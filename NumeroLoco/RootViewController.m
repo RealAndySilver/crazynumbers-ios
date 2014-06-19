@@ -8,6 +8,7 @@
 
 #import "RootViewController.h"
 #import "ChaptersViewController.h"
+#import "AppInfo.h"
 
 @interface RootViewController ()
 
@@ -38,8 +39,8 @@
     numberLabel.text = @"5";
     numberLabel.layer.cornerRadius = 10.0;
     numberLabel.layer.borderWidth = 1.0;
-    numberLabel.layer.borderColor = [UIColor colorWithRed:0.0 green:0.8 blue:0.8 alpha:1.0].CGColor;
-    numberLabel.textColor = [UIColor colorWithRed:0.0 green:0.8 blue:0.8 alpha:1.0];
+    numberLabel.layer.borderColor = ((UIColor *)[[AppInfo sharedInstance] appColorsArray][0]).CGColor;
+    numberLabel.textColor = [[AppInfo sharedInstance] appColorsArray][0];
     numberLabel.textAlignment = NSTextAlignmentCenter;
     numberLabel.font = [UIFont fontWithName:@"ArialRoundedMTBold" size:200.0];
     [self.view addSubview:numberLabel];

@@ -9,6 +9,7 @@
 #import "ChaptersViewController.h"
 #import "ChaptersCell.h"
 #import "GameViewController.h"
+#import "AppInfo.h"
 
 @interface ChaptersViewController () <UICollectionViewDataSource, UICollectionViewDelegate, ChaptersCellDelegate>
 @property (strong, nonatomic) UIPageControl *pageControl;
@@ -65,8 +66,8 @@
     //Setup PageControl
     self.pageControl = [[UIPageControl alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 100.0, screenBounds.size.height - 100.0, 200.0, 30.0)];
     self.pageControl.numberOfPages = numberOfChapters;
-    self.pageControl.pageIndicatorTintColor = [UIColor colorWithWhite:0.7 alpha:1.0];
-    self.pageControl.currentPageIndicatorTintColor = [UIColor colorWithRed:0.0 green:0.8 blue:0.8 alpha:1.0];
+    self.pageControl.pageIndicatorTintColor = [UIColor colorWithWhite:0.6 alpha:1.0];
+    self.pageControl.currentPageIndicatorTintColor = [UIColor colorWithWhite:0.8 alpha:1.0];
     [self.view addSubview:self.pageControl];
     
     //Back button
@@ -90,6 +91,7 @@
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     ChaptersCell *cell = (ChaptersCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"CellIdentifier" forIndexPath:indexPath];
     cell.chapterNameLabel.text = self.chaptersNamesArray[indexPath.item];
+    cell.chapterNameLabel.textColor = [[AppInfo sharedInstance] appColorsArray][indexPath.item];
     cell.delegate = self;
     return cell;
 }

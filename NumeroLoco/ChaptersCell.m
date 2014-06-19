@@ -21,7 +21,6 @@
     if (self) {
         // Initialization code
         self.chapterNameLabel = [[UILabel alloc] init];
-        self.chapterNameLabel.textColor = [UIColor colorWithRed:0.0 green:0.8 blue:0.8 alpha:1.0];
         self.chapterNameLabel.font = [UIFont fontWithName:@"ArialRoundedMTBold" size:30.0];
         self.chapterNameLabel.textAlignment = NSTextAlignmentCenter;
         [self.contentView addSubview:self.chapterNameLabel];

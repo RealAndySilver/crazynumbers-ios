@@ -28,6 +28,7 @@
 		8B6FB90419509AB800EB2C4E /* ChaptersGames.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8B6FB90319509AB800EB2C4E /* ChaptersGames.plist */; };
 		8B6FB9071950A18600EB2C4E /* GameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B6FB9061950A18600EB2C4E /* GameViewController.m */; };
 		8B6FB9091950A6BA00EB2C4E /* GamesDatabase.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8B6FB9081950A6BA00EB2C4E /* GamesDatabase.plist */; };
+		8B9857FC19537C080083FD45 /* AppInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B9857FB19537C080083FD45 /* AppInfo.m */; };
 		8BD2CED31951E6B4002EF327 /* GamesDatabase2.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8BD2CED21951E6B4002EF327 /* GamesDatabase2.plist */; };
 /* End PBXBuildFile section */
 
@@ -72,6 +73,8 @@
 		8B6FB9051950A18600EB2C4E /* GameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameViewController.h; sourceTree = "<group>"; };
 		8B6FB9061950A18600EB2C4E /* GameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameViewController.m; sourceTree = "<group>"; };
 		8B6FB9081950A6BA00EB2C4E /* GamesDatabase.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = GamesDatabase.plist; sourceTree = "<group>"; };
+		8B9857FA19537C080083FD45 /* AppInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppInfo.h; sourceTree = "<group>"; };
+		8B9857FB19537C080083FD45 /* AppInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppInfo.m; sourceTree = "<group>"; };
 		8BD2CED21951E6B4002EF327 /* GamesDatabase2.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = GamesDatabase2.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -132,6 +135,8 @@
 		8B6FB8C519507C6B00EB2C4E /* NumeroLoco */ = {
 			isa = PBXGroup;
 			children = (
+				8B9857FA19537C080083FD45 /* AppInfo.h */,
+				8B9857FB19537C080083FD45 /* AppInfo.m */,
 				8B6FB8F6195084BD00EB2C4E /* Main */,
 				8B6FB8F5195084B400EB2C4E /* ViewControllers */,
 				8B6FB8FD19508BBB00EB2C4E /* Custom Cells */,
@@ -309,6 +314,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8B6FB8FC19508B0800EB2C4E /* ChaptersCell.m in Sources */,
+				8B9857FC19537C080083FD45 /* AppInfo.m in Sources */,
 				8B6FB8F9195084CE00EB2C4E /* ChaptersViewController.m in Sources */,
 				8B6FB9071950A18600EB2C4E /* GameViewController.m in Sources */,
 				8B6FB9021950978700EB2C4E /* GameNumberCell.m in Sources */,

@@ -39,7 +39,7 @@
 
 -(void)viewDidLoad {
     [super viewDidLoad];
-    self.view.backgroundColor = [UIColor colorWithRed:0.0 green:0.8 blue:0.8 alpha:1.0];
+    self.view.backgroundColor = [UIColor colorWithRed:0.380 green:0.870 blue:1.000 alpha:1.0];
     screenBounds = [UIScreen mainScreen].bounds;
     NSLog(@"Seleccioné el juego %d en el capítulo %d", self.selectedGame, self.selectedChapter);
     [self setupUI];

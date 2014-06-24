@@ -51,7 +51,7 @@
     [blueScaleArray addObjectsFromArray:@[color1, color2, color3, color4 ,color5, color6, color7, color8, color9, color10]];
 
     NSMutableArray *secondChapterColors = [[NSMutableArray alloc] init];
-    color1 = [UIColor colorWithRed:1.0 green:0.992 blue:1.000 alpha:1.0];
+    color1 = [UIColor colorWithRed:1.0 green:1.0 blue:1.000 alpha:1.0];
     color2 = [UIColor colorWithRed:0.902 green:0.827 blue:1.000 alpha:1.0];
     color3 = [UIColor colorWithRed:0.878 green:0.784 blue:1.000 alpha:1.0];
     color4 = [UIColor colorWithRed:0.831 green:0.698 blue:1.000 alpha:1.0];
@@ -61,20 +61,35 @@
     color8 = [UIColor colorWithRed:0.404 green:0.247 blue:0.600 alpha:1.0];
     color9 = [UIColor colorWithRed:0.267 green:0.165 blue:0.400 alpha:1.0];
     color10 = [UIColor colorWithRed:0.133 green:0.082 blue:0.200 alpha:1.0];
+    [secondChapterColors addObjectsFromArray:@[color1, color2, color3, color4, color5, color6, color7, color8, color9, color10]];
     
-    [secondChapterColors addObject:color1];
-    [secondChapterColors addObject:color2];
-    [secondChapterColors addObject:color3];
-    [secondChapterColors addObject:color4];
-    [secondChapterColors addObject:color5];
-    [secondChapterColors addObject:color6];
-    [secondChapterColors addObject:color7];
-    [secondChapterColors addObject:color8];
-    [secondChapterColors addObject:color9];
-    [secondChapterColors addObject:color10];
+    NSMutableArray *thirdChapterColors = [[NSMutableArray alloc] init];
+    color1 = [UIColor colorWithRed:1.0 green:1.0 blue:1.000 alpha:1.0];
+    color2 = [UIColor colorWithRed:1.000 green:0.820 blue:0.827 alpha:1.0];
+    color3 = [UIColor colorWithRed:1.000 green:0.729 blue:0.741 alpha:1.0];
+    color4 = [UIColor colorWithRed:1.000 green:0.643 blue:0.651 alpha:1.0];
+    color5 = [UIColor colorWithRed:1.000 green:0.553 blue:0.565 alpha:1.0];
+    color6 = [UIColor colorWithRed:1.000 green:0.373 blue:0.392 alpha:1.0];
+    color7 = [UIColor colorWithRed:0.800 green:0.298 blue:0.314 alpha:1.0];
+    color8 = [UIColor colorWithRed:0.600 green:0.224 blue:0.235 alpha:1.0];
+    color9 = [UIColor colorWithRed:0.400 green:0.149 blue:0.157 alpha:1.0];
+    color10 = [UIColor colorWithRed:0.200 green:0.075 blue:0.078 alpha:1.0];
+    [thirdChapterColors addObjectsFromArray:@[color1, color2, color3, color4, color5, color6, color7, color8, color9, color10]];
     
-    
-    [chapterColorsArray addObjectsFromArray:@[blueScaleArray, secondChapterColors]];
+    NSMutableArray *fourthChapterColors = [[NSMutableArray alloc] init];
+    color1 = [UIColor colorWithRed:1.0 green:1.0 blue:1.000 alpha:1.0];
+    color2 = [UIColor colorWithRed:1.000 green:0.937 blue:0.831 alpha:1.0];
+    color3 = [UIColor colorWithRed:1.000 green:0.914 blue:0.773 alpha:1.0];
+    color4 = [UIColor colorWithRed:1.000 green:0.894 blue:0.718 alpha:1.0];
+    color5 = [UIColor colorWithRed:1.000 green:0.851 blue:0.604 alpha:1.0];
+    color6 = [UIColor colorWithRed:1.000 green:0.792 blue:0.447 alpha:1.0];
+    color7 = [UIColor colorWithRed:0.800 green:0.631 blue:0.357 alpha:1.0];
+    color8 = [UIColor colorWithRed:0.600 green:0.475 blue:0.267 alpha:1.0];
+    color9 = [UIColor colorWithRed:0.400 green:0.318 blue:0.176 alpha:1.0];
+    color10 = [UIColor colorWithRed:0.200 green:0.157 blue:0.090 alpha:1.0];
+    [fourthChapterColors addObjectsFromArray:@[color1, color2, color3, color4, color5, color6, color7, color8, color9, color10]];
+
+    [chapterColorsArray addObjectsFromArray:@[blueScaleArray, secondChapterColors, thirdChapterColors, fourthChapterColors]];
     return chapterColorsArray;
 }
 

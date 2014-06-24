@@ -27,6 +27,7 @@
 		8B6FB9071950A18600EB2C4E /* GameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B6FB9061950A18600EB2C4E /* GameViewController.m */; };
 		8B9857FC19537C080083FD45 /* AppInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B9857FB19537C080083FD45 /* AppInfo.m */; };
 		8BD2CED31951E6B4002EF327 /* GamesDatabase2.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8BD2CED21951E6B4002EF327 /* GamesDatabase2.plist */; };
+		A06520711959B7D100399778 /* PadStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A06520701959B7D100399778 /* PadStoryboard.storyboard */; };
 		A0BCCCB8195474F6001CD7F1 /* ColorsChaptersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A0BCCCB7195474F6001CD7F1 /* ColorsChaptersViewController.m */; };
 		A0BCCCBA195476D1001CD7F1 /* ColorsChaptersNames.plist in Resources */ = {isa = PBXBuildFile; fileRef = A0BCCCB9195476D1001CD7F1 /* ColorsChaptersNames.plist */; };
 		A0BCCCBC1954778C001CD7F1 /* ColorGamesDatabase2.plist in Resources */ = {isa = PBXBuildFile; fileRef = A0BCCCBB1954778C001CD7F1 /* ColorGamesDatabase2.plist */; };
@@ -73,6 +74,7 @@
 		8B9857FA19537C080083FD45 /* AppInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppInfo.h; sourceTree = "<group>"; };
 		8B9857FB19537C080083FD45 /* AppInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppInfo.m; sourceTree = "<group>"; };
 		8BD2CED21951E6B4002EF327 /* GamesDatabase2.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = GamesDatabase2.plist; sourceTree = "<group>"; };
+		A06520701959B7D100399778 /* PadStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = PadStoryboard.storyboard; sourceTree = "<group>"; };
 		A0BCCCB6195474F6001CD7F1 /* ColorsChaptersViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ColorsChaptersViewController.h; sourceTree = "<group>"; };
 		A0BCCCB7195474F6001CD7F1 /* ColorsChaptersViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ColorsChaptersViewController.m; sourceTree = "<group>"; };
 		A0BCCCB9195476D1001CD7F1 /* ColorsChaptersNames.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = ColorsChaptersNames.plist; sourceTree = "<group>"; };
@@ -205,6 +207,7 @@
 				8B6FB8CE19507C6B00EB2C4E /* AppDelegate.h */,
 				8B6FB8CF19507C6B00EB2C4E /* AppDelegate.m */,
 				8B6FB8EE19507CC400EB2C4E /* MainStoryboard.storyboard */,
+				A06520701959B7D100399778 /* PadStoryboard.storyboard */,
 			);
 			name = Main;
 			sourceTree = "<group>";
@@ -298,6 +301,7 @@
 				8B6FB8EF19507CC400EB2C4E /* MainStoryboard.storyboard in Resources */,
 				A0BCCCBC1954778C001CD7F1 /* ColorGamesDatabase2.plist in Resources */,
 				8B6FB8CA19507C6B00EB2C4E /* InfoPlist.strings in Resources */,
+				A06520711959B7D100399778 /* PadStoryboard.storyboard in Resources */,
 				8B6FB8D219507C6B00EB2C4E /* Images.xcassets in Resources */,
 				8B6FB8FF19508CA200EB2C4E /* ChapterNames.plist in Resources */,
 			);
@@ -447,7 +451,9 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "NumeroLoco/NumeroLoco-Prefix.pch";
 				INFOPLIST_FILE = "NumeroLoco/NumeroLoco-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -460,7 +466,9 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "NumeroLoco/NumeroLoco-Prefix.pch";
 				INFOPLIST_FILE = "NumeroLoco/NumeroLoco-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

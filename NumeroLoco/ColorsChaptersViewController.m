@@ -99,6 +99,15 @@
     return cell;
 }
 
+#pragma mark - UICollectionViewDelegate
+
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    NSLog(@"Scrolleandooooooo con un offset en x: %f", scrollView.contentOffset.x);
+    NSArray *visibleCells = [self.collectionView visibleCells];
+    ChaptersCell *firstCell = [visibleCells firstObject];
+    firstCell.button1.transform = CGAffineTransformMakeTranslation(0.0, -scrollView.contentOffset.x);
+}
+
 #pragma mark - Actions 
 
 -(void)dismissVC {

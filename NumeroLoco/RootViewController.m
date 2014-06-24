@@ -19,41 +19,53 @@
 
 @implementation RootViewController {
     CGRect screenBounds;
+    BOOL isPad;
 }
 
 -(void)viewDidLoad {
     [super viewDidLoad];
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        isPad = YES;
+    } else {
+        isPad = NO;
+    }
     self.navigationController.navigationBarHidden = YES;
-    for (NSString *family in [UIFont familyNames])
+    /*for (NSString *family in [UIFont familyNames])
     {
         NSLog(@"%@", family);
         for (NSString *font in [UIFont fontNamesForFamilyName:family])
         {
             NSLog(@"\t%@", font);
         }
-    }
+    }*/
     screenBounds = [UIScreen mainScreen].bounds;
     [self setupUI];
 }
 
 -(void)setupUI {
     //Big NUmber Label
-    UILabel *numberLabel = [[UILabel alloc] initWithFrame:CGRectMake(65.0, 65.0, screenBounds.size.width - 130.0, screenBounds.size.width - 130.0)];
+    UILabel *numberLabel = [[UILabel alloc] init];
+    if (isPad) numberLabel.frame = CGRectMake(150.0, 150.0, screenBounds.size.width - 300.0, screenBounds.size.width - 300.0);
+    else numberLabel.frame = CGRectMake(65.0, 65.0, screenBounds.size.width - 130.0, screenBounds.size.width - 130.0);
     numberLabel.text = @"5";
     numberLabel.layer.cornerRadius = 10.0;
     numberLabel.layer.borderWidth = 1.0;
     numberLabel.layer.borderColor = ((UIColor *)[[AppInfo sharedInstance] appColorsArray][0]).CGColor;
     numberLabel.textColor = [[AppInfo sharedInstance] appColorsArray][0];
     numberLabel.textAlignment = NSTextAlignmentCenter;
-    numberLabel.font = [UIFont fontWithName:@"ArialRoundedMTBold" size:200.0];
+    if (isPad)  numberLabel.font = [UIFont fontWithName:@"ArialRoundedMTBold" size:400.0];
+    else        numberLabel.font = [UIFont fontWithName:@"ArialRoundedMTBold" size:200.0];
     [self.view addSubview:numberLabel];
     
     //Main title
-    UILabel *mainTitle = [[UILabel alloc] initWithFrame:CGRectMake(20.0, 260.0, screenBounds.size.width - 40.0, 40.0)];
+    UILabel *mainTitle = [[UILabel alloc] init];
+    if (isPad) mainTitle.frame = CGRectMake(20.0, 630.0, screenBounds.size.width - 40.0, 70.0);
+    else mainTitle.frame = CGRectMake(20.0, 260.0, screenBounds.size.width - 40.0, 40.0);
     mainTitle.text = @"Numero Loco";
     mainTitle.textAlignment = NSTextAlignmentCenter;
     mainTitle.textColor = [UIColor lightGrayColor];
-    mainTitle.font = [UIFont fontWithName:@"ArialRoundedMTBold" size:28.0];
+    if (isPad) mainTitle.font = [UIFont fontWithName:@"ArialRoundedMTBold" size:56.0];
+    else       mainTitle.font = [UIFont fontWithName:@"ArialRoundedMTBold" size:28.0];
     [self.view addSubview:mainTitle];
     
     //Start Option

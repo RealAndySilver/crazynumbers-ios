@@ -9,7 +9,6 @@
 #import "ChaptersCell.h"
 
 @interface ChaptersCell()
-@property (strong, nonatomic) UIButton *button1;
 @property (strong, nonatomic) UIButton *button2;
 @property (strong, nonatomic) UIButton *button3;
 @property (strong, nonatomic) UIButton *button4;
@@ -20,7 +19,9 @@
 @property (strong, nonatomic) UIButton *button9;
 @end
 
-@implementation ChaptersCell
+@implementation ChaptersCell {
+    BOOL isPad;
+}
 
 -(void)setButtonsTitleColor:(UIColor *)buttonsTitleColor {
     _buttonsTitleColor = buttonsTitleColor;
@@ -66,10 +67,18 @@
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
-        NSUInteger fontSize = 40.0;
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+            isPad = YES;
+        } else {
+            isPad = NO;
+        }
+        
+        NSUInteger fontSize;
+        if (isPad) fontSize = 80.0;
+        else fontSize = 40.0;
         
         self.chapterNameLabel = [[UILabel alloc] init];
-        self.chapterNameLabel.font = [UIFont fontWithName:@"ArialRoundedMTBold" size:30.0];
+        self.chapterNameLabel.font = [UIFont fontWithName:@"ArialRoundedMTBold" size:fontSize - 10.0];
         self.chapterNameLabel.textAlignment = NSTextAlignmentCenter;
         [self.contentView addSubview:self.chapterNameLabel];
         
@@ -186,11 +195,29 @@
 
 -(void)layoutSubviews {
     [super layoutSubviews];
-    NSUInteger buttonSize = 70.0;
-    NSUInteger buttonDistance = 10.0;
+    NSUInteger buttonSize;
+    NSUInteger buttonDistance;
+    NSUInteger initialHeight;
+    NSUInteger chapterNameY;
+    NSUInteger chapterNameHeight;
+    
+    if (isPad) {
+        buttonSize = 140.0;
+        buttonDistance = 20.0;
+        initialHeight = 200.0;
+        chapterNameY = 70.0;
+        chapterNameHeight = 70.0;
+    } else {
+        buttonSize = 70.0;
+        buttonDistance = 10.0;
+        initialHeight = 100.0;
+        chapterNameY = 30.0;
+        chapterNameHeight = 40.0;
+    }
+    
     CGRect contentBounds = self.contentView.bounds;
-    self.chapterNameLabel.frame = CGRectMake(20.0, 30.0, contentBounds.size.width - 40.0, 40.0);
-    self.button2.frame = CGRectMake(contentBounds.size.width/2.0 - buttonSize/2.0, 100.0, buttonSize, buttonSize);
+    self.chapterNameLabel.frame = CGRectMake(20.0, chapterNameY, contentBounds.size.width - 40.0, chapterNameHeight);
+    self.button2.frame = CGRectMake(contentBounds.size.width/2.0 - buttonSize/2.0, initialHeight, buttonSize, buttonSize);
     self.button1.frame = CGRectMake(self.button2.frame.origin.x - buttonDistance - buttonSize, self.button2.frame.origin.y, buttonSize, buttonSize);
     self.button3.frame = CGRectMake(self.button2.frame.origin.x + buttonSize + buttonDistance, self.button2.frame.origin.y, buttonSize, buttonSize);
     

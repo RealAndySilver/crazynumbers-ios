@@ -26,6 +26,7 @@
     NSUInteger numberOfTaps;
     NSUInteger matrixSize;
     NSUInteger maxNumber;
+    BOOL isPad;
 }
 
 #pragma mark - Lazy Instantiation
@@ -48,6 +49,11 @@
 
 -(void)viewDidLoad {
     [super viewDidLoad];
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        isPad = YES;
+    } else {
+        isPad = NO;
+    }
     screenBounds = [UIScreen mainScreen].bounds;
     NSLog(@"Seleccioné el juego %d en el capítulo %d", self.selectedGame, self.selectedChapter);
     [self setupUI];
@@ -63,10 +69,15 @@
 
 -(void)setupUI {
     //Setup MainTitle
-    self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 70.0, screenBounds.size.width, 40.0)];
+    if (isPad) {
+        self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 70.0, screenBounds.size.width, 70.0)];
+        self.titleLabel.font = [UIFont fontWithName:@"ArialRoundedMTBold" size:60.0];
+    } else {
+        self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 70.0, screenBounds.size.width, 40.0)];
+        self.titleLabel.font = [UIFont fontWithName:@"ArialRoundedMTBold" size:30.0];
+    }
     self.titleLabel.text = [NSString stringWithFormat:@"Chapter %i - Game %i", self.selectedChapter + 1, self.selectedGame + 1];
     self.titleLabel.textColor = [UIColor lightGrayColor];
-    self.titleLabel.font = [UIFont fontWithName:@"ArialRoundedMTBold" size:30.0];
     self.titleLabel.textAlignment = NSTextAlignmentCenter;
     [self.view addSubview:self.titleLabel];
     
@@ -136,8 +147,12 @@
     
     //self.buttonsContainerView.frame = CGRectMake(0.0, 100.0, matrixSize*53.33333, matrixSize*53.33333);
     if (matrixSize < 5) {
-        self.buttonsContainerView.frame = CGRectMake(35.0, 110.0, screenBounds.size.width - 70.0, screenBounds.size.width - 70.0);
-    } else if (matrixSize == 5) {
+        if (isPad)
+            self.buttonsContainerView.frame = CGRectMake(130.0, 110.0, screenBounds.size.width - 260.0, screenBounds.size.width - 260.0);
+        else
+            self.buttonsContainerView.frame = CGRectMake(35.0, 110.0, screenBounds.size.width - 70.0, screenBounds.size.width - 70.0);
+        
+    } else if (matrixSize >= 5) {
         self.buttonsContainerView.frame = CGRectMake(10.0, 110.0, screenBounds.size.width - 20.0, screenBounds.size.width - 20.0);
     }
     self.buttonsContainerView.center = CGPointMake(screenBounds.size.width/2.0, screenBounds.size.height/2.0);
@@ -275,7 +290,11 @@
 }
 
 -(void)createSquareMatrixOf:(NSUInteger)size {
-    NSUInteger buttonSize = (self.buttonsContainerView.frame.size.width - ((matrixSize + 1)*10)) / matrixSize;
+    NSUInteger buttonDistance;
+    if (isPad) buttonDistance = 20.0;
+    else buttonDistance = 10.0;
+    
+    NSUInteger buttonSize = (self.buttonsContainerView.frame.size.width - ((matrixSize + 1)*buttonDistance)) / matrixSize;
     NSLog(@"Tamaño del boton: %d", buttonSize);
     
     int h = 1000;
@@ -287,13 +306,15 @@
             button.layer.cornerRadius = 4.0;
             //button.layer.borderColor = [UIColor lightGrayColor].CGColor;
             //button.layer.borderWidth = 1.0;
-            button.frame = CGRectMake(10 + (i*buttonSize + 10.0*i), 10 + (j*buttonSize + 10*j), buttonSize, buttonSize);
+            button.frame = CGRectMake(buttonDistance + (i*buttonSize + buttonDistance*i), buttonDistance + (j*buttonSize + buttonDistance*j), buttonSize, buttonSize);
             button.backgroundColor = self.colorPaletteArray[0];
             //[button setTitle:@"0" forState:UIControlStateNormal];
             if (matrixSize < 5) {
-                button.titleLabel.font = [UIFont fontWithName:FONT_NAME size:40.0];
+                if (isPad) button.titleLabel.font = [UIFont fontWithName:FONT_NAME size:80.0];
+                else button.titleLabel.font = [UIFont fontWithName:FONT_NAME size:40.0];
             } else {
-                button.titleLabel.font = [UIFont fontWithName:FONT_NAME size:30.0];
+                if (isPad) button.titleLabel.font = [UIFont fontWithName:FONT_NAME size:70.0];
+                else button.titleLabel.font = [UIFont fontWithName:FONT_NAME size:30.0];
             }
             [button addTarget:self action:@selector(numberButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
             button.tag = h;
@@ -349,7 +370,7 @@
     if (column + 1 < matrixSize) {
         //Right Button
         buttonTitle = [self substractOneForButton:self.columnsButtonsArray[column + 1][row]];
-       // [self.columnsButtonsArray[column + 1][row] setTitle:buttonTitle forState:UIControlStateNormal];
+        //[self.columnsButtonsArray[column + 1][row] setTitle:buttonTitle forState:UIControlStateNormal];
         
         buttonColor = [self substractColorForButton:self.columnsButtonsArray[column + 1][row]];
         [self.columnsButtonsArray[column + 1][row] setBackgroundColor:buttonColor];

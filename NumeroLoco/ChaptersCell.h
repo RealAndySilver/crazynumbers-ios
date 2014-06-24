@@ -18,4 +18,5 @@
 @property (strong, nonatomic) UIColor *buttonsBackgroundColor;
 @property (strong, nonatomic) UIColor *buttonsBorderColor;
 @property (strong, nonatomic) UIColor *buttonsTitleColor;
+@property (strong, nonatomic) UIButton *button1;
 @end

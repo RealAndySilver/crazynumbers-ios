@@ -1,32 +1,32 @@
 //
-//  ChaptersViewController.m
+//  ColorsChaptersViewController.m
 //  NumeroLoco
 //
-//  Created by Developer on 17/06/14.
+//  Created by Diego Vidal on 20/06/14.
 //  Copyright (c) 2014 iAm Studio. All rights reserved.
 //
 
-#import "ChaptersViewController.h"
+#import "ColorsChaptersViewController.h"
+#import "ColorsGameViewController.h"
 #import "ChaptersCell.h"
-#import "GameViewController.h"
 #import "AppInfo.h"
 
-@interface ChaptersViewController () <UICollectionViewDataSource, UICollectionViewDelegate, ChaptersCellDelegate>
-@property (strong, nonatomic) UIPageControl *pageControl;
+@interface ColorsChaptersViewController () <UICollectionViewDataSource, UICollectionViewDelegate, ChaptersCellDelegate>
 @property (strong, nonatomic) UICollectionView *collectionView;
 @property (strong, nonatomic) NSArray *chaptersNamesArray;
+@property (strong, nonatomic) UIPageControl *pageControl;
 @end
 
-@implementation ChaptersViewController {
-    CGRect screenBounds;
+@implementation ColorsChaptersViewController {
     NSUInteger numberOfChapters;
+    CGRect screenBounds;
 }
 
-#pragma mark - Lazy Instantiation 
+#pragma mark - Lazy Instantiation
 
 -(NSArray *)chaptersNamesArray {
     if (!_chaptersNamesArray) {
-        NSString *filePath = [[NSBundle mainBundle] pathForResource:@"ChapterNames" ofType:@"plist"];
+        NSString *filePath = [[NSBundle mainBundle] pathForResource:@"ColorsChaptersNames" ofType:@"plist"];
         _chaptersNamesArray = [NSArray arrayWithContentsOfFile:filePath];
     }
     return _chaptersNamesArray;
@@ -36,7 +36,7 @@
 
 -(void)viewDidLoad {
     [super viewDidLoad];
-    NSString *gamesDatabasePath = [[NSBundle mainBundle] pathForResource:@"GamesDatabase2" ofType:@"plist"];
+    NSString *gamesDatabasePath = [[NSBundle mainBundle] pathForResource:@"ColorGamesDatabase2" ofType:@"plist"];
     NSArray *chaptersArray = [NSArray arrayWithContentsOfFile:gamesDatabasePath];
     numberOfChapters = [chaptersArray count];
     
@@ -92,6 +92,9 @@
     ChaptersCell *cell = (ChaptersCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"CellIdentifier" forIndexPath:indexPath];
     cell.chapterNameLabel.text = self.chaptersNamesArray[indexPath.item];
     cell.chapterNameLabel.textColor = [[AppInfo sharedInstance] appColorsArray][indexPath.item];
+    cell.buttonsBackgroundColor = [[AppInfo sharedInstance] appColorsArray][indexPath.item];
+    cell.buttonsBorderColor = [[AppInfo sharedInstance] appColorsArray][indexPath.item];
+    cell.buttonsTitleColor = [UIColor whiteColor];
     cell.delegate = self;
     return cell;
 }
@@ -100,14 +103,6 @@
 
 -(void)dismissVC {
     [self dismissViewControllerAnimated:YES completion:nil];
-}
-
--(void)goToGameVCWithSelectedGame:(NSUInteger)game inChapter:(NSUInteger)chapter {
-    GameViewController *gameVC = [self.storyboard instantiateViewControllerWithIdentifier:@"Game"];
-    gameVC.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-    gameVC.selectedChapter = chapter;
-    gameVC.selectedGame = game;
-    [self presentViewController:gameVC animated:YES completion:nil];
 }
 
 #pragma mark - UIScrollViewViewDelegate
@@ -123,7 +118,11 @@
 
 -(void)chaptersCellDidSelectGame:(NSUInteger)game {
     NSLog(@"Se seleccionó el juego %d", game);
-    [self goToGameVCWithSelectedGame:game inChapter:self.pageControl.currentPage];
+    ColorsGameViewController *colorsGameVC = [self.storyboard instantiateViewControllerWithIdentifier:@"ColorsGame"];
+    colorsGameVC.selectedChapter = self.pageControl.currentPage;
+    colorsGameVC.selectedGame = game;
+    colorsGameVC.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+    [self presentViewController:colorsGameVC animated:YES completion:nil];
 }
 
 @end

@@ -11,4 +11,5 @@
 @interface AppInfo : NSObject
 +(AppInfo *)sharedInstance;
 -(NSArray *)appColorsArray;
+-(NSArray *)arrayOfChaptersColorsArray;
 @end

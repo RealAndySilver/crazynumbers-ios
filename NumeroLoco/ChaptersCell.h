@@ -15,4 +15,7 @@
 @interface ChaptersCell : UICollectionViewCell
 @property (strong, nonatomic) UILabel *chapterNameLabel;
 @property (strong, nonatomic) id <ChaptersCellDelegate> delegate;
+@property (strong, nonatomic) UIColor *buttonsBackgroundColor;
+@property (strong, nonatomic) UIColor *buttonsBorderColor;
+@property (strong, nonatomic) UIColor *buttonsTitleColor;
 @end

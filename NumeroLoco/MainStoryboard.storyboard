@@ -42,6 +42,42 @@
             </objects>
             <point key="canvasLocation" x="1097" y="19"/>
         </scene>
+        <!--Colors Chapters View Controller-->
+        <scene sceneID="p7z-kR-brO">
+            <objects>
+                <viewController storyboardIdentifier="ColorsChapters" id="B7r-oX-6jf" customClass="ColorsChaptersViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="gkf-bM-nRi"/>
+                        <viewControllerLayoutGuide type="bottom" id="TG2-Cb-p3M"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="ZLk-z8-RoN">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="qPA-pi-FBr" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1093" y="635"/>
+        </scene>
+        <!--Colors Game View Controller-->
+        <scene sceneID="Gnl-rw-HTj">
+            <objects>
+                <viewController storyboardIdentifier="ColorsGame" id="0r8-Oi-xjF" customClass="ColorsGameViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="LZ9-XL-lDf"/>
+                        <viewControllerLayoutGuide type="bottom" id="Due-wW-5uh"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="bP1-se-PEr">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="uPS-Ql-kbG" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1458" y="663"/>
+        </scene>
         <!--Game View Controller-->
         <scene sceneID="oEz-qx-TYB">
             <objects>

@@ -8,10 +8,13 @@
 
 #import "RootViewController.h"
 #import "ChaptersViewController.h"
+#import "ColorsChaptersViewController.h"
 #import "AppInfo.h"
 
 @interface RootViewController ()
-
+@property (strong, nonatomic) UIButton *numbersButton;
+@property (strong, nonatomic) UIButton *colorsButton;
+@property (strong, nonatomic) UIButton *startButton;
 @end
 
 @implementation RootViewController {
@@ -54,16 +57,40 @@
     [self.view addSubview:mainTitle];
     
     //Start Option
-    UIButton *startButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    startButton.layer.borderColor = [UIColor lightGrayColor].CGColor;
-    startButton.layer.borderWidth = 1.0;
-    startButton.layer.cornerRadius = 4.0;
-    [startButton setTitle:@"Start" forState:UIControlStateNormal];
-    [startButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
-    startButton.titleLabel.font = [UIFont fontWithName:@"ArialRoundedMTBold" size:20.0];
-    startButton.frame = CGRectMake(screenBounds.size.width/2.0 - 50.0, screenBounds.size.height - 130.0, 100.0, 40.0);
-    [startButton addTarget:self action:@selector(goToChaptersVC) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:startButton];
+    self.startButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    self.startButton.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    self.startButton.layer.borderWidth = 1.0;
+    self.startButton.layer.cornerRadius = 4.0;
+    [self.startButton setTitle:@"Start" forState:UIControlStateNormal];
+    [self.startButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+    self.startButton.titleLabel.font = [UIFont fontWithName:@"ArialRoundedMTBold" size:20.0];
+    self.startButton.frame = CGRectMake(screenBounds.size.width/2.0 - 50.0, screenBounds.size.height - 130.0, 100.0, 40.0);
+    [self.startButton addTarget:self action:@selector(animateGameButtons) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:self.startButton];
+    
+    //Numbers Button
+    self.numbersButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    self.numbersButton.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    self.numbersButton.layer.borderWidth = 1.0;
+    self.numbersButton.layer.cornerRadius = 4.0;
+    [self.numbersButton setTitle:@"Numbers" forState:UIControlStateNormal];
+    [self.numbersButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+    self.numbersButton.titleLabel.font = [UIFont fontWithName:@"ArialRoundedMTBold" size:20.0];
+    self.numbersButton.frame = CGRectMake(screenBounds.size.width, screenBounds.size.height - 180.0, 100.0, 40.0);
+    [self.numbersButton addTarget:self action:@selector(goToChaptersVC) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:self.numbersButton];
+    
+    //Colors button
+    self.colorsButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    self.colorsButton.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    self.colorsButton.layer.borderWidth = 1.0;
+    self.colorsButton.layer.cornerRadius = 4.0;
+    [self.colorsButton setTitle:@"Colors" forState:UIControlStateNormal];
+    [self.colorsButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+    self.colorsButton.titleLabel.font = [UIFont fontWithName:@"ArialRoundedMTBold" size:20.0];
+    self.colorsButton.frame = CGRectMake(screenBounds.size.width, screenBounds.size.height - 130.0, 100.0, 40.0);
+    [self.colorsButton addTarget:self action:@selector(goToColorsChaptersVC) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:self.colorsButton];
     
     //Options
     UIButton *optionsButton = [UIButton buttonWithType:UIButtonTypeSystem];
@@ -78,6 +105,25 @@
 }
 
 #pragma mark - Actions
+
+-(void)animateGameButtons {
+    [UIView animateWithDuration:0.8
+                          delay:0.0
+         usingSpringWithDamping:0.7
+          initialSpringVelocity:0.0
+                        options:UIViewAnimationOptionCurveEaseInOut
+                     animations:^(){
+                         self.startButton.transform = CGAffineTransformMakeTranslation(-(self.startButton.frame.origin.x + self.startButton.frame.size.width), 0.0);
+                         self.numbersButton.transform = CGAffineTransformMakeTranslation(-(screenBounds.size.width/2.0 + self.numbersButton.frame.size.width/2.0), 0.0);
+                         self.colorsButton.transform = CGAffineTransformMakeTranslation(-(screenBounds.size.width/2.0 + self.colorsButton.frame.size.width/2.0), 0.0);
+                     } completion:^(BOOL finished){}];
+}
+
+-(void)goToColorsChaptersVC {
+    ColorsChaptersViewController *colorsChaptersVC = [self.storyboard instantiateViewControllerWithIdentifier:@"ColorsChapters"];
+    colorsChaptersVC.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+    [self presentViewController:colorsChaptersVC animated:YES completion:nil];
+}
 
 -(void)goToChaptersVC {
     ChaptersViewController *chaptersVC = [self.storyboard instantiateViewControllerWithIdentifier:@"Chapters"];

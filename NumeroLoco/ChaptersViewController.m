@@ -10,12 +10,16 @@
 #import "ChaptersCell.h"
 #import "GameViewController.h"
 #import "AppInfo.h"
+#import "FileSaver.h"
 
 @interface ChaptersViewController () <UICollectionViewDataSource, UICollectionViewDelegate, ChaptersCellDelegate>
 @property (strong, nonatomic) UIPageControl *pageControl;
 @property (strong, nonatomic) UICollectionView *collectionView;
 @property (strong, nonatomic) NSArray *chaptersNamesArray;
+@property (strong, nonatomic) NSArray *chaptersGamesFinishedArray;
 @end
+
+#define FONT_NAME @"HelveticaNeue-UltraLight"
 
 @implementation ChaptersViewController {
     CGRect screenBounds;
@@ -23,6 +27,14 @@
 }
 
 #pragma mark - Lazy Instantiation 
+
+-(NSArray *)chaptersGamesFinishedArray {
+    if (!_chaptersGamesFinishedArray) {
+        FileSaver *fileSaver = [[FileSaver alloc] init];
+        _chaptersGamesFinishedArray = [fileSaver getDictionary:@"NumberChaptersDic"][@"NumberChaptersArray"];
+    }
+    return _chaptersGamesFinishedArray;
+}
 
 -(NSArray *)chaptersNamesArray {
     if (!_chaptersNamesArray) {
@@ -36,6 +48,11 @@
 
 -(void)viewDidLoad {
     [super viewDidLoad];
+    self.view.backgroundColor = [UIColor colorWithWhite:0.07 alpha:1.0];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(gameWonNotificationReceived:)
+                                                 name:@"GameWonNotification"
+                                               object:nil];
     NSString *gamesDatabasePath = [[NSBundle mainBundle] pathForResource:@"GamesDatabase2" ofType:@"plist"];
     NSArray *chaptersArray = [NSArray arrayWithContentsOfFile:gamesDatabasePath];
     numberOfChapters = [chaptersArray count];
@@ -43,6 +60,20 @@
     self.automaticallyAdjustsScrollViewInsets = NO;
     screenBounds = [UIScreen mainScreen].bounds;
     [self setupUI];
+}
+
+-(void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    //Animate CollectionView
+    [UIView animateWithDuration:1.0
+                          delay:0.0
+         usingSpringWithDamping:0.6
+          initialSpringVelocity:0.0
+                        options:UIViewAnimationOptionCurveEaseInOut
+                     animations:^(){
+                         self.collectionView.transform = CGAffineTransformMakeTranslation(-(screenBounds.size.width + 200.0), 0.0);
+                     } completion:^(BOOL finished){}];
 }
 
 -(void)setupUI {
@@ -54,7 +85,7 @@
     collectionViewFlowLayout.itemSize = CGSizeMake(screenBounds.size.width, screenBounds.size.width + 100.0);
     
     //Setup CollectionView
-    self.collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0.0, 0.0, screenBounds.size.width, screenBounds.size.height) collectionViewLayout:collectionViewFlowLayout];
+    self.collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(screenBounds.size.width + 200.0, 0.0, screenBounds.size.width, screenBounds.size.height) collectionViewLayout:collectionViewFlowLayout];
     self.collectionView.showsHorizontalScrollIndicator = NO;
     self.collectionView.dataSource = self;
     self.collectionView.delegate = self;
@@ -66,18 +97,18 @@
     //Setup PageControl
     self.pageControl = [[UIPageControl alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 100.0, screenBounds.size.height - 130.0, 200.0, 30.0)];
     self.pageControl.numberOfPages = numberOfChapters;
-    self.pageControl.pageIndicatorTintColor = [UIColor colorWithWhite:0.6 alpha:1.0];
-    self.pageControl.currentPageIndicatorTintColor = [UIColor colorWithWhite:0.8 alpha:1.0];
+    self.pageControl.pageIndicatorTintColor = [UIColor colorWithWhite:0.7 alpha:1.0];
+    self.pageControl.currentPageIndicatorTintColor = [UIColor colorWithWhite:1.0 alpha:1.0];
     [self.view addSubview:self.pageControl];
     
     //Back button
     UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(20.0, screenBounds.size.height - 60.0, 70.0, 40.0)];
     [backButton setTitle:@"Back" forState:UIControlStateNormal];
     backButton.layer.cornerRadius = 4.0;
-    backButton.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    backButton.layer.borderColor = [UIColor whiteColor].CGColor;
     backButton.layer.borderWidth = 1.0;
-    [backButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
-    backButton.titleLabel.font = [UIFont fontWithName:@"ArialRoundedMTBold" size:13.0];
+    [backButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    backButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:15.0];
     [backButton addTarget:self action:@selector(dismissVC) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:backButton];
 }
@@ -89,10 +120,86 @@
 }
 
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+    NSLog(@"Index path %d", indexPath.item);
     ChaptersCell *cell = (ChaptersCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"CellIdentifier" forIndexPath:indexPath];
     cell.chapterNameLabel.text = self.chaptersNamesArray[indexPath.item];
     cell.chapterNameLabel.textColor = [[AppInfo sharedInstance] appColorsArray][indexPath.item];
     cell.delegate = self;
+    NSLog(@"juegos ganados en este capítulo: %d", [self.chaptersGamesFinishedArray[indexPath.item] count]);
+    NSArray *gamesFinishedArray = self.chaptersGamesFinishedArray[indexPath.item];
+    
+    if ([gamesFinishedArray containsObject:@1]) {
+        cell.button1.layer.borderColor = ((UIColor *)[[AppInfo sharedInstance] appColorsArray][indexPath.item]).CGColor;
+        [cell.button1 setTitleColor:[[AppInfo sharedInstance] appColorsArray][indexPath.item] forState:UIControlStateNormal];
+    } else {
+        cell.button1.layer.borderColor = [UIColor lightGrayColor].CGColor;
+        [cell.button1 setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+    }
+    
+    if ([gamesFinishedArray containsObject:@2]) {
+        cell.button2.layer.borderColor = ((UIColor *)[[AppInfo sharedInstance] appColorsArray][indexPath.item]).CGColor;
+        [cell.button2 setTitleColor:[[AppInfo sharedInstance] appColorsArray][indexPath.item] forState:UIControlStateNormal];
+    } else {
+        cell.button2.layer.borderColor = [UIColor lightGrayColor].CGColor;
+        [cell.button2 setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+    }
+    
+    if ([gamesFinishedArray containsObject:@3]) {
+        cell.button3.layer.borderColor = ((UIColor *)[[AppInfo sharedInstance] appColorsArray][indexPath.item]).CGColor;
+        [cell.button3 setTitleColor:[[AppInfo sharedInstance] appColorsArray][indexPath.item] forState:UIControlStateNormal];
+    } else {
+        cell.button3.layer.borderColor = [UIColor lightGrayColor].CGColor;
+        [cell.button3 setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+    }
+    
+    if ([gamesFinishedArray containsObject:@4]) {
+        cell.button4.layer.borderColor = ((UIColor *)[[AppInfo sharedInstance] appColorsArray][indexPath.item]).CGColor;
+        [cell.button4 setTitleColor:[[AppInfo sharedInstance] appColorsArray][indexPath.item] forState:UIControlStateNormal];
+    } else {
+        cell.button4.layer.borderColor = [UIColor lightGrayColor].CGColor;
+        [cell.button4 setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+    }
+    
+    if ([gamesFinishedArray containsObject:@5]) {
+        cell.button5.layer.borderColor = ((UIColor *)[[AppInfo sharedInstance] appColorsArray][indexPath.item]).CGColor;
+        [cell.button5 setTitleColor:[[AppInfo sharedInstance] appColorsArray][indexPath.item] forState:UIControlStateNormal];
+    } else {
+        cell.button5.layer.borderColor = [UIColor lightGrayColor].CGColor;
+        [cell.button5 setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+    }
+    
+    if ([gamesFinishedArray containsObject:@6]) {
+        cell.button6.layer.borderColor = ((UIColor *)[[AppInfo sharedInstance] appColorsArray][indexPath.item]).CGColor;
+        [cell.button6 setTitleColor:[[AppInfo sharedInstance] appColorsArray][indexPath.item] forState:UIControlStateNormal];
+    } else {
+        cell.button6.layer.borderColor = [UIColor lightGrayColor].CGColor;
+        [cell.button6 setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+    }
+    
+    if ([gamesFinishedArray containsObject:@7]) {
+        cell.button7.layer.borderColor = ((UIColor *)[[AppInfo sharedInstance] appColorsArray][indexPath.item]).CGColor;
+        [cell.button7 setTitleColor:[[AppInfo sharedInstance] appColorsArray][indexPath.item] forState:UIControlStateNormal];
+    } else {
+        cell.button7.layer.borderColor = [UIColor lightGrayColor].CGColor;
+        [cell.button7 setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+    }
+    
+    if ([gamesFinishedArray containsObject:@8]) {
+        cell.button8.layer.borderColor = ((UIColor *)[[AppInfo sharedInstance] appColorsArray][indexPath.item]).CGColor;
+        [cell.button8 setTitleColor:[[AppInfo sharedInstance] appColorsArray][indexPath.item] forState:UIControlStateNormal];
+    } else {
+        cell.button8.layer.borderColor = [UIColor lightGrayColor].CGColor;
+        [cell.button8 setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+    }
+    
+    if ([gamesFinishedArray containsObject:@9]) {
+        cell.button9.layer.borderColor = ((UIColor *)[[AppInfo sharedInstance] appColorsArray][indexPath.item]).CGColor;
+        [cell.button9 setTitleColor:[[AppInfo sharedInstance] appColorsArray][indexPath.item] forState:UIControlStateNormal];
+    } else {
+        cell.button9.layer.borderColor = [UIColor lightGrayColor].CGColor;
+        [cell.button9 setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+    }
+    
     return cell;
 }
 
@@ -110,10 +217,32 @@
     [self presentViewController:gameVC animated:YES completion:nil];
 }
 
+-(BOOL)checkIfUserCanPlayGame:(NSUInteger)game inChapter:(NSUInteger)chapter {
+    FileSaver *fileSaver = [[FileSaver alloc] init];
+    NSArray *chaptersArray = [fileSaver getDictionary:@"NumberChaptersDic"][@"NumberChaptersArray"];
+    if (chaptersArray) {
+        NSLog(@"Existe el dic de capítulos");
+        NSArray *chapterGamesArray = chaptersArray[chapter];
+        if (chapterGamesArray) {
+            NSLog(@"Existe e array de chapter");
+            if ([chapterGamesArray containsObject:@(game)]) {
+                NSLog(@"El usuario puede jugar este juego");
+                return YES;
+            } else {
+                NSLog(@"El usuario no puede jugar");
+                return  NO;
+            }
+        } else {
+            return NO;
+        }
+    } else {
+        return NO;
+    }
+}
+
 #pragma mark - UIScrollViewViewDelegate
 
 -(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
-    NSLog(@"Terminé de movemer");
     CGFloat pageWidth = self.collectionView.frame.size.width;
     NSUInteger currentPage = self.collectionView.contentOffset.x / pageWidth;
     self.pageControl.currentPage = currentPage;
@@ -122,8 +251,23 @@
 #pragma mark - ChaptersCellDelegate
 
 -(void)chaptersCellDidSelectGame:(NSUInteger)game {
+    BOOL userCanPlayGame = [self checkIfUserCanPlayGame:game + 1 inChapter:self.pageControl.currentPage];
     NSLog(@"Se seleccionó el juego %d", game);
-    [self goToGameVCWithSelectedGame:game inChapter:self.pageControl.currentPage];
+    if (userCanPlayGame) {
+        [self goToGameVCWithSelectedGame:game inChapter:self.pageControl.currentPage];
+    } else {
+        [[[UIAlertView alloc] initWithTitle:@"Oops!" message:@"You haven't unlock this game yet!" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil] show];
+    }
+}
+
+#pragma mark - Notification Handlers
+
+-(void)gameWonNotificationReceived:(NSNotification *)notification {
+    NSLog(@"Recibí la notificación de juego ganado");
+    //Get the won games in file saver
+    FileSaver *fileSaver = [[FileSaver alloc] init];
+    self.chaptersGamesFinishedArray = [fileSaver getDictionary:@"NumberChaptersDic"][@"NumberChaptersArray"];
+    [self.collectionView reloadData];
 }
 
 @end

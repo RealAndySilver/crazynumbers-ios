@@ -7,11 +7,22 @@
 //
 
 #import "AppDelegate.h"
+#import "FileSaver.h"
 
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    FileSaver *fileSaver = [[FileSaver alloc] init];
+    if ([fileSaver getDictionary:@"NumberChaptersDic"]) {
+        NSLog(@"Ya existía el dic");
+    } else {
+        NSLog(@"No existía el dic");
+        [fileSaver setDictionary:@{@"NumberChaptersArray" : @[@[@1],
+                                                              @[],
+                                                              @[],
+                                                              @[]]} withName:@"NumberChaptersDic"];
+    }
     return YES;
 }
 

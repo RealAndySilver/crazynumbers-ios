@@ -19,7 +19,7 @@
 @property (strong, nonatomic) NSArray *colorPaletteArray;
 @end
 
-#define FONT_NAME @"ArialRoundedMTBold"
+#define FONT_NAME @"HelveticaNeue-Light"
 
 @implementation ColorsGameViewController {
     CGRect screenBounds;
@@ -49,6 +49,7 @@
 
 -(void)viewDidLoad {
     [super viewDidLoad];
+    self.view.backgroundColor = [UIColor colorWithWhite:0.07 alpha:1.0];
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
         isPad = YES;
     } else {
@@ -71,13 +72,13 @@
     //Setup MainTitle
     if (isPad) {
         self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 70.0, screenBounds.size.width, 70.0)];
-        self.titleLabel.font = [UIFont fontWithName:@"ArialRoundedMTBold" size:60.0];
+        self.titleLabel.font = [UIFont fontWithName:FONT_NAME size:60.0];
     } else {
         self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 70.0, screenBounds.size.width, 40.0)];
-        self.titleLabel.font = [UIFont fontWithName:@"ArialRoundedMTBold" size:30.0];
+        self.titleLabel.font = [UIFont fontWithName:FONT_NAME size:30.0];
     }
     self.titleLabel.text = [NSString stringWithFormat:@"Chapter %i - Game %i", self.selectedChapter + 1, self.selectedGame + 1];
-    self.titleLabel.textColor = [UIColor lightGrayColor];
+    self.titleLabel.textColor = [UIColor whiteColor];
     self.titleLabel.textAlignment = NSTextAlignmentCenter;
     [self.view addSubview:self.titleLabel];
     
@@ -86,10 +87,10 @@
     backButton.frame = CGRectMake(20.0, screenBounds.size.height - 60.0, 70.0, 40.0);
     backButton.layer.cornerRadius = 4.0;
     backButton.layer.borderWidth = 1.0;
-    backButton.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    backButton.layer.borderColor = [UIColor whiteColor].CGColor;
     [backButton setTitle:@"Back" forState:UIControlStateNormal];
-    [backButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
-    backButton.titleLabel.font = [UIFont fontWithName:@"ArialRoundedMTBold" size:15.0];
+    [backButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    backButton.titleLabel.font = [UIFont fontWithName:FONT_NAME size:15.0];
     [backButton addTarget:self action:@selector(dismissVC) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:backButton];
     
@@ -97,24 +98,24 @@
     UIButton *resetButton = [UIButton buttonWithType:UIButtonTypeSystem];
     resetButton.frame = CGRectMake(screenBounds.size.width - 90, screenBounds.size.height - 60.0, 70.0, 40.0);
     resetButton.layer.cornerRadius = 4.0;
-    resetButton.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    resetButton.layer.borderColor = [UIColor whiteColor].CGColor;
     resetButton.layer.borderWidth = 1.0;
     [resetButton setTitle:@"Restart" forState:UIControlStateNormal];
-    [resetButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
-    resetButton.titleLabel.font = [UIFont fontWithName:FONT_NAME size:13.0];
+    [resetButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    resetButton.titleLabel.font = [UIFont fontWithName:FONT_NAME size:15.0];
     [resetButton addTarget:self action:@selector(initGame) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:resetButton];
     
     //Number of taps label
     self.numberOfTapsLabel = [[UILabel alloc] initWithFrame:CGRectMake(45.0, screenBounds.size.height - 135.0, 200.0, 20.0)];
     self.numberOfTapsLabel.text = @"Number of taps: 0";
-    self.numberOfTapsLabel.textColor = [UIColor lightGrayColor];
+    self.numberOfTapsLabel.textColor = [UIColor whiteColor];
     self.numberOfTapsLabel.font = [UIFont fontWithName:FONT_NAME size:15.0];
     [self.view addSubview:self.numberOfTapsLabel];
     
     //Max taps label
     self.maxTapsLabel = [[UILabel alloc] initWithFrame:CGRectMake(45.0, screenBounds.size.height - 110.0, 200.0, 20.0)];
-    self.maxTapsLabel.textColor = [UIColor lightGrayColor];
+    self.maxTapsLabel.textColor = [UIColor whiteColor];
     self.maxTapsLabel.font = [UIFont fontWithName:FONT_NAME size:15.0];
     [self.view addSubview:self.maxTapsLabel];
     

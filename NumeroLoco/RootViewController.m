@@ -12,10 +12,17 @@
 #import "AppInfo.h"
 
 @interface RootViewController ()
+@property (weak, nonatomic) IBOutlet UILabel *fifthLabel;
+@property (weak, nonatomic) IBOutlet UILabel *fourthLabel;
+@property (weak, nonatomic) IBOutlet UILabel *thirdLabel;
+@property (weak, nonatomic) IBOutlet UILabel *firstLabel;
+@property (weak, nonatomic) IBOutlet UILabel *secondLabel;
 @property (strong, nonatomic) UIButton *numbersButton;
 @property (strong, nonatomic) UIButton *colorsButton;
 @property (strong, nonatomic) UIButton *startButton;
 @end
+
+#define FONT_NAME @"HelveticaNeue-UltraLight"
 
 @implementation RootViewController {
     CGRect screenBounds;
@@ -29,6 +36,7 @@
     } else {
         isPad = NO;
     }
+    self.view.backgroundColor = [UIColor colorWithWhite:0.07 alpha:1.0];
     self.navigationController.navigationBarHidden = YES;
     /*for (NSString *family in [UIFont familyNames])
     {
@@ -43,63 +51,97 @@
 }
 
 -(void)setupUI {
-    //Big NUmber Label
-    UILabel *numberLabel = [[UILabel alloc] init];
-    if (isPad) numberLabel.frame = CGRectMake(150.0, 150.0, screenBounds.size.width - 300.0, screenBounds.size.width - 300.0);
-    else numberLabel.frame = CGRectMake(65.0, 65.0, screenBounds.size.width - 130.0, screenBounds.size.width - 130.0);
-    numberLabel.text = @"5";
-    numberLabel.layer.cornerRadius = 10.0;
-    numberLabel.layer.borderWidth = 1.0;
-    numberLabel.layer.borderColor = ((UIColor *)[[AppInfo sharedInstance] appColorsArray][0]).CGColor;
-    numberLabel.textColor = [[AppInfo sharedInstance] appColorsArray][0];
-    numberLabel.textAlignment = NSTextAlignmentCenter;
-    if (isPad)  numberLabel.font = [UIFont fontWithName:@"ArialRoundedMTBold" size:400.0];
-    else        numberLabel.font = [UIFont fontWithName:@"ArialRoundedMTBold" size:200.0];
-    [self.view addSubview:numberLabel];
+    ///////////////////////////////////////////////////////////////////////////////////////////
+    //Numbers labels
+    //5 label
+    self.firstLabel.text = @"4";
+    self.firstLabel.backgroundColor = [UIColor clearColor];
+    self.firstLabel.layer.cornerRadius = 5.0;
+    self.firstLabel.layer.borderWidth = 1.0;
+    self.firstLabel.layer.borderColor = ((UIColor *)[[AppInfo sharedInstance] appColorsArray][0]).CGColor;
+    self.firstLabel.textColor = [[AppInfo sharedInstance] appColorsArray][0];
+    self.firstLabel.textAlignment = NSTextAlignmentCenter;
+    if (isPad)  self.firstLabel.font = [UIFont fontWithName:FONT_NAME size:400.0];
+    else        self.firstLabel.font = [UIFont fontWithName:FONT_NAME size:30.0];
     
-    //Main title
-    UILabel *mainTitle = [[UILabel alloc] init];
-    if (isPad) mainTitle.frame = CGRectMake(20.0, 630.0, screenBounds.size.width - 40.0, 70.0);
-    else mainTitle.frame = CGRectMake(20.0, 260.0, screenBounds.size.width - 40.0, 40.0);
-    mainTitle.text = @"Numero Loco";
-    mainTitle.textAlignment = NSTextAlignmentCenter;
-    mainTitle.textColor = [UIColor lightGrayColor];
-    if (isPad) mainTitle.font = [UIFont fontWithName:@"ArialRoundedMTBold" size:56.0];
-    else       mainTitle.font = [UIFont fontWithName:@"ArialRoundedMTBold" size:28.0];
-    [self.view addSubview:mainTitle];
     
+    //4 label
+    self.secondLabel.text = @"3";
+    self.secondLabel.backgroundColor = [UIColor clearColor];
+    self.secondLabel.layer.cornerRadius = 5.0;
+    self.secondLabel.layer.borderWidth = 1.0;
+    self.secondLabel.layer.borderColor = ((UIColor *)[[AppInfo sharedInstance] appColorsArray][0]).CGColor;
+    self.secondLabel.textColor = [[AppInfo sharedInstance] appColorsArray][0];
+    self.secondLabel.textAlignment = NSTextAlignmentCenter;
+    if (isPad)  self.secondLabel.font = [UIFont fontWithName:FONT_NAME size:400.0];
+    else        self.secondLabel.font = [UIFont fontWithName:FONT_NAME size:30.0];
+    
+    //2 label
+    self.thirdLabel.text = @"2";
+    self.thirdLabel.backgroundColor = [UIColor clearColor];
+    self.thirdLabel.layer.cornerRadius = 5.0;
+    self.thirdLabel.layer.borderWidth = 1.0;
+    self.thirdLabel.layer.borderColor = ((UIColor *)[[AppInfo sharedInstance] appColorsArray][0]).CGColor;
+    self.thirdLabel.textColor = [[AppInfo sharedInstance] appColorsArray][0];
+    self.thirdLabel.textAlignment = NSTextAlignmentCenter;
+    if (isPad)  self.thirdLabel.font = [UIFont fontWithName:FONT_NAME size:400.0];
+    else        self.thirdLabel.font = [UIFont fontWithName:FONT_NAME size:30.0];
+    
+    //1 label
+    self.fourthLabel.text = @"1";
+    self.fourthLabel.backgroundColor = [UIColor clearColor];
+    self.fourthLabel.layer.cornerRadius = 5.0;
+    self.fourthLabel.layer.borderWidth = 1.0;
+    self.fourthLabel.layer.borderColor = ((UIColor *)[[AppInfo sharedInstance] appColorsArray][0]).CGColor;
+    self.fourthLabel.textColor = [[AppInfo sharedInstance] appColorsArray][0];
+    self.fourthLabel.textAlignment = NSTextAlignmentCenter;
+    if (isPad)  self.fourthLabel.font = [UIFont fontWithName:FONT_NAME size:400.0];
+    else        self.fourthLabel.font = [UIFont fontWithName:FONT_NAME size:30.0];
+    
+    //0 label
+    self.fifthLabel.text = @"0";
+    self.fifthLabel.backgroundColor = [UIColor clearColor];
+    self.fifthLabel.layer.cornerRadius = 5.0;
+    self.fifthLabel.layer.borderWidth = 1.0;
+    self.fifthLabel.layer.borderColor = ((UIColor *)[[AppInfo sharedInstance] appColorsArray][0]).CGColor;
+    self.fifthLabel.textColor = [[AppInfo sharedInstance] appColorsArray][0];
+    self.fifthLabel.textAlignment = NSTextAlignmentCenter;
+    if (isPad)  self.fifthLabel.font = [UIFont fontWithName:FONT_NAME size:400.0];
+    else        self.fifthLabel.font = [UIFont fontWithName:FONT_NAME size:30.0];
+    
+    ///////////////////////////////////////////////////////////////////////////////////////////
     //Start Option
     self.startButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    self.startButton.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    self.startButton.layer.borderColor = [UIColor whiteColor].CGColor;
     self.startButton.layer.borderWidth = 1.0;
     self.startButton.layer.cornerRadius = 4.0;
     [self.startButton setTitle:@"Start" forState:UIControlStateNormal];
-    [self.startButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
-    self.startButton.titleLabel.font = [UIFont fontWithName:@"ArialRoundedMTBold" size:20.0];
+    [self.startButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    self.startButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:20.0];
     self.startButton.frame = CGRectMake(screenBounds.size.width/2.0 - 50.0, screenBounds.size.height - 130.0, 100.0, 40.0);
     [self.startButton addTarget:self action:@selector(animateGameButtons) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.startButton];
     
     //Numbers Button
     self.numbersButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    self.numbersButton.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    self.numbersButton.layer.borderColor = [UIColor whiteColor].CGColor;
     self.numbersButton.layer.borderWidth = 1.0;
     self.numbersButton.layer.cornerRadius = 4.0;
     [self.numbersButton setTitle:@"Numbers" forState:UIControlStateNormal];
-    [self.numbersButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
-    self.numbersButton.titleLabel.font = [UIFont fontWithName:@"ArialRoundedMTBold" size:20.0];
+    [self.numbersButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    self.numbersButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:20.0];
     self.numbersButton.frame = CGRectMake(screenBounds.size.width, screenBounds.size.height - 180.0, 100.0, 40.0);
     [self.numbersButton addTarget:self action:@selector(goToChaptersVC) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.numbersButton];
     
     //Colors button
     self.colorsButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    self.colorsButton.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    self.colorsButton.layer.borderColor = [UIColor whiteColor].CGColor;
     self.colorsButton.layer.borderWidth = 1.0;
     self.colorsButton.layer.cornerRadius = 4.0;
     [self.colorsButton setTitle:@"Colors" forState:UIControlStateNormal];
-    [self.colorsButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
-    self.colorsButton.titleLabel.font = [UIFont fontWithName:@"ArialRoundedMTBold" size:20.0];
+    [self.colorsButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    self.colorsButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:20.0];
     self.colorsButton.frame = CGRectMake(screenBounds.size.width, screenBounds.size.height - 130.0, 100.0, 40.0);
     [self.colorsButton addTarget:self action:@selector(goToColorsChaptersVC) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.colorsButton];
@@ -107,11 +149,11 @@
     //Options
     UIButton *optionsButton = [UIButton buttonWithType:UIButtonTypeSystem];
     optionsButton.layer.borderWidth = 1.0;
-    optionsButton.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    optionsButton.layer.borderColor = [UIColor whiteColor].CGColor;
     optionsButton.layer.cornerRadius = 4.0;
     [optionsButton setTitle:@"Options" forState:UIControlStateNormal];
-    [optionsButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
-    optionsButton.titleLabel.font = [UIFont fontWithName:@"ArialRoundedMTBold" size:20.0];
+    [optionsButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    optionsButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:20.0];
     optionsButton.frame = CGRectMake(screenBounds.size.width/2.0 - 50.0, screenBounds.size.height - 80.0, 100.0, 40.0);
     [self.view addSubview:optionsButton];
 }

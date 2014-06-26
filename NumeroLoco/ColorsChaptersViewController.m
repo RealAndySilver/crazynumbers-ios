@@ -10,11 +10,13 @@
 #import "ColorsGameViewController.h"
 #import "ChaptersCell.h"
 #import "AppInfo.h"
+@import GLKit;
 
 @interface ColorsChaptersViewController () <UICollectionViewDataSource, UICollectionViewDelegate, ChaptersCellDelegate>
 @property (strong, nonatomic) UICollectionView *collectionView;
 @property (strong, nonatomic) NSArray *chaptersNamesArray;
 @property (strong, nonatomic) UIPageControl *pageControl;
+@property (assign, nonatomic) CGFloat lastContentOffset;
 @end
 
 @implementation ColorsChaptersViewController {
@@ -36,6 +38,7 @@
 
 -(void)viewDidLoad {
     [super viewDidLoad];
+    self.view.backgroundColor = [UIColor colorWithWhite:0.07 alpha:1.0];
     NSString *gamesDatabasePath = [[NSBundle mainBundle] pathForResource:@"ColorGamesDatabase2" ofType:@"plist"];
     NSArray *chaptersArray = [NSArray arrayWithContentsOfFile:gamesDatabasePath];
     numberOfChapters = [chaptersArray count];
@@ -66,18 +69,18 @@
     //Setup PageControl
     self.pageControl = [[UIPageControl alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 100.0, screenBounds.size.height - 130.0, 200.0, 30.0)];
     self.pageControl.numberOfPages = numberOfChapters;
-    self.pageControl.pageIndicatorTintColor = [UIColor colorWithWhite:0.6 alpha:1.0];
-    self.pageControl.currentPageIndicatorTintColor = [UIColor colorWithWhite:0.8 alpha:1.0];
+    self.pageControl.pageIndicatorTintColor = [UIColor colorWithWhite:0.7 alpha:1.0];
+    self.pageControl.currentPageIndicatorTintColor = [UIColor whiteColor];
     [self.view addSubview:self.pageControl];
     
     //Back button
     UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(20.0, screenBounds.size.height - 60.0, 70.0, 40.0)];
     [backButton setTitle:@"Back" forState:UIControlStateNormal];
     backButton.layer.cornerRadius = 4.0;
-    backButton.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    backButton.layer.borderColor = [UIColor whiteColor].CGColor;
     backButton.layer.borderWidth = 1.0;
-    [backButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
-    backButton.titleLabel.font = [UIFont fontWithName:@"ArialRoundedMTBold" size:13.0];
+    [backButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    backButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:15.0];
     [backButton addTarget:self action:@selector(dismissVC) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:backButton];
 }
@@ -94,19 +97,12 @@
     cell.chapterNameLabel.textColor = [[AppInfo sharedInstance] appColorsArray][indexPath.item];
     cell.buttonsBackgroundColor = [[AppInfo sharedInstance] appColorsArray][indexPath.item];
     cell.buttonsBorderColor = [[AppInfo sharedInstance] appColorsArray][indexPath.item];
-    cell.buttonsTitleColor = [UIColor whiteColor];
+    cell.buttonsTitleColor = [UIColor colorWithWhite:0.07 alpha:1.0];
     cell.delegate = self;
     return cell;
 }
 
 #pragma mark - UICollectionViewDelegate
-
--(void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    NSLog(@"Scrolleandooooooo con un offset en x: %f", scrollView.contentOffset.x);
-    NSArray *visibleCells = [self.collectionView visibleCells];
-    ChaptersCell *firstCell = [visibleCells firstObject];
-    firstCell.button1.transform = CGAffineTransformMakeTranslation(0.0, -scrollView.contentOffset.x);
-}
 
 #pragma mark - Actions 
 
@@ -115,6 +111,47 @@
 }
 
 #pragma mark - UIScrollViewViewDelegate
+
+
+/*-(void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    static BOOL scrollingLeft = NO;
+    static BOOL scrollingRight = NO;
+    
+    NSLog(@"Scrolleandooooooo con un offset en x: %f", scrollView.contentOffset.x);
+    NSArray *visibleCells = [self.collectionView visibleCells];
+    if ([visibleCells count] == 1) {
+        ChaptersCell *firstCell = [visibleCells firstObject];
+        NSLog(@"Solo se ve una celda con indexpath de %d", [self.collectionView indexPathForCell:firstCell].item);
+    } else if ([visibleCells count] == 2) {
+        NSUInteger firstCellIndex = [self.collectionView indexPathForCell:[visibleCells firstObject]].item;
+        NSUInteger secondCellIndex = [self.collectionView indexPathForCell:[visibleCells lastObject]].item;
+        ChaptersCell *leftCell;
+        ChaptersCell *rightCell;
+        if (firstCellIndex > secondCellIndex) {
+            leftCell = [visibleCells lastObject];
+            rightCell = [visibleCells firstObject];
+        } else {
+            leftCell = [visibleCells firstObject];
+            rightCell = [visibleCells lastObject];
+        }
+        NSLog(@"Se ven dos celdas con indexpath de %d y %d y currentpage: %d", [self.collectionView indexPathForCell:leftCell].item, [self.collectionView indexPathForCell:rightCell].item, self.pageControl.currentPage);
+        
+        if (self.lastContentOffset > scrollView.contentOffset.x) {
+            NSLog(@"Scrolleando a la izquierdaaaa");
+            leftCell.button1.alpha = -(scrollView.contentOffset.x - 320.0*self.pageControl.currentPage)/320.0;
+            rightCell.button1.alpha = 1.0 + (scrollView.contentOffset.x - 320.0*self.pageControl.currentPage)/320.0;
+            
+        } else {
+            NSLog(@"Scrolleando a la derechaaa");
+            leftCell.button1.alpha = 1.0 - (scrollView.contentOffset.x - 320.0*self.pageControl.currentPage)/320.0;
+            rightCell.button1.alpha = (scrollView.contentOffset.x - 320.0*self.pageControl.currentPage)/320.0;
+        }
+        self.lastContentOffset = scrollView.contentOffset.x;
+        //leftCell.button1.transform = CGAffineTransformMakeRotation(GLKMathDegreesToRadians(scrollView.contentOffset.x*(360.0/320.0)));
+        //rightCell.button1.transform = CGAffineTransformMakeRotation(GLKMathDegreesToRadians(360.0 - scrollView.contentOffset.x*(360.0/320.0)));
+        
+    }
+}*/
 
 -(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
     NSLog(@"Terminé de movemer");

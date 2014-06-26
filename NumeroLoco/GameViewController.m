@@ -8,8 +8,10 @@
 
 #import "GameViewController.h"
 #import "AppInfo.h"
+#import "FileSaver.h"
+#import "GameWonAlert.h"
 
-@interface GameViewController () <UIAlertViewDelegate>
+@interface GameViewController ()
 @property (strong, nonatomic) NSMutableArray *columnsButtonsArray; //Of UIButton
 @property (strong, nonatomic) UIView *buttonsContainerView;
 @property (strong, nonatomic) UILabel *numberOfTapsLabel;
@@ -18,7 +20,7 @@
 @property (strong, nonatomic) NSArray *pointsArray;
 @end
 
-#define FONT_NAME @"ArialRoundedMTBold"
+#define FONT_NAME @"HelveticaNeue-Light"
 
 @implementation GameViewController {
     CGRect screenBounds;
@@ -64,14 +66,14 @@
     //Setup MainTitle
     if (isPad) {
         self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 70.0, screenBounds.size.width, 70.0)];
-        self.titleLabel.font = [UIFont fontWithName:@"ArialRoundedMTBold" size:60.0];
+        self.titleLabel.font = [UIFont fontWithName:FONT_NAME size:60.0];
     } else {
         self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 70.0, screenBounds.size.width, 40.0)];
-        self.titleLabel.font = [UIFont fontWithName:@"ArialRoundedMTBold" size:30.0];
+        self.titleLabel.font = [UIFont fontWithName:FONT_NAME size:30.0];
     }
     
     self.titleLabel.text = [NSString stringWithFormat:@"Chapter %i - Game %i", self.selectedChapter + 1, self.selectedGame + 1];
-    self.titleLabel.textColor = [UIColor whiteColor];
+    self.titleLabel.textColor = [UIColor colorWithWhite:0.2 alpha:1.0];
     
     self.titleLabel.textAlignment = NSTextAlignmentCenter;
     [self.view addSubview:self.titleLabel];
@@ -81,10 +83,10 @@
     backButton.frame = CGRectMake(20.0, screenBounds.size.height - 60.0, 70.0, 40.0);
     backButton.layer.cornerRadius = 4.0;
     backButton.layer.borderWidth = 1.0;
-    backButton.layer.borderColor = [UIColor whiteColor].CGColor;
+    backButton.layer.borderColor = [UIColor colorWithWhite:0.2 alpha:1.0].CGColor;
     [backButton setTitle:@"Back" forState:UIControlStateNormal];
-    [backButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    backButton.titleLabel.font = [UIFont fontWithName:@"ArialRoundedMTBold" size:15.0];
+    [backButton setTitleColor:[UIColor colorWithWhite:0.2 alpha:1.0] forState:UIControlStateNormal];
+    backButton.titleLabel.font = [UIFont fontWithName:FONT_NAME size:15.0];
     [backButton addTarget:self action:@selector(dismissVC) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:backButton];
     
@@ -92,25 +94,25 @@
     UIButton *resetButton = [UIButton buttonWithType:UIButtonTypeSystem];
     resetButton.frame = CGRectMake(screenBounds.size.width - 90, screenBounds.size.height - 60.0, 70.0, 40.0);
     resetButton.layer.cornerRadius = 4.0;
-    resetButton.layer.borderColor = [UIColor whiteColor].CGColor;
+    resetButton.layer.borderColor = [UIColor colorWithWhite:0.2 alpha:1.0].CGColor;
     resetButton.layer.borderWidth = 1.0;
     [resetButton setTitle:@"Restart" forState:UIControlStateNormal];
-    [resetButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    resetButton.titleLabel.font = [UIFont fontWithName:FONT_NAME size:13.0];
+    [resetButton setTitleColor:[UIColor colorWithWhite:0.2 alpha:1.0] forState:UIControlStateNormal];
+    resetButton.titleLabel.font = [UIFont fontWithName:FONT_NAME size:15.0];
     [resetButton addTarget:self action:@selector(initGame) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:resetButton];
     
     //Number of taps label
     self.numberOfTapsLabel = [[UILabel alloc] initWithFrame:CGRectMake(45.0, screenBounds.size.height - 135.0, 200.0, 20.0)];
     self.numberOfTapsLabel.text = @"Number of taps: 0";
-    self.numberOfTapsLabel.textColor = [UIColor whiteColor];
-    self.numberOfTapsLabel.font = [UIFont fontWithName:FONT_NAME size:15.0];
+    self.numberOfTapsLabel.textColor = [UIColor colorWithWhite:0.2 alpha:1.0];
+    self.numberOfTapsLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:18.0];
     [self.view addSubview:self.numberOfTapsLabel];
     
     //Max taps label
     self.maxTapsLabel = [[UILabel alloc] initWithFrame:CGRectMake(45.0, screenBounds.size.height - 110.0, 200.0, 20.0)];
-    self.maxTapsLabel.textColor = [UIColor whiteColor];
-    self.maxTapsLabel.font = [UIFont fontWithName:FONT_NAME size:15.0];
+    self.maxTapsLabel.textColor = [UIColor colorWithWhite:0.2 alpha:1.0];
+    self.maxTapsLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:18.0];
     [self.view addSubview:self.maxTapsLabel];
     
     //Buttons container view
@@ -134,6 +136,7 @@
     NSArray *chaptersDataArray = [NSArray arrayWithContentsOfFile:gamesDatabasePath];
     if (self.selectedGame >= [chaptersDataArray[self.selectedChapter] count]) {
         self.selectedChapter += 1;
+        self.view.backgroundColor = [[AppInfo sharedInstance] appColorsArray][self.selectedChapter];
         self.selectedGame = 0;
     }
     matrixSize = [chaptersDataArray[self.selectedChapter][self.selectedGame][@"matrixSize"] intValue];
@@ -248,9 +251,9 @@
         NSMutableArray *filaButtonsArray = [[NSMutableArray alloc] init];
         for (int j = 0; j < size; j++) {
             UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-            [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+            [button setTitleColor:[UIColor colorWithWhite:0.2 alpha:1.0] forState:UIControlStateNormal];
             button.layer.cornerRadius = 4.0;
-            button.layer.borderColor = [UIColor whiteColor].CGColor;
+            button.layer.borderColor = [UIColor colorWithWhite:0.2 alpha:1.0].CGColor;
             button.layer.borderWidth = 1.0;
             button.frame = CGRectMake(buttonDistance + (i*buttonSize + buttonDistance*i), buttonDistance + (j*buttonSize + buttonDistance*j), buttonSize, buttonSize);
             
@@ -324,20 +327,68 @@
             }
         }
     }
-    [self userWon];
+    [self performSelector:@selector(userWon) withObject:nil afterDelay:0.35];
 }
 
 -(void)userWon {
-    [[[UIAlertView alloc] initWithTitle:@"Game Won!" message:@"Congratulations! you have won this game!" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil] show];
+    //Unlock the next game saving the game number with FileSaver
+    FileSaver *fileSaver = [[FileSaver alloc] init];
+    NSMutableArray *chaptersArray = [fileSaver getDictionary:@"NumberChaptersDic"][@"NumberChaptersArray"];
+    NSLog(@"Agregando el número %d a filesaver porque gané", self.selectedGame + 2);
+    
+    //Check if the user won the last game of the chapter
+    if (self.selectedGame == 8) {
+        //This is the last game of the chapter
+        NSLog(@"Estamos en el último juego del capítulo");
+        NSMutableArray *chapterGamesFinishedArray = [NSMutableArray arrayWithArray:chaptersArray[self.selectedChapter + 1]];
+        
+        //Check if the first game of the next chapter has been already unlocked
+        //by the user
+        if (![chapterGamesFinishedArray containsObject:@1]) {
+            //The user hadn't unlocked this game, so unlock it in file saver
+            NSLog(@"Guardaré el primer juego del próximo capítulo en file saver");
+            
+            [chapterGamesFinishedArray addObject:@(1)];
+            [chaptersArray replaceObjectAtIndex:self.selectedChapter + 1 withObject:chapterGamesFinishedArray];
+            [fileSaver setDictionary:@{@"NumberChaptersArray" : chaptersArray} withName:@"NumberChaptersDic"];
+            
+            //Post a notification to update the color of the buttons in ChaptersViewController
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"GameWonNotification" object:nil];
+        
+        } else {
+            NSLog(@"No guardé la info porque el usuario ya había ganado este juego");
+        }
+        
+    } else {
+        //The user is playing a game different than the last one
+        NSMutableArray *chapterGamesFinishedArray = chaptersArray[self.selectedChapter];
+        
+        //Check if this game is already saved in FileSaver (The user has already won this game)
+        if (![chapterGamesFinishedArray containsObject:@(self.selectedGame + 2)]) {
+            NSLog(@"Guardé la info del juego ganado en file saver");
+            //The user won this game for the first time, so save it in file saver
+            
+            [chapterGamesFinishedArray addObject:@(self.selectedGame + 2)];
+            [chaptersArray replaceObjectAtIndex:self.selectedChapter withObject:chapterGamesFinishedArray];
+            [fileSaver setDictionary:@{@"NumberChaptersArray" : chaptersArray} withName:@"NumberChaptersDic"];
+            
+            //Post a notification to update the color of the buttons in ChaptersViewController
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"GameWonNotification" object:nil];
+            
+        } else {
+            NSLog(@"No guardé la info del juego ganado orque el usuario ya lo había ganado");
+        }
+    }
+    
+    [GameWonAlert showInView:self.view];
+    [self performSelector:@selector(prepareNextGame) withObject:nil afterDelay:1.5];
 }
 
 -(void)dismissVC {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-#pragma mark - UIAlertViewDelegate
-
--(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+-(void)prepareNextGame {
     self.selectedGame += 1;
     [self initGame];
 }

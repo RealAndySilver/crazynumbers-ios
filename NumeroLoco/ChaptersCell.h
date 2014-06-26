@@ -18,5 +18,16 @@
 @property (strong, nonatomic) UIColor *buttonsBackgroundColor;
 @property (strong, nonatomic) UIColor *buttonsBorderColor;
 @property (strong, nonatomic) UIColor *buttonsTitleColor;
+@property (strong, nonatomic) NSMutableArray *buttonsArray;
+
 @property (strong, nonatomic) UIButton *button1;
+@property (strong, nonatomic) UIButton *button2;
+@property (strong, nonatomic) UIButton *button3;
+@property (strong, nonatomic) UIButton *button4;
+@property (strong, nonatomic) UIButton *button5;
+@property (strong, nonatomic) UIButton *button6;
+@property (strong, nonatomic) UIButton *button7;
+@property (strong, nonatomic) UIButton *button8;
+@property (strong, nonatomic) UIButton *button9;
+
 @end

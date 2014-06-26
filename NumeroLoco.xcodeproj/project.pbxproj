@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8B61F8FB195C87CC0036BB90 /* GameWonAlert.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B61F8FA195C87CC0036BB90 /* GameWonAlert.m */; };
 		8B6FB8C019507C6B00EB2C4E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B6FB8BF19507C6B00EB2C4E /* Foundation.framework */; };
 		8B6FB8C219507C6B00EB2C4E /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B6FB8C119507C6B00EB2C4E /* CoreGraphics.framework */; };
 		8B6FB8C419507C6B00EB2C4E /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B6FB8C319507C6B00EB2C4E /* UIKit.framework */; };
@@ -26,6 +27,7 @@
 		8B6FB8FF19508CA200EB2C4E /* ChapterNames.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8B6FB8FE19508CA200EB2C4E /* ChapterNames.plist */; };
 		8B6FB9071950A18600EB2C4E /* GameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B6FB9061950A18600EB2C4E /* GameViewController.m */; };
 		8B9857FC19537C080083FD45 /* AppInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B9857FB19537C080083FD45 /* AppInfo.m */; };
+		8BA60C37195B33870072A7F4 /* FileSaver.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BA60C36195B33870072A7F4 /* FileSaver.m */; };
 		8BD2CED31951E6B4002EF327 /* GamesDatabase2.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8BD2CED21951E6B4002EF327 /* GamesDatabase2.plist */; };
 		A06520711959B7D100399778 /* PadStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A06520701959B7D100399778 /* PadStoryboard.storyboard */; };
 		A0BCCCB8195474F6001CD7F1 /* ColorsChaptersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A0BCCCB7195474F6001CD7F1 /* ColorsChaptersViewController.m */; };
@@ -45,6 +47,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		8B61F8F9195C87CC0036BB90 /* GameWonAlert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameWonAlert.h; sourceTree = "<group>"; };
+		8B61F8FA195C87CC0036BB90 /* GameWonAlert.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameWonAlert.m; sourceTree = "<group>"; };
 		8B6FB8BC19507C6B00EB2C4E /* NumeroLoco.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NumeroLoco.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8B6FB8BF19507C6B00EB2C4E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		8B6FB8C119507C6B00EB2C4E /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -73,6 +77,8 @@
 		8B6FB9061950A18600EB2C4E /* GameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameViewController.m; sourceTree = "<group>"; };
 		8B9857FA19537C080083FD45 /* AppInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppInfo.h; sourceTree = "<group>"; };
 		8B9857FB19537C080083FD45 /* AppInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppInfo.m; sourceTree = "<group>"; };
+		8BA60C35195B33870072A7F4 /* FileSaver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileSaver.h; sourceTree = "<group>"; };
+		8BA60C36195B33870072A7F4 /* FileSaver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FileSaver.m; sourceTree = "<group>"; };
 		8BD2CED21951E6B4002EF327 /* GamesDatabase2.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = GamesDatabase2.plist; sourceTree = "<group>"; };
 		A06520701959B7D100399778 /* PadStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = PadStoryboard.storyboard; sourceTree = "<group>"; };
 		A0BCCCB6195474F6001CD7F1 /* ColorsChaptersViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ColorsChaptersViewController.h; sourceTree = "<group>"; };
@@ -107,6 +113,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		8B61F8F8195C87A90036BB90 /* Custom Views */ = {
+			isa = PBXGroup;
+			children = (
+				8B61F8F9195C87CC0036BB90 /* GameWonAlert.h */,
+				8B61F8FA195C87CC0036BB90 /* GameWonAlert.m */,
+			);
+			name = "Custom Views";
+			sourceTree = "<group>";
+		};
 		8B6FB8B319507C6B00EB2C4E = {
 			isa = PBXGroup;
 			children = (
@@ -140,11 +155,13 @@
 		8B6FB8C519507C6B00EB2C4E /* NumeroLoco */ = {
 			isa = PBXGroup;
 			children = (
+				8BA60C34195B33870072A7F4 /* FileSaver */,
 				8B9857FA19537C080083FD45 /* AppInfo.h */,
 				8B9857FB19537C080083FD45 /* AppInfo.m */,
 				8B6FB8F6195084BD00EB2C4E /* Main */,
 				8B6FB8F5195084B400EB2C4E /* ViewControllers */,
 				8B6FB8FD19508BBB00EB2C4E /* Custom Cells */,
+				8B61F8F8195C87A90036BB90 /* Custom Views */,
 				8B6FB8D119507C6B00EB2C4E /* Images.xcassets */,
 				8B6FB8C619507C6B00EB2C4E /* Supporting Files */,
 				8B6FB8FE19508CA200EB2C4E /* ChapterNames.plist */,
@@ -219,6 +236,15 @@
 				8B6FB8FB19508B0800EB2C4E /* ChaptersCell.m */,
 			);
 			name = "Custom Cells";
+			sourceTree = "<group>";
+		};
+		8BA60C34195B33870072A7F4 /* FileSaver */ = {
+			isa = PBXGroup;
+			children = (
+				8BA60C35195B33870072A7F4 /* FileSaver.h */,
+				8BA60C36195B33870072A7F4 /* FileSaver.m */,
+			);
+			path = FileSaver;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -325,6 +351,8 @@
 				8B6FB8FC19508B0800EB2C4E /* ChaptersCell.m in Sources */,
 				8B9857FC19537C080083FD45 /* AppInfo.m in Sources */,
 				8B6FB8F9195084CE00EB2C4E /* ChaptersViewController.m in Sources */,
+				8BA60C37195B33870072A7F4 /* FileSaver.m in Sources */,
+				8B61F8FB195C87CC0036BB90 /* GameWonAlert.m in Sources */,
 				A0BCCCB8195474F6001CD7F1 /* ColorsChaptersViewController.m in Sources */,
 				8B6FB9071950A18600EB2C4E /* GameViewController.m in Sources */,
 				A0BCCCBF19549049001CD7F1 /* ColorsGameViewController.m in Sources */,
@@ -451,7 +479,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "NumeroLoco/NumeroLoco-Prefix.pch";
 				INFOPLIST_FILE = "NumeroLoco/NumeroLoco-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
@@ -466,7 +494,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "NumeroLoco/NumeroLoco-Prefix.pch";
 				INFOPLIST_FILE = "NumeroLoco/NumeroLoco-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;

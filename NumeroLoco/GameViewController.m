@@ -18,6 +18,8 @@
 @property (strong, nonatomic) UILabel *maxTapsLabel;
 @property (strong, nonatomic) UILabel *titleLabel;
 @property (strong, nonatomic) NSArray *pointsArray;
+@property (strong, nonatomic) UIButton *backButton;
+@property (strong, nonatomic) UIButton *resetButton;
 @end
 
 #define FONT_NAME @"HelveticaNeue-Light"
@@ -64,55 +66,60 @@
 
 -(void)setupUI {
     //Setup MainTitle
+    NSUInteger labelsFontSize;
     if (isPad) {
         self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 70.0, screenBounds.size.width, 70.0)];
-        self.titleLabel.font = [UIFont fontWithName:FONT_NAME size:60.0];
+        self.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-UltraLight" size:70.0];
+        labelsFontSize = 25.0;
     } else {
         self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 70.0, screenBounds.size.width, 40.0)];
         self.titleLabel.font = [UIFont fontWithName:FONT_NAME size:30.0];
+        labelsFontSize = 18.0;
     }
     
     self.titleLabel.text = [NSString stringWithFormat:@"Chapter %i - Game %i", self.selectedChapter + 1, self.selectedGame + 1];
-    self.titleLabel.textColor = [UIColor colorWithWhite:0.2 alpha:1.0];
+    self.titleLabel.textColor = [UIColor whiteColor];
     
     self.titleLabel.textAlignment = NSTextAlignmentCenter;
     [self.view addSubview:self.titleLabel];
     
     //Back Button
-    UIButton *backButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    backButton.frame = CGRectMake(20.0, screenBounds.size.height - 60.0, 70.0, 40.0);
-    backButton.layer.cornerRadius = 4.0;
-    backButton.layer.borderWidth = 1.0;
-    backButton.layer.borderColor = [UIColor colorWithWhite:0.2 alpha:1.0].CGColor;
-    [backButton setTitle:@"Back" forState:UIControlStateNormal];
-    [backButton setTitleColor:[UIColor colorWithWhite:0.2 alpha:1.0] forState:UIControlStateNormal];
-    backButton.titleLabel.font = [UIFont fontWithName:FONT_NAME size:15.0];
-    [backButton addTarget:self action:@selector(dismissVC) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:backButton];
+    self.backButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    self.backButton.frame = CGRectMake(20.0, screenBounds.size.height - 60.0, 70.0, 40.0);
+    self.backButton.layer.cornerRadius = 4.0;
+    self.backButton.layer.borderWidth = 1.0;
+    self.backButton.layer.borderColor = [UIColor whiteColor].CGColor;
+    [self.backButton setTitle:@"Back" forState:UIControlStateNormal];
+    [self.backButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    self.backButton.titleLabel.font = [UIFont fontWithName:FONT_NAME size:15.0];
+    [self.backButton addTarget:self action:@selector(dismissVC) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:self.backButton];
     
     //Reset Button
-    UIButton *resetButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    resetButton.frame = CGRectMake(screenBounds.size.width - 90, screenBounds.size.height - 60.0, 70.0, 40.0);
-    resetButton.layer.cornerRadius = 4.0;
-    resetButton.layer.borderColor = [UIColor colorWithWhite:0.2 alpha:1.0].CGColor;
-    resetButton.layer.borderWidth = 1.0;
-    [resetButton setTitle:@"Restart" forState:UIControlStateNormal];
-    [resetButton setTitleColor:[UIColor colorWithWhite:0.2 alpha:1.0] forState:UIControlStateNormal];
-    resetButton.titleLabel.font = [UIFont fontWithName:FONT_NAME size:15.0];
-    [resetButton addTarget:self action:@selector(initGame) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:resetButton];
+    self.resetButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    self.resetButton.frame = CGRectMake(screenBounds.size.width - 90, screenBounds.size.height - 60.0, 70.0, 40.0);
+    self.resetButton.layer.cornerRadius = 4.0;
+    self.resetButton.layer.borderColor = [UIColor whiteColor].CGColor;
+    self.resetButton.layer.borderWidth = 1.0;
+    [self.resetButton setTitle:@"Restart" forState:UIControlStateNormal];
+    [self.resetButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    self.resetButton.titleLabel.font = [UIFont fontWithName:FONT_NAME size:15.0];
+    [self.resetButton addTarget:self action:@selector(initGame) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:self.resetButton];
     
     //Number of taps label
-    self.numberOfTapsLabel = [[UILabel alloc] initWithFrame:CGRectMake(45.0, screenBounds.size.height - 135.0, 200.0, 20.0)];
+    self.numberOfTapsLabel = [[UILabel alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 150.0, screenBounds.size.height - 135.0, 300.0, 30.0)];
     self.numberOfTapsLabel.text = @"Number of taps: 0";
-    self.numberOfTapsLabel.textColor = [UIColor colorWithWhite:0.2 alpha:1.0];
-    self.numberOfTapsLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:18.0];
+    self.numberOfTapsLabel.textAlignment = NSTextAlignmentCenter;
+    self.numberOfTapsLabel.textColor = [UIColor whiteColor];
+    self.numberOfTapsLabel.font = [UIFont fontWithName:FONT_NAME size:labelsFontSize];
     [self.view addSubview:self.numberOfTapsLabel];
     
     //Max taps label
-    self.maxTapsLabel = [[UILabel alloc] initWithFrame:CGRectMake(45.0, screenBounds.size.height - 110.0, 200.0, 20.0)];
-    self.maxTapsLabel.textColor = [UIColor colorWithWhite:0.2 alpha:1.0];
-    self.maxTapsLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:18.0];
+    self.maxTapsLabel = [[UILabel alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 150.0, screenBounds.size.height - 110.0, 300.0, 30.0)];
+    self.maxTapsLabel.textColor = [UIColor whiteColor];
+    self.maxTapsLabel.textAlignment = NSTextAlignmentCenter;
+    self.maxTapsLabel.font = [UIFont fontWithName:FONT_NAME size:labelsFontSize];
     [self.view addSubview:self.maxTapsLabel];
     
     //Buttons container view
@@ -149,8 +156,11 @@
         else
             self.buttonsContainerView.frame = CGRectMake(35.0, 110.0, screenBounds.size.width - 70.0, screenBounds.size.width - 70.0);
         
-    } else if (matrixSize >= 5) {
-        self.buttonsContainerView.frame = CGRectMake(10.0, 110.0, screenBounds.size.width - 20.0, screenBounds.size.width - 20.0);
+    } else {
+        if (isPad)
+            self.buttonsContainerView.frame = CGRectMake(50.0, 110.0, screenBounds.size.width - 100.0, screenBounds.size.width - 100.0);
+        else
+            self.buttonsContainerView.frame = CGRectMake(10.0, 110.0, screenBounds.size.width - 20.0, screenBounds.size.width - 20.0);
     }
     self.buttonsContainerView.center = CGPointMake(screenBounds.size.width/2.0, screenBounds.size.height/2.0);
     
@@ -240,8 +250,15 @@
 
 -(void)createSquareMatrixOf:(NSUInteger)size {
     NSUInteger buttonDistance;
-    if (isPad) buttonDistance = 20.0;
-    else buttonDistance = 10.0;
+    NSUInteger cornerRadius;
+    if (isPad) {
+        buttonDistance = 20.0;
+        cornerRadius = 10.0;
+    }
+    else {
+        buttonDistance = 10.0;
+        cornerRadius = 4.0;
+    }
     
     NSUInteger buttonSize = (self.buttonsContainerView.frame.size.width - ((matrixSize + 1)*buttonDistance)) / matrixSize;
     NSLog(@"Tamaño del boton: %d", buttonSize);
@@ -251,18 +268,16 @@
         NSMutableArray *filaButtonsArray = [[NSMutableArray alloc] init];
         for (int j = 0; j < size; j++) {
             UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-            [button setTitleColor:[UIColor colorWithWhite:0.2 alpha:1.0] forState:UIControlStateNormal];
-            button.layer.cornerRadius = 4.0;
-            button.layer.borderColor = [UIColor colorWithWhite:0.2 alpha:1.0].CGColor;
-            button.layer.borderWidth = 1.0;
+            [button setTitleColor:[[AppInfo sharedInstance] appColorsArray][self.selectedChapter] forState:UIControlStateNormal];
+            button.layer.cornerRadius = cornerRadius;
             button.frame = CGRectMake(buttonDistance + (i*buttonSize + buttonDistance*i), buttonDistance + (j*buttonSize + buttonDistance*j), buttonSize, buttonSize);
-            
+            button.backgroundColor = [UIColor whiteColor];
             [button setTitle:@"0" forState:UIControlStateNormal];
             if (matrixSize < 5) {
-                if (isPad) button.titleLabel.font = [UIFont fontWithName:FONT_NAME size:80.0];
+                if (isPad) button.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-UltraLight" size:80.0];
                 else button.titleLabel.font = [UIFont fontWithName:FONT_NAME size:40.0];
             } else {
-                if (isPad) button.titleLabel.font = [UIFont fontWithName:FONT_NAME size:70.0];
+                if (isPad) button.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-UltraLight" size:70.0];
                 else button.titleLabel.font = [UIFont fontWithName:FONT_NAME size:30.0];
             }
             [button addTarget:self action:@selector(numberButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
@@ -381,7 +396,7 @@
     }
     
     [GameWonAlert showInView:self.view];
-    [self performSelector:@selector(prepareNextGame) withObject:nil afterDelay:1.5];
+    [self performSelector:@selector(prepareNextGame) withObject:nil afterDelay:2.5];
 }
 
 -(void)dismissVC {

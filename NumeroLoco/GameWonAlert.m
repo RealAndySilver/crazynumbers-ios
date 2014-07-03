@@ -29,15 +29,20 @@
 }*/
 
 +(void)showInView:(UIView *)view {
+    UIView *opacityView = [[UIView alloc] initWithFrame:view.frame];
+    opacityView.backgroundColor = [UIColor blackColor];
+    opacityView.alpha = 0.0;
+    [view addSubview:opacityView];
+    
     UIView *alert = [[UIView alloc] initWithFrame:CGRectMake(view.frame.size.width, view.frame.size.height/2.0 - 75.0, 250.0, 150.0)];
-    alert.backgroundColor = [UIColor colorWithWhite:0.07 alpha:1.0];
+    alert.backgroundColor = [UIColor whiteColor];
     alert.layer.cornerRadius = 10.0;
     [view addSubview:alert];
     
     UILabel *mainTitle = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 0.0, alert.frame.size.width, alert.frame.size.height)];
     mainTitle.text = @"Game Won!";
-    mainTitle.textColor = [UIColor whiteColor];
-    mainTitle.font = [UIFont fontWithName:@"HelveticaNeue-UltraLight" size:35.0];
+    mainTitle.textColor = [UIColor colorWithWhite:0.07 alpha:1.0];
+    mainTitle.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:35.0];
     mainTitle.textAlignment = NSTextAlignmentCenter;
     [alert addSubview:mainTitle];
     alert.transform = CGAffineTransformMakeScale(0.5, 0.5);
@@ -48,10 +53,14 @@
           initialSpringVelocity:0.0
                         options:UIViewAnimationOptionCurveEaseInOut
                      animations:^(){
+                         opacityView.alpha = 0.8;
                          alert.transform = CGAffineTransformMakeScale(1.0, 1.0);
                          alert.transform = CGAffineTransformMakeTranslation(-(view.frame.size.width/2.0 + alert.frame.size.width/2.0), 0.0);
                      } completion:^(BOOL finished){
-                         [UIView animateWithDuration:3.0 animations:^(){} completion:^(BOOL finished){
+                         [UIView animateWithDuration:1.0 animations:^(){
+                             alert.transform = CGAffineTransformMakeScale(1.0, 1.0);
+                             alert.transform = CGAffineTransformMakeTranslation(-(view.frame.size.width/2.0 + alert.frame.size.width/2.0), 0.0);
+                         } completion:^(BOOL finished){
                              [UIView animateWithDuration:1.0
                                                    delay:0.0
                                   usingSpringWithDamping:0.7
@@ -60,8 +69,10 @@
                                               animations:^(){
                                                   alert.transform = CGAffineTransformMakeScale(0.5, 0.5);
                                                   alert.transform = CGAffineTransformMakeTranslation(-(view.frame.size.width + alert.frame.size.width*2), 0.0);
+                                                  opacityView.alpha = 0.0;
 
                                               } completion:^(BOOL finished){
+                                                  [opacityView removeFromSuperview];
                                                   [alert removeFromSuperview];
                                               }];
                          }];

@@ -71,10 +71,13 @@
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
+        NSUInteger cornerRadius = 0;
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
             isPad = YES;
+            cornerRadius = 10.0;
         } else {
             isPad = NO;
+            cornerRadius = 4.0;
         }
         
         NSUInteger fontSize;
@@ -82,7 +85,7 @@
         else fontSize = 40.0;
         
         self.chapterNameLabel = [[UILabel alloc] init];
-        self.chapterNameLabel.font = [UIFont fontWithName:FONT_NAME size:45.0];
+        self.chapterNameLabel.font = [UIFont fontWithName:FONT_NAME size:fontSize];
         self.chapterNameLabel.textAlignment = NSTextAlignmentCenter;
         [self.contentView addSubview:self.chapterNameLabel];
         
@@ -91,7 +94,7 @@
         [self.button1 setTitle:@"1" forState:UIControlStateNormal];
         [self.button1 setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
         self.button1.titleLabel.font = [UIFont fontWithName:FONT_NAME size:fontSize];
-        self.button1.layer.cornerRadius = 4.0;
+        self.button1.layer.cornerRadius = cornerRadius;
         self.button1.layer.borderColor = [UIColor darkGrayColor].CGColor;
         self.button1.layer.borderWidth = 1.0;
         self.button1.tag = 1;
@@ -102,7 +105,7 @@
         self.button2 = [UIButton buttonWithType:UIButtonTypeSystem];
         [self.button2 setTitle:@"2" forState:UIControlStateNormal];
         [self.button2 setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
-        self.button2.layer.cornerRadius = 4.0;
+        self.button2.layer.cornerRadius = cornerRadius;
         self.button2.layer.borderColor = [UIColor darkGrayColor].CGColor;
         self.button2.titleLabel.font = [UIFont fontWithName:FONT_NAME size:fontSize];
         self.button2.layer.borderWidth = 1.0;
@@ -115,7 +118,7 @@
         self.button3.titleLabel.font = [UIFont fontWithName:FONT_NAME size:fontSize];
         [self.button3 setTitle:@"3" forState:UIControlStateNormal];
         [self.button3 setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
-        self.button3.layer.cornerRadius = 4.0;
+        self.button3.layer.cornerRadius = cornerRadius;
         self.button3.layer.borderColor = [UIColor darkGrayColor].CGColor;
         self.button3.layer.borderWidth = 1.0;
         self.button3.tag = 3;
@@ -127,7 +130,7 @@
         self.button4.titleLabel.font = [UIFont fontWithName:FONT_NAME size:fontSize];
         [self.button4 setTitle:@"4" forState:UIControlStateNormal];
         [self.button4 setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
-        self.button4.layer.cornerRadius = 4.0;
+        self.button4.layer.cornerRadius = cornerRadius;
         self.button4.layer.borderColor = [UIColor darkGrayColor].CGColor;
         self.button4.layer.borderWidth = 1.0;
         self.button4.tag = 4;
@@ -139,7 +142,7 @@
         [self.button5 setTitle:@"5" forState:UIControlStateNormal];
         self.button5.titleLabel.font = [UIFont fontWithName:FONT_NAME size:fontSize];
         [self.button5 setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
-        self.button5.layer.cornerRadius = 4.0;
+        self.button5.layer.cornerRadius = cornerRadius;
         self.button5.layer.borderColor = [UIColor darkGrayColor].CGColor;
         self.button5.layer.borderWidth = 1.0;
         self.button5.tag = 5;
@@ -151,7 +154,7 @@
         [self.button6 setTitle:@"6" forState:UIControlStateNormal];
         [self.button6 setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
         self.button6.titleLabel.font = [UIFont fontWithName:FONT_NAME size:fontSize];
-        self.button6.layer.cornerRadius = 4.0;
+        self.button6.layer.cornerRadius = cornerRadius;
         self.button6.layer.borderColor = [UIColor darkGrayColor].CGColor;
         self.button6.layer.borderWidth = 1.0;
         self.button6.tag = 6;
@@ -163,7 +166,7 @@
         [self.button7 setTitle:@"7" forState:UIControlStateNormal];
         [self.button7 setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
         self.button7.titleLabel.font = [UIFont fontWithName:FONT_NAME size:fontSize];
-        self.button7.layer.cornerRadius = 4.0;
+        self.button7.layer.cornerRadius = cornerRadius;
         self.button7.layer.borderColor = [UIColor darkGrayColor].CGColor;
         self.button7.layer.borderWidth = 1.0;
         self.button7.tag = 7;
@@ -175,7 +178,7 @@
         [self.button8 setTitle:@"8" forState:UIControlStateNormal];
         self.button8.titleLabel.font = [UIFont fontWithName:FONT_NAME size:fontSize];
         [self.button8 setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
-        self.button8.layer.cornerRadius = 4.0;
+        self.button8.layer.cornerRadius = cornerRadius;
         self.button8.layer.borderColor = [UIColor darkGrayColor].CGColor;
         self.button8.layer.borderWidth = 1.0;
         self.button8.tag = 8;
@@ -187,7 +190,7 @@
         [self.button9 setTitle:@"9" forState:UIControlStateNormal];
         self.button9.titleLabel.font = [UIFont fontWithName:FONT_NAME size:fontSize];
         [self.button9 setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
-        self.button9.layer.cornerRadius = 4.0;
+        self.button9.layer.cornerRadius = cornerRadius;
         self.button9.layer.borderColor = [UIColor darkGrayColor].CGColor;
         self.button9.layer.borderWidth = 1.0;
         self.button9.tag = 9;
@@ -210,14 +213,14 @@
     if (isPad) {
         buttonSize = 140.0;
         buttonDistance = 20.0;
-        initialHeight = 200.0;
-        chapterNameY = 70.0;
+        initialHeight = 280.0;
+        chapterNameY = 120.0;
         chapterNameHeight = 70.0;
     } else {
         buttonSize = 70.0;
         buttonDistance = 10.0;
-        initialHeight = 100.0;
-        chapterNameY = 0.0;
+        initialHeight = 168.0;
+        chapterNameY = 60.0;
         chapterNameHeight = 50.0;
     }
     

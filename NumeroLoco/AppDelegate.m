@@ -19,9 +19,14 @@
     } else {
         NSLog(@"No existía el dic");
         [fileSaver setDictionary:@{@"NumberChaptersArray" : @[@[@1],
-                                                              @[],
-                                                              @[],
-                                                              @[]]} withName:@"NumberChaptersDic"];
+                                                              @[@1],
+                                                              @[@1],
+                                                              @[@1]]} withName:@"NumberChaptersDic"];
+        
+        [fileSaver setDictionary:@{@"ColorChaptersArray" : @[@[@1],
+                                                              @[@1],
+                                                              @[@1],
+                                                              @[@1]]} withName:@"ColorChaptersDic"];
     }
     return YES;
 }

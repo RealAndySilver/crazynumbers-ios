@@ -48,7 +48,7 @@
 
 -(void)viewDidLoad {
     [super viewDidLoad];
-    self.view.backgroundColor = [UIColor colorWithWhite:0.07 alpha:1.0];
+    self.view.backgroundColor = [UIColor whiteColor];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(gameWonNotificationReceived:)
                                                  name:@"GameWonNotification"
@@ -82,7 +82,7 @@
     collectionViewFlowLayout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
     collectionViewFlowLayout.minimumInteritemSpacing = 0;
     collectionViewFlowLayout.minimumLineSpacing = 0;
-    collectionViewFlowLayout.itemSize = CGSizeMake(screenBounds.size.width, screenBounds.size.width + 100.0);
+    collectionViewFlowLayout.itemSize = CGSizeMake(screenBounds.size.width, screenBounds.size.height);
     
     //Setup CollectionView
     self.collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(screenBounds.size.width + 200.0, 0.0, screenBounds.size.width, screenBounds.size.height) collectionViewLayout:collectionViewFlowLayout];
@@ -95,7 +95,7 @@
     [self.view addSubview:self.collectionView];
     
     //Setup PageControl
-    self.pageControl = [[UIPageControl alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 100.0, screenBounds.size.height - 130.0, 200.0, 30.0)];
+    self.pageControl = [[UIPageControl alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 100.0, screenBounds.size.height - 115.0, 200.0, 30.0)];
     self.pageControl.numberOfPages = numberOfChapters;
     self.pageControl.pageIndicatorTintColor = [UIColor colorWithWhite:0.7 alpha:1.0];
     self.pageControl.currentPageIndicatorTintColor = [UIColor colorWithWhite:1.0 alpha:1.0];
@@ -122,82 +122,102 @@
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     NSLog(@"Index path %d", indexPath.item);
     ChaptersCell *cell = (ChaptersCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"CellIdentifier" forIndexPath:indexPath];
+    cell.backgroundColor = [[AppInfo sharedInstance] appColorsArray][indexPath.item];
     cell.chapterNameLabel.text = self.chaptersNamesArray[indexPath.item];
-    cell.chapterNameLabel.textColor = [[AppInfo sharedInstance] appColorsArray][indexPath.item];
+    cell.chapterNameLabel.textColor = [UIColor whiteColor];
     cell.delegate = self;
     NSLog(@"juegos ganados en este capítulo: %d", [self.chaptersGamesFinishedArray[indexPath.item] count]);
     NSArray *gamesFinishedArray = self.chaptersGamesFinishedArray[indexPath.item];
     
     if ([gamesFinishedArray containsObject:@1]) {
         cell.button1.layer.borderColor = ((UIColor *)[[AppInfo sharedInstance] appColorsArray][indexPath.item]).CGColor;
+        cell.button1.backgroundColor = [UIColor whiteColor];
         [cell.button1 setTitleColor:[[AppInfo sharedInstance] appColorsArray][indexPath.item] forState:UIControlStateNormal];
+
     } else {
-        cell.button1.layer.borderColor = [UIColor lightGrayColor].CGColor;
-        [cell.button1 setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+        cell.button1.backgroundColor = [UIColor clearColor];
+        cell.button1.layer.borderColor = [UIColor whiteColor].CGColor;
+        [cell.button1 setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     }
     
     if ([gamesFinishedArray containsObject:@2]) {
         cell.button2.layer.borderColor = ((UIColor *)[[AppInfo sharedInstance] appColorsArray][indexPath.item]).CGColor;
+        cell.button2.backgroundColor = [UIColor whiteColor];
         [cell.button2 setTitleColor:[[AppInfo sharedInstance] appColorsArray][indexPath.item] forState:UIControlStateNormal];
     } else {
-        cell.button2.layer.borderColor = [UIColor lightGrayColor].CGColor;
-        [cell.button2 setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+        cell.button2.backgroundColor = [UIColor clearColor];
+        cell.button2.layer.borderColor = [UIColor whiteColor].CGColor;
+        [cell.button2 setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     }
     
     if ([gamesFinishedArray containsObject:@3]) {
         cell.button3.layer.borderColor = ((UIColor *)[[AppInfo sharedInstance] appColorsArray][indexPath.item]).CGColor;
+        cell.button3.backgroundColor = [UIColor whiteColor];
         [cell.button3 setTitleColor:[[AppInfo sharedInstance] appColorsArray][indexPath.item] forState:UIControlStateNormal];
     } else {
-        cell.button3.layer.borderColor = [UIColor lightGrayColor].CGColor;
-        [cell.button3 setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+        cell.button3.backgroundColor = [UIColor clearColor];
+        cell.button3.layer.borderColor = [UIColor whiteColor].CGColor;
+        [cell.button3 setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     }
     
     if ([gamesFinishedArray containsObject:@4]) {
         cell.button4.layer.borderColor = ((UIColor *)[[AppInfo sharedInstance] appColorsArray][indexPath.item]).CGColor;
+        cell.button4.backgroundColor = [UIColor whiteColor];
         [cell.button4 setTitleColor:[[AppInfo sharedInstance] appColorsArray][indexPath.item] forState:UIControlStateNormal];
     } else {
-        cell.button4.layer.borderColor = [UIColor lightGrayColor].CGColor;
-        [cell.button4 setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+        cell.button4.backgroundColor = [UIColor clearColor];
+        cell.button4.layer.borderColor = [UIColor whiteColor].CGColor;
+        [cell.button4 setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     }
     
     if ([gamesFinishedArray containsObject:@5]) {
         cell.button5.layer.borderColor = ((UIColor *)[[AppInfo sharedInstance] appColorsArray][indexPath.item]).CGColor;
+        cell.button5.backgroundColor = [UIColor whiteColor];
         [cell.button5 setTitleColor:[[AppInfo sharedInstance] appColorsArray][indexPath.item] forState:UIControlStateNormal];
     } else {
-        cell.button5.layer.borderColor = [UIColor lightGrayColor].CGColor;
-        [cell.button5 setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+        cell.button5.backgroundColor = [UIColor clearColor];
+        cell.button5.layer.borderColor = [UIColor whiteColor].CGColor;
+        [cell.button5 setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     }
     
     if ([gamesFinishedArray containsObject:@6]) {
         cell.button6.layer.borderColor = ((UIColor *)[[AppInfo sharedInstance] appColorsArray][indexPath.item]).CGColor;
+        cell.button6.backgroundColor = [UIColor whiteColor];
         [cell.button6 setTitleColor:[[AppInfo sharedInstance] appColorsArray][indexPath.item] forState:UIControlStateNormal];
     } else {
-        cell.button6.layer.borderColor = [UIColor lightGrayColor].CGColor;
-        [cell.button6 setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+        cell.button6.backgroundColor = [UIColor clearColor];
+        cell.button6.layer.borderColor = [UIColor whiteColor].CGColor;
+        [cell.button6 setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     }
     
     if ([gamesFinishedArray containsObject:@7]) {
         cell.button7.layer.borderColor = ((UIColor *)[[AppInfo sharedInstance] appColorsArray][indexPath.item]).CGColor;
+        cell.button7.backgroundColor = [UIColor whiteColor];
         [cell.button7 setTitleColor:[[AppInfo sharedInstance] appColorsArray][indexPath.item] forState:UIControlStateNormal];
     } else {
-        cell.button7.layer.borderColor = [UIColor lightGrayColor].CGColor;
-        [cell.button7 setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+        cell.button7.backgroundColor = [UIColor clearColor];
+        cell.button7.layer.borderColor = [UIColor whiteColor].CGColor;
+        [cell.button7 setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     }
     
     if ([gamesFinishedArray containsObject:@8]) {
         cell.button8.layer.borderColor = ((UIColor *)[[AppInfo sharedInstance] appColorsArray][indexPath.item]).CGColor;
+        cell.button8.backgroundColor = [UIColor whiteColor];
         [cell.button8 setTitleColor:[[AppInfo sharedInstance] appColorsArray][indexPath.item] forState:UIControlStateNormal];
     } else {
-        cell.button8.layer.borderColor = [UIColor lightGrayColor].CGColor;
-        [cell.button8 setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+        cell.button8.backgroundColor = [UIColor clearColor];
+        cell.button8.layer.borderColor = [UIColor whiteColor].CGColor;
+        [cell.button8 setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     }
     
     if ([gamesFinishedArray containsObject:@9]) {
         cell.button9.layer.borderColor = ((UIColor *)[[AppInfo sharedInstance] appColorsArray][indexPath.item]).CGColor;
+        cell.button9.backgroundColor = [UIColor whiteColor];
         [cell.button9 setTitleColor:[[AppInfo sharedInstance] appColorsArray][indexPath.item] forState:UIControlStateNormal];
     } else {
-        cell.button9.layer.borderColor = [UIColor lightGrayColor].CGColor;
-        [cell.button9 setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+        cell.button9.backgroundColor = [UIColor clearColor];
+        cell.button9.layer.borderColor = [UIColor whiteColor].CGColor;
+        [cell.button9 setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     }
     
     return cell;

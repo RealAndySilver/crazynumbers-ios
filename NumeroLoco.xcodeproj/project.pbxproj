@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8B18CF8F19644AD000F3FB0F /* TutorialPhoneR4_4.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B18CF8E19644AD000F3FB0F /* TutorialPhoneR4_4.png */; };
+		8B18CF9119644BBB00F3FB0F /* TutorialPhoneR4_5.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B18CF9019644BBB00F3FB0F /* TutorialPhoneR4_5.png */; };
 		8B61F8FB195C87CC0036BB90 /* GameWonAlert.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B61F8FA195C87CC0036BB90 /* GameWonAlert.m */; };
 		8B6FB8C019507C6B00EB2C4E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B6FB8BF19507C6B00EB2C4E /* Foundation.framework */; };
 		8B6FB8C219507C6B00EB2C4E /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B6FB8C119507C6B00EB2C4E /* CoreGraphics.framework */; };
@@ -26,8 +28,14 @@
 		8B6FB8FC19508B0800EB2C4E /* ChaptersCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B6FB8FB19508B0800EB2C4E /* ChaptersCell.m */; };
 		8B6FB8FF19508CA200EB2C4E /* ChapterNames.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8B6FB8FE19508CA200EB2C4E /* ChapterNames.plist */; };
 		8B6FB9071950A18600EB2C4E /* GameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B6FB9061950A18600EB2C4E /* GameViewController.m */; };
+		8B90453F196359FC000F2E51 /* TutorialPhoneR4_1.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B90453E196359FC000F2E51 /* TutorialPhoneR4_1.png */; };
+		8B90454119635EEF000F2E51 /* TutorialPhoneR4_2.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B90454019635EEF000F2E51 /* TutorialPhoneR4_2.png */; };
+		8B90454319636244000F2E51 /* TutorialPhoneR4_3.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B90454219636244000F2E51 /* TutorialPhoneR4_3.png */; };
 		8B9857FC19537C080083FD45 /* AppInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B9857FB19537C080083FD45 /* AppInfo.m */; };
 		8BA60C37195B33870072A7F4 /* FileSaver.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BA60C36195B33870072A7F4 /* FileSaver.m */; };
+		8BA94021195DC10C0032706E /* ColorPatternView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BA94020195DC10C0032706E /* ColorPatternView.m */; };
+		8BB9EC9319632542007B8C8E /* TutorialViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BB9EC9219632542007B8C8E /* TutorialViewController.m */; };
+		8BB9EC96196345E9007B8C8E /* TutorialCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BB9EC95196345E9007B8C8E /* TutorialCell.m */; };
 		8BD2CED31951E6B4002EF327 /* GamesDatabase2.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8BD2CED21951E6B4002EF327 /* GamesDatabase2.plist */; };
 		A06520711959B7D100399778 /* PadStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A06520701959B7D100399778 /* PadStoryboard.storyboard */; };
 		A0BCCCB8195474F6001CD7F1 /* ColorsChaptersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A0BCCCB7195474F6001CD7F1 /* ColorsChaptersViewController.m */; };
@@ -47,6 +55,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		8B18CF8E19644AD000F3FB0F /* TutorialPhoneR4_4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TutorialPhoneR4_4.png; sourceTree = "<group>"; };
+		8B18CF9019644BBB00F3FB0F /* TutorialPhoneR4_5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TutorialPhoneR4_5.png; sourceTree = "<group>"; };
 		8B61F8F9195C87CC0036BB90 /* GameWonAlert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameWonAlert.h; sourceTree = "<group>"; };
 		8B61F8FA195C87CC0036BB90 /* GameWonAlert.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameWonAlert.m; sourceTree = "<group>"; };
 		8B6FB8BC19507C6B00EB2C4E /* NumeroLoco.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NumeroLoco.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -75,10 +85,19 @@
 		8B6FB8FE19508CA200EB2C4E /* ChapterNames.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = ChapterNames.plist; sourceTree = "<group>"; };
 		8B6FB9051950A18600EB2C4E /* GameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameViewController.h; sourceTree = "<group>"; };
 		8B6FB9061950A18600EB2C4E /* GameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameViewController.m; sourceTree = "<group>"; };
+		8B90453E196359FC000F2E51 /* TutorialPhoneR4_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TutorialPhoneR4_1.png; sourceTree = "<group>"; };
+		8B90454019635EEF000F2E51 /* TutorialPhoneR4_2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TutorialPhoneR4_2.png; sourceTree = "<group>"; };
+		8B90454219636244000F2E51 /* TutorialPhoneR4_3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TutorialPhoneR4_3.png; sourceTree = "<group>"; };
 		8B9857FA19537C080083FD45 /* AppInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppInfo.h; sourceTree = "<group>"; };
 		8B9857FB19537C080083FD45 /* AppInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppInfo.m; sourceTree = "<group>"; };
 		8BA60C35195B33870072A7F4 /* FileSaver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileSaver.h; sourceTree = "<group>"; };
 		8BA60C36195B33870072A7F4 /* FileSaver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FileSaver.m; sourceTree = "<group>"; };
+		8BA9401F195DC10C0032706E /* ColorPatternView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ColorPatternView.h; sourceTree = "<group>"; };
+		8BA94020195DC10C0032706E /* ColorPatternView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ColorPatternView.m; sourceTree = "<group>"; };
+		8BB9EC9119632542007B8C8E /* TutorialViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TutorialViewController.h; sourceTree = "<group>"; };
+		8BB9EC9219632542007B8C8E /* TutorialViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TutorialViewController.m; sourceTree = "<group>"; };
+		8BB9EC94196345E9007B8C8E /* TutorialCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TutorialCell.h; sourceTree = "<group>"; };
+		8BB9EC95196345E9007B8C8E /* TutorialCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TutorialCell.m; sourceTree = "<group>"; };
 		8BD2CED21951E6B4002EF327 /* GamesDatabase2.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = GamesDatabase2.plist; sourceTree = "<group>"; };
 		A06520701959B7D100399778 /* PadStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = PadStoryboard.storyboard; sourceTree = "<group>"; };
 		A0BCCCB6195474F6001CD7F1 /* ColorsChaptersViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ColorsChaptersViewController.h; sourceTree = "<group>"; };
@@ -118,6 +137,8 @@
 			children = (
 				8B61F8F9195C87CC0036BB90 /* GameWonAlert.h */,
 				8B61F8FA195C87CC0036BB90 /* GameWonAlert.m */,
+				8BA9401F195DC10C0032706E /* ColorPatternView.h */,
+				8BA94020195DC10C0032706E /* ColorPatternView.m */,
 			);
 			name = "Custom Views";
 			sourceTree = "<group>";
@@ -175,6 +196,7 @@
 		8B6FB8C619507C6B00EB2C4E /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				8B90453B196359FC000F2E51 /* Resources */,
 				8B6FB8C719507C6B00EB2C4E /* NumeroLoco-Info.plist */,
 				8B6FB8C819507C6B00EB2C4E /* InfoPlist.strings */,
 				8B6FB8CB19507C6B00EB2C4E /* main.m */,
@@ -214,6 +236,8 @@
 				8B6FB9061950A18600EB2C4E /* GameViewController.m */,
 				A0BCCCBD19549049001CD7F1 /* ColorsGameViewController.h */,
 				A0BCCCBE19549049001CD7F1 /* ColorsGameViewController.m */,
+				8BB9EC9119632542007B8C8E /* TutorialViewController.h */,
+				8BB9EC9219632542007B8C8E /* TutorialViewController.m */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -234,8 +258,38 @@
 			children = (
 				8B6FB8FA19508B0800EB2C4E /* ChaptersCell.h */,
 				8B6FB8FB19508B0800EB2C4E /* ChaptersCell.m */,
+				8BB9EC94196345E9007B8C8E /* TutorialCell.h */,
+				8BB9EC95196345E9007B8C8E /* TutorialCell.m */,
 			);
 			name = "Custom Cells";
+			sourceTree = "<group>";
+		};
+		8B90453B196359FC000F2E51 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				8B90453C196359FC000F2E51 /* Tutorial */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		8B90453C196359FC000F2E51 /* Tutorial */ = {
+			isa = PBXGroup;
+			children = (
+				8B90453D196359FC000F2E51 /* iPhoneR4 */,
+			);
+			path = Tutorial;
+			sourceTree = "<group>";
+		};
+		8B90453D196359FC000F2E51 /* iPhoneR4 */ = {
+			isa = PBXGroup;
+			children = (
+				8B18CF9019644BBB00F3FB0F /* TutorialPhoneR4_5.png */,
+				8B18CF8E19644AD000F3FB0F /* TutorialPhoneR4_4.png */,
+				8B90453E196359FC000F2E51 /* TutorialPhoneR4_1.png */,
+				8B90454219636244000F2E51 /* TutorialPhoneR4_3.png */,
+				8B90454019635EEF000F2E51 /* TutorialPhoneR4_2.png */,
+			);
+			path = iPhoneR4;
 			sourceTree = "<group>";
 		};
 		8BA60C34195B33870072A7F4 /* FileSaver */ = {
@@ -325,9 +379,14 @@
 				8BD2CED31951E6B4002EF327 /* GamesDatabase2.plist in Resources */,
 				A0BCCCBA195476D1001CD7F1 /* ColorsChaptersNames.plist in Resources */,
 				8B6FB8EF19507CC400EB2C4E /* MainStoryboard.storyboard in Resources */,
+				8B18CF8F19644AD000F3FB0F /* TutorialPhoneR4_4.png in Resources */,
+				8B90454119635EEF000F2E51 /* TutorialPhoneR4_2.png in Resources */,
 				A0BCCCBC1954778C001CD7F1 /* ColorGamesDatabase2.plist in Resources */,
 				8B6FB8CA19507C6B00EB2C4E /* InfoPlist.strings in Resources */,
+				8B18CF9119644BBB00F3FB0F /* TutorialPhoneR4_5.png in Resources */,
 				A06520711959B7D100399778 /* PadStoryboard.storyboard in Resources */,
+				8B90453F196359FC000F2E51 /* TutorialPhoneR4_1.png in Resources */,
+				8B90454319636244000F2E51 /* TutorialPhoneR4_3.png in Resources */,
 				8B6FB8D219507C6B00EB2C4E /* Images.xcassets in Resources */,
 				8B6FB8FF19508CA200EB2C4E /* ChapterNames.plist in Resources */,
 			);
@@ -349,6 +408,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				8B6FB8FC19508B0800EB2C4E /* ChaptersCell.m in Sources */,
+				8BB9EC96196345E9007B8C8E /* TutorialCell.m in Sources */,
+				8BA94021195DC10C0032706E /* ColorPatternView.m in Sources */,
 				8B9857FC19537C080083FD45 /* AppInfo.m in Sources */,
 				8B6FB8F9195084CE00EB2C4E /* ChaptersViewController.m in Sources */,
 				8BA60C37195B33870072A7F4 /* FileSaver.m in Sources */,
@@ -357,6 +418,7 @@
 				8B6FB9071950A18600EB2C4E /* GameViewController.m in Sources */,
 				A0BCCCBF19549049001CD7F1 /* ColorsGameViewController.m in Sources */,
 				8B6FB8D019507C6B00EB2C4E /* AppDelegate.m in Sources */,
+				8BB9EC9319632542007B8C8E /* TutorialViewController.m in Sources */,
 				8B6FB8CC19507C6B00EB2C4E /* main.m in Sources */,
 				8B6FB8F419507D7600EB2C4E /* RootViewController.m in Sources */,
 			);

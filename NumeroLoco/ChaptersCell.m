@@ -204,6 +204,7 @@
 
 -(void)layoutSubviews {
     [super layoutSubviews];
+    CGRect bounds = self.contentView.bounds;
     NSUInteger buttonSize;
     NSUInteger buttonDistance;
     NSUInteger initialHeight;
@@ -219,8 +220,8 @@
     } else {
         buttonSize = 70.0;
         buttonDistance = 10.0;
-        initialHeight = 168.0;
-        chapterNameY = 60.0;
+        initialHeight = bounds.size.height/3.38;
+        chapterNameY = bounds.size.height/9.46;
         chapterNameHeight = 50.0;
     }
     

@@ -8,25 +8,28 @@
 
 #import "AppDelegate.h"
 #import "FileSaver.h"
+#import <FacebookSDK/FacebookSDK.h>
 
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    [FBLoginView class];
+    
     FileSaver *fileSaver = [[FileSaver alloc] init];
     if ([fileSaver getDictionary:@"NumberChaptersDic"]) {
         NSLog(@"Ya existía el dic");
     } else {
         NSLog(@"No existía el dic");
         [fileSaver setDictionary:@{@"NumberChaptersArray" : @[@[@1],
-                                                              @[@1],
-                                                              @[@1],
-                                                              @[@1]]} withName:@"NumberChaptersDic"];
+                                                              @[],
+                                                              @[],
+                                                              @[]]} withName:@"NumberChaptersDic"];
         
         [fileSaver setDictionary:@{@"ColorChaptersArray" : @[@[@1],
-                                                              @[@1],
-                                                              @[@1],
-                                                              @[@1]]} withName:@"ColorChaptersDic"];
+                                                              @[],
+                                                              @[],
+                                                              @[]]} withName:@"ColorChaptersDic"];
     }
     return YES;
 }
@@ -56,6 +59,15 @@
 - (void)applicationWillTerminate:(UIApplication *)application
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+}
+
+-(BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
+    // Call FBAppCall's handleOpenURL:sourceApplication to handle Facebook app responses
+    BOOL wasHandled = [FBAppCall handleOpenURL:url sourceApplication:sourceApplication];
+    
+    // You can add your app-specific url handling code here if needed
+    
+    return wasHandled;
 }
 
 @end

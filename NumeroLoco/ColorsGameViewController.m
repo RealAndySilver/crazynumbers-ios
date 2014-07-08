@@ -60,16 +60,16 @@
     } else {
         isPad = NO;
     }
-    screenBounds = [UIScreen mainScreen].bounds;
-    NSLog(@"Seleccioné el juego %d en el capítulo %d", self.selectedGame, self.selectedChapter);
-    [self setupUI];
-    
     NSString *gamesDatabasePath = [[NSBundle mainBundle] pathForResource:@"ColorGamesDatabase2" ofType:@"plist"];
     NSArray *chaptersDataArray = [NSArray arrayWithContentsOfFile:gamesDatabasePath];
     matrixSize = [chaptersDataArray[self.selectedChapter][self.selectedGame][@"matrixSize"] intValue];
     maxNumber = [chaptersDataArray[self.selectedChapter][self.selectedGame][@"maxNumber"] intValue];
     NSLog(@"Tamaño de la matriz: %d", matrixSize);
-    [self createSquareMatrixOf:matrixSize];
+    screenBounds = [UIScreen mainScreen].bounds;
+    NSLog(@"Seleccioné el juego %d en el capítulo %d", self.selectedGame, self.selectedChapter);
+    [self setupUI];
+    
+    //[self createSquareMatrixOf:matrixSize];
     [self initGame];
 }
 
@@ -77,12 +77,28 @@
     //Setup MainTitle
     NSUInteger labelsFontSize;
     if (isPad) {
+        self.numberOfTapsLabel = [[UILabel alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 150.0, screenBounds.size.height - 140.0, 300.0, 30.0)];
+        
         self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 70.0, screenBounds.size.width, 70.0)];
         self.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-UltraLight" size:70.0];
         labelsFontSize = 25.0;
     } else {
-        self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 70.0, screenBounds.size.width, 40.0)];
-        self.titleLabel.font = [UIFont fontWithName:FONT_NAME size:30.0];
+        self.numberOfTapsLabel = [[UILabel alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 150.0, screenBounds.size.height - (screenBounds.size.height/4.20), 300.0, 30.0)];
+        
+        if (screenBounds.size.height > 500) {
+            //4 Inch
+            self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0, screenBounds.size.height/8.11, screenBounds.size.width, 40.0)];
+            self.titleLabel.font = [UIFont fontWithName:FONT_NAME size:30.0];
+        } else {
+            //Small iPhone
+            if (matrixSize >= 5) {
+                self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 30.0, screenBounds.size.width, 40.0)];
+                self.titleLabel.font = [UIFont fontWithName:FONT_NAME size:30.0];
+            } else {
+                self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0, screenBounds.size.height/8.11, screenBounds.size.width, 40.0)];
+                self.titleLabel.font = [UIFont fontWithName:FONT_NAME size:30.0];
+            }
+        }
         labelsFontSize = 18.0;
     }
     self.titleLabel.text = [NSString stringWithFormat:@"Chapter %i - Game %i", self.selectedChapter + 1, self.selectedGame + 1];
@@ -127,7 +143,6 @@
     [self.view addSubview:colorPattern];
     
     //Number of taps label
-    self.numberOfTapsLabel = [[UILabel alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 150.0, screenBounds.size.height - 135.0, 300.0, 30.0)];
     self.numberOfTapsLabel.text = @"Number of taps: 0";
     self.numberOfTapsLabel.textColor = [UIColor lightGrayColor];
     self.numberOfTapsLabel.textAlignment = NSTextAlignmentCenter;
@@ -135,7 +150,7 @@
     [self.view addSubview:self.numberOfTapsLabel];
     
     //Max taps label
-    self.maxTapsLabel = [[UILabel alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 150.0, screenBounds.size.height - 110.0, 300.0, 30.0)];
+    self.maxTapsLabel = [[UILabel alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 150.0, self.numberOfTapsLabel.frame.origin.y + self.numberOfTapsLabel.frame.size.height, 300.0, 20.0)];
     self.maxTapsLabel.textColor = [UIColor lightGrayColor];
     self.maxTapsLabel.textAlignment = NSTextAlignmentCenter;
     self.maxTapsLabel.font = [UIFont fontWithName:FONT_NAME size:labelsFontSize];
@@ -148,7 +163,7 @@
     
     self.buttonsContainerView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 100.0, matrixSize*53.33333, matrixSize*53.33333)];
     self.buttonsContainerView.center = CGPointMake(screenBounds.size.width/2.0, screenBounds.size.height/2.0);
-    self.buttonsContainerView.backgroundColor = [UIColor colorWithWhite:0.8 alpha:1.0];
+    self.buttonsContainerView.backgroundColor = [UIColor colorWithWhite:0.9 alpha:1.0];
     self.buttonsContainerView.layer.cornerRadius = 10.0;
     [self.view addSubview:self.buttonsContainerView];
 }
@@ -174,18 +189,33 @@
     
     //self.buttonsContainerView.frame = CGRectMake(0.0, 100.0, matrixSize*53.33333, matrixSize*53.33333);
     if (matrixSize < 5) {
-        if (isPad)
+        if (isPad) {
             self.buttonsContainerView.frame = CGRectMake(130.0, 110.0, screenBounds.size.width - 260.0, screenBounds.size.width - 260.0);
-        else
-            self.buttonsContainerView.frame = CGRectMake(35.0, 110.0, screenBounds.size.width - 70.0, screenBounds.size.width - 70.0);
+            self.buttonsContainerView.center = CGPointMake(screenBounds.size.width/2.0, screenBounds.size.height/2.0);
+        }
+        else {
+            self.buttonsContainerView.frame = CGRectMake(35.0, screenBounds.size.height/5.16, screenBounds.size.width - 70.0, screenBounds.size.width - 70.0);
+            self.buttonsContainerView.center = CGPointMake(screenBounds.size.width/2.0, screenBounds.size.height/2.0);
+        }
+        
         
     } else {
-        if (isPad)
+        if (isPad) {
             self.buttonsContainerView.frame = CGRectMake(50.0, 110.0, screenBounds.size.width - 100.0, screenBounds.size.width - 100.0);
-        else
+            self.buttonsContainerView.center = CGPointMake(screenBounds.size.width/2.0, screenBounds.size.height/2.0);
+        }
+        else if (screenBounds.size.height > 500) {
+            NSLog(@"************ Estoy en 4 inch");
+            //4 inch
             self.buttonsContainerView.frame = CGRectMake(10.0, 110.0, screenBounds.size.width - 20.0, screenBounds.size.width - 20.0);
+            self.buttonsContainerView.center = CGPointMake(screenBounds.size.width/2.0, screenBounds.size.height/2.0);
+            
+        } else {
+            //Small screen iPhone
+            NSLog(@"*************** Estoy en iPhone pequeño");
+            self.buttonsContainerView.frame = CGRectMake(10.0, 70.0, screenBounds.size.width - 20.0, screenBounds.size.width - 20.0);
+        }
     }
-    self.buttonsContainerView.center = CGPointMake(screenBounds.size.width/2.0, screenBounds.size.height/2.0);
     
     [self createSquareMatrixOf:matrixSize];
     

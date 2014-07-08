@@ -95,7 +95,7 @@
     [self.view addSubview:self.collectionView];
     
     //Setup PageControl
-    self.pageControl = [[UIPageControl alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 100.0, screenBounds.size.height - 130.0, 200.0, 30.0)];
+    self.pageControl = [[UIPageControl alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 100.0, screenBounds.size.height - (screenBounds.size.height/4.93), 200.0, 30.0)];
     self.pageControl.numberOfPages = numberOfChapters;
     self.pageControl.pageIndicatorTintColor = [UIColor colorWithWhite:0.7 alpha:1.0];
     self.pageControl.currentPageIndicatorTintColor = [UIColor colorWithWhite:0.9 alpha:1.0];

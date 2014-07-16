@@ -10,6 +10,8 @@
 #import "AppInfo.h"
 #import "FileSaver.h"
 #import "GameWonAlert.h"
+#import "Flurry.h"
+#import "FlurryAds.h"
 
 @interface GameViewController ()
 @property (strong, nonatomic) NSMutableArray *columnsButtonsArray; //Of UIButton
@@ -63,6 +65,18 @@
     NSLog(@"Tamaño de la matriz: %d", matrixSize);
     //[self createSquareMatrixOf:matrixSize];
     [self initGame];
+}
+
+-(void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    [FlurryAds setAdDelegate:self];
+    [FlurryAds fetchAndDisplayAdForSpace:@"GAME_TOP_BANNER" view:self.view size:BANNER_TOP];
+}
+
+-(void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
+    [FlurryAds removeAdFromSpace:@"GAME_TOP_BANNER"];
+    [FlurryAds setAdDelegate:nil];
 }
 
 -(void)setupUI {
@@ -378,6 +392,9 @@
 }
 
 -(void)userWon {
+    //Send data to Flurry
+    [Flurry logEvent:@"NumbersGameWon" withParameters:@{@"Chapter" : @(self.selectedChapter), @"Game" : @(self.selectedGame)}];
+    
     //Unlock the next game saving the game number with FileSaver
     FileSaver *fileSaver = [[FileSaver alloc] init];
     NSMutableArray *chaptersArray = [fileSaver getDictionary:@"NumberChaptersDic"][@"NumberChaptersArray"];

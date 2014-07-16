@@ -12,6 +12,7 @@
 #import "AppInfo.h"
 #import "TutorialViewController.h"
 #import "FileSaver.h"
+#import "Flurry.h"
 
 @interface RootViewController ()
 @property (weak, nonatomic) IBOutlet UILabel *fifthLabel;
@@ -170,9 +171,25 @@
     self.numbersButton.frame = CGRectMake(screenBounds.size.width, self.startButton.frame.origin.y - 10.0 - buttonsHeight, screenBounds.size.width/6.4*2, buttonsHeight);
     [self.numbersButton addTarget:self action:@selector(goToChaptersVC) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.numbersButton];
+    
+    //Back button
+    UIButton *backButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    backButton.frame = CGRectMake(20.0, screenBounds.size.height - 80.0, screenBounds.size.width/4.57, buttonsHeight);
+    [backButton setTitle:@"Back" forState:UIControlStateNormal];
+    [backButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    backButton.layer.borderColor = [UIColor whiteColor].CGColor;
+    backButton.layer.borderWidth = 1.0;
+    backButton.layer.cornerRadius = cornerRadius;
+    backButton.titleLabel.font = [UIFont fontWithName:fontName size:fontSize];
+    [backButton addTarget:self action:@selector(dismissVC) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:backButton];
 }
 
 #pragma mark - Actions
+
+-(void)dismissVC {
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
 
 -(void)animateGameButtons {
     [UIView animateWithDuration:0.8
@@ -188,18 +205,22 @@
 }
 
 -(void)goToColorsChaptersVC {
+    [Flurry logEvent:@"OpenColorsChapters"];
     ColorsChaptersViewController *colorsChaptersVC = [self.storyboard instantiateViewControllerWithIdentifier:@"ColorsChapters"];
     colorsChaptersVC.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
     [self presentViewController:colorsChaptersVC animated:YES completion:nil];
+    
 }
 
 -(void)goToChaptersVC {
+    [Flurry logEvent:@"OpenNumbersChapters"];
     ChaptersViewController *chaptersVC = [self.storyboard instantiateViewControllerWithIdentifier:@"Chapters"];
     chaptersVC.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
     [self presentViewController:chaptersVC animated:YES completion:nil];
 }
 
 -(void)goToTutorialVC {
+    [Flurry logEvent:@"OpenTutorial"];
     TutorialViewController *tutorialVC = [self.storyboard instantiateViewControllerWithIdentifier:@"Tutorial"];
     [self presentViewController:tutorialVC animated:YES completion:nil];
 }

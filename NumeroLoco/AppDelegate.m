@@ -9,6 +9,8 @@
 #import "AppDelegate.h"
 #import "FileSaver.h"
 #import <FacebookSDK/FacebookSDK.h>
+#import "Flurry.h"
+#import "FlurryAds.h"
 
 @implementation AppDelegate
 
@@ -16,20 +18,25 @@
 {
     [FBLoginView class];
     
+    //Flurry Setup
+    [Flurry setCrashReportingEnabled:YES];
+    [Flurry startSession:@"F3B2NR3G33WX6BTWXFFQ"];
+    [FlurryAds initialize:self.window.rootViewController];
+    
     FileSaver *fileSaver = [[FileSaver alloc] init];
     if ([fileSaver getDictionary:@"NumberChaptersDic"]) {
         NSLog(@"Ya existía el dic");
     } else {
         NSLog(@"No existía el dic");
         [fileSaver setDictionary:@{@"NumberChaptersArray" : @[@[@1],
-                                                              @[],
-                                                              @[],
-                                                              @[]]} withName:@"NumberChaptersDic"];
+                                                              @[@1],
+                                                              @[@1],
+                                                              @[@1]]} withName:@"NumberChaptersDic"];
         
         [fileSaver setDictionary:@{@"ColorChaptersArray" : @[@[@1],
-                                                              @[],
-                                                              @[],
-                                                              @[]]} withName:@"ColorChaptersDic"];
+                                                              @[@1],
+                                                              @[@1],
+                                                              @[@1]]} withName:@"ColorChaptersDic"];
     }
     return YES;
 }

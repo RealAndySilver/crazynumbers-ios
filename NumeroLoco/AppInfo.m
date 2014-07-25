@@ -77,4 +77,8 @@
     return chapterColorsArray;
 }
 
+-(NSArray *)wordsArray {
+    return @[@"Zero", @"One", @"Two", @"Three", @"Four", @"Five", @"Six", @"Seven", @"Eight", @"Nine", @"Ten"];
+}
+
 @end

@@ -9,11 +9,11 @@
 #import "GameViewController.h"
 #import "AppInfo.h"
 #import "FileSaver.h"
-#import "GameWonAlert.h"
 #import "Flurry.h"
 #import "FlurryAds.h"
+#import "GameKitHelper.h"
 
-@interface GameViewController ()
+@interface GameViewController () <UIAlertViewDelegate>
 @property (strong, nonatomic) NSMutableArray *columnsButtonsArray; //Of UIButton
 @property (strong, nonatomic) UIView *buttonsContainerView;
 @property (strong, nonatomic) UILabel *numberOfTapsLabel;
@@ -22,6 +22,7 @@
 @property (strong, nonatomic) NSArray *pointsArray;
 @property (strong, nonatomic) UIButton *backButton;
 @property (strong, nonatomic) UIButton *resetButton;
+@property (strong, nonatomic) NSTimer *gameTimer;
 @end
 
 #define FONT_NAME @"HelveticaNeue-Light"
@@ -31,6 +32,9 @@
     NSUInteger numberOfTaps;
     NSUInteger matrixSize;
     NSUInteger maxNumber;
+    float maxScore;
+    float maxTime;
+    float timeElapsed;
     BOOL isPad;
 }
 
@@ -63,20 +67,31 @@
     NSLog(@"Seleccioné el juego %d en el capítulo %d", self.selectedGame, self.selectedChapter);
     [self setupUI];
     NSLog(@"Tamaño de la matriz: %d", matrixSize);
-    //[self createSquareMatrixOf:matrixSize];
     [self initGame];
 }
 
 -(void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    [FlurryAds setAdDelegate:self];
-    [FlurryAds fetchAndDisplayAdForSpace:@"GAME_TOP_BANNER" view:self.view size:BANNER_TOP];
+    
+    //Add adds from Flurry
+    if (!isPad) {
+        [FlurryAds setAdDelegate:self];
+        [FlurryAds fetchAndDisplayAdForSpace:@"GAME_TOP_BANNER" view:self.view size:BANNER_TOP];
+    }
 }
 
 -(void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
-    [FlurryAds removeAdFromSpace:@"GAME_TOP_BANNER"];
-    [FlurryAds setAdDelegate:nil];
+    
+    //Stop the timer
+    [self.gameTimer invalidate];
+    self.gameTimer = nil;
+    
+    //Remove ads from Flurry
+    if (!isPad) {
+        [FlurryAds removeAdFromSpace:@"GAME_TOP_BANNER"];
+        [FlurryAds setAdDelegate:nil];
+    }
 }
 
 -(void)setupUI {
@@ -139,7 +154,7 @@
     [self.view addSubview:self.resetButton];
     
     //Number of taps label
-    self.numberOfTapsLabel.text = @"Number of taps: 0";
+    /*self.numberOfTapsLabel.text = @"Number of taps: 0";
     self.numberOfTapsLabel.textAlignment = NSTextAlignmentCenter;
     self.numberOfTapsLabel.textColor = [UIColor whiteColor];
     self.numberOfTapsLabel.font = [UIFont fontWithName:FONT_NAME size:labelsFontSize];
@@ -150,7 +165,7 @@
     self.maxTapsLabel.textColor = [UIColor whiteColor];
     self.maxTapsLabel.textAlignment = NSTextAlignmentCenter;
     self.maxTapsLabel.font = [UIFont fontWithName:FONT_NAME size:labelsFontSize];
-    [self.view addSubview:self.maxTapsLabel];
+    [self.view addSubview:self.maxTapsLabel];*/
     
     //Buttons container view
     NSString *gamesDatabasePath = [[NSBundle mainBundle] pathForResource:@"GamesDatabase2" ofType:@"plist"];
@@ -166,6 +181,8 @@
 #pragma mark - Custom Methods
 
 -(void)resetGame {
+    [self.gameTimer invalidate];
+    self.gameTimer = nil;
     
     [self.buttonsContainerView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
     [self.columnsButtonsArray removeAllObjects];
@@ -179,6 +196,9 @@
     }
     matrixSize = [chaptersDataArray[self.selectedChapter][self.selectedGame][@"matrixSize"] intValue];
     maxNumber = [chaptersDataArray[self.selectedChapter][self.selectedGame][@"maxNumber"] intValue];
+    maxScore = [chaptersDataArray[self.selectedChapter][self.selectedGame][@"maxScore"] floatValue];
+    maxTime = [chaptersDataArray[self.selectedChapter][self.selectedGame][@"maxTime"] floatValue];
+    timeElapsed = 0;
     
     //self.buttonsContainerView.frame = CGRectMake(0.0, 100.0, matrixSize*53.33333, matrixSize*53.33333);
     if (matrixSize < 5) {
@@ -190,7 +210,6 @@
             self.buttonsContainerView.frame = CGRectMake(35.0, screenBounds.size.height/5.16, screenBounds.size.width - 70.0, screenBounds.size.width - 70.0);
             self.buttonsContainerView.center = CGPointMake(screenBounds.size.width/2.0, screenBounds.size.height/2.0);
         }
-        
         
     } else {
         if (isPad) {
@@ -250,6 +269,9 @@
     self.maxTapsLabel.text = [NSString stringWithFormat:@"Taps for perfect score: %d", [self.pointsArray count]];
     self.numberOfTapsLabel.text = @"Number of taps: 0";
     numberOfTaps = 0;
+    
+    //Start the game timer
+    self.gameTimer = [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(substractTime) userInfo:nil repeats:YES];
 }
 
 -(void)addOneToButtonAtRow:(NSInteger)row column:(NSInteger)column {
@@ -388,7 +410,17 @@
             }
         }
     }
-    [self performSelector:@selector(userWon) withObject:nil afterDelay:0.35];
+    
+    //Get Points won
+    NSUInteger pointsWon = [self pointsWonForTime:timeElapsed];
+    NSLog(@"Point Woooon %d", pointsWon);
+
+    //Cancel timer
+    [self.gameTimer invalidate];
+    self.gameTimer = nil;
+    
+    [self userWon];
+    //[self performSelector:@selector(userWon) withObject:nil afterDelay:0.3];
 }
 
 -(void)userWon {
@@ -439,13 +471,27 @@
             //Post a notification to update the color of the buttons in ChaptersViewController
             [[NSNotificationCenter defaultCenter] postNotificationName:@"GameWonNotification" object:nil];
             
+            //Save points to fileSaver
+            NSUInteger points = 0;
+            if ([fileSaver getDictionary:@"UserPointsDic"][@"UserPoints"]) {
+                points = [[fileSaver getDictionary:@"UserPointsDic"][@"UserPoints"] intValue];
+                points += [self pointsWonForTime:timeElapsed];
+                [fileSaver setDictionary:@{@"UserPoints" : @(points)} withName:@"UserPointsDic"];
+            } else {
+                points = [self pointsWonForTime:timeElapsed];
+                [fileSaver setDictionary:@{@"UserPoints" : @(points)} withName:@"UserPointsDic"];
+            }
+            
+            NSLog(@"Sending %d points to game center ****************", points);
+            [[GameKitHelper sharedGameKitHelper] submitScore:points category:@"Points_Leaderboard"];
+            
         } else {
-            NSLog(@"No guardé la info del juego ganado orque el usuario ya lo había ganado");
+            NSLog(@"No guardé la info del juego ganado porque el usuario ya lo había ganado");
         }
     }
     
-    [GameWonAlert showInView:self.view];
-    [self performSelector:@selector(prepareNextGame) withObject:nil afterDelay:2.5];
+    NSString *winMessage = [NSString stringWithFormat:@"You finished the game in %0.1f seconds. you scored %d points", timeElapsed, [self pointsWonForTime:timeElapsed]];
+    [[[UIAlertView alloc] initWithTitle:@"GameWon!" message:winMessage delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil] show];
 }
 
 -(void)dismissVC {
@@ -455,6 +501,33 @@
 -(void)prepareNextGame {
     self.selectedGame += 1;
     [self initGame];
+}
+
+-(NSUInteger)pointsWonForTime:(float)time {
+    float pointsWon = 0;
+    NSLog(@"*********** Max Time: %f", maxTime);
+    NSLog(@"*********** Max Score: %f", maxScore);
+    NSLog(@"*********** Time Elapsed: %f", time);
+    //pointsWon = 1/((1/maxTime)*time - 1) + (float)maxScore;
+    float pendiente = (0 - maxScore) / (maxTime - 0);
+    NSLog(@"********** Pendiente: %f", pendiente);
+    pointsWon = pendiente * time + maxScore;
+    
+    if (pointsWon < 0) {
+        pointsWon = 0;
+    }
+    return (int)pointsWon;
+}
+
+-(void)substractTime {
+    timeElapsed += 0.1;
+    //NSLog(@"Time Remainig: %f", maxTime - timeElapsed);
+}
+
+#pragma mark - UIAlertViewDelegate
+
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    [self prepareNextGame];
 }
 
 @end

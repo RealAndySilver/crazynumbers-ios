@@ -1,25 +1,25 @@
 //
-//  ColorsChaptersViewController.m
+//  WordsChaptersViewController.m
 //  NumeroLoco
 //
-//  Created by Diego Vidal on 20/06/14.
+//  Created by Developer on 18/07/14.
 //  Copyright (c) 2014 iAm Studio. All rights reserved.
 //
 
-#import "ColorsChaptersViewController.h"
-#import "ColorsGameViewController.h"
+#import "WordsChaptersViewController.h"
+#import "WordsGameViewController.h"
+#import "FileSaver.h"
 #import "ChaptersCell.h"
 #import "AppInfo.h"
-#import "FileSaver.h"
 
-@interface ColorsChaptersViewController () <UICollectionViewDataSource, UICollectionViewDelegate, ChaptersCellDelegate>
+@interface WordsChaptersViewController () <UICollectionViewDataSource, UICollectionViewDelegate, ChaptersCellDelegate>
 @property (strong, nonatomic) UICollectionView *collectionView;
 @property (strong, nonatomic) NSArray *chaptersNamesArray;
 @property (strong, nonatomic) UIPageControl *pageControl;
-@property (strong, nonatomic) NSArray *colorGamesFinishedArray;
+@property (strong, nonatomic) NSArray *wordGamesFinishedArray;
 @end
 
-@implementation ColorsChaptersViewController {
+@implementation WordsChaptersViewController {
     NSUInteger numberOfChapters;
     CGRect screenBounds;
 }
@@ -27,11 +27,11 @@
 #pragma mark - Lazy Instantiation
 
 -(NSArray *)colorGamesFinishedArray {
-    if (!_colorGamesFinishedArray) {
+    if (!_wordGamesFinishedArray) {
         FileSaver *fileSaver = [[FileSaver alloc] init];
-        _colorGamesFinishedArray = [fileSaver getDictionary:@"ColorChaptersDic"][@"ColorChaptersArray"];
+        _wordGamesFinishedArray = [fileSaver getDictionary:@"WordChaptersDic"][@"WordChaptersArray"];
     }
-    return _colorGamesFinishedArray;
+    return _wordGamesFinishedArray;
 }
 
 -(NSArray *)chaptersNamesArray {
@@ -48,11 +48,11 @@
     [super viewDidLoad];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(gameWonNotificationReceived:)
-                                                 name:@"ColorGameWonNotification"
+                                                 name:@"WordGameWonNotification"
                                                object:nil];
-
+    
     self.view.backgroundColor = [UIColor whiteColor];
-    NSString *gamesDatabasePath = [[NSBundle mainBundle] pathForResource:@"ColorGamesDatabase2" ofType:@"plist"];
+    NSString *gamesDatabasePath = [[NSBundle mainBundle] pathForResource:@"WordsGamesDatabase2" ofType:@"plist"];
     NSArray *chaptersArray = [NSArray arrayWithContentsOfFile:gamesDatabasePath];
     numberOfChapters = [chaptersArray count];
     
@@ -72,7 +72,7 @@
                      animations:^(){
                          self.collectionView.transform = CGAffineTransformMakeTranslation(-(screenBounds.size.width + 200.0), 0.0);
                      } completion:^(BOOL finished){}];
-
+    
 }
 
 -(void)setupUI {
@@ -202,56 +202,11 @@
     return cell;
 }
 
-#pragma mark - UICollectionViewDelegate
-
 #pragma mark - Actions 
 
 -(void)dismissVC {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
-
-#pragma mark - UIScrollViewViewDelegate
-
-
-/*-(void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    static BOOL scrollingLeft = NO;
-    static BOOL scrollingRight = NO;
-    
-    NSLog(@"Scrolleandooooooo con un offset en x: %f", scrollView.contentOffset.x);
-    NSArray *visibleCells = [self.collectionView visibleCells];
-    if ([visibleCells count] == 1) {
-        ChaptersCell *firstCell = [visibleCells firstObject];
-        NSLog(@"Solo se ve una celda con indexpath de %d", [self.collectionView indexPathForCell:firstCell].item);
-    } else if ([visibleCells count] == 2) {
-        NSUInteger firstCellIndex = [self.collectionView indexPathForCell:[visibleCells firstObject]].item;
-        NSUInteger secondCellIndex = [self.collectionView indexPathForCell:[visibleCells lastObject]].item;
-        ChaptersCell *leftCell;
-        ChaptersCell *rightCell;
-        if (firstCellIndex > secondCellIndex) {
-            leftCell = [visibleCells lastObject];
-            rightCell = [visibleCells firstObject];
-        } else {
-            leftCell = [visibleCells firstObject];
-            rightCell = [visibleCells lastObject];
-        }
-        NSLog(@"Se ven dos celdas con indexpath de %d y %d y currentpage: %d", [self.collectionView indexPathForCell:leftCell].item, [self.collectionView indexPathForCell:rightCell].item, self.pageControl.currentPage);
-        
-        if (self.lastContentOffset > scrollView.contentOffset.x) {
-            NSLog(@"Scrolleando a la izquierdaaaa");
-            leftCell.button1.alpha = -(scrollView.contentOffset.x - 320.0*self.pageControl.currentPage)/320.0;
-            rightCell.button1.alpha = 1.0 + (scrollView.contentOffset.x - 320.0*self.pageControl.currentPage)/320.0;
-            
-        } else {
-            NSLog(@"Scrolleando a la derechaaa");
-            leftCell.button1.alpha = 1.0 - (scrollView.contentOffset.x - 320.0*self.pageControl.currentPage)/320.0;
-            rightCell.button1.alpha = (scrollView.contentOffset.x - 320.0*self.pageControl.currentPage)/320.0;
-        }
-        self.lastContentOffset = scrollView.contentOffset.x;
-        //leftCell.button1.transform = CGAffineTransformMakeRotation(GLKMathDegreesToRadians(scrollView.contentOffset.x*(360.0/320.0)));
-        //rightCell.button1.transform = CGAffineTransformMakeRotation(GLKMathDegreesToRadians(360.0 - scrollView.contentOffset.x*(360.0/320.0)));
-        
-    }
-}*/
 
 -(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
     NSLog(@"Terminé de movemer");
@@ -261,16 +216,16 @@
 }
 
 -(void)goToGameVCWithSelectedGame:(NSUInteger)game inChapter:(NSUInteger)chapter {
-    ColorsGameViewController *colorsGameVC = [self.storyboard instantiateViewControllerWithIdentifier:@"ColorsGame"];
-    colorsGameVC.selectedChapter = chapter;
-    colorsGameVC.selectedGame = game;
-    colorsGameVC.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-    [self presentViewController:colorsGameVC animated:YES completion:nil];
+    WordsGameViewController *wordsGameVC = [self.storyboard instantiateViewControllerWithIdentifier:@"WordsGame"];
+    wordsGameVC.selectedChapter = chapter;
+    wordsGameVC.selectedGame = game;
+    wordsGameVC.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+    [self presentViewController:wordsGameVC animated:YES completion:nil];
 }
 
 -(BOOL)checkIfUserCanPlayGame:(NSUInteger)game inChapter:(NSUInteger)chapter {
     FileSaver *fileSaver = [[FileSaver alloc] init];
-    NSArray *chaptersArray = [fileSaver getDictionary:@"ColorChaptersDic"][@"ColorChaptersArray"];
+    NSArray *chaptersArray = [fileSaver getDictionary:@"WordChaptersDic"][@"WordChaptersArray"];
     if (chaptersArray) {
         NSLog(@"Existe el dic de capítulos");
         NSArray *chapterGamesArray = chaptersArray[chapter];
@@ -310,7 +265,7 @@
     NSLog(@"Recibí la notificación de juego ganado");
     //Get the won games in file saver
     FileSaver *fileSaver = [[FileSaver alloc] init];
-    self.colorGamesFinishedArray = [fileSaver getDictionary:@"ColorChaptersDic"][@"ColorChaptersArray"];
+    self.wordGamesFinishedArray = [fileSaver getDictionary:@"WordChaptersDic"][@"WordChaptersArray"];
     [self.collectionView reloadData];
 }
 

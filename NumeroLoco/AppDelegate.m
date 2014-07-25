@@ -11,11 +11,13 @@
 #import <FacebookSDK/FacebookSDK.h>
 #import "Flurry.h"
 #import "FlurryAds.h"
+#import "GameKitHelper.h"
 
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    //Facebook Setup
     [FBLoginView class];
     
     //Flurry Setup
@@ -29,15 +31,21 @@
     } else {
         NSLog(@"No existía el dic");
         [fileSaver setDictionary:@{@"NumberChaptersArray" : @[@[@1],
-                                                              @[@1],
-                                                              @[@1],
-                                                              @[@1]]} withName:@"NumberChaptersDic"];
+                                                              @[],
+                                                              @[],
+                                                              @[]]} withName:@"NumberChaptersDic"];
         
         [fileSaver setDictionary:@{@"ColorChaptersArray" : @[@[@1],
-                                                              @[@1],
-                                                              @[@1],
-                                                              @[@1]]} withName:@"ColorChaptersDic"];
+                                                              @[],
+                                                              @[],
+                                                              @[]]} withName:@"ColorChaptersDic"];
+        
+        [fileSaver setDictionary:@{@"WordChaptersArray" : @[@[@1, @2, @3],
+                                                             @[@1],
+                                                             @[@1],
+                                                             @[@1]]} withName:@"WordChaptersDic"];
     }
+    [[GameKitHelper sharedGameKitHelper] authenticateLocalPlayer];
     return YES;
 }
 

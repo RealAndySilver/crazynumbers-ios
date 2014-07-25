@@ -10,7 +10,7 @@
 
 @implementation GameWonAlert
 
-/*- (instancetype)initWithFrame:(CGRect)frame
+- (instancetype)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
     if (self) {
@@ -26,7 +26,7 @@
         [self addSubview:titleLabel];
     }
     return self;
-}*/
+}
 
 +(void)showInView:(UIView *)view {
     UIView *opacityView = [[UIView alloc] initWithFrame:view.frame];

@@ -12,4 +12,5 @@
 +(AppInfo *)sharedInstance;
 -(NSArray *)appColorsArray;
 -(NSArray *)arrayOfChaptersColorsArray;
+-(NSArray *)wordsArray;
 @end

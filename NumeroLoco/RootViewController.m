@@ -9,12 +9,14 @@
 #import "RootViewController.h"
 #import "ChaptersViewController.h"
 #import "ColorsChaptersViewController.h"
+#import "WordsChaptersViewController.h"
 #import "AppInfo.h"
 #import "TutorialViewController.h"
 #import "FileSaver.h"
 #import "Flurry.h"
+#import <GameKit/GameKit.h>
 
-@interface RootViewController ()
+@interface RootViewController () <GKGameCenterControllerDelegate>
 @property (weak, nonatomic) IBOutlet UILabel *fifthLabel;
 @property (weak, nonatomic) IBOutlet UILabel *fourthLabel;
 @property (weak, nonatomic) IBOutlet UILabel *thirdLabel;
@@ -23,6 +25,7 @@
 @property (strong, nonatomic) UIButton *numbersButton;
 @property (strong, nonatomic) UIButton *colorsButton;
 @property (strong, nonatomic) UIButton *startButton;
+@property (strong, nonatomic) UIButton *wordsButton;
 @end
 
 #define FONT_NAME @"HelveticaNeue-UltraLight"
@@ -172,6 +175,18 @@
     [self.numbersButton addTarget:self action:@selector(goToChaptersVC) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.numbersButton];
     
+    //Words Button
+    self.wordsButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    self.wordsButton.layer.borderColor = [UIColor whiteColor].CGColor;
+    self.wordsButton.layer.borderWidth = 1.0;
+    self.wordsButton.layer.cornerRadius = cornerRadius;
+    [self.wordsButton setTitle:@"Words" forState:UIControlStateNormal];
+    [self.wordsButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    self.wordsButton.titleLabel.font = [UIFont fontWithName:fontName size:fontSize];
+    self.wordsButton.frame = CGRectMake(screenBounds.size.width, self.numbersButton.frame.origin.y - 10.0 - buttonsHeight, screenBounds.size.width/6.4*2, buttonsHeight);
+    [self.wordsButton addTarget:self action:@selector(goToWordsChaptersVC) forControlEvents:UIControlEventTouchUpInside];
+   // [self.view addSubview:self.wordsButton];
+    
     //Back button
     UIButton *backButton = [UIButton buttonWithType:UIButtonTypeSystem];
     backButton.frame = CGRectMake(20.0, screenBounds.size.height - 80.0, screenBounds.size.width/4.57, buttonsHeight);
@@ -183,9 +198,29 @@
     backButton.titleLabel.font = [UIFont fontWithName:fontName size:fontSize];
     [backButton addTarget:self action:@selector(dismissVC) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:backButton];
+    
+    //GameCenter BUtton
+    UIButton *gameCenterButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    gameCenterButton.frame = CGRectMake(screenBounds.size.width - 20.0 - (screenBounds.size.width/4.57), screenBounds.size.height - 80.0, screenBounds.size.width/4.57, buttonsHeight);
+    [gameCenterButton setTitle:@"My Points" forState:UIControlStateNormal];
+    [gameCenterButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    gameCenterButton.layer.borderColor = [UIColor whiteColor].CGColor;
+    gameCenterButton.layer.borderWidth = 1.0;
+    gameCenterButton.layer.cornerRadius = cornerRadius;
+    gameCenterButton.titleLabel.font = [UIFont fontWithName:fontName size:fontSize - 6.0];
+    [gameCenterButton addTarget:self action:@selector(showGameCenter) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:gameCenterButton];
 }
 
 #pragma mark - Actions
+
+-(void)showGameCenter {
+    GKGameCenterViewController *gameViewController = [[GKGameCenterViewController alloc] init];
+    if (gameViewController) {
+        gameViewController.gameCenterDelegate = self;
+        [self presentViewController:gameViewController animated:YES completion:nil];
+    }
+}
 
 -(void)dismissVC {
     [self dismissViewControllerAnimated:YES completion:nil];
@@ -201,6 +236,7 @@
                          self.startButton.transform = CGAffineTransformMakeTranslation(-(self.startButton.frame.origin.x + self.startButton.frame.size.width + 10), 0.0);
                          self.numbersButton.transform = CGAffineTransformMakeTranslation(-(screenBounds.size.width/2.0 + self.numbersButton.frame.size.width/2.0), 0.0);
                          self.colorsButton.transform = CGAffineTransformMakeTranslation(-(screenBounds.size.width/2.0 + self.colorsButton.frame.size.width/2.0), 0.0);
+                         self.wordsButton.transform = CGAffineTransformMakeTranslation(-(screenBounds.size.width/2.0 + self.colorsButton.frame.size.width/2.0), 0.0);
                      } completion:^(BOOL finished){}];
 }
 
@@ -223,6 +259,18 @@
     [Flurry logEvent:@"OpenTutorial"];
     TutorialViewController *tutorialVC = [self.storyboard instantiateViewControllerWithIdentifier:@"Tutorial"];
     [self presentViewController:tutorialVC animated:YES completion:nil];
+}
+
+-(void)goToWordsChaptersVC {
+    WordsChaptersViewController *wordsChapterVC = [self.storyboard instantiateViewControllerWithIdentifier:@"WordsChapters"];
+    wordsChapterVC.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+    [self presentViewController:wordsChapterVC animated:YES completion:nil];
+}
+
+#pragma mark - GameCenterDelegate
+
+-(void)gameCenterViewControllerDidFinish:(GKGameCenterViewController *)gameCenterViewController {
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 @end

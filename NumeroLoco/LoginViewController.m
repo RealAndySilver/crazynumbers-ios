@@ -9,6 +9,7 @@
 #import "LoginViewController.h"
 #import "RootViewController.h"
 #import <FacebookSDK/FacebookSDK.h>
+#import <GameKit/GameKit.h>
 
 @interface LoginViewController () <FBLoginViewDelegate>
 
@@ -16,10 +17,16 @@
 
 @implementation LoginViewController {
     CGRect screenBounds;
+    BOOL _gameCenterEnabled;
+    NSString *_leaderboardIdentifier;
 }
 
 -(void)viewDidLoad {
     [super viewDidLoad];
+    
+    //Init gameCenter
+    //[self authenticateLocalPlayer];
+    
     screenBounds = [UIScreen mainScreen].bounds;
     [self setupUI];
 }
@@ -55,7 +62,43 @@
     [self.view addSubview:enterButton];
 }
 
-#pragma mark - Actions 
+#pragma mark - Custom Methods
+
+/*-(void)authenticateLocalPlayer{
+    GKLocalPlayer *localPlayer = [GKLocalPlayer localPlayer];
+    
+    localPlayer.authenticateHandler = ^(UIViewController *viewController, NSError *error){
+        if (viewController != nil) {
+            NSLog(@"Mostraré el controlador de game center");
+            [self presentViewController:viewController animated:YES completion:nil];
+        }
+        else{
+            NSLog(@"No mostraré el controlador de game center");
+            if ([GKLocalPlayer localPlayer].authenticated) {
+                NSLog(@"El suaurio ya estaba autenticado");
+                _gameCenterEnabled = YES;
+                
+                // Get the default leaderboard identifier.
+                [[GKLocalPlayer localPlayer] loadDefaultLeaderboardIdentifierWithCompletionHandler:^(NSString *leaderboardIdentifier, NSError *error) {
+                    
+                    if (error != nil) {
+                        NSLog(@"%@", [error localizedDescription]);
+                    }
+                    else{
+                        _leaderboardIdentifier = leaderboardIdentifier;
+                    }
+                }];
+            }
+            
+            else{
+                NSLog(@"EL usuario no está autenticado");
+                _gameCenterEnabled = NO;
+            }
+        }
+    };
+}*/
+
+#pragma mark - Actions
 
 -(void)goToRootVC {
     RootViewController *rootVC = [self.storyboard instantiateViewControllerWithIdentifier:@"Root"];

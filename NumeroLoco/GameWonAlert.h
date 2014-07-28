@@ -7,7 +7,19 @@
 //
 
 #import <UIKit/UIKit.h>
+@class GameWonAlert;
+
+@protocol GameWonAlertDelegate <NSObject>
+-(void)continueButtonPressedInAlert:(GameWonAlert *)gameWonAlert;
+-(void)gameWonAlertDidDissapear:(GameWonAlert *)gameWonAlert;
+-(void)facebookButtonPressedInAlert:(GameWonAlert *)gameWonAlert;
+-(void)twitterButtonPressedInAlert:(GameWonAlert *)gameWonAlert;
+-(void)challengeButtonPressedInAlert:(GameWonAlert *)gameWonAlert;
+-(void)gameWonAlertDidApper:(GameWonAlert *)gameWonAlert;
+@end
 
 @interface GameWonAlert : UIView
-+(void)showInView:(UIView *)view;
+@property (strong, nonatomic) NSString *message;
+@property (strong, nonatomic) id <GameWonAlertDelegate> delegate;
+-(void)showAlertInView:(UIView *)view;
 @end

@@ -11,9 +11,13 @@
 #import "FileSaver.h"
 #import "Flurry.h"
 #import "FlurryAds.h"
+#import "FlurryAdDelegate.h"
 #import "GameKitHelper.h"
+#import <Social/Social.h>
+#import "GameWonAlert.h"
+#import "ChallengeFriendsViewController.h"
 
-@interface GameViewController () <UIAlertViewDelegate>
+@interface GameViewController () <UIAlertViewDelegate, GameWonAlertDelegate>
 @property (strong, nonatomic) NSMutableArray *columnsButtonsArray; //Of UIButton
 @property (strong, nonatomic) UIView *buttonsContainerView;
 @property (strong, nonatomic) UILabel *numberOfTapsLabel;
@@ -74,10 +78,15 @@
     [super viewDidAppear:animated];
     
     //Add adds from Flurry
-    if (!isPad) {
-        [FlurryAds setAdDelegate:self];
-        [FlurryAds fetchAndDisplayAdForSpace:@"GAME_TOP_BANNER" view:self.view size:BANNER_TOP];
+    [FlurryAds setAdDelegate:self];
+    if ([FlurryAds adReadyForSpace:@"FullScreenAd"]) {
+        NSLog(@"Mostraré el ad");
+        //[FlurryAds displayAdForSpace:@"FullScreenAd" onView:self.view];
+    } else {
+        NSLog(@"No mostraré el ad sino que lo cargaré");
+        [FlurryAds fetchAdForSpace:@"FullScreenAd" frame:self.view.frame size:FULLSCREEN];
     }
+    //[FlurryAds fetchAndDisplayAdForSpace:@"GAME_TOP_BANNER" view:self.view size:BANNER_TOP];
 }
 
 -(void)viewDidDisappear:(BOOL)animated {
@@ -419,8 +428,8 @@
     [self.gameTimer invalidate];
     self.gameTimer = nil;
     
-    [self userWon];
-    //[self performSelector:@selector(userWon) withObject:nil afterDelay:0.3];
+    //[self userWon];
+    [self performSelector:@selector(userWon) withObject:nil afterDelay:0.3];
 }
 
 -(void)userWon {
@@ -491,7 +500,23 @@
     }
     
     NSString *winMessage = [NSString stringWithFormat:@"You finished the game in %0.1f seconds. you scored %d points", timeElapsed, [self pointsWonForTime:timeElapsed]];
-    [[[UIAlertView alloc] initWithTitle:@"GameWon!" message:winMessage delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil] show];
+    GameWonAlert *gameWonAlert = [[GameWonAlert alloc] initWithFrame:CGRectMake(self.view.bounds.size.width/2.0 - 125.0, self.view.bounds.size.height/2.0 - 200.0, 250.0, 400.0)];
+    gameWonAlert.message = winMessage;
+    gameWonAlert.delegate = self;
+    [gameWonAlert showAlertInView:self.view];
+}
+
+-(void)showFlurryAds {
+    if ([FlurryAds adReadyForSpace:@"FullScreenAd"]) {
+        NSLog(@"Mostraré el ad");
+        [FlurryAds displayAdForSpace:@"FullScreenAd" onView:self.view];
+    } else {
+        NSLog(@"No mostraré el ad sino que lo cargaré");
+        [FlurryAds fetchAdForSpace:@"FullScreenAd" frame:self.view.frame size:FULLSCREEN];
+        
+        //Go to the next game
+        [self prepareNextGame];
+    }
 }
 
 -(void)dismissVC {
@@ -521,13 +546,77 @@
 
 -(void)substractTime {
     timeElapsed += 0.1;
-    //NSLog(@"Time Remainig: %f", maxTime - timeElapsed);
 }
 
-#pragma mark - UIAlertViewDelegate
+#pragma mark - Social Stuff
 
--(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    [self prepareNextGame];
+-(void)challengeFriends {
+    ChallengeFriendsViewController *challengeFriendsVC = [self.storyboard instantiateViewControllerWithIdentifier:@"ChallengeFriends"];
+    if (isPad) challengeFriendsVC.modalPresentationStyle = UIModalPresentationFormSheet;
+    challengeFriendsVC.score = [self pointsWonForTime:timeElapsed];
+    [self presentViewController:challengeFriendsVC animated:YES completion:nil];
+}
+
+-(void)shareScoreOnSocialNetwork:(NSString *)socialNetwork {
+    NSString *serviceType;
+    if ([socialNetwork isEqualToString:@"facebook"]) {
+        serviceType = SLServiceTypeFacebook;
+    } else if ([socialNetwork isEqualToString:@"twitter"]) {
+        serviceType = SLServiceTypeTwitter;
+    }
+    SLComposeViewController *socialViewController = [SLComposeViewController composeViewControllerForServiceType:serviceType];
+    [socialViewController setInitialText:[NSString stringWithFormat:@"I scored %d points playing Cross: Numbers & Colors", [self pointsWonForTime:timeElapsed]]];
+    [self presentViewController:socialViewController animated:YES completion:nil];
+}
+
+#pragma mark - GameWonAlert
+
+-(void)gameWonAlertDidApper:(GameWonAlert *)gameWonAlert {
+    //[self showFlurryAds];
+}
+
+-(void)facebookButtonPressedInAlert:(GameWonAlert *)gameWonAlert {
+    [self shareScoreOnSocialNetwork:@"facebook"];
+}
+
+-(void)challengeButtonPressedInAlert:(GameWonAlert *)gameWonAlert {
+    [self challengeFriends];
+}
+
+-(void)twitterButtonPressedInAlert:(GameWonAlert *)gameWonAlert {
+    [self shareScoreOnSocialNetwork:@"twitter"];
+}
+
+-(void)continueButtonPressedInAlert:(GameWonAlert *)gameWonAlert {
+    NSLog(@"Presioné el botón de continuar");
+}
+
+-(void)gameWonAlertDidDissapear:(GameWonAlert *)gameWonAlert {
+    [self showFlurryAds];
+}
+
+#pragma mark - FlurryAdsDelegate
+
+- (BOOL) spaceShouldDisplay:(NSString*)adSpace interstitial:(BOOL)
+interstitial {
+    NSLog(@"Entré al delegate");
+    if (interstitial) {
+        // Pause app state here
+    }
+    
+    // Continue ad display
+    return YES;
+}
+
+/*
+ *  Resume app state when the interstitial is dismissed.
+ */
+- (void)spaceDidDismiss:(NSString *)adSpace interstitial:(BOOL)interstitial {
+    NSLog(@"Entré al spaceDidDismiss");
+    if (interstitial) {
+        // Resume app state here
+        [self prepareNextGame];
+    }
 }
 
 @end

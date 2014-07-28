@@ -98,13 +98,106 @@
          
          BOOL success = (error == nil);
          
-         if ([_delegate
+         if ([self.delegate
               respondsToSelector:
               @selector(onScoresSubmitted:)]) {
              
-             [_delegate onScoresSubmitted:success];
+             [self.delegate onScoresSubmitted:success];
          }
      }];
+}
+
+-(void) findScoresOfFriendsToChallenge {
+    //1
+    GKLeaderboard *leaderboard =
+    [[GKLeaderboard alloc] init];
+    
+    //2
+    leaderboard.identifier = @"Points_Leaderboard";
+    
+    //3
+    leaderboard.playerScope =
+    GKLeaderboardPlayerScopeFriendsOnly;
+    
+    //4
+    leaderboard.range = NSMakeRange(1, 100);
+    
+    //5
+    [leaderboard
+     loadScoresWithCompletionHandler:
+     ^(NSArray *scores, NSError *error) {
+         
+         [self setLastError:error];
+         
+         BOOL success = (error == nil);
+         
+         if (success) {
+             if (!_includeLocalPlayerScore) {
+                 NSMutableArray *friendsScores =
+                 [NSMutableArray array];
+                 
+                 for (GKScore *score in scores) {
+                     if (![score.playerID
+                           isEqualToString:
+                           [GKLocalPlayer localPlayer]
+                           .playerID]) {
+                         [friendsScores addObject:score];
+                     }
+                 }
+                 scores = friendsScores;
+             }
+             if ([_delegate
+                  respondsToSelector:
+                  @selector
+                  (onScoresOfFriendsToChallengeListReceived:)]) {
+                 
+                 [_delegate
+                  onScoresOfFriendsToChallengeListReceived:scores];
+             }
+         }
+     }];
+}
+
+-(void) getPlayerInfo:(NSArray*)playerList {
+    //1
+    if (_gameCenterFeaturesEnabled == NO)
+        return;
+    
+    //2
+    if ([playerList count] > 0) {
+        [GKPlayer
+         loadPlayersForIdentifiers:
+         playerList
+         withCompletionHandler:
+         ^(NSArray* players, NSError* error) {
+             
+             [self setLastError:error];
+             
+             if ([_delegate
+                  respondsToSelector:
+                  @selector(onPlayerInfoReceived:)]) {
+                 
+                 [_delegate onPlayerInfoReceived:players];
+             }
+         }];
+    }
+}
+
+-(void) sendScoreChallengeToPlayers:(NSArray*)players
+                          withScore:(int64_t)score
+                            message:(NSString*)message {
+    
+    //1
+    GKScore *gkScore =
+    [[GKScore alloc]
+     initWithLeaderboardIdentifier:@"Points_Leaderboard"];
+    gkScore.value = score;
+    
+    //2
+    /*[gkScore challengeComposeControllerWithPlayers:players message:message completionHandler:^(UIViewController *composeViewController, BOOL didIssueChallenge, NSArray *sentPlayerIDs){
+        
+    }];*/
+    [gkScore issueChallengeToPlayers:players message:message];
 }
 
 @end

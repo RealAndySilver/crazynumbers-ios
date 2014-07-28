@@ -13,8 +13,12 @@
 #import "FileSaver.h"
 #import "Flurry.h"
 #import "FlurryAds.h"
+#import "FlurryAdDelegate.h"
+#import "GameKitHelper.h"
+#import <Social/Social.h>
+#import "ChallengeFriendsViewController.h"
 
-@interface ColorsGameViewController () <ColorPatternViewDelegate>
+@interface ColorsGameViewController () <ColorPatternViewDelegate, GameWonAlertDelegate>
 @property (strong, nonatomic) NSMutableArray *columnsButtonsArray; //Of UIButton
 @property (strong, nonatomic) UIView *buttonsContainerView;
 @property (strong, nonatomic) UILabel *numberOfTapsLabel;
@@ -24,6 +28,7 @@
 @property (strong, nonatomic) NSArray *colorPaletteArray;
 @property (strong, nonatomic) ColorPatternView *colorPatternView;
 @property (strong, nonatomic) UIView *opacityView;
+@property (strong, nonatomic) NSTimer *gameTimer;
 @end
 
 #define FONT_NAME @"HelveticaNeue-Light"
@@ -34,6 +39,9 @@
     NSUInteger matrixSize;
     NSUInteger maxNumber;
     BOOL isPad;
+    float maxScore;
+    float maxTime;
+    float timeElapsed;
 }
 
 #pragma mark - Lazy Instantiation
@@ -78,7 +86,13 @@
 -(void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     [FlurryAds setAdDelegate:self];
-    [FlurryAds fetchAndDisplayAdForSpace:@"GAME_TOP_BANNER" view:self.view size:BANNER_TOP];
+    if ([FlurryAds adReadyForSpace:@"FullScreenAd"]) {
+        NSLog(@"Mostraré el ad");
+        //[FlurryAds displayAdForSpace:@"FullScreenAd" onView:self.view];
+    } else {
+        NSLog(@"No mostraré el ad sino que lo cargaré");
+        [FlurryAds fetchAdForSpace:@"FullScreenAd" frame:self.view.frame size:FULLSCREEN];
+    }
 }
 
 -(void)viewDidDisappear:(BOOL)animated {
@@ -157,7 +171,7 @@
     [self.view addSubview:colorPattern];
     
     //Number of taps label
-    self.numberOfTapsLabel.text = @"Number of taps: 0";
+    /*self.numberOfTapsLabel.text = @"Number of taps: 0";
     self.numberOfTapsLabel.textColor = [UIColor lightGrayColor];
     self.numberOfTapsLabel.textAlignment = NSTextAlignmentCenter;
     self.numberOfTapsLabel.font = [UIFont fontWithName:FONT_NAME size:labelsFontSize];
@@ -168,7 +182,7 @@
     self.maxTapsLabel.textColor = [UIColor lightGrayColor];
     self.maxTapsLabel.textAlignment = NSTextAlignmentCenter;
     self.maxTapsLabel.font = [UIFont fontWithName:FONT_NAME size:labelsFontSize];
-    [self.view addSubview:self.maxTapsLabel];
+    [self.view addSubview:self.maxTapsLabel];*/
     
     //Buttons container view
     NSString *gamesDatabasePath = [[NSBundle mainBundle] pathForResource:@"ColorGamesDatabase2" ofType:@"plist"];
@@ -185,6 +199,8 @@
 #pragma mark - Custom Methods
 
 -(void)resetGame {
+    [self.gameTimer invalidate];
+    self.gameTimer = nil;
     
     [self.buttonsContainerView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
     [self.columnsButtonsArray removeAllObjects];
@@ -197,6 +213,9 @@
     }
     matrixSize = [chaptersDataArray[self.selectedChapter][self.selectedGame][@"matrixSize"] intValue];
     maxNumber = [chaptersDataArray[self.selectedChapter][self.selectedGame][@"maxNumber"] intValue];
+    maxScore = [chaptersDataArray[self.selectedChapter][self.selectedGame][@"maxScore"] floatValue];
+    maxTime = [chaptersDataArray[self.selectedChapter][self.selectedGame][@"maxTime"] floatValue];
+    timeElapsed = 0;
     
     //Set the new color palette to use
     self.colorPaletteArray = [[AppInfo sharedInstance] arrayOfChaptersColorsArray][self.selectedChapter];
@@ -272,6 +291,9 @@
     self.numberOfTapsLabel.text = @"Number of taps: 0";
     numberOfTaps = 0;
     NSLog(@"Terminé el init game");
+    
+    //Start the game timer
+    self.gameTimer = [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(substractTime) userInfo:nil repeats:YES];
 }
 
 -(void)addOneToButtonAtRow:(NSInteger)row column:(NSInteger)column {
@@ -476,6 +498,10 @@
     self.numberOfTapsLabel.text = [NSString stringWithFormat:@"Number of taps: %i", numberOfTaps];
 }
 
+-(void)substractTime {
+    timeElapsed += 0.1;
+}
+
 -(void)checkIfUserWon {
     for (int i = 0; i < matrixSize; i++) {
         for (int j = 0; j < matrixSize; j++) {
@@ -484,12 +510,49 @@
             }
         }
     }
-    [self performSelector:@selector(userWon) withObject:nil afterDelay:0.35];
+    //Get Points won
+    NSUInteger pointsWon = [self pointsWonForTime:timeElapsed];
+    NSLog(@"Point Woooon %d", pointsWon);
+    
+    //Cancel timer
+    [self.gameTimer invalidate];
+    self.gameTimer = nil;
+    
+    //[self userWon];
+    [self performSelector:@selector(userWon) withObject:nil afterDelay:0.3];}
+
+-(NSUInteger)pointsWonForTime:(float)time {
+    float pointsWon = 0;
+    NSLog(@"*********** Max Time: %f", maxTime);
+    NSLog(@"*********** Max Score: %f", maxScore);
+    NSLog(@"*********** Time Elapsed: %f", time);
+    //pointsWon = 1/((1/maxTime)*time - 1) + (float)maxScore;
+    float pendiente = (0 - maxScore) / (maxTime - 0);
+    NSLog(@"********** Pendiente: %f", pendiente);
+    pointsWon = pendiente * time + maxScore;
+    
+    if (pointsWon < 0) {
+        pointsWon = 0;
+    }
+    return (int)pointsWon;
+}
+
+-(void)showFlurryAds {
+    if ([FlurryAds adReadyForSpace:@"FullScreenAd"]) {
+        NSLog(@"Mostraré el ad");
+        [FlurryAds displayAdForSpace:@"FullScreenAd" onView:self.view];
+    } else {
+        NSLog(@"No mostraré el ad sino que lo cargaré");
+        [FlurryAds fetchAdForSpace:@"FullScreenAd" frame:self.view.frame size:FULLSCREEN];
+        
+        //Go to the next game
+        [self prepareNextGame];
+    }
 }
 
 -(void)userWon {
     //Send data to Flurry
-    [Flurry logEvent:@"NumbersGameWon" withParameters:@{@"Chapter" : @(self.selectedChapter), @"Game" : @(self.selectedGame)}];
+    [Flurry logEvent:@"ColorsGameWon" withParameters:@{@"Chapter" : @(self.selectedChapter), @"Game" : @(self.selectedGame)}];
     
     //Unlock the next game saving the game number with FileSaver
     FileSaver *fileSaver = [[FileSaver alloc] init];
@@ -535,13 +598,33 @@
             //Post a notification to update the color of the buttons in ChaptersViewController
             [[NSNotificationCenter defaultCenter] postNotificationName:@"ColorGameWonNotification" object:nil];
             
+            //Save points to fileSaver
+            NSUInteger points = 0;
+            if ([fileSaver getDictionary:@"UserPointsDic"][@"UserPoints"]) {
+                points = [[fileSaver getDictionary:@"UserPointsDic"][@"UserPoints"] intValue];
+                points += [self pointsWonForTime:timeElapsed];
+                [fileSaver setDictionary:@{@"UserPoints" : @(points)} withName:@"UserPointsDic"];
+            } else {
+                points = [self pointsWonForTime:timeElapsed];
+                [fileSaver setDictionary:@{@"UserPoints" : @(points)} withName:@"UserPointsDic"];
+            }
+            
+            NSLog(@"Sending %d points to game center ****************", points);
+            [[GameKitHelper sharedGameKitHelper] submitScore:points category:@"Points_Leaderboard"];
+            
         } else {
             NSLog(@"No guardé la info del juego ganado orque el usuario ya lo había ganado");
         }
     }
     
-    [GameWonAlert showInView:self.view];
-    [self performSelector:@selector(prepareNextGame) withObject:nil afterDelay:2.5];
+    NSString *winMessage = [NSString stringWithFormat:@"You finished the game in %0.1f seconds. you scored %d points", timeElapsed, [self pointsWonForTime:timeElapsed]];
+    GameWonAlert *gameWonAlert = [[GameWonAlert alloc] initWithFrame:CGRectMake(self.view.bounds.size.width/2.0 - 125.0, self.view.bounds.size.height/2.0 - 200.0, 250.0, 400.0)];
+    gameWonAlert.message = winMessage;
+    gameWonAlert.delegate = self;
+    [gameWonAlert showAlertInView:self.view];
+    
+    //[GameWonAlert showInView:self.view];
+    //[self performSelector:@selector(prepareNextGame) withObject:nil afterDelay:2.5];
 }
 
 -(void)dismissVC {
@@ -562,6 +645,77 @@
 
 -(void)colorPatternViewDidDissapear:(ColorPatternView *)colorPatternView {
     self.colorPatternView = nil;
+}
+
+#pragma mark - Social Stuff
+
+-(void)challengeFriends {
+    ChallengeFriendsViewController *challengeFriendsVC = [self.storyboard instantiateViewControllerWithIdentifier:@"ChallengeFriends"];
+    if (isPad) challengeFriendsVC.modalPresentationStyle = UIModalPresentationFormSheet;
+    challengeFriendsVC.score = [self pointsWonForTime:timeElapsed];
+    [self presentViewController:challengeFriendsVC animated:YES completion:nil];
+}
+
+-(void)shareScoreOnSocialNetwork:(NSString *)socialNetwork {
+    NSString *serviceType;
+    if ([socialNetwork isEqualToString:@"facebook"]) {
+        serviceType = SLServiceTypeFacebook;
+    } else if ([socialNetwork isEqualToString:@"twitter"]) {
+        serviceType = SLServiceTypeTwitter;
+    }
+    SLComposeViewController *socialViewController = [SLComposeViewController composeViewControllerForServiceType:serviceType];
+    [socialViewController setInitialText:[NSString stringWithFormat:@"I scored %d points playing Cross: Numbers & Colors", [self pointsWonForTime:timeElapsed]]];
+    [self presentViewController:socialViewController animated:YES completion:nil];
+}
+
+#pragma mark - GameWonAlert
+
+-(void)gameWonAlertDidApper:(GameWonAlert *)gameWonAlert {
+    //[self showFlurryAds];
+}
+
+-(void)facebookButtonPressedInAlert:(GameWonAlert *)gameWonAlert {
+    [self shareScoreOnSocialNetwork:@"facebook"];
+}
+
+-(void)challengeButtonPressedInAlert:(GameWonAlert *)gameWonAlert {
+    [self challengeFriends];
+}
+
+-(void)twitterButtonPressedInAlert:(GameWonAlert *)gameWonAlert {
+    [self shareScoreOnSocialNetwork:@"twitter"];
+}
+
+-(void)continueButtonPressedInAlert:(GameWonAlert *)gameWonAlert {
+    NSLog(@"Presioné el botón de continuar");
+}
+
+-(void)gameWonAlertDidDissapear:(GameWonAlert *)gameWonAlert {
+    [self showFlurryAds];
+}
+
+#pragma mark - FlurryAdsDelegate
+
+- (BOOL) spaceShouldDisplay:(NSString*)adSpace interstitial:(BOOL)
+interstitial {
+    NSLog(@"Entré al delegate");
+    if (interstitial) {
+        // Pause app state here
+    }
+    
+    // Continue ad display
+    return YES;
+}
+
+/*
+ *  Resume app state when the interstitial is dismissed.
+ */
+- (void)spaceDidDismiss:(NSString *)adSpace interstitial:(BOOL)interstitial {
+    NSLog(@"Entré al spaceDidDismiss");
+    if (interstitial) {
+        // Resume app state here
+        [self prepareNextGame];
+    }
 }
 
 @end

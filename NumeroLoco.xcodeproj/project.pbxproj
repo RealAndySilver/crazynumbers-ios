@@ -42,11 +42,18 @@
 		8BB9EC96196345E9007B8C8E /* TutorialCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BB9EC95196345E9007B8C8E /* TutorialCell.m */; };
 		8BC16FCE19780957003405F1 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BC16FCD19780957003405F1 /* GameKit.framework */; };
 		8BD2CED31951E6B4002EF327 /* GamesDatabase2.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8BD2CED21951E6B4002EF327 /* GamesDatabase2.plist */; };
+		8BE1D5F5198697A700CAAFCF /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BE1D5F4198697A700CAAFCF /* Social.framework */; };
+		8BE1D5F81986A5A300CAAFCF /* ChallengeFriendsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BE1D5F71986A5A300CAAFCF /* ChallengeFriendsViewController.m */; };
+		8BE1D5FB1986AD4D00CAAFCF /* FriendsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BE1D5FA1986AD4D00CAAFCF /* FriendsCell.m */; };
+		8BE1D5FD1986BF4800CAAFCF /* checkmark.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BE1D5FC1986BF4800CAAFCF /* checkmark.png */; };
+		8BE1D6011986D2FE00CAAFCF /* ChallengeIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BE1D5FE1986D2FE00CAAFCF /* ChallengeIcon.png */; };
+		8BE1D6021986D2FE00CAAFCF /* FacebookLogo.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BE1D5FF1986D2FE00CAAFCF /* FacebookLogo.png */; };
+		8BE1D6031986D2FE00CAAFCF /* TwitterLogo.gif in Resources */ = {isa = PBXBuildFile; fileRef = 8BE1D6001986D2FE00CAAFCF /* TwitterLogo.gif */; };
+		8BE1D6051986F8D200CAAFCF /* ColorGamesDatabase2.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8BE1D6041986F8D200CAAFCF /* ColorGamesDatabase2.plist */; };
 		8BF4A7131978047C00F2B531 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BF4A7121978047C00F2B531 /* FacebookSDK.framework */; };
 		A06520711959B7D100399778 /* PadStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A06520701959B7D100399778 /* PadStoryboard.storyboard */; };
 		A0BCCCB8195474F6001CD7F1 /* ColorsChaptersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A0BCCCB7195474F6001CD7F1 /* ColorsChaptersViewController.m */; };
 		A0BCCCBA195476D1001CD7F1 /* ColorsChaptersNames.plist in Resources */ = {isa = PBXBuildFile; fileRef = A0BCCCB9195476D1001CD7F1 /* ColorsChaptersNames.plist */; };
-		A0BCCCBC1954778C001CD7F1 /* ColorGamesDatabase2.plist in Resources */ = {isa = PBXBuildFile; fileRef = A0BCCCBB1954778C001CD7F1 /* ColorGamesDatabase2.plist */; };
 		A0BCCCBF19549049001CD7F1 /* ColorsGameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A0BCCCBE19549049001CD7F1 /* ColorsGameViewController.m */; };
 		A0BDEAD71976C0EC008BFF4D /* Background.png in Resources */ = {isa = PBXBuildFile; fileRef = A0BDEAD61976C0EC008BFF4D /* Background.png */; };
 		A0BDEADB1976C7E3008BFF4D /* libFlurry_5.2.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A0BDEADA1976C7E3008BFF4D /* libFlurry_5.2.0.a */; };
@@ -124,12 +131,21 @@
 		8BB9EC95196345E9007B8C8E /* TutorialCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TutorialCell.m; sourceTree = "<group>"; };
 		8BC16FCD19780957003405F1 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
 		8BD2CED21951E6B4002EF327 /* GamesDatabase2.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = GamesDatabase2.plist; sourceTree = "<group>"; };
+		8BE1D5F4198697A700CAAFCF /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
+		8BE1D5F61986A5A300CAAFCF /* ChallengeFriendsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChallengeFriendsViewController.h; sourceTree = "<group>"; };
+		8BE1D5F71986A5A300CAAFCF /* ChallengeFriendsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChallengeFriendsViewController.m; sourceTree = "<group>"; };
+		8BE1D5F91986AD4D00CAAFCF /* FriendsCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FriendsCell.h; sourceTree = "<group>"; };
+		8BE1D5FA1986AD4D00CAAFCF /* FriendsCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FriendsCell.m; sourceTree = "<group>"; };
+		8BE1D5FC1986BF4800CAAFCF /* checkmark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = checkmark.png; sourceTree = "<group>"; };
+		8BE1D5FE1986D2FE00CAAFCF /* ChallengeIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ChallengeIcon.png; sourceTree = "<group>"; };
+		8BE1D5FF1986D2FE00CAAFCF /* FacebookLogo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = FacebookLogo.png; sourceTree = "<group>"; };
+		8BE1D6001986D2FE00CAAFCF /* TwitterLogo.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = TwitterLogo.gif; sourceTree = "<group>"; };
+		8BE1D6041986F8D200CAAFCF /* ColorGamesDatabase2.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = ColorGamesDatabase2.plist; sourceTree = "<group>"; };
 		8BF4A7121978047C00F2B531 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FacebookSDK.framework; path = ../../Documents/FacebookSDK/FacebookSDK.framework; sourceTree = "<group>"; };
 		A06520701959B7D100399778 /* PadStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = PadStoryboard.storyboard; sourceTree = "<group>"; };
 		A0BCCCB6195474F6001CD7F1 /* ColorsChaptersViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ColorsChaptersViewController.h; sourceTree = "<group>"; };
 		A0BCCCB7195474F6001CD7F1 /* ColorsChaptersViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ColorsChaptersViewController.m; sourceTree = "<group>"; };
 		A0BCCCB9195476D1001CD7F1 /* ColorsChaptersNames.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = ColorsChaptersNames.plist; sourceTree = "<group>"; };
-		A0BCCCBB1954778C001CD7F1 /* ColorGamesDatabase2.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = ColorGamesDatabase2.plist; sourceTree = "<group>"; };
 		A0BCCCBD19549049001CD7F1 /* ColorsGameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ColorsGameViewController.h; sourceTree = "<group>"; };
 		A0BCCCBE19549049001CD7F1 /* ColorsGameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ColorsGameViewController.m; sourceTree = "<group>"; };
 		A0BDEAD61976C0EC008BFF4D /* Background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Background.png; sourceTree = "<group>"; };
@@ -154,6 +170,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8BE1D5F5198697A700CAAFCF /* Social.framework in Frameworks */,
 				8BC16FCE19780957003405F1 /* GameKit.framework in Frameworks */,
 				A0BDEAEC197732BC008BFF4D /* libz.dylib in Frameworks */,
 				A0BDEAEA197732B0008BFF4D /* StoreKit.framework in Frameworks */,
@@ -225,6 +242,7 @@
 		8B6FB8BE19507C6B00EB2C4E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				8BE1D5F4198697A700CAAFCF /* Social.framework */,
 				8BC16FCD19780957003405F1 /* GameKit.framework */,
 				A0BDEAEB197732BC008BFF4D /* libz.dylib */,
 				A0BDEAE9197732B0008BFF4D /* StoreKit.framework */,
@@ -259,8 +277,8 @@
 				8B6FB8FE19508CA200EB2C4E /* ChapterNames.plist */,
 				A0BCCCB9195476D1001CD7F1 /* ColorsChaptersNames.plist */,
 				8BD2CED21951E6B4002EF327 /* GamesDatabase2.plist */,
-				A0BCCCBB1954778C001CD7F1 /* ColorGamesDatabase2.plist */,
 				8B96EAD819795E1C00E60698 /* WordsGamesDatabase2.plist */,
+				8BE1D6041986F8D200CAAFCF /* ColorGamesDatabase2.plist */,
 			);
 			path = NumeroLoco;
 			sourceTree = "<group>";
@@ -316,6 +334,8 @@
 				8B96EADE197969A200E60698 /* WordsGameViewController.m */,
 				8BB9EC9119632542007B8C8E /* TutorialViewController.h */,
 				8BB9EC9219632542007B8C8E /* TutorialViewController.m */,
+				8BE1D5F61986A5A300CAAFCF /* ChallengeFriendsViewController.h */,
+				8BE1D5F71986A5A300CAAFCF /* ChallengeFriendsViewController.m */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -338,6 +358,8 @@
 				8B6FB8FB19508B0800EB2C4E /* ChaptersCell.m */,
 				8BB9EC94196345E9007B8C8E /* TutorialCell.h */,
 				8BB9EC95196345E9007B8C8E /* TutorialCell.m */,
+				8BE1D5F91986AD4D00CAAFCF /* FriendsCell.h */,
+				8BE1D5FA1986AD4D00CAAFCF /* FriendsCell.m */,
 			);
 			name = "Custom Cells";
 			sourceTree = "<group>";
@@ -345,6 +367,10 @@
 		8B90453B196359FC000F2E51 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				8BE1D5FE1986D2FE00CAAFCF /* ChallengeIcon.png */,
+				8BE1D5FF1986D2FE00CAAFCF /* FacebookLogo.png */,
+				8BE1D6001986D2FE00CAAFCF /* TwitterLogo.gif */,
+				8BE1D5FC1986BF4800CAAFCF /* checkmark.png */,
 				A0BDEAED19773C31008BFF4D /* BackgroundPad.png */,
 				A0BDEAD61976C0EC008BFF4D /* Background.png */,
 				8B90453C196359FC000F2E51 /* Tutorial */,
@@ -484,13 +510,17 @@
 				8B6FB8EF19507CC400EB2C4E /* MainStoryboard.storyboard in Resources */,
 				A0BDEAD71976C0EC008BFF4D /* Background.png in Resources */,
 				8B18CF8F19644AD000F3FB0F /* TutorialPhoneR4_4.png in Resources */,
+				8BE1D6011986D2FE00CAAFCF /* ChallengeIcon.png in Resources */,
+				8BE1D6031986D2FE00CAAFCF /* TwitterLogo.gif in Resources */,
 				8B96EAD919795E1C00E60698 /* WordsGamesDatabase2.plist in Resources */,
+				8BE1D6021986D2FE00CAAFCF /* FacebookLogo.png in Resources */,
+				8BE1D6051986F8D200CAAFCF /* ColorGamesDatabase2.plist in Resources */,
 				8B90454119635EEF000F2E51 /* TutorialPhoneR4_2.png in Resources */,
-				A0BCCCBC1954778C001CD7F1 /* ColorGamesDatabase2.plist in Resources */,
 				8B6FB8CA19507C6B00EB2C4E /* InfoPlist.strings in Resources */,
 				8B18CF9119644BBB00F3FB0F /* TutorialPhoneR4_5.png in Resources */,
 				A06520711959B7D100399778 /* PadStoryboard.storyboard in Resources */,
 				8B90453F196359FC000F2E51 /* TutorialPhoneR4_1.png in Resources */,
+				8BE1D5FD1986BF4800CAAFCF /* checkmark.png in Resources */,
 				8B90454319636244000F2E51 /* TutorialPhoneR4_3.png in Resources */,
 				8B6FB8D219507C6B00EB2C4E /* Images.xcassets in Resources */,
 				8B6FB8FF19508CA200EB2C4E /* ChapterNames.plist in Resources */,
@@ -522,6 +552,8 @@
 				8BA60C37195B33870072A7F4 /* FileSaver.m in Sources */,
 				8B61F8FB195C87CC0036BB90 /* GameWonAlert.m in Sources */,
 				A0BCCCB8195474F6001CD7F1 /* ColorsChaptersViewController.m in Sources */,
+				8BE1D5F81986A5A300CAAFCF /* ChallengeFriendsViewController.m in Sources */,
+				8BE1D5FB1986AD4D00CAAFCF /* FriendsCell.m in Sources */,
 				8B6FB9071950A18600EB2C4E /* GameViewController.m in Sources */,
 				A0BCCCBF19549049001CD7F1 /* ColorsGameViewController.m in Sources */,
 				8B6FB8D019507C6B00EB2C4E /* AppDelegate.m in Sources */,

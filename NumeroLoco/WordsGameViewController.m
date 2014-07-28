@@ -480,7 +480,7 @@
         }
     }
     
-    [GameWonAlert showInView:self.view];
+    //[GameWonAlert showInView:self.view];
     [self performSelector:@selector(prepareNextGame) withObject:nil afterDelay:2.5];
 }
 

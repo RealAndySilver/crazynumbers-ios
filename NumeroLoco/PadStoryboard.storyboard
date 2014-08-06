@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5053" systemVersion="13D65" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" useAutolayout="YES" initialViewController="9sU-wK-NNT">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5053" systemVersion="13D65" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" initialViewController="7fK-iv-lXm">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
     </dependencies>
@@ -8,10 +8,6 @@
         <scene sceneID="DHn-sx-pWR">
             <objects>
                 <viewController storyboardIdentifier="Chapters" id="Aeh-dD-hDo" customClass="ChaptersViewController" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="Ufc-G1-vab"/>
-                        <viewControllerLayoutGuide type="bottom" id="Uzb-hK-0fz"/>
-                    </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="HUZ-It-PbU">
                         <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -26,10 +22,6 @@
         <scene sceneID="yZ5-Yi-xAf">
             <objects>
                 <viewController storyboardIdentifier="ColorsChapters" id="PIJ-ei-TXV" customClass="ColorsChaptersViewController" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="cZT-hy-Xcj"/>
-                        <viewControllerLayoutGuide type="bottom" id="4Be-zI-r5V"/>
-                    </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="Zmg-dv-vJG">
                         <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -44,10 +36,6 @@
         <scene sceneID="1UA-lG-pmS">
             <objects>
                 <viewController storyboardIdentifier="ColorsGame" id="NQy-2B-hC2" customClass="ColorsGameViewController" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="uvF-dB-nLE"/>
-                        <viewControllerLayoutGuide type="bottom" id="eCd-iA-L02"/>
-                    </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="VaT-8x-DNa">
                         <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -62,10 +50,6 @@
         <scene sceneID="YnD-5w-2fI">
             <objects>
                 <viewController storyboardIdentifier="Tutorial" id="uuU-mI-6x2" customClass="TutorialViewController" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="cHY-UA-2ed"/>
-                        <viewControllerLayoutGuide type="bottom" id="UZi-4g-Crs"/>
-                    </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="Rkl-NR-GSu">
                         <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -80,10 +64,6 @@
         <scene sceneID="XxD-Va-hRq">
             <objects>
                 <viewController storyboardIdentifier="Game" id="T8P-Ft-WhP" customClass="GameViewController" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="GII-NK-MnN"/>
-                        <viewControllerLayoutGuide type="bottom" id="DPF-HC-mx9"/>
-                    </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="8PA-NT-8Zf">
                         <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -98,43 +78,39 @@
         <scene sceneID="upu-g1-YU6">
             <objects>
                 <viewController storyboardIdentifier="Root" id="7fK-iv-lXm" customClass="RootViewController" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="fhn-7x-KIe"/>
-                        <viewControllerLayoutGuide type="bottom" id="mEJ-bS-Mgj"/>
-                    </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="LJd-WC-cny">
                         <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="5" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ho4-Ig-kQe">
-                                <rect key="frame" x="316" y="105" width="136" height="136"/>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="5" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Ho4-Ig-kQe">
+                                <rect key="frame" x="28" y="249" width="136" height="136"/>
                                 <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="43"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="5" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DYJ-R7-Jm4">
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="5" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="DYJ-R7-Jm4">
                                 <rect key="frame" x="316" y="249" width="136" height="136"/>
                                 <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="43"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="5" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="x3e-fa-h7X">
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="5" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="x3e-fa-h7X">
                                 <rect key="frame" x="460" y="249" width="136" height="136"/>
                                 <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="43"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="5" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2QN-wc-JFL">
-                                <rect key="frame" x="316" y="393" width="136" height="136"/>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="5" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="2QN-wc-JFL">
+                                <rect key="frame" x="604" y="249" width="136" height="136"/>
                                 <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="43"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="5" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xTf-cY-eEZ">
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="5" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="xTf-cY-eEZ">
                                 <rect key="frame" x="172" y="249" width="136" height="136"/>
                                 <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="43"/>
@@ -162,10 +138,6 @@
         <scene sceneID="vhL-dE-fLd">
             <objects>
                 <viewController storyboardIdentifier="Login" id="9sU-wK-NNT" customClass="LoginViewController" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="l9x-Ku-0uy"/>
-                        <viewControllerLayoutGuide type="bottom" id="tiX-T5-f9q"/>
-                    </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="4xQ-uw-v0J">
                         <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -180,10 +152,6 @@
         <scene sceneID="mf8-BV-rZH">
             <objects>
                 <viewController storyboardIdentifier="WordsChapters" id="FhJ-Dv-0uS" customClass="WordsChaptersViewController" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="yae-Lc-147"/>
-                        <viewControllerLayoutGuide type="bottom" id="j1t-lp-wKv"/>
-                    </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="QCj-EJ-ADE">
                         <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -198,10 +166,6 @@
         <scene sceneID="JiO-pS-puP">
             <objects>
                 <viewController storyboardIdentifier="WordsGame" id="qt5-OV-Zf8" customClass="WordsGameViewController" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="X16-54-ims"/>
-                        <viewControllerLayoutGuide type="bottom" id="d4T-eM-xWU"/>
-                    </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="tZD-yI-9lJ">
                         <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -216,10 +180,6 @@
         <scene sceneID="AOc-w9-RzW">
             <objects>
                 <viewController storyboardIdentifier="ChallengeFriends" id="Go3-Ip-Ryo" customClass="ChallengeFriendsViewController" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="48R-qb-ihD"/>
-                        <viewControllerLayoutGuide type="bottom" id="bLt-sg-9kS"/>
-                    </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="RCi-wv-ZKm">
                         <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -230,7 +190,70 @@
             </objects>
             <point key="canvasLocation" x="3765" y="386"/>
         </scene>
+        <!--Multiplayer Game View Controller-->
+        <scene sceneID="qdy-HO-XOp">
+            <objects>
+                <viewController storyboardIdentifier="MultiplayerGame" id="Sc5-Y4-wNS" customClass="MultiplayerGameViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="5VK-em-duR">
+                        <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" id="taQ-xC-OLR">
+                                <rect key="frame" x="0.0" y="512" width="768" height="512"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <subviews>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Games Won: 0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="LNf-RA-s6W">
+                                        <rect key="frame" x="298" y="444" width="172" height="48"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="23"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="hand.png" id="lMl-5V-Xpu">
+                                        <rect key="frame" x="648" y="338" width="100" height="100"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    </imageView>
+                                </subviews>
+                                <color key="backgroundColor" red="0.026931828729999996" green="0.71755246350364965" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            </view>
+                            <view contentMode="scaleToFill" id="mIv-7D-bLy">
+                                <rect key="frame" x="0.0" y="0.0" width="768" height="513"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Games Won: 0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="nMu-Zd-Vx6">
+                                        <rect key="frame" x="298" y="20" width="172" height="48"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="23"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="hand.png" id="dxN-22-Z3U">
+                                        <rect key="frame" x="20" y="76" width="100" height="100"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    </imageView>
+                                </subviews>
+                                <color key="backgroundColor" red="1" green="0.27376654901282427" blue="0.3569627773125208" alpha="1" colorSpace="calibratedRGB"/>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                    <connections>
+                        <outlet property="bottomHand" destination="lMl-5V-Xpu" id="yNr-Rc-5yM"/>
+                        <outlet property="bottomSideView" destination="taQ-xC-OLR" id="HYT-kn-I5b"/>
+                        <outlet property="gamesWonBottomLabel" destination="LNf-RA-s6W" id="aBf-tA-PB2"/>
+                        <outlet property="gamesWonTopLabel" destination="nMu-Zd-Vx6" id="7sf-gA-3al"/>
+                        <outlet property="topHand" destination="dxN-22-Z3U" id="mC0-tB-XpK"/>
+                        <outlet property="topSideVIew" destination="mIv-7D-bLy" id="dnt-1J-s8d"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="r23-K9-Q1D" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4578" y="386"/>
+        </scene>
     </scenes>
+    <resources>
+        <image name="hand.png" width="200" height="200"/>
+    </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>

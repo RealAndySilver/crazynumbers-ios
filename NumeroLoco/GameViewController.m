@@ -16,6 +16,7 @@
 #import <Social/Social.h>
 #import "GameWonAlert.h"
 #import "ChallengeFriendsViewController.h"
+#import "Score+AddOns.h"
 
 @interface GameViewController () <UIAlertViewDelegate, GameWonAlertDelegate>
 @property (strong, nonatomic) NSMutableArray *columnsButtonsArray; //Of UIButton
@@ -27,9 +28,15 @@
 @property (strong, nonatomic) UIButton *backButton;
 @property (strong, nonatomic) UIButton *resetButton;
 @property (strong, nonatomic) NSTimer *gameTimer;
+@property (strong, nonatomic) UILabel *maxScoreLabel;
+
+//CoreData
+@property (strong, nonatomic) UIManagedDocument *databaseDocument;
+@property (strong, nonatomic) NSURL *databaseDocumentURL;
 @end
 
 #define FONT_NAME @"HelveticaNeue-Light"
+#define DOCUMENT_NAME @"MyDocument";
 
 @implementation GameViewController {
     CGRect screenBounds;
@@ -39,10 +46,32 @@
     float maxScore;
     float maxTime;
     float timeElapsed;
+    BOOL managedDocumentIsReady;
     BOOL isPad;
 }
 
 #pragma mark - Lazy Instantiation
+
+-(NSURL *)databaseDocumentURL {
+    if (!_databaseDocumentURL) {
+        NSFileManager *fileManager = [NSFileManager defaultManager];
+        NSURL *documentsDirectory = [[fileManager URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] firstObject];
+        NSString *documentName = DOCUMENT_NAME;
+        _databaseDocumentURL = [documentsDirectory URLByAppendingPathComponent:documentName];
+    }
+    return _databaseDocumentURL;
+}
+
+-(UIManagedDocument *)databaseDocument {
+    if (!_databaseDocument) {
+        NSFileManager *fileManager = [NSFileManager defaultManager];
+        NSURL *documentsDirectory = [[fileManager URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] firstObject];
+        NSString *documentName = DOCUMENT_NAME;
+        NSURL *url = [documentsDirectory URLByAppendingPathComponent:documentName];
+        _databaseDocument = [[UIManagedDocument alloc] initWithFileURL:url];
+    }
+    return _databaseDocument;
+}
 
 -(NSMutableArray *)columnsButtonsArray {
     if (!_columnsButtonsArray) {
@@ -65,6 +94,9 @@
     NSArray *chaptersDataArray = [NSArray arrayWithContentsOfFile:gamesDatabasePath];
     matrixSize = [chaptersDataArray[self.selectedChapter][self.selectedGame][@"matrixSize"] intValue];
     maxNumber = [chaptersDataArray[self.selectedChapter][self.selectedGame][@"maxNumber"] intValue];
+    maxScore = [chaptersDataArray[self.selectedChapter][self.selectedGame][@"maxScore"] floatValue];
+    
+    [self openCoreDataDocument];
     
     self.view.backgroundColor = [[AppInfo sharedInstance] appColorsArray][self.selectedChapter];
     screenBounds = [UIScreen mainScreen].bounds;
@@ -97,10 +129,8 @@
     self.gameTimer = nil;
     
     //Remove ads from Flurry
-    if (!isPad) {
-        [FlurryAds removeAdFromSpace:@"GAME_TOP_BANNER"];
-        [FlurryAds setAdDelegate:nil];
-    }
+    [FlurryAds removeAdFromSpace:@"FullScreenAd"];
+    [FlurryAds setAdDelegate:nil];
 }
 
 -(void)setupUI {
@@ -134,7 +164,6 @@
     
     self.titleLabel.text = [NSString stringWithFormat:@"Chapter %i - Game %i", self.selectedChapter + 1, self.selectedGame + 1];
     self.titleLabel.textColor = [UIColor whiteColor];
-    
     self.titleLabel.textAlignment = NSTextAlignmentCenter;
     [self.view addSubview:self.titleLabel];
     
@@ -162,29 +191,19 @@
     [self.resetButton addTarget:self action:@selector(initGame) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.resetButton];
     
-    //Number of taps label
-    /*self.numberOfTapsLabel.text = @"Number of taps: 0";
-    self.numberOfTapsLabel.textAlignment = NSTextAlignmentCenter;
-    self.numberOfTapsLabel.textColor = [UIColor whiteColor];
-    self.numberOfTapsLabel.font = [UIFont fontWithName:FONT_NAME size:labelsFontSize];
-    [self.view addSubview:self.numberOfTapsLabel];
-    
-    //Max taps label
-    self.maxTapsLabel = [[UILabel alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 150.0, self.numberOfTapsLabel.frame.origin.y + self.numberOfTapsLabel.frame.size.height, 300.0, 20.0)];
-    self.maxTapsLabel.textColor = [UIColor whiteColor];
-    self.maxTapsLabel.textAlignment = NSTextAlignmentCenter;
-    self.maxTapsLabel.font = [UIFont fontWithName:FONT_NAME size:labelsFontSize];
-    [self.view addSubview:self.maxTapsLabel];*/
-    
     //Buttons container view
     NSString *gamesDatabasePath = [[NSBundle mainBundle] pathForResource:@"GamesDatabase2" ofType:@"plist"];
     NSArray *chaptersDataArray = [NSArray arrayWithContentsOfFile:gamesDatabasePath];
     matrixSize = [chaptersDataArray[self.selectedChapter][self.selectedGame][@"matrixSize"] intValue];
-
-    /*self.buttonsContainerView = [[UIView alloc] initWithFrame:CGRectMake(0.0, screenBounds.size.height/5.68, matrixSize*53.33333, matrixSize*53.33333)];
-    self.buttonsContainerView.center = CGPointMake(screenBounds.size.width/2.0, screenBounds.size.height/2.0);*/
     self.buttonsContainerView = [[UIView alloc] init];
     [self.view addSubview:self.buttonsContainerView];
+    
+    //Max Score Label
+    self.maxScoreLabel = [[UILabel alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 150.0, screenBounds.size.height - 80.0, 300.0, 40.0)];
+    self.maxScoreLabel.textColor = [UIColor whiteColor];
+    self.maxScoreLabel.textAlignment = NSTextAlignmentCenter;
+    self.maxScoreLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:20.0];
+    [self.view addSubview:self.maxScoreLabel];
 }
 
 #pragma mark - Custom Methods
@@ -208,6 +227,8 @@
     maxScore = [chaptersDataArray[self.selectedChapter][self.selectedGame][@"maxScore"] floatValue];
     maxTime = [chaptersDataArray[self.selectedChapter][self.selectedGame][@"maxTime"] floatValue];
     timeElapsed = 0;
+    self.maxScoreLabel.text = [NSString stringWithFormat:@"Best Score: %d/%d", [self getScoredStoredInCoreData], (int)maxScore];
+
     
     //self.buttonsContainerView.frame = CGRectMake(0.0, 100.0, matrixSize*53.33333, matrixSize*53.33333);
     if (matrixSize < 5) {
@@ -402,12 +423,11 @@
         [self.columnsButtonsArray[column + 1][row] setTitle:buttonTitle forState:UIControlStateNormal];
     }
     numberOfTaps += 1;
-    [self updateUI];
     [self checkIfUserWon];
 }
 
 -(void)updateUI {
-    self.numberOfTapsLabel.text = [NSString stringWithFormat:@"Number of taps: %i", numberOfTaps];
+    self.maxScoreLabel.text = [NSString stringWithFormat:@"Best Score: %d/%d", [self getScoredStoredInCoreData], (int)maxScore];
 }
 
 -(void)checkIfUserWon {
@@ -420,7 +440,8 @@
         }
     }
     
-    //Get Points won
+    //User Won
+    //Get Points Won
     NSUInteger pointsWon = [self pointsWonForTime:timeElapsed];
     NSLog(@"Point Woooon %d", pointsWon);
 
@@ -433,8 +454,20 @@
 }
 
 -(void)userWon {
+    BOOL scoreWasImproved = [self checkIfScoredWasImprovedInCoreDataWithNewScore:[self pointsWonForTime:timeElapsed]];
+    
     //Send data to Flurry
     [Flurry logEvent:@"NumbersGameWon" withParameters:@{@"Chapter" : @(self.selectedChapter), @"Game" : @(self.selectedGame)}];
+    [self savePointsInCoreData];
+    if (scoreWasImproved) {
+        NSLog(@"EL score se mejoróoooo *************************");
+        NSUInteger totalScore = [self getTotalScoreInCoreData];
+        NSLog(@"Score Totaaaaaaaalllllll: %d", totalScore);
+        [[GameKitHelper sharedGameKitHelper] submitScore:totalScore category:@"Points_Leaderboard"];
+        
+    } else {
+        NSLog(@"El score no se mejoróooooot *************************");
+    }
     
     //Unlock the next game saving the game number with FileSaver
     FileSaver *fileSaver = [[FileSaver alloc] init];
@@ -459,6 +492,20 @@
             
             //Post a notification to update the color of the buttons in ChaptersViewController
             [[NSNotificationCenter defaultCenter] postNotificationName:@"GameWonNotification" object:nil];
+            
+            //Save points to fileSaver
+            /*NSUInteger points = 0;
+            if ([fileSaver getDictionary:@"UserPointsDic"][@"UserPoints"]) {
+                points = [[fileSaver getDictionary:@"UserPointsDic"][@"UserPoints"] intValue];
+                points += [self pointsWonForTime:timeElapsed];
+                [fileSaver setDictionary:@{@"UserPoints" : @(points)} withName:@"UserPointsDic"];
+            } else {
+                points = [self pointsWonForTime:timeElapsed];
+                [fileSaver setDictionary:@{@"UserPoints" : @(points)} withName:@"UserPointsDic"];
+            }
+            
+            NSLog(@"Sending %d points to game center ****************", points);
+            [[GameKitHelper sharedGameKitHelper] submitScore:points category:@"Points_Leaderboard"];*/
         
         } else {
             NSLog(@"No guardé la info porque el usuario ya había ganado este juego");
@@ -481,7 +528,7 @@
             [[NSNotificationCenter defaultCenter] postNotificationName:@"GameWonNotification" object:nil];
             
             //Save points to fileSaver
-            NSUInteger points = 0;
+            /*NSUInteger points = 0;
             if ([fileSaver getDictionary:@"UserPointsDic"][@"UserPoints"]) {
                 points = [[fileSaver getDictionary:@"UserPointsDic"][@"UserPoints"] intValue];
                 points += [self pointsWonForTime:timeElapsed];
@@ -492,7 +539,7 @@
             }
             
             NSLog(@"Sending %d points to game center ****************", points);
-            [[GameKitHelper sharedGameKitHelper] submitScore:points category:@"Points_Leaderboard"];
+            [[GameKitHelper sharedGameKitHelper] submitScore:points category:@"Points_Leaderboard"];*/
             
         } else {
             NSLog(@"No guardé la info del juego ganado porque el usuario ya lo había ganado");
@@ -507,14 +554,24 @@
 }
 
 -(void)showFlurryAds {
-    if ([FlurryAds adReadyForSpace:@"FullScreenAd"]) {
-        NSLog(@"Mostraré el ad");
-        [FlurryAds displayAdForSpace:@"FullScreenAd" onView:self.view];
+    //Check if the user removed the ads
+    FileSaver *fileSaver = [[FileSaver alloc] init];
+    BOOL userHasRemoveAds = [[fileSaver getDictionary:@"UserRemovedAdsDic"][@"UserRemovedAdsKey"] boolValue];
+    
+    if (!userHasRemoveAds) {
+        //The user has not removed the ads, so display them.
+        if ([FlurryAds adReadyForSpace:@"FullScreenAd"]) {
+            NSLog(@"Mostraré el ad");
+            [FlurryAds displayAdForSpace:@"FullScreenAd" onView:self.view];
+        } else {
+            NSLog(@"No mostraré el ad sino que lo cargaré");
+            [FlurryAds fetchAdForSpace:@"FullScreenAd" frame:self.view.frame size:FULLSCREEN];
+            
+            //Go to the next game
+            [self prepareNextGame];
+        }
     } else {
-        NSLog(@"No mostraré el ad sino que lo cargaré");
-        [FlurryAds fetchAdForSpace:@"FullScreenAd" frame:self.view.frame size:FULLSCREEN];
-        
-        //Go to the next game
+        //The user removed the ads
         [self prepareNextGame];
     }
 }
@@ -567,6 +624,131 @@
     SLComposeViewController *socialViewController = [SLComposeViewController composeViewControllerForServiceType:serviceType];
     [socialViewController setInitialText:[NSString stringWithFormat:@"I scored %d points playing Cross: Numbers & Colors", [self pointsWonForTime:timeElapsed]]];
     [self presentViewController:socialViewController animated:YES completion:nil];
+}
+
+#pragma mark - CoreData Stuff
+
+-(void)openCoreDataDocument {
+    BOOL fileExist = [[NSFileManager defaultManager] fileExistsAtPath:[self.databaseDocumentURL path]];
+    if (fileExist) {
+        //Open the database document
+        [self.databaseDocument openWithCompletionHandler:^(BOOL success){
+            if (success) {
+                NSLog(@"Abrí el documento de core data");
+                managedDocumentIsReady = YES;
+                [self updateUI];
+            } else {
+                managedDocumentIsReady = NO;
+                NSLog(@"Error opening the document");
+            }
+        }];
+    } else {
+        //The database document did not exist, so create it.
+        [self.databaseDocument saveToURL:self.databaseDocumentURL forSaveOperation:UIDocumentSaveForCreating completionHandler:^(BOOL success){
+            if (success) {
+                NSLog(@"Abrí el documento de core data");
+                managedDocumentIsReady = YES;
+                [self updateUI];
+            } else {
+                managedDocumentIsReady = NO;
+                NSLog(@"Error opening the document");
+            }
+        }];
+    }
+}
+
+-(NSUInteger)getTotalScoreInCoreData {
+    if (managedDocumentIsReady && self.databaseDocument.documentState == UIDocumentStateNormal) {
+        NSManagedObjectContext *context = self.databaseDocument.managedObjectContext;
+        return [Score getTotalScoreInContext:context];
+    } else {
+        return 0;
+    }
+}
+
+-(BOOL)checkIfScoredWasImprovedInCoreDataWithNewScore:(NSUInteger)newScore {
+    if (managedDocumentIsReady && self.databaseDocument.documentState == UIDocumentStateNormal) {
+        NSManagedObjectContext *context = self.databaseDocument.managedObjectContext;
+        
+        //Get the game identifier
+        NSNumber *gameIdentifier;
+        if (self.selectedChapter == 0) {
+            gameIdentifier = @(self.selectedGame + 1);
+        } else {
+            gameIdentifier = @((9*(self.selectedChapter)) + (self.selectedGame + 1));
+        }
+        Score *score = [Score getScoreWithType:@"numbers" identifier:gameIdentifier inManagedObjectContext:context];
+        if (score) {
+            NSLog(@"******************* EXISTE EL OBJETO SCORE ******************");
+            if ([score.value intValue] < newScore) {
+                //The score was improved
+                NSLog(@"***************** SCORE MEJORADO *************************");
+                NSLog(@"**************** SCORE GUARDADO EN COREDATA: %d", [score.value intValue]);
+                NSLog(@"**************** SCORE LOGRADO: %d", newScore);
+                return YES;
+            } else {
+                NSLog(@"**************** SCORE NO MEJORADO ************************");
+                NSLog(@"**************** SCORE GUARDADO EN COREDATA: %d", [score.value intValue]);
+                NSLog(@"**************** SCORE LOGRADO: %d", newScore);
+                return NO;
+            }
+        } else {
+            NSLog(@"No había ningun score guardado, así que si se mejoró");
+            return YES;
+        }
+        
+    } else {
+        NSLog(@"No pude abrir el documento para obtener el puntaje del juego");
+        //Error in the document state, alert the user
+        return NO;
+    }
+}
+
+-(NSUInteger)getScoredStoredInCoreData {
+    if (managedDocumentIsReady && self.databaseDocument.documentState == UIDocumentStateNormal) {
+        NSManagedObjectContext *context = self.databaseDocument.managedObjectContext;
+        
+        //Get the game identifier
+        NSNumber *gameIdentifier;
+        if (self.selectedChapter == 0) {
+            gameIdentifier = @(self.selectedGame + 1);
+        } else {
+            gameIdentifier = @((9*(self.selectedChapter)) + (self.selectedGame + 1));
+        }
+        Score *score = [Score getScoreWithType:@"numbers" identifier:gameIdentifier inManagedObjectContext:context];
+        if (score) {
+            return [score.value intValue];
+        } else {
+            NSLog(@"Error obteniendo el score de este juego en CoreData");
+            return 0;
+        }
+        
+    } else {
+        NSLog(@"No pude abrir el documento para obtener el puntaje del juego");
+        //Error in the document state, alert the user
+        return 0;
+    }
+}
+
+-(void)savePointsInCoreData {
+    //Check database document state
+    if (managedDocumentIsReady && self.databaseDocument.documentState == UIDocumentStateNormal) {
+        //Do anything with the document
+        NSManagedObjectContext *context = self.databaseDocument.managedObjectContext;
+        
+        //Get the game identifier
+        NSNumber *gameIdentifier;
+        if (self.selectedChapter == 0) {
+            gameIdentifier = @(self.selectedGame + 1);
+        } else {
+            gameIdentifier = @((9*(self.selectedChapter)) + (self.selectedGame + 1));
+        }
+        NSLog(@"Game Identifier: %@", gameIdentifier);
+        [Score scoreWithIdentifier:gameIdentifier type:@"numbers" value:@([self pointsWonForTime:timeElapsed]) inManagedObjectContext:context];
+        
+    } else {
+        //Error in the document state, alert the user.
+    }
 }
 
 #pragma mark - GameWonAlert

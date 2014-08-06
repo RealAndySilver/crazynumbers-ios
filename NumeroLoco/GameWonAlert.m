@@ -135,7 +135,7 @@
                          self.transform = CGAffineTransformMakeScale(0.5, 0.5);
                      } completion:^(BOOL finished){
                          [self.opacityView removeFromSuperview];
-                         [view removeFromSuperview];
+                         [self removeFromSuperview];
                          [self.delegate gameWonAlertDidDissapear:self];
                      }];
 }

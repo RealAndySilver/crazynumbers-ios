@@ -12,11 +12,15 @@
 #import "Flurry.h"
 #import "FlurryAds.h"
 #import "GameKitHelper.h"
+#import "CPIAPHelper.h"
 
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    //Init our InApp-Purchases Helper Singleton
+    [CPIAPHelper sharedInstance];
+    
     //Facebook Setup
     [FBLoginView class];
     
@@ -40,10 +44,10 @@
                                                               @[],
                                                               @[]]} withName:@"ColorChaptersDic"];
         
-        [fileSaver setDictionary:@{@"WordChaptersArray" : @[@[@1, @2, @3],
-                                                             @[@1],
-                                                             @[@1],
-                                                             @[@1]]} withName:@"WordChaptersDic"];
+        [fileSaver setDictionary:@{@"WordChaptersArray" : @[@[@1],
+                                                             @[],
+                                                             @[],
+                                                             @[]]} withName:@"WordChaptersDic"];
     }
     [[GameKitHelper sharedGameKitHelper] authenticateLocalPlayer];
     return YES;

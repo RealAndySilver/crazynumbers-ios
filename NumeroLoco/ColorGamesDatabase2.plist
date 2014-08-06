@@ -9,7 +9,7 @@
 			<key>maxTime</key>
 			<integer>20</integer>
 			<key>maxNumber</key>
-			<integer>1</integer>
+			<integer>5</integer>
 			<key>matrixSize</key>
 			<integer>3</integer>
 			<key>puntos</key>
@@ -30,7 +30,7 @@
 			<key>maxTime</key>
 			<integer>20</integer>
 			<key>maxNumber</key>
-			<integer>2</integer>
+			<integer>5</integer>
 			<key>puntos</key>
 			<array>
 				<dict>
@@ -49,7 +49,7 @@
 		</dict>
 		<dict>
 			<key>maxNumber</key>
-			<integer>3</integer>
+			<integer>5</integer>
 			<key>maxScore</key>
 			<integer>300</integer>
 			<key>maxTime</key>
@@ -80,7 +80,7 @@
 		</dict>
 		<dict>
 			<key>maxNumber</key>
-			<integer>4</integer>
+			<integer>5</integer>
 			<key>maxScore</key>
 			<integer>400</integer>
 			<key>maxTime</key>
@@ -178,7 +178,7 @@
 		</dict>
 		<dict>
 			<key>maxNumber</key>
-			<integer>6</integer>
+			<integer>5</integer>
 			<key>maxScore</key>
 			<integer>600</integer>
 			<key>maxTime</key>
@@ -229,23 +229,11 @@
 					<key>columna</key>
 					<string>3</string>
 				</dict>
-				<dict>
-					<key>fila</key>
-					<string>2</string>
-					<key>columna</key>
-					<string>2</string>
-				</dict>
-				<dict>
-					<key>fila</key>
-					<string>1</string>
-					<key>columna</key>
-					<string>1</string>
-				</dict>
 			</array>
 		</dict>
 		<dict>
 			<key>maxNumber</key>
-			<integer>7</integer>
+			<integer>5</integer>
 			<key>maxScore</key>
 			<integer>700</integer>
 			<key>maxTime</key>
@@ -296,35 +284,11 @@
 					<key>columna</key>
 					<string>3</string>
 				</dict>
-				<dict>
-					<key>fila</key>
-					<string>2</string>
-					<key>columna</key>
-					<string>2</string>
-				</dict>
-				<dict>
-					<key>fila</key>
-					<string>1</string>
-					<key>columna</key>
-					<string>1</string>
-				</dict>
-				<dict>
-					<key>fila</key>
-					<string>2</string>
-					<key>columna</key>
-					<string>3</string>
-				</dict>
-				<dict>
-					<key>fila</key>
-					<string>3</string>
-					<key>columna</key>
-					<string>2</string>
-				</dict>
 			</array>
 		</dict>
 		<dict>
 			<key>maxNumber</key>
-			<integer>8</integer>
+			<integer>5</integer>
 			<key>maxTime</key>
 			<integer>50</integer>
 			<key>maxScore</key>
@@ -375,47 +339,11 @@
 					<key>columna</key>
 					<string>3</string>
 				</dict>
-				<dict>
-					<key>fila</key>
-					<string>2</string>
-					<key>columna</key>
-					<string>2</string>
-				</dict>
-				<dict>
-					<key>fila</key>
-					<string>1</string>
-					<key>columna</key>
-					<string>1</string>
-				</dict>
-				<dict>
-					<key>fila</key>
-					<string>2</string>
-					<key>columna</key>
-					<string>3</string>
-				</dict>
-				<dict>
-					<key>fila</key>
-					<string>3</string>
-					<key>columna</key>
-					<string>2</string>
-				</dict>
-				<dict>
-					<key>fila</key>
-					<string>1</string>
-					<key>columna</key>
-					<string>1</string>
-				</dict>
-				<dict>
-					<key>fila</key>
-					<string>3</string>
-					<key>columna</key>
-					<string>3</string>
-				</dict>
 			</array>
 		</dict>
 		<dict>
 			<key>maxNumber</key>
-			<integer>11</integer>
+			<integer>5</integer>
 			<key>maxScore</key>
 			<integer>900</integer>
 			<key>maxTime</key>
@@ -459,54 +387,6 @@
 					<string>3</string>
 					<key>columna</key>
 					<string>1</string>
-				</dict>
-				<dict>
-					<key>fila</key>
-					<string>1</string>
-					<key>columna</key>
-					<string>2</string>
-				</dict>
-				<dict>
-					<key>fila</key>
-					<string>2</string>
-					<key>columna</key>
-					<string>2</string>
-				</dict>
-				<dict>
-					<key>fila</key>
-					<string>1</string>
-					<key>columna</key>
-					<string>1</string>
-				</dict>
-				<dict>
-					<key>fila</key>
-					<string>2</string>
-					<key>columna</key>
-					<string>3</string>
-				</dict>
-				<dict>
-					<key>fila</key>
-					<string>2</string>
-					<key>columna</key>
-					<string>2</string>
-				</dict>
-				<dict>
-					<key>fila</key>
-					<string>1</string>
-					<key>columna</key>
-					<string>1</string>
-				</dict>
-				<dict>
-					<key>fila</key>
-					<string>3</string>
-					<key>columna</key>
-					<string>3</string>
-				</dict>
-				<dict>
-					<key>fila</key>
-					<string>1</string>
-					<key>columna</key>
-					<string>3</string>
 				</dict>
 				<dict>
 					<key>fila</key>
@@ -942,24 +822,6 @@
 					<string>4</string>
 					<key>columna</key>
 					<string>1</string>
-				</dict>
-				<dict>
-					<key>fila</key>
-					<string>1</string>
-					<key>columna</key>
-					<string>1</string>
-				</dict>
-				<dict>
-					<key>fila</key>
-					<string>3</string>
-					<key>columna</key>
-					<string>3</string>
-				</dict>
-				<dict>
-					<key>fila</key>
-					<string>2</string>
-					<key>columna</key>
-					<string>2</string>
 				</dict>
 			</array>
 		</dict>
@@ -1052,42 +914,6 @@
 					<key>columna</key>
 					<string>1</string>
 				</dict>
-				<dict>
-					<key>fila</key>
-					<string>1</string>
-					<key>columna</key>
-					<string>1</string>
-				</dict>
-				<dict>
-					<key>fila</key>
-					<string>3</string>
-					<key>columna</key>
-					<string>3</string>
-				</dict>
-				<dict>
-					<key>fila</key>
-					<string>2</string>
-					<key>columna</key>
-					<string>2</string>
-				</dict>
-				<dict>
-					<key>fila</key>
-					<string>2</string>
-					<key>columna</key>
-					<string>2</string>
-				</dict>
-				<dict>
-					<key>fila</key>
-					<string>2</string>
-					<key>columna</key>
-					<string>2</string>
-				</dict>
-				<dict>
-					<key>fila</key>
-					<string>2</string>
-					<key>columna</key>
-					<string>2</string>
-				</dict>
 			</array>
 		</dict>
 		<dict>
@@ -1178,60 +1004,6 @@
 					<string>4</string>
 					<key>columna</key>
 					<string>1</string>
-				</dict>
-				<dict>
-					<key>fila</key>
-					<string>1</string>
-					<key>columna</key>
-					<string>1</string>
-				</dict>
-				<dict>
-					<key>fila</key>
-					<string>3</string>
-					<key>columna</key>
-					<string>3</string>
-				</dict>
-				<dict>
-					<key>fila</key>
-					<string>2</string>
-					<key>columna</key>
-					<string>2</string>
-				</dict>
-				<dict>
-					<key>fila</key>
-					<string>2</string>
-					<key>columna</key>
-					<string>2</string>
-				</dict>
-				<dict>
-					<key>fila</key>
-					<string>2</string>
-					<key>columna</key>
-					<string>2</string>
-				</dict>
-				<dict>
-					<key>fila</key>
-					<string>2</string>
-					<key>columna</key>
-					<string>2</string>
-				</dict>
-				<dict>
-					<key>fila</key>
-					<string>1</string>
-					<key>columna</key>
-					<string>4</string>
-				</dict>
-				<dict>
-					<key>fila</key>
-					<string>1</string>
-					<key>columna</key>
-					<string>4</string>
-				</dict>
-				<dict>
-					<key>fila</key>
-					<string>4</string>
-					<key>columna</key>
-					<string>2</string>
 				</dict>
 			</array>
 		</dict>
@@ -1575,7 +1347,7 @@
 		</dict>
 		<dict>
 			<key>maxNumber</key>
-			<integer>6</integer>
+			<integer>5</integer>
 			<key>maxTime</key>
 			<integer>70</integer>
 			<key>maxScore</key>
@@ -1662,29 +1434,11 @@
 					<key>columna</key>
 					<string>1</string>
 				</dict>
-				<dict>
-					<key>fila</key>
-					<string>1</string>
-					<key>columna</key>
-					<string>1</string>
-				</dict>
-				<dict>
-					<key>fila</key>
-					<string>3</string>
-					<key>columna</key>
-					<string>3</string>
-				</dict>
-				<dict>
-					<key>fila</key>
-					<string>2</string>
-					<key>columna</key>
-					<string>2</string>
-				</dict>
 			</array>
 		</dict>
 		<dict>
 			<key>maxNumber</key>
-			<integer>10</integer>
+			<integer>5</integer>
 			<key>maxTime</key>
 			<integer>80</integer>
 			<key>maxScore</key>
@@ -1771,47 +1525,11 @@
 					<key>columna</key>
 					<string>1</string>
 				</dict>
-				<dict>
-					<key>fila</key>
-					<string>1</string>
-					<key>columna</key>
-					<string>1</string>
-				</dict>
-				<dict>
-					<key>fila</key>
-					<string>3</string>
-					<key>columna</key>
-					<string>3</string>
-				</dict>
-				<dict>
-					<key>fila</key>
-					<string>2</string>
-					<key>columna</key>
-					<string>2</string>
-				</dict>
-				<dict>
-					<key>fila</key>
-					<string>2</string>
-					<key>columna</key>
-					<string>2</string>
-				</dict>
-				<dict>
-					<key>fila</key>
-					<string>2</string>
-					<key>columna</key>
-					<string>2</string>
-				</dict>
-				<dict>
-					<key>fila</key>
-					<string>2</string>
-					<key>columna</key>
-					<string>2</string>
-				</dict>
 			</array>
 		</dict>
 		<dict>
 			<key>maxNumber</key>
-			<integer>11</integer>
+			<integer>5</integer>
 			<key>maxTime</key>
 			<integer>90</integer>
 			<key>maxScore</key>
@@ -1897,60 +1615,6 @@
 					<string>4</string>
 					<key>columna</key>
 					<string>1</string>
-				</dict>
-				<dict>
-					<key>fila</key>
-					<string>1</string>
-					<key>columna</key>
-					<string>1</string>
-				</dict>
-				<dict>
-					<key>fila</key>
-					<string>3</string>
-					<key>columna</key>
-					<string>3</string>
-				</dict>
-				<dict>
-					<key>fila</key>
-					<string>2</string>
-					<key>columna</key>
-					<string>2</string>
-				</dict>
-				<dict>
-					<key>fila</key>
-					<string>2</string>
-					<key>columna</key>
-					<string>2</string>
-				</dict>
-				<dict>
-					<key>fila</key>
-					<string>2</string>
-					<key>columna</key>
-					<string>2</string>
-				</dict>
-				<dict>
-					<key>fila</key>
-					<string>2</string>
-					<key>columna</key>
-					<string>2</string>
-				</dict>
-				<dict>
-					<key>fila</key>
-					<string>1</string>
-					<key>columna</key>
-					<string>4</string>
-				</dict>
-				<dict>
-					<key>fila</key>
-					<string>1</string>
-					<key>columna</key>
-					<string>4</string>
-				</dict>
-				<dict>
-					<key>fila</key>
-					<string>4</string>
-					<key>columna</key>
-					<string>2</string>
 				</dict>
 			</array>
 		</dict>

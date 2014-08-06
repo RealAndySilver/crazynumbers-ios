@@ -95,6 +95,7 @@
     
     //Setup PageControl
     self.pageControl = [[UIPageControl alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 100.0, screenBounds.size.height - (screenBounds.size.height/4.93), 200.0, 30.0)];
+    self.pageControl.userInteractionEnabled = NO;
     self.pageControl.numberOfPages = numberOfChapters;
     self.pageControl.pageIndicatorTintColor = [UIColor colorWithWhite:0.7 alpha:1.0];
     self.pageControl.currentPageIndicatorTintColor = [UIColor colorWithWhite:0.9 alpha:1.0];
@@ -299,7 +300,7 @@
     if (userCanPlayGame) {
         [self goToGameVCWithSelectedGame:game inChapter:self.pageControl.currentPage];
     } else {
-        [[[UIAlertView alloc] initWithTitle:@"Oops!" message:@"You haven't unlock this game yet!" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil] show];
+        [[[UIAlertView alloc] initWithTitle:@"Oops!" message:@"You haven't unlocked this game yet!" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil] show];
     }
     NSLog(@"Se seleccionó el juego %d", game);
 }

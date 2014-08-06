@@ -11,6 +11,7 @@
 #import "GameViewController.h"
 #import "AppInfo.h"
 #import "FileSaver.h"
+#import "MultiplayerGameViewController.h"
 
 @interface ChaptersViewController () <UICollectionViewDataSource, UICollectionViewDelegate, ChaptersCellDelegate>
 @property (strong, nonatomic) UIPageControl *pageControl;
@@ -24,6 +25,7 @@
 @implementation ChaptersViewController {
     CGRect screenBounds;
     NSUInteger numberOfChapters;
+    NSUInteger selectedGame;
 }
 
 #pragma mark - Lazy Instantiation 
@@ -48,7 +50,7 @@
 
 -(void)viewDidLoad {
     [super viewDidLoad];
-    self.view.backgroundColor = [UIColor whiteColor];
+    self.view.backgroundColor = [[AppInfo sharedInstance] appColorsArray][0];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(gameWonNotificationReceived:)
                                                  name:@"GameWonNotification"
@@ -96,6 +98,7 @@
     
     //Setup PageControl
     self.pageControl = [[UIPageControl alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 100.0, screenBounds.size.height - (screenBounds.size.height/4.93), 200.0, 30.0)];
+    self.pageControl.userInteractionEnabled = NO;
     self.pageControl.numberOfPages = numberOfChapters;
     self.pageControl.pageIndicatorTintColor = [UIColor colorWithWhite:0.7 alpha:1.0];
     self.pageControl.currentPageIndicatorTintColor = [UIColor colorWithWhite:1.0 alpha:1.0];
@@ -268,15 +271,26 @@
     self.pageControl.currentPage = currentPage;
 }
 
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    NSUInteger pageWidth = self.view.bounds.size.width;
+    if (scrollView.contentOffset.x < 0) {
+        self.view.backgroundColor = [[[AppInfo sharedInstance] appColorsArray] firstObject];
+    } else if (scrollView.contentOffset.x > pageWidth*3) {
+        self.view.backgroundColor = [[AppInfo sharedInstance] appColorsArray][3];
+    }
+}
+
 #pragma mark - ChaptersCellDelegate
 
 -(void)chaptersCellDidSelectGame:(NSUInteger)game {
     BOOL userCanPlayGame = [self checkIfUserCanPlayGame:game + 1 inChapter:self.pageControl.currentPage];
     NSLog(@"Se seleccionó el juego %d", game);
     if (userCanPlayGame) {
+        selectedGame = game;
         [self goToGameVCWithSelectedGame:game inChapter:self.pageControl.currentPage];
+
     } else {
-        [[[UIAlertView alloc] initWithTitle:@"Oops!" message:@"You haven't unlock this game yet!" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil] show];
+        [[[UIAlertView alloc] initWithTitle:@"Oops!" message:@"You haven't unlocked this game yet!" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil] show];
     }
 }
 

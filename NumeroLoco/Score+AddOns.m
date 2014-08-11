@@ -81,4 +81,21 @@
     return totalScore;
 }
 
++(NSArray *)getAllScoresWithType:(NSString *)type inManagedObjectContext:(NSManagedObjectContext *)context {
+    NSSortDescriptor *sortDescritor = [[NSSortDescriptor alloc] initWithKey:@"identifier" ascending:YES];
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Score"];
+    request.predicate = [NSPredicate predicateWithFormat:@"type == %@", type];
+    request.sortDescriptors = @[sortDescritor];
+    NSError *error;
+    NSArray *matches = [context executeFetchRequest:request error:&error];
+    if (!matches || error) {
+        //Error
+        return nil;
+    } else {
+        return matches;
+    }
+    
+    
+}
+
 @end

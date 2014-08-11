@@ -15,4 +15,5 @@
        inManagedObjectContext:(NSManagedObjectContext *)context;
 +(Score *)getScoreWithType:(NSString *)type identifier:(NSNumber *)identifier inManagedObjectContext:(NSManagedObjectContext *)context;
 +(NSUInteger)getTotalScoreInContext:(NSManagedObjectContext *)context;
++(NSArray *)getAllScoresWithType:(NSString *)type inManagedObjectContext:(NSManagedObjectContext *)context;
 @end

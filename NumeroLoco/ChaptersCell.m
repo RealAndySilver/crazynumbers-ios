@@ -198,6 +198,71 @@
         [self.contentView addSubview:self.button9];
         
         self.buttonsArray = [NSMutableArray arrayWithArray:@[self.button1, self.button2, self.button3, self.button4, self.button5, self.button6, self.button7, self.button8, self.button9]];
+        
+        if (isPad) {
+            //Label1
+            self.label1 = [[UILabel alloc] init];
+            self.label1.textColor = [UIColor lightGrayColor];
+            self.label1.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:17.0];
+            self.label1.textAlignment = NSTextAlignmentCenter;
+            [self.button1 addSubview:self.label1];
+            
+            //Label2
+            self.label2 = [[UILabel alloc] init];
+            self.label2.textColor = [UIColor lightGrayColor];
+            self.label2.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:17.0];
+            self.label2.textAlignment = NSTextAlignmentCenter;
+            [self.button2 addSubview:self.label2];
+            
+            //Label3
+            self.label3 = [[UILabel alloc] init];
+            self.label3.textColor = [UIColor lightGrayColor];
+            self.label3.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:17.0];
+            self.label3.textAlignment = NSTextAlignmentCenter;
+            [self.button3 addSubview:self.label3];
+            
+            //Label4
+            self.label4 = [[UILabel alloc] init];
+            self.label4.textColor = [UIColor lightGrayColor];
+            self.label4.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:17.0];
+            self.label4.textAlignment = NSTextAlignmentCenter;
+            [self.button4 addSubview:self.label4];
+            
+            //Label5
+            self.label5 = [[UILabel alloc] init];
+            self.label5.textColor = [UIColor lightGrayColor];
+            self.label5.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:17.0];
+            self.label5.textAlignment = NSTextAlignmentCenter;
+            [self.button5 addSubview:self.label5];
+            
+            //Label6
+            self.label6 = [[UILabel alloc] init];
+            self.label6.textColor = [UIColor lightGrayColor];
+            self.label6.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:17.0];
+            self.label6.textAlignment = NSTextAlignmentCenter;
+            [self.button6 addSubview:self.label6];
+            
+            //Label7
+            self.label7 = [[UILabel alloc] init];
+            self.label7.textColor = [UIColor lightGrayColor];
+            self.label7.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:17.0];
+            self.label7.textAlignment = NSTextAlignmentCenter;
+            [self.button7 addSubview:self.label7];
+            
+            //Label8
+            self.label8 = [[UILabel alloc] init];
+            self.label8.textColor = [UIColor lightGrayColor];
+            self.label8.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:17.0];
+            self.label8.textAlignment = NSTextAlignmentCenter;
+            [self.button8 addSubview:self.label8];
+            
+            //Label1
+            self.label9 = [[UILabel alloc] init];
+            self.label9.textColor = [UIColor lightGrayColor];
+            self.label9.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:17.0];
+            self.label9.textAlignment = NSTextAlignmentCenter;
+            [self.button9 addSubview:self.label9];
+        }
     }
     return self;
 }
@@ -238,6 +303,19 @@
     self.button7.frame = CGRectMake(self.button4.frame.origin.x, self.button5.frame.origin.y + buttonSize + buttonDistance, buttonSize, buttonSize);
     self.button8.frame = CGRectMake(self.button5.frame.origin.x, self.button7.frame.origin.y, buttonSize, buttonSize);
     self.button9.frame = CGRectMake(self.button6.frame.origin.x, self.button7.frame.origin.y, buttonSize, buttonSize);
+    
+    //Labels
+    if (isPad) {
+        self.label1.frame = CGRectMake(0.0, self.button1.frame.size.height - 20.0, self.button1.frame.size.width, 20.0);
+        self.label2.frame = CGRectMake(0.0, self.button2.frame.size.height - 20.0, self.button2.frame.size.width, 20.0);
+        self.label3.frame = CGRectMake(0.0, self.button3.frame.size.height - 20.0, self.button3.frame.size.width, 20.0);
+        self.label4.frame = CGRectMake(0.0, self.button4.frame.size.height - 20.0, self.button4.frame.size.width, 20.0);
+        self.label5.frame = CGRectMake(0.0, self.button5.frame.size.height - 20.0, self.button5.frame.size.width, 20.0);
+        self.label6.frame = CGRectMake(0.0, self.button6.frame.size.height - 20.0, self.button6.frame.size.width, 20.0);
+        self.label7.frame = CGRectMake(0.0, self.button7.frame.size.height - 20.0, self.button7.frame.size.width, 20.0);
+        self.label8.frame = CGRectMake(0.0, self.button8.frame.size.height - 20.0, self.button8.frame.size.width, 20.0);
+        self.label9.frame = CGRectMake(0.0, self.button9.frame.size.height - 20.0, self.button9.frame.size.width, 20.0);
+    }
 }
 
 #pragma mark - Actions

@@ -96,7 +96,7 @@
     maxNumber = [chaptersDataArray[self.selectedChapter][self.selectedGame][@"maxNumber"] intValue];
     maxScore = [chaptersDataArray[self.selectedChapter][self.selectedGame][@"maxScore"] floatValue];
     
-    [self openCoreDataDocument];
+    if (!isPad) [self openCoreDataDocument];
     
     self.view.backgroundColor = [[AppInfo sharedInstance] appColorsArray][self.selectedChapter];
     screenBounds = [UIScreen mainScreen].bounds;
@@ -199,11 +199,13 @@
     [self.view addSubview:self.buttonsContainerView];
     
     //Max Score Label
-    self.maxScoreLabel = [[UILabel alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 150.0, screenBounds.size.height - 80.0, 300.0, 40.0)];
-    self.maxScoreLabel.textColor = [UIColor whiteColor];
-    self.maxScoreLabel.textAlignment = NSTextAlignmentCenter;
-    self.maxScoreLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:20.0];
-    [self.view addSubview:self.maxScoreLabel];
+    if (!isPad) {
+        self.maxScoreLabel = [[UILabel alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 150.0, screenBounds.size.height - 130.0, 300.0, 40.0)];
+        self.maxScoreLabel.textColor = [UIColor whiteColor];
+        self.maxScoreLabel.textAlignment = NSTextAlignmentCenter;
+        self.maxScoreLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:20.0];
+        [self.view addSubview:self.maxScoreLabel];
+    }
 }
 
 #pragma mark - Custom Methods

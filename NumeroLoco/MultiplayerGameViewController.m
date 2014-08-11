@@ -153,6 +153,18 @@
     [anotherGameButton addTarget:self action:@selector(startRandomGame) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:anotherGameButton];
     
+    //Restart button
+    UIButton *restartButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    restartButton.frame = CGRectMake(30.0, screenBounds.size.height/2.0 + 100.0, 150.0, 50.0);
+    [restartButton setTitle:@"Restart" forState:UIControlStateNormal];
+    [restartButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    restartButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:25.0];
+    restartButton.layer.borderColor = [UIColor whiteColor].CGColor;
+    restartButton.layer.borderWidth = 1.0;
+    restartButton.layer.cornerRadius = 4.0;
+    [restartButton addTarget:self action:@selector(restartGame) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:restartButton];
+    
     //Back Button
     self.backButton = [UIButton buttonWithType:UIButtonTypeSystem];
     self.backButton.frame = CGRectMake(30.0, screenBounds.size.height - 80.0, 90.0, 50.0);
@@ -374,6 +386,14 @@
 }
 
 #pragma mark - Actions
+
+-(void)restartGame {
+    gameInProgress = NO;
+    self.topHand.hidden = NO;
+    self.bottomHand.hidden = NO;
+    
+    [self initGame];
+}
 
 -(void)startRandomGame {
     [self prepareNextGame];

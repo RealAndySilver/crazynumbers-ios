@@ -17,8 +17,9 @@
 #import "GameWonAlert.h"
 #import "ChallengeFriendsViewController.h"
 #import "Score+AddOns.h"
+#import "AllGamesFinishedView.h"
 
-@interface GameViewController () <UIAlertViewDelegate, GameWonAlertDelegate>
+@interface GameViewController () <UIAlertViewDelegate, GameWonAlertDelegate, AllGamesFinishedViewDelegate>
 @property (strong, nonatomic) NSMutableArray *columnsButtonsArray; //Of UIButton
 @property (strong, nonatomic) UIView *buttonsContainerView;
 @property (strong, nonatomic) UILabel *numberOfTapsLabel;
@@ -43,6 +44,7 @@
     NSUInteger numberOfTaps;
     NSUInteger matrixSize;
     NSUInteger maxNumber;
+    NSUInteger numberOfChapters;
     float maxScore;
     float maxTime;
     float timeElapsed;
@@ -90,20 +92,20 @@
         isPad = NO;
     }
     
+    self.view.backgroundColor = [[AppInfo sharedInstance] appColorsArray][self.selectedChapter];
+    screenBounds = [UIScreen mainScreen].bounds;
+    
     NSString *gamesDatabasePath = [[NSBundle mainBundle] pathForResource:@"GamesDatabase2" ofType:@"plist"];
     NSArray *chaptersDataArray = [NSArray arrayWithContentsOfFile:gamesDatabasePath];
     matrixSize = [chaptersDataArray[self.selectedChapter][self.selectedGame][@"matrixSize"] intValue];
     maxNumber = [chaptersDataArray[self.selectedChapter][self.selectedGame][@"maxNumber"] intValue];
     maxScore = [chaptersDataArray[self.selectedChapter][self.selectedGame][@"maxScore"] floatValue];
+    numberOfChapters = [chaptersDataArray count];
     
-    if (!isPad) [self openCoreDataDocument];
-    
-    self.view.backgroundColor = [[AppInfo sharedInstance] appColorsArray][self.selectedChapter];
-    screenBounds = [UIScreen mainScreen].bounds;
-    NSLog(@"Seleccioné el juego %d en el capítulo %d", self.selectedGame, self.selectedChapter);
     [self setupUI];
-    NSLog(@"Tamaño de la matriz: %d", matrixSize);
     [self initGame];
+    
+    [self openCoreDataDocument];
 }
 
 -(void)viewDidAppear:(BOOL)animated {
@@ -143,7 +145,7 @@
         self.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-UltraLight" size:70.0];
         labelsFontSize = 25.0;
     } else {
-        self.numberOfTapsLabel = [[UILabel alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 150.0, screenBounds.size.height - (screenBounds.size.height/4.20), 300.0, 30.0)];
+        //self.numberOfTapsLabel = [[UILabel alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 150.0, screenBounds.size.height - (screenBounds.size.height/4.20), 300.0, 30.0)];
         
         if (screenBounds.size.height > 500) {
             //4 Inch
@@ -151,10 +153,13 @@
             self.titleLabel.font = [UIFont fontWithName:FONT_NAME size:30.0];
         } else {
             //Small iPhone
+            NSLog(@"***************** ESTOY EN IPHONE PEQUEÑOOOO *********************");
             if (matrixSize >= 5) {
-                self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 40.0, screenBounds.size.width, 40.0)];
+                NSLog(@"El tamaño de la matriz es muy grandeeeeeeeeeee");
+                self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 20.0, screenBounds.size.width, 40.0)];
                 self.titleLabel.font = [UIFont fontWithName:FONT_NAME size:30.0];
             } else {
+                NSLog(@"EL tamaño de la matriz es menor que cincooooo");
                 self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0, screenBounds.size.height/8.11, screenBounds.size.width, 40.0)];
                 self.titleLabel.font = [UIFont fontWithName:FONT_NAME size:30.0];
             }
@@ -169,8 +174,8 @@
     
     //Back Button
     self.backButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    self.backButton.frame = CGRectMake(20.0, screenBounds.size.height - 60.0, 70.0, 40.0);
-    self.backButton.layer.cornerRadius = 4.0;
+    self.backButton.frame = CGRectMake(10.0, screenBounds.size.height - 60.0, 60.0, 40.0);
+    self.backButton.layer.cornerRadius = 10.0;
     self.backButton.layer.borderWidth = 1.0;
     self.backButton.layer.borderColor = [UIColor whiteColor].CGColor;
     [self.backButton setTitle:@"Back" forState:UIControlStateNormal];
@@ -181,8 +186,8 @@
     
     //Reset Button
     self.resetButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    self.resetButton.frame = CGRectMake(screenBounds.size.width - 90, screenBounds.size.height - 60.0, 70.0, 40.0);
-    self.resetButton.layer.cornerRadius = 4.0;
+    self.resetButton.frame = CGRectMake(screenBounds.size.width - 70, screenBounds.size.height - 60.0, 60.0, 40.0);
+    self.resetButton.layer.cornerRadius = 10.0;
     self.resetButton.layer.borderColor = [UIColor whiteColor].CGColor;
     self.resetButton.layer.borderWidth = 1.0;
     [self.resetButton setTitle:@"Restart" forState:UIControlStateNormal];
@@ -199,13 +204,15 @@
     [self.view addSubview:self.buttonsContainerView];
     
     //Max Score Label
-    if (!isPad) {
-        self.maxScoreLabel = [[UILabel alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 150.0, screenBounds.size.height - 130.0, 300.0, 40.0)];
-        self.maxScoreLabel.textColor = [UIColor whiteColor];
-        self.maxScoreLabel.textAlignment = NSTextAlignmentCenter;
-        self.maxScoreLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:20.0];
-        [self.view addSubview:self.maxScoreLabel];
-    }
+    //self.maxScoreLabel = [[UILabel alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 150.0, screenBounds.size.height - 60.0, 300.0, 40.0)];
+    self.maxScoreLabel = [[UILabel alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 80.0, screenBounds.size.height - 60.0, 160.0, 40.0)];
+    self.maxScoreLabel.textColor = [UIColor whiteColor];
+    self.maxScoreLabel.layer.cornerRadius = 10.0;
+    self.maxScoreLabel.layer.borderWidth = 1.0;
+    self.maxScoreLabel.layer.borderColor = [UIColor whiteColor].CGColor;
+    self.maxScoreLabel.textAlignment = NSTextAlignmentCenter;
+    self.maxScoreLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:15.0];
+    [self.view addSubview:self.maxScoreLabel];
 }
 
 #pragma mark - Custom Methods
@@ -215,6 +222,10 @@
     self.gameTimer = nil;
     
     [self.buttonsContainerView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+    /*for (int i = 0; i < [self.buttonsContainerView.subviews count]; i++) {
+        UIView *view = self.buttonsContainerView.subviews[i];
+        view = nil;
+    }*/
     [self.columnsButtonsArray removeAllObjects];
     
     NSString *gamesDatabasePath = [[NSBundle mainBundle] pathForResource:@"GamesDatabase2" ofType:@"plist"];
@@ -298,9 +309,9 @@
         //NSUInteger buttonTag = [self tagForButtonAtRow:row column:column];
         //[self addOneToButtonWithTag:buttonTag];
     }
-    self.maxTapsLabel.text = [NSString stringWithFormat:@"Taps for perfect score: %d", [self.pointsArray count]];
-    self.numberOfTapsLabel.text = @"Number of taps: 0";
-    numberOfTaps = 0;
+    //self.maxTapsLabel.text = [NSString stringWithFormat:@"Taps for perfect score: %d", [self.pointsArray count]];
+    //self.numberOfTapsLabel.text = @"Number of taps: 0";
+    //numberOfTaps = 0;
     
     //Start the game timer
     self.gameTimer = [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(substractTime) userInfo:nil repeats:YES];
@@ -357,7 +368,7 @@
     }
     else {
         buttonDistance = 10.0;
-        cornerRadius = 4.0;
+        cornerRadius = 10.0;
     }
     
     NSUInteger buttonSize = (self.buttonsContainerView.frame.size.width - ((matrixSize + 1)*buttonDistance)) / matrixSize;
@@ -467,8 +478,12 @@
         NSLog(@"Score Totaaaaaaaalllllll: %d", totalScore);
         [[GameKitHelper sharedGameKitHelper] submitScore:totalScore category:@"Points_Leaderboard"];
         
+        //Post a notification to update the chapters VC with the new score
+        //if (isPad)
+          //  [[NSNotificationCenter defaultCenter] postNotificationName:@"ScoreUpdatedNotification" object:nil];
+    
     } else {
-        NSLog(@"El score no se mejoróooooot *************************");
+        NSLog(@"El score no se mejoróooooo *************************");
     }
     
     //Unlock the next game saving the game number with FileSaver
@@ -477,7 +492,7 @@
     NSLog(@"Agregando el número %d a filesaver porque gané", self.selectedGame + 2);
     
     //Check if the user won the last game of the chapter
-    if (self.selectedGame == 8) {
+    if (self.selectedGame == 8 && self.selectedChapter != numberOfChapters - 1) {
         //This is the last game of the chapter
         NSLog(@"Estamos en el último juego del capítulo");
         NSMutableArray *chapterGamesFinishedArray = [NSMutableArray arrayWithArray:chaptersArray[self.selectedChapter + 1]];
@@ -574,6 +589,8 @@
         }
     } else {
         //The user removed the ads
+        
+        //Check if this is the last game
         [self prepareNextGame];
     }
 }
@@ -583,8 +600,20 @@
 }
 
 -(void)prepareNextGame {
-    self.selectedGame += 1;
-    [self initGame];
+    if (self.selectedChapter == numberOfChapters - 1 && self.selectedGame == 8) {
+        //The user won the last game of the game. Display a congrats view
+        [self displayAllGamesFinishedView];
+        //[[[UIAlertView alloc] initWithTitle:@"Congrats!" message:@"You have completed all the numbers game!" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil] show];
+    } else {
+        self.selectedGame += 1;
+        [self initGame];
+    }
+}
+
+-(void)displayAllGamesFinishedView {
+    AllGamesFinishedView *allGamesFinishedView = [[AllGamesFinishedView alloc] initWithFrame:CGRectMake(self.view.bounds.size.width/2.0 - 125.0, self.view.bounds.size.height/2.0 - 200.0, 250.0, 400.0)];
+    allGamesFinishedView.delegate = self;
+    [allGamesFinishedView showInView:self.view];
 }
 
 -(NSUInteger)pointsWonForTime:(float)time {
@@ -799,8 +828,26 @@ interstitial {
     NSLog(@"Entré al spaceDidDismiss");
     if (interstitial) {
         // Resume app state here
+        NSLog(@"**************Entraré al prepare next game ***************");
         [self prepareNextGame];
     }
+}
+
+#pragma mark - UIAlertViewDelegate 
+
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+#pragma mark - AllGamesFinishedViewDelegate
+
+-(void)gameFinishedViewDidDissapear:(AllGamesFinishedView *)gamesFinishedView {
+    gamesFinishedView = nil;
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+-(void)gameFinishedViewWillDissapear:(AllGamesFinishedView *)gamesFinishedView {
+    
 }
 
 @end

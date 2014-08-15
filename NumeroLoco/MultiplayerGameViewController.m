@@ -12,8 +12,9 @@
 #import "GameKitHelper.h"
 #import "GameWonAlert.h"
 #import "MultiplayerWinAlert.h"
+#import "MultiplayerAlertView.h"
 
-@interface MultiplayerGameViewController () <GameWonAlertDelegate, UIAlertViewDelegate, MultiplayerWinAlertDelegate>
+@interface MultiplayerGameViewController () <GameWonAlertDelegate, UIAlertViewDelegate, MultiplayerWinAlertDelegate, MultiplayerAlertDelegate>
 @property (weak, nonatomic) IBOutlet UILabel *gamesWonTopLabel;
 @property (weak, nonatomic) IBOutlet UILabel *gamesWonBottomLabel;
 @property (weak, nonatomic) IBOutlet UIView *topSideVIew;
@@ -32,6 +33,7 @@
 @property (weak, nonatomic) IBOutlet UIImageView *bottomHand;
 @property (weak, nonatomic) IBOutlet UIImageView *topHand;
 @property (strong, nonatomic) UIButton *multiplayerButton;
+@property (strong, nonatomic) UIView *littleOpacityView;
 @end
 
 @implementation MultiplayerGameViewController {
@@ -50,6 +52,9 @@
     NSUInteger gamesWonBottomUser;
     NSUInteger selectedChapter;
     NSUInteger selectedGame;
+    NSUInteger rand1;
+    BOOL resetBottomGame;
+    BOOL resetTopGame;
 }
 
 #pragma mark - Lazy Instantiation
@@ -89,17 +94,25 @@
 
 -(void)setupUI {
     //Bottom and top side views
-    NSUInteger rand1 = arc4random()%5;
-    NSUInteger rand2 = rand1;
-    while (rand2 == rand1) {
+    rand1 = arc4random()%3;
+    //NSUInteger rand2 = rand1;
+    /*while (rand2 == rand1) {
         rand2 = arc4random()%5;
-    }
+    }*/
     
-    self.topSideVIew.backgroundColor = [[AppInfo sharedInstance] appColorsArray][rand1];
-    self.bottomSideView.backgroundColor = [[AppInfo sharedInstance] appColorsArray][rand2];
+    self.topSideVIew.backgroundColor = [UIColor whiteColor];
+    self.bottomSideView.backgroundColor = [[AppInfo sharedInstance] appColorsArray][rand1];
     
     //Game won labels
     self.gamesWonTopLabel.transform = CGAffineTransformMakeRotation(M_PI);
+    self.gamesWonTopLabel.textColor = [[AppInfo sharedInstance] appColorsArray][rand1];
+    self.gamesWonTopLabel.layer.borderWidth = 1.0;
+    self.gamesWonTopLabel.layer.cornerRadius = 10.0;
+    self.gamesWonTopLabel.layer.borderColor = ((UIColor *)[[AppInfo sharedInstance] appColorsArray][rand1]).CGColor;
+    
+    self.gamesWonBottomLabel.layer.borderWidth = 1.0;
+    self.gamesWonBottomLabel.layer.cornerRadius = 10.0;
+    self.gamesWonBottomLabel.layer.borderColor = [UIColor whiteColor].CGColor;
     
     //COunter Label
     self.counterLabel = [[UILabel alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 250.0, screenBounds.size.height/2.0 - 100.0, 500.0, 200.0)];
@@ -113,14 +126,15 @@
     //Start button bottom
     self.startButtonBottom = [UIButton buttonWithType:UIButtonTypeSystem];
     self.startButtonBottom.tag = 2;
-    self.startButtonBottom.frame = CGRectMake(screenBounds.size.width - 120.0, screenBounds.size.height - 80.0, 90.0, 50.0);
+    self.startButtonBottom.frame = CGRectMake(screenBounds.size.width - 150.0, screenBounds.size.height - 140.0, 120.0, 50.0);
     [self.startButtonBottom setTitle:@"Start" forState:UIControlStateNormal];
     [self.startButtonBottom setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     self.startButtonBottom.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:30.0];
     [self.startButtonBottom addTarget:self action:@selector(startButtonPressed:) forControlEvents:UIControlEventTouchDown];
     [self.startButtonBottom addTarget:self action:@selector(startButtonUnpressed:) forControlEvents:UIControlEventTouchUpInside];
-    [self.startButtonBottom addTarget:self action:@selector(startButtonUnpressed:) forControlEvents:UIControlEventTouchUpOutside];
-    self.startButtonBottom.layer.cornerRadius = 4.0;
+    [self.startButtonBottom addTarget:self action:@selector(startButtonUnpressed:) forControlEvents:(UIControlEventTouchUpOutside | UIControlEventTouchDragOutside)];
+    
+    self.startButtonBottom.layer.cornerRadius = 10.0;
     self.startButtonBottom.layer.borderWidth = 1.0;
     self.startButtonBottom.layer.borderColor = [UIColor whiteColor].CGColor;
     [self.view addSubview:self.startButtonBottom];
@@ -128,17 +142,17 @@
     //Start button top
     self.startButtonTop = [UIButton buttonWithType:UIButtonTypeSystem];
     self.startButtonTop.tag = 1;
-    self.startButtonTop.layer.cornerRadius = 4.0;
+    self.startButtonTop.layer.cornerRadius = 10.0;
     self.startButtonTop.layer.borderWidth = 1.0;
-    self.startButtonTop.layer.borderColor = [UIColor whiteColor].CGColor;
-    [self.startButtonTop setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    self.startButtonTop.layer.borderColor = ((UIColor *)[[AppInfo sharedInstance] appColorsArray][rand1]).CGColor;
+    [self.startButtonTop setTitleColor:[[AppInfo sharedInstance] appColorsArray][rand1] forState:UIControlStateNormal];
     self.startButtonTop.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:30.0];
     self.startButtonTop.transform = CGAffineTransformMakeRotation(M_PI);
-    self.startButtonTop.frame = CGRectMake(30.0, 30.0, 90.0, 50.0);
+    self.startButtonTop.frame = CGRectMake(30.0, 20.0, 90.0, 50.0);
     [self.startButtonTop setTitle:@"Start" forState:UIControlStateNormal];
     [self.startButtonTop addTarget:self action:@selector(startButtonPressed:) forControlEvents:UIControlEventTouchDown];
     [self.startButtonTop addTarget:self action:@selector(startButtonUnpressed:) forControlEvents:UIControlEventTouchUpInside];
-    [self.startButtonTop addTarget:self action:@selector(startButtonUnpressed:) forControlEvents:UIControlEventTouchUpOutside];
+    [self.startButtonTop addTarget:self action:@selector(startButtonUnpressed:) forControlEvents:(UIControlEventTouchUpOutside | UIControlEventTouchDragOutside)];
     [self.view addSubview:self.startButtonTop];
     
     //Another Game BUtton
@@ -149,11 +163,11 @@
     anotherGameButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:25.0];
     anotherGameButton.layer.borderColor = [UIColor whiteColor].CGColor;
     anotherGameButton.layer.borderWidth = 1.0;
-    anotherGameButton.layer.cornerRadius = 4.0;
+    anotherGameButton.layer.cornerRadius = 10.0;
     [anotherGameButton addTarget:self action:@selector(startRandomGame) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:anotherGameButton];
     
-    //Restart button
+    //RestartBottom button
     UIButton *restartButton = [UIButton buttonWithType:UIButtonTypeSystem];
     restartButton.frame = CGRectMake(30.0, screenBounds.size.height/2.0 + 100.0, 150.0, 50.0);
     [restartButton setTitle:@"Restart" forState:UIControlStateNormal];
@@ -161,14 +175,39 @@
     restartButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:25.0];
     restartButton.layer.borderColor = [UIColor whiteColor].CGColor;
     restartButton.layer.borderWidth = 1.0;
-    restartButton.layer.cornerRadius = 4.0;
-    [restartButton addTarget:self action:@selector(restartGame) forControlEvents:UIControlEventTouchUpInside];
+    restartButton.layer.cornerRadius = 10.0;
+    [restartButton addTarget:self action:@selector(restartBottomGame) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:restartButton];
+    
+    //RestartTop Bottom
+    UIButton *restartTopButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    restartTopButton.frame = CGRectMake(self.view.bounds.size.width - 180.0, 20.0, 150.0, 50.0);
+    restartTopButton.transform = CGAffineTransformMakeRotation(M_PI);
+    [restartTopButton setTitle:@"Restart" forState:UIControlStateNormal];
+    [restartTopButton setTitleColor:[[AppInfo sharedInstance] appColorsArray][rand1] forState:UIControlStateNormal];
+    restartTopButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:25.0];
+    restartTopButton.layer.borderColor = ((UIColor *)[[AppInfo sharedInstance] appColorsArray][rand1]).CGColor;
+    restartTopButton.layer.borderWidth = 1.0;
+    restartTopButton.layer.cornerRadius = 10.0;
+    [restartTopButton addTarget:self action:@selector(restartTopGame) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:restartTopButton];
+    
+    //Restart all button
+    UIButton *restartAll = [UIButton buttonWithType:UIButtonTypeSystem];
+    restartAll.frame = CGRectMake(screenBounds.size.width - 150.0, screenBounds.size.height - 70.0, 120.0, 50.0);
+    [restartAll setTitle:@"Restart Both" forState:UIControlStateNormal];
+    [restartAll setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    restartAll.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:17.0];
+    restartAll.layer.cornerRadius = 10.0;
+    restartAll.layer.borderWidth = 1.0;
+    restartAll.layer.borderColor = [UIColor whiteColor].CGColor;
+    [restartAll addTarget:self action:@selector(restartGame) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:restartAll];
     
     //Back Button
     self.backButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    self.backButton.frame = CGRectMake(30.0, screenBounds.size.height - 80.0, 90.0, 50.0);
-    self.backButton.layer.cornerRadius = 4.0;
+    self.backButton.frame = CGRectMake(30.0, screenBounds.size.height - 70.0, 90.0, 50.0);
+    self.backButton.layer.cornerRadius = 10.0;
     self.backButton.layer.borderWidth = 1.0;
     self.backButton.layer.borderColor = [UIColor whiteColor].CGColor;
     [self.backButton setTitle:@"Back" forState:UIControlStateNormal];
@@ -189,7 +228,11 @@
     [self.view addSubview:self.buttonsContainerView2];
     
     //Hands
+    UIImage *handImage = [UIImage imageNamed:@"hand.png"];
+    self.topHand.image = [handImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    
     self.bottomHand.transform = CGAffineTransformMakeRotation(M_PI);
+    self.topHand.tintColor = [[AppInfo sharedInstance] appColorsArray][rand1];
     [self animateHands];
 }
 
@@ -198,7 +241,7 @@
                           delay:0.0
                         options:UIViewAnimationOptionCurveEaseInOut
                      animations:^(){
-                         self.bottomHand.center = CGPointMake(self.bottomHand.center.x, 360.0);
+                         self.bottomHand.center = CGPointMake(self.bottomHand.center.x, 300.0);
                          self.topHand.center = CGPointMake(self.topHand.center.x, 150.0);
                      } completion:^(BOOL success){
                          [self animateHandsSecondStep];
@@ -210,7 +253,7 @@
                           delay:0.0
                         options:UIViewAnimationOptionCurveEaseInOut
                      animations:^(){
-                         self.bottomHand.center = CGPointMake(self.bottomHand.center.x, 380.0);
+                         self.bottomHand.center = CGPointMake(self.bottomHand.center.x, 320.0);
                          self.topHand.center = CGPointMake(self.topHand.center.x, 130.0);
                      } completion:^(BOOL success){
                          [self animateHands];
@@ -299,7 +342,7 @@
 
     } else {
         self.buttonsContainerView.frame = CGRectMake(screenBounds.size.width/2.0 - 200.0, 60.0, 400.0, 400.0);
-        self.buttonsContainerView2.frame = CGRectMake(screenBounds.size.width/2.0 - 200.0, screenBounds.size.height/2.0 + 60.0, 400.0, 400.0);
+        self.buttonsContainerView2.frame = CGRectMake(screenBounds.size.width/2.0 - 200.0, screenBounds.size.height/2.0 + 50.0, 400.0, 400.0);
     }
     
     [self createSquareMatrixOf:matrixSize];
@@ -347,9 +390,9 @@
         NSMutableArray *filaButtonsArray = [[NSMutableArray alloc] init];
         for (int j = 0; j < size; j++) {
             UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-            [button setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+            [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
             button.layer.cornerRadius = cornerRadius;
-            button.backgroundColor = [UIColor whiteColor];
+            button.backgroundColor = [[AppInfo sharedInstance] appColorsArray][rand1];
             button.frame = CGRectMake(buttonDistance + (i*buttonSize + buttonDistance*i), buttonDistance + (j*buttonSize + buttonDistance*j), buttonSize, buttonSize);
             [button setTitle:@"0" forState:UIControlStateNormal];
             button.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-UltraLight" size:fontSize];
@@ -368,7 +411,7 @@
         NSMutableArray *filaButtonsArray = [[NSMutableArray alloc] init];
         for (int j = 0; j < size; j++) {
             UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-            [button setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+            [button setTitleColor:[[AppInfo sharedInstance] appColorsArray][rand1] forState:UIControlStateNormal];
             button.layer.cornerRadius = cornerRadius;
             button.backgroundColor = [UIColor whiteColor];
             button.frame = CGRectMake(buttonDistance + (i*buttonSize + buttonDistance*i), buttonDistance + (j*buttonSize + buttonDistance*j), buttonSize, buttonSize);
@@ -387,12 +430,25 @@
 
 #pragma mark - Actions
 
+-(void)restartBottomGame {
+    [self initBottomGame];
+}
+
+-(void)restartTopGame {
+    [self initTopGame];
+}
+
 -(void)restartGame {
-    gameInProgress = NO;
+    //Show alert
+    MultiplayerAlertView *multiplayerAlert = [[MultiplayerAlertView alloc] initWithFrame:CGRectMake(self.view.bounds.size.width/2.0 - 150.0, self.view.bounds.size.height/2.0 - 100.0, 300.0, 200.0)];
+    multiplayerAlert.delegate = self;
+    [multiplayerAlert showInView:self.view];
+    
+    /*gameInProgress = NO;
     self.topHand.hidden = NO;
     self.bottomHand.hidden = NO;
     
-    [self initGame];
+    [self initGame];*/
 }
 
 -(void)startRandomGame {
@@ -400,6 +456,10 @@
 }
 
 -(void)startButtonUnpressed:(UIButton *)button {
+    self.littleOpacityView.alpha = 0.0;
+    [self.littleOpacityView removeFromSuperview];
+    self.littleOpacityView = nil;
+    
     self.counterLabel.hidden = YES;
     self.counterLabel.text = @"3";
     
@@ -431,6 +491,14 @@
     }
     
     if (startButtonBottomPressed && startButtonTopPressed && self.buttonsContainerView.userInteractionEnabled == NO) {
+        //Show Little opacity view
+        self.littleOpacityView = [[UIView alloc] initWithFrame:CGRectMake(self.view.bounds.size.width/2.0 - 200.0, self.view.bounds.size.height/2.0 - 100.0, 400.0, 200.0)];
+        self.littleOpacityView.backgroundColor = [UIColor blackColor];
+        self.littleOpacityView.layer.cornerRadius = 10.0;
+        self.littleOpacityView.alpha = 0.7;
+        [self.view addSubview:self.littleOpacityView];
+        [self.view bringSubviewToFront:self.counterLabel];
+        
         //Start timer
         self.counterLabel.hidden = NO;
         self.startGameTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(countDown) userInfo:nil repeats:YES];
@@ -606,7 +674,7 @@
         winAlert.transform = CGAffineTransformMakeRotation(M_PI);
 
     } else {
-        MultiplayerWinAlert *winAlert = [[MultiplayerWinAlert alloc] initWithFrame:CGRectMake(self.view.bounds.size.width/2.0 - 125.0, 700.0, 250.0, 150.0)];
+        MultiplayerWinAlert *winAlert = [[MultiplayerWinAlert alloc] initWithFrame:CGRectMake(self.view.bounds.size.width/2.0 - 125.0, 670.0, 250.0, 150.0)];
         winAlert.delegate = self;
         [winAlert showAlertInView:self.view];
     }
@@ -666,6 +734,288 @@
 -(void)multiplayerWinAlertDidDissapear:(MultiplayerWinAlert *)winAlert {
     winAlert = nil;
     [self prepareNextGame];
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//Reset only one game stuff
+
+-(void)initBottomGame {
+    [self resetBottomGame];
+    
+    NSString *gamesDatabasePath = [[NSBundle mainBundle] pathForResource:@"GamesDatabase2" ofType:@"plist"];
+    NSArray *chaptersDataArray = [NSArray arrayWithContentsOfFile:gamesDatabasePath];
+    self.pointsArray = chaptersDataArray[selectedChapter][selectedGame][@"puntos"];
+    for (int i = 0; i < [self.pointsArray count]; i++) {
+        NSUInteger row = [self.pointsArray[i][@"fila"] intValue] - 1;
+        NSUInteger column = [self.pointsArray[i][@"columna"] intValue] - 1;
+        [self addOneToBottomButtonAtRow:row column:column];
+    }
+}
+
+-(void)initTopGame {
+    [self resetTopGame];
+    
+    NSString *gamesDatabasePath = [[NSBundle mainBundle] pathForResource:@"GamesDatabase2" ofType:@"plist"];
+    NSArray *chaptersDataArray = [NSArray arrayWithContentsOfFile:gamesDatabasePath];
+    self.pointsArray = chaptersDataArray[selectedChapter][selectedGame][@"puntos"];
+    for (int i = 0; i < [self.pointsArray count]; i++) {
+        NSUInteger row = [self.pointsArray[i][@"fila"] intValue] - 1;
+        NSUInteger column = [self.pointsArray[i][@"columna"] intValue] - 1;
+        [self addOneToTopButtonAtRow:row column:column];
+    }
+}
+
+-(void)resetBottomGame {
+    [self.buttonsContainerView2.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+    for (int i = 0; i < [self.buttonsContainerView2.subviews count]; i++) {
+        UIView *subview = self.buttonsContainerView2.subviews[i];
+        subview = nil;
+    }
+    [self.columnsButtonsArray2 removeAllObjects];
+    
+    NSString *gamesDatabasePath = [[NSBundle mainBundle] pathForResource:@"GamesDatabase2" ofType:@"plist"];
+    NSArray *chaptersDataArray = [NSArray arrayWithContentsOfFile:gamesDatabasePath];
+   
+    if (selectedGame >= [chaptersDataArray[selectedChapter] count]) {
+        selectedChapter += 1;
+        self.view.backgroundColor = [[AppInfo sharedInstance] appColorsArray][selectedChapter];
+        selectedGame = 0;
+    }
+    
+    matrixSize = [chaptersDataArray[selectedChapter][selectedGame][@"matrixSize"] intValue];
+    maxNumber = [chaptersDataArray[selectedChapter][selectedGame][@"maxNumber"] intValue];
+    maxScore = [chaptersDataArray[selectedChapter][selectedGame][@"maxScore"] floatValue];
+    maxTime = [chaptersDataArray[selectedChapter][selectedGame][@"maxTime"] floatValue];
+    timeElapsed = 0;
+    
+    if (matrixSize < 5) {
+        self.buttonsContainerView2.frame = CGRectMake(screenBounds.size.width/2.0 - 150.0, screenBounds.size.height/2.0 + 100.0, 300.0, 300.0);
+        
+    } else {
+        self.buttonsContainerView2.frame = CGRectMake(screenBounds.size.width/2.0 - 200.0, screenBounds.size.height/2.0 + 50.0, 400.0, 400.0);
+    }
+    
+    [self createBottomSquareMatrixOf:matrixSize];
+    
+    for (int i = 0; i < matrixSize; i++) {
+        for (int j = 0; j < matrixSize; j++) {
+            [self.columnsButtonsArray2[i][j] setTitle:@"0" forState:UIControlStateNormal];
+            CGPoint originalButtonCenter2 = [self.columnsButtonsArray2[i][j] center];
+            CGPoint randomCenter = CGPointMake(arc4random()%1000, arc4random()%500);
+            [self.columnsButtonsArray2[i][j] setCenter:randomCenter];
+            [UIView animateWithDuration:0.8
+                                  delay:0.0
+                 usingSpringWithDamping:0.7
+                  initialSpringVelocity:0.0
+                                options:UIViewAnimationOptionCurveEaseInOut
+                             animations:^(){
+                                 [self.columnsButtonsArray2[i][j] setCenter:originalButtonCenter2];
+                             } completion:^(BOOL finished){}];
+            
+        }
+    }
+}
+
+-(void)resetTopGame {
+    [self.buttonsContainerView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+    for (int i = 0; i < [self.buttonsContainerView.subviews count]; i++) {
+        UIView *subview = self.buttonsContainerView.subviews[i];
+        subview = nil;
+    }
+    [self.columnsButtonsArray removeAllObjects];
+    
+    NSString *gamesDatabasePath = [[NSBundle mainBundle] pathForResource:@"GamesDatabase2" ofType:@"plist"];
+    NSArray *chaptersDataArray = [NSArray arrayWithContentsOfFile:gamesDatabasePath];
+    
+    if (selectedGame >= [chaptersDataArray[selectedChapter] count]) {
+        selectedChapter += 1;
+        self.view.backgroundColor = [[AppInfo sharedInstance] appColorsArray][selectedChapter];
+        selectedGame = 0;
+    }
+    
+    matrixSize = [chaptersDataArray[selectedChapter][selectedGame][@"matrixSize"] intValue];
+    maxNumber = [chaptersDataArray[selectedChapter][selectedGame][@"maxNumber"] intValue];
+    maxScore = [chaptersDataArray[selectedChapter][selectedGame][@"maxScore"] floatValue];
+    maxTime = [chaptersDataArray[selectedChapter][selectedGame][@"maxTime"] floatValue];
+    timeElapsed = 0;
+    
+    if (matrixSize < 5) {
+        self.buttonsContainerView.frame = CGRectMake(screenBounds.size.width/2.0 - 150.0, 100.0, 300.0, 300.0);
+        
+    } else {
+        self.buttonsContainerView.frame = CGRectMake(screenBounds.size.width/2.0 - 200.0, 60.0, 400.0, 400.0);
+    }
+    
+    [self createTopSquareMatrixOf:matrixSize];
+    
+    for (int i = 0; i < matrixSize; i++) {
+        for (int j = 0; j < matrixSize; j++) {
+            [self.columnsButtonsArray[i][j] setTitle:@"0" forState:UIControlStateNormal];
+            CGPoint originalButtonCenter2 = [self.columnsButtonsArray[i][j] center];
+            CGPoint randomCenter = CGPointMake(arc4random()%1000, arc4random()%500);
+            [self.columnsButtonsArray[i][j] setCenter:randomCenter];
+            [UIView animateWithDuration:0.8
+                                  delay:0.0
+                 usingSpringWithDamping:0.7
+                  initialSpringVelocity:0.0
+                                options:UIViewAnimationOptionCurveEaseInOut
+                             animations:^(){
+                                 [self.columnsButtonsArray[i][j] setCenter:originalButtonCenter2];
+                             } completion:^(BOOL finished){}];
+            
+        }
+    }
+}
+
+-(void)createTopSquareMatrixOf:(NSUInteger)size {
+    NSUInteger fontSize = 0;
+    NSUInteger buttonDistance;
+    NSUInteger cornerRadius;
+    buttonDistance = 20.0;
+    cornerRadius = 10.0;
+    
+    if (matrixSize == 3) fontSize = 60.0;
+    else if (matrixSize == 4) fontSize = 40.0;
+    else if (matrixSize == 5) fontSize = 40.0;
+    else if (matrixSize == 6) fontSize = 30.0;
+    
+    NSUInteger buttonSize = (self.buttonsContainerView.frame.size.width - ((matrixSize + 1)*buttonDistance)) / matrixSize;
+    NSLog(@"Tamaño del boton: %d", buttonSize);
+    
+    ///////////////////////////////////////////////////////////
+    int h = 1000;
+    for (int i = 0; i < size; i++) {
+        NSMutableArray *filaButtonsArray = [[NSMutableArray alloc] init];
+        for (int j = 0; j < size; j++) {
+            UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+            [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+            button.layer.cornerRadius = cornerRadius;
+            button.backgroundColor = [[AppInfo sharedInstance] appColorsArray][rand1];
+            button.frame = CGRectMake(buttonDistance + (i*buttonSize + buttonDistance*i), buttonDistance + (j*buttonSize + buttonDistance*j), buttonSize, buttonSize);
+            [button setTitle:@"0" forState:UIControlStateNormal];
+            button.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-UltraLight" size:fontSize];
+            [button addTarget:self action:@selector(topNumberButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+            button.tag = h;
+            [self.buttonsContainerView addSubview:button];
+            [filaButtonsArray addObject:button];
+            h+=1;
+        }
+        [self.columnsButtonsArray addObject:filaButtonsArray];
+    }
+    self.buttonsContainerView.transform = CGAffineTransformMakeRotation(M_PI);
+}
+
+-(void)createBottomSquareMatrixOf:(NSUInteger)size {
+    NSUInteger fontSize = 0;
+    NSUInteger buttonDistance;
+    NSUInteger cornerRadius;
+    buttonDistance = 20.0;
+    cornerRadius = 10.0;
+    
+    if (matrixSize == 3) fontSize = 60.0;
+    else if (matrixSize == 4) fontSize = 40.0;
+    else if (matrixSize == 5) fontSize = 40.0;
+    else if (matrixSize == 6) fontSize = 30.0;
+    
+    NSUInteger buttonSize = (self.buttonsContainerView2.frame.size.width - ((matrixSize + 1)*buttonDistance)) / matrixSize;
+    NSLog(@"Tamaño del boton: %d", buttonSize);
+    
+    ///////////////////////////////////////////////////////////
+    int h = 2000;
+    for (int i = 0; i < size; i++) {
+        NSMutableArray *filaButtonsArray = [[NSMutableArray alloc] init];
+        for (int j = 0; j < size; j++) {
+            UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+            [button setTitleColor:[[AppInfo sharedInstance] appColorsArray][rand1] forState:UIControlStateNormal];
+            button.layer.cornerRadius = cornerRadius;
+            button.backgroundColor = [UIColor whiteColor];
+            button.frame = CGRectMake(buttonDistance + (i*buttonSize + buttonDistance*i), buttonDistance + (j*buttonSize + buttonDistance*j), buttonSize, buttonSize);
+            [button setTitle:@"0" forState:UIControlStateNormal];
+            button.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-UltraLight" size:fontSize];
+            [button addTarget:self action:@selector(bottomNumberButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+            button.tag = h;
+            [self.buttonsContainerView2 addSubview:button];
+            [filaButtonsArray addObject:button];
+            h+=1;
+        }
+        [self.columnsButtonsArray2 addObject:filaButtonsArray];
+    }
+}
+
+-(void)addOneToBottomButtonAtRow:(NSInteger)row column:(NSInteger)column {
+    NSString *buttonTitle = [self getNewValueForButton:self.columnsButtonsArray2[column][row]];
+    [self.columnsButtonsArray2[column][row] setTitle:buttonTitle forState:UIControlStateNormal];
+    
+    if (row + 1 < matrixSize) {
+        //Down Button
+        buttonTitle = [self getNewValueForButton:self.columnsButtonsArray2[column][row + 1]];
+        [self.columnsButtonsArray2[column][row + 1] setTitle:buttonTitle forState:UIControlStateNormal];
+    }
+    
+    if (row - 1 >= 0) {
+        //Up Button
+        buttonTitle = [self getNewValueForButton:self.columnsButtonsArray2[column][row - 1]];
+        [self.columnsButtonsArray2[column][row - 1] setTitle:buttonTitle forState:UIControlStateNormal];
+    }
+    
+    if (column - 1 >= 0) {
+        //Left button
+        buttonTitle = [self getNewValueForButton:self.columnsButtonsArray2[column - 1][row]];
+        [self.columnsButtonsArray2[column - 1][row] setTitle:buttonTitle forState:UIControlStateNormal];
+    }
+    
+    if (column + 1 < matrixSize) {
+        //Right Button
+        buttonTitle = [self getNewValueForButton:self.columnsButtonsArray2[column + 1][row]];
+        [self.columnsButtonsArray2[column + 1][row] setTitle:buttonTitle forState:UIControlStateNormal];
+    }
+}
+
+-(void)addOneToTopButtonAtRow:(NSInteger)row column:(NSInteger)column {
+    NSString *buttonTitle = [self getNewValueForButton:self.columnsButtonsArray[column][row]];
+    [self.columnsButtonsArray[column][row] setTitle:buttonTitle forState:UIControlStateNormal];
+    
+    if (row + 1 < matrixSize) {
+        //Down Button
+        buttonTitle = [self getNewValueForButton:self.columnsButtonsArray[column][row + 1]];
+        [self.columnsButtonsArray[column][row + 1] setTitle:buttonTitle forState:UIControlStateNormal];
+    }
+    
+    if (row - 1 >= 0) {
+        //Up Button
+        buttonTitle = [self getNewValueForButton:self.columnsButtonsArray[column][row - 1]];
+        [self.columnsButtonsArray[column][row - 1] setTitle:buttonTitle forState:UIControlStateNormal];
+    }
+    
+    if (column - 1 >= 0) {
+        //Left button
+        buttonTitle = [self getNewValueForButton:self.columnsButtonsArray[column - 1][row]];
+        [self.columnsButtonsArray[column - 1][row] setTitle:buttonTitle forState:UIControlStateNormal];
+    }
+    
+    if (column + 1 < matrixSize) {
+        //Right Button
+        buttonTitle = [self getNewValueForButton:self.columnsButtonsArray[column + 1][row]];
+        [self.columnsButtonsArray[column + 1][row] setTitle:buttonTitle forState:UIControlStateNormal];
+    }
+}
+
+#pragma mark - MUltiplayerAlertDelegate
+
+-(void)cancelButtonPressedInMultiplayerAlert:(MultiplayerAlertView *)multiplayerAlert {
+    
+}
+
+-(void)restartButtonPressedInMultiplayerAlert:(MultiplayerAlertView *)multiplayerAlert {
+     gameInProgress = NO;
+     self.topHand.hidden = NO;
+     self.bottomHand.hidden = NO;
+     
+     [self initGame];
+}
+
+-(void)multiplayerAlertDidDissapear:(MultiplayerAlertView *)multiplayerAlert {
+    multiplayerAlert = nil;
 }
 
 @end

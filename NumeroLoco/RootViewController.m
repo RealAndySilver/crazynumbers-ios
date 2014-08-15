@@ -19,19 +19,23 @@
 #import "IAPProduct.h"
 #import "MBProgressHUD.h"
 #import "MultiplayerGameViewController.h"
+#import "GameKitHelper.h"
 
 @interface RootViewController () <GKGameCenterControllerDelegate>
-@property (weak, nonatomic) IBOutlet UILabel *fifthLabel;
-@property (weak, nonatomic) IBOutlet UILabel *fourthLabel;
-@property (weak, nonatomic) IBOutlet UILabel *thirdLabel;
+@property (weak, nonatomic) IBOutlet UILabel *rossLabel;
+@property (weak, nonatomic) IBOutlet UILabel *bigCLabel;
+@property (weak, nonatomic) IBOutlet UIView *colorBackgroundView;
+@property (weak, nonatomic) IBOutlet UIButton *optionsMenuButton;
+@property (weak, nonatomic) IBOutlet UIButton *gamesMenuButton;
 @property (weak, nonatomic) IBOutlet UILabel *firstLabel;
-@property (weak, nonatomic) IBOutlet UILabel *secondLabel;
 @property (strong, nonatomic) UIButton *numbersButton;
 @property (strong, nonatomic) UIButton *colorsButton;
-@property (strong, nonatomic) UIButton *startButton;
 @property (strong, nonatomic) UIButton *wordsButton;
-@property (strong, nonatomic) UIButton *onePlayerButton;
 @property (strong, nonatomic) UIButton *twoPlayerButton;
+@property (strong, nonatomic) UIButton *removeAdsButton;
+@property (strong, nonatomic) UIButton *optionsButton;
+@property (strong, nonatomic) UIButton *gameCenterButton;
+@property (strong, nonatomic) UIButton *backButton;
 @end
 
 #define FONT_NAME @"HelveticaNeue-UltraLight"
@@ -42,6 +46,8 @@
     BOOL isPad;
     BOOL viewIsVisible;
     CGFloat animationDistance;
+    BOOL gamesButtonsDisplayed;
+    BOOL viewAppearFromFirstTimeTutorial;
 }
 
 -(void)viewDidLoad {
@@ -54,6 +60,11 @@
                                              selector:@selector(userDidSuscribeNotificationReceived:)
                                                  name:@"UserDidSuscribe"
                                                object:nil];
+    /*[[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(firsTimeTutorialNotificationReceived:)
+                                                 name:@"FirstTimeTutorialNotification"
+                                               object:nil];*/
+    
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
         isPad = YES;
         animationDistance = 50.0;
@@ -63,32 +74,27 @@
         animationDistance = 25.0;
         cornerRadius = 5.0;
     }
-    self.view.backgroundColor = [[[AppInfo sharedInstance] appColorsArray] firstObject];
     self.navigationController.navigationBarHidden = YES;
     screenBounds = [UIScreen mainScreen].bounds;
     [self setupUI];
-}
-
--(void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    
-    //Animate labels
-    //[self performSelector:@selector(animateLabel:) withObject:self.firstLabel afterDelay:0.1];
-    //[self performSelector:@selector(animateLabel:) withObject:self.secondLabel afterDelay:0.3];
-    //[self performSelector:@selector(animateLabel:) withObject:self.thirdLabel afterDelay:0.5];
-    //[self performSelector:@selector(animateLabel:) withObject:self.fourthLabel afterDelay:0.7];
-    //[self performSelector:@selector(animateLabel:) withObject:self.fifthLabel afterDelay:0.9];
 }
 
 -(void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     viewIsVisible = YES;
 
+    if (viewAppearFromFirstTimeTutorial) {
+        [[GameKitHelper sharedGameKitHelper] authenticateLocalPlayer];
+        viewAppearFromFirstTimeTutorial = NO;
+    }
+    
     //Check if this is the first time the user launch the app
     FileSaver *fileSaver = [[FileSaver alloc] init];
     if (![fileSaver getDictionary:@"FirstAppLaunchDic"][@"FirstAppLaunchKey"]) {
         //This is the first time the user launches the app
         //so present the tutorial view controller
+        viewAppearFromFirstTimeTutorial = YES;
+        
         [fileSaver setDictionary:@{@"FirstAppLaunchKey" : @YES} withName:@"FirstAppLaunchDic"];
         [self goToTutorialVC];
     }
@@ -97,40 +103,74 @@
 -(void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
     viewIsVisible = NO;
-    self.firstLabel.transform = CGAffineTransformMakeTranslation(0.0, 0.0);
-    self.secondLabel.transform = CGAffineTransformMakeTranslation(0.0, 0.0);
-    self.thirdLabel.transform = CGAffineTransformMakeTranslation(0.0, 0.0);
-    self.fourthLabel.transform = CGAffineTransformMakeTranslation(0.0, 0.0);
-    self.fifthLabel.transform = CGAffineTransformMakeTranslation(0.0, 0.0);
 }
 
 -(void)setupUI {
+    CGRect buttonFrames;
+    CGRect backButtonFrame;
+    CGRect gamesButtonsFrames;
     NSUInteger buttonsHeight = 0;
     NSUInteger fontSize = 0;
+    NSUInteger borderWidth;
     NSString *fontName = nil;
     if (isPad) {
+        borderWidth = 2.0;
+        backButtonFrame = CGRectMake(0.0, 0.0, 150.0, 70.0);
+        buttonFrames = CGRectMake(0.0, 0.0, 237.0, 97.0);
+        gamesButtonsFrames = CGRectMake(0.0, 0.0, 237.0, 97.0);
         fontSize = 40.0;
         buttonsHeight = 70.0;
-        fontName = @"HelveticaNeue-UltraLight";
+        fontName = @"HelveticaNeue-Light";
     } else {
+        borderWidth = 1.0;
+        backButtonFrame = CGRectMake(0.0, 0.0, 80.0, 35.0);
+        buttonFrames = CGRectMake(0.0, 0.0, 150.0, 70.0);
+        gamesButtonsFrames = CGRectMake(0.0, 0.0, 100.0, 50.0);
         fontSize = 20.0;
         buttonsHeight = 40.0;
         fontName = @"HelveticaNeue-Light";
     }
     
+    if (self.view.bounds.size.height > 500) {
+        self.rossLabel.center = CGPointMake(self.rossLabel.center.x, self.bigCLabel.frame.origin.y + self.bigCLabel.frame.size.height - 40.0);
+    } else {
+        self.rossLabel.center = CGPointMake(self.rossLabel.center.x, self.bigCLabel.frame.origin.y + self.bigCLabel.frame.size.height - 65.0);
+    }
+    
+    //ColorBackgroundView
+    self.colorBackgroundView.frame = CGRectMake(0.0, 0.0, self.view.bounds.size.width, self.view.bounds.size.height/2.0);
+    NSUInteger randomColor = arc4random()%3;
+    self.view.backgroundColor = [[AppInfo sharedInstance] appColorsArray][randomColor];
+    self.colorBackgroundView.backgroundColor = [[AppInfo sharedInstance] appColorsArray][randomColor];
+    self.bigCLabel.textColor = [[AppInfo sharedInstance] appColorsArray][randomColor];
+    
+    //GameMenu & OptionsMenu Buttons
+    self.gamesMenuButton.frame = buttonFrames;
+    [self.gamesMenuButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    self.gamesMenuButton.center = CGPointMake(self.view.center.x, self.view.center.y + (self.view.bounds.size.height/4.0) - self.gamesMenuButton.bounds.size.height/2.0 - 10.0);
+    self.gamesMenuButton.titleLabel.font = [UIFont fontWithName:fontName size:fontSize + 10.0];
+    [self.gamesMenuButton addTarget:self action:@selector(showGameMenuOptions) forControlEvents:UIControlEventTouchUpInside];
+    self.gamesMenuButton.layer.cornerRadius = 10.0;
+    self.gamesMenuButton.layer.borderWidth = borderWidth;
+    self.gamesMenuButton.layer.borderColor = [UIColor whiteColor].CGColor;
+    
+    self.optionsMenuButton.frame = buttonFrames;
+    [self.optionsMenuButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    self.optionsMenuButton.center = CGPointMake(self.view.center.x, self.view.center.y + (self.view.bounds.size.height/4.0) + self.optionsMenuButton.frame.size.height/2.0 + 10.0);
+    self.optionsMenuButton.titleLabel.font = [UIFont fontWithName:fontName size:fontSize + 10.0];
+    self.optionsMenuButton.layer.cornerRadius = 10.0;
+    self.optionsMenuButton.layer.borderWidth = borderWidth;
+    self.optionsMenuButton.layer.borderColor = [UIColor whiteColor].CGColor;
+    [self.optionsMenuButton addTarget:self action:@selector(showOptionsButtons) forControlEvents:UIControlEventTouchUpInside];
+    
     ///////////////////////////////////////////////////////////////////////////////////////////
     //Numbers labels
     //5 label
-    self.firstLabel.text = @"C";
-    self.firstLabel.backgroundColor = [UIColor whiteColor];
-    self.firstLabel.layer.cornerRadius = cornerRadius;
+    /*self.firstLabel.layer.cornerRadius = cornerRadius;
     self.firstLabel.textColor = [[AppInfo sharedInstance] appColorsArray][0];
-    self.firstLabel.textAlignment = NSTextAlignmentCenter;
-    if (isPad)  self.firstLabel.font = [UIFont fontWithName:FONT_NAME size:90.0];
-    else        self.firstLabel.font = [UIFont fontWithName:FONT_NAME size:40.0];
+    self.firstLabel.textAlignment = NSTextAlignmentCenter;*/
     
-    
-    //4 label
+    /*//4 label
     self.secondLabel.text = @"R";
     self.secondLabel.backgroundColor = [UIColor whiteColor];
     self.secondLabel.layer.cornerRadius = cornerRadius;
@@ -164,151 +204,189 @@
     self.fifthLabel.textColor = [[AppInfo sharedInstance] appColorsArray][0];
     self.fifthLabel.textAlignment = NSTextAlignmentCenter;
     if (isPad)  self.fifthLabel.font = [UIFont fontWithName:FONT_NAME size:90.0];
-    else        self.fifthLabel.font = [UIFont fontWithName:FONT_NAME size:40.0];
+    else        self.fifthLabel.font = [UIFont fontWithName:FONT_NAME size:40.0];*/
+    
+    //Tutorial
+    self.optionsButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    self.optionsButton.frame = gamesButtonsFrames;
+    self.optionsButton.center = CGPointMake(self.view.bounds.size.width + self.optionsButton.frame.size.width/2.0, self.view.center.y + self.view.frame.size.height/4.0);
+    [self.optionsButton setTitle:@"Tutorial" forState:UIControlStateNormal];
+    [self.optionsButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    self.optionsButton.layer.cornerRadius = cornerRadius;
+    self.optionsButton.layer.borderWidth = borderWidth;
+    self.optionsButton.layer.borderColor = [UIColor whiteColor].CGColor;
+    self.optionsButton.titleLabel.font = [UIFont fontWithName:fontName size:fontSize];
+    [self.optionsButton addTarget:self action:@selector(goToTutorialVC) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:self.optionsButton];
     
     //////////////////////////////////////////////////////////////////////////////////////////
     //Remove Ads button
-    UIButton *removeAdsButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    removeAdsButton.frame = CGRectMake(screenBounds.size.width/2.0 - (screenBounds.size.width/6.4), screenBounds.size.height - 80.0, screenBounds.size.width/6.4*2, buttonsHeight);
-    [removeAdsButton setTitle:@"Remove Ads" forState:UIControlStateNormal];
-    [removeAdsButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    removeAdsButton.backgroundColor = [UIColor colorWithRed:255.0/255.0 green:160.0/255.0 blue:122.0/255.0 alpha:1.0];
-    //removeAdsButton.layer.borderColor = [UIColor whiteColor].CGColor;
-    //removeAdsButton.layer.borderWidth = 1.0;
-    removeAdsButton.titleLabel.font = [UIFont fontWithName:fontName size:fontSize - 6.0];
-    removeAdsButton.layer.cornerRadius = cornerRadius;
-    [removeAdsButton addTarget:self action:@selector(buyNoAds) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:removeAdsButton];
+    self.removeAdsButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    self.removeAdsButton.frame = gamesButtonsFrames;
+    self.removeAdsButton.center = CGPointMake(self.view.frame.size.width + self.removeAdsButton.frame.size.width/2.0, self.optionsButton.center.y - self.optionsButton.bounds.size.height - 20.0);
+    [self.removeAdsButton setTitle:@"Remove Ads" forState:UIControlStateNormal];
+    [self.removeAdsButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    self.removeAdsButton.titleLabel.font = [UIFont fontWithName:fontName size:fontSize - 6.0];
+    self.removeAdsButton.layer.cornerRadius = cornerRadius;
+    self.removeAdsButton.layer.borderWidth = borderWidth;
+    self.removeAdsButton.layer.borderColor = [UIColor whiteColor].CGColor;
+    [self.removeAdsButton addTarget:self action:@selector(buyNoAds) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:self.removeAdsButton];
     
-    //Tutorial
-    UIButton *optionsButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    optionsButton.backgroundColor = [UIColor colorWithRed:255.0/255.0 green:160.0/255.0 blue:122.0/255.0 alpha:1.0];
-    //optionsButton.layer.borderWidth = 1.0;
-    //optionsButton.layer.borderColor = [UIColor whiteColor].CGColor;
-    optionsButton.layer.cornerRadius = cornerRadius;
-    [optionsButton setTitle:@"Tutorial" forState:UIControlStateNormal];
-    [optionsButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    optionsButton.titleLabel.font = [UIFont fontWithName:fontName size:fontSize];
-    optionsButton.frame = CGRectOffset(removeAdsButton.frame, 0.0, -(10.0 + removeAdsButton.frame.size.height));
-    [optionsButton addTarget:self action:@selector(goToTutorialVC) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:optionsButton];
-    
-    //Start Option
-    self.startButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    self.startButton.backgroundColor = [UIColor whiteColor];
-    //self.startButton.layer.borderColor = [UIColor whiteColor].CGColor;
-    //self.startButton.layer.borderWidth = 1.0;
-    self.startButton.layer.cornerRadius = cornerRadius;
-    [self.startButton setTitle:@"Start" forState:UIControlStateNormal];
-    [self.startButton setTitleColor:[[AppInfo sharedInstance] appColorsArray][0] forState:UIControlStateNormal];
-    self.startButton.titleLabel.font = [UIFont fontWithName:fontName size:fontSize];
-    self.startButton.frame = CGRectOffset(optionsButton.frame, 0.0, -(10.0 + optionsButton.frame.size.height));
-    if (isPad) {
-        [self.startButton addTarget:self action:@selector(animatePlayersButtons) forControlEvents:UIControlEventTouchUpInside];
-    } else {
-        [self.startButton addTarget:self action:@selector(animateGameButtons) forControlEvents:UIControlEventTouchUpInside];
-    }
-    [self.view addSubview:self.startButton];
-    
-    /////////////////////////////////////////////////////////////////////////////////////////
-    if (isPad) {
-        //One Player Button
-        self.onePlayerButton = [UIButton buttonWithType:UIButtonTypeSystem];
-        self.onePlayerButton.backgroundColor = [UIColor whiteColor];
-        self.onePlayerButton.layer.cornerRadius = cornerRadius;
-        [self.onePlayerButton setTitle:@"One Player" forState:UIControlStateNormal];
-        [self.onePlayerButton setTitleColor:[[AppInfo sharedInstance] appColorsArray][0] forState:UIControlStateNormal];
-        self.onePlayerButton.titleLabel.font = [UIFont fontWithName:fontName size:fontSize];
-        //self.onePlayerButton.frame = CGRectMake(screenBounds.size.width, self.startButton.frame.origin.y, screenBounds.size.width/6.4*2, buttonsHeight);
-        self.onePlayerButton.frame = CGRectMake(screenBounds.size.width, self.startButton.frame.origin.y - 10.0 - buttonsHeight, screenBounds.size.width/6.4*2, buttonsHeight);
-        [self.onePlayerButton addTarget:self action:@selector(showGameButtons) forControlEvents:UIControlEventTouchUpInside];
-        [self.view addSubview:self.onePlayerButton];
-        
-        //Numbers Button
-        self.twoPlayerButton = [UIButton buttonWithType:UIButtonTypeSystem];
-        self.twoPlayerButton.backgroundColor = [UIColor whiteColor];
-        self.twoPlayerButton.layer.cornerRadius = cornerRadius;
-        [self.twoPlayerButton setTitle:@"Two Player Vs" forState:UIControlStateNormal];
-        [self.twoPlayerButton setTitleColor:[[AppInfo sharedInstance] appColorsArray][0] forState:UIControlStateNormal];
-        self.twoPlayerButton.titleLabel.font = [UIFont fontWithName:fontName size:fontSize];
-        self.twoPlayerButton.frame = CGRectMake(screenBounds.size.width, self.startButton.frame.origin.y, screenBounds.size.width/6.4*2, buttonsHeight);
-        [self.twoPlayerButton addTarget:self action:@selector(goToMultiplayerVC) forControlEvents:UIControlEventTouchUpInside];
-        [self.view addSubview:self.twoPlayerButton];
-    }
-    
+    ////////////////////////////////////////////////////////////////////////////////////////
     //Colors button
     self.colorsButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    self.colorsButton.backgroundColor = [UIColor whiteColor];
-    //self.colorsButton.layer.borderColor = [UIColor whiteColor].CGColor;
-    //self.colorsButton.layer.borderWidth = 1.0;
-    self.colorsButton.layer.cornerRadius = cornerRadius;
+    self.colorsButton.frame = gamesButtonsFrames;
+    self.colorsButton.center = CGPointMake(self.view.bounds.size.width + self.colorsButton.frame.size.width/2.0, self.view.center.y + self.view.frame.size.height/4.0);
     [self.colorsButton setTitle:@"Colors" forState:UIControlStateNormal];
-    [self.colorsButton setTitleColor:[[AppInfo sharedInstance] appColorsArray][0] forState:UIControlStateNormal];
+    [self.colorsButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     self.colorsButton.titleLabel.font = [UIFont fontWithName:fontName size:fontSize];
-    if (!isPad)
-        self.colorsButton.frame = CGRectMake(screenBounds.size.width, self.startButton.frame.origin.y, screenBounds.size.width/6.4*2, buttonsHeight);
-    else
-        self.colorsButton.frame = CGRectMake(screenBounds.size.width, self.onePlayerButton.frame.origin.y, screenBounds.size.width/6.4*2, buttonsHeight);
     [self.colorsButton addTarget:self action:@selector(goToColorsChaptersVC) forControlEvents:UIControlEventTouchUpInside];
+    self.colorsButton.layer.cornerRadius = 10.0;
+    self.colorsButton.layer.borderColor = [UIColor whiteColor].CGColor;
+    self.colorsButton.layer.borderWidth = borderWidth;
     [self.view addSubview:self.colorsButton];
     
     //Numbers Button
     self.numbersButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    self.numbersButton.backgroundColor = [UIColor whiteColor];
-    //self.numbersButton.layer.borderColor = [UIColor whiteColor].CGColor;
-    //self.numbersButton.layer.borderWidth = 1.0;
-    self.numbersButton.layer.cornerRadius = cornerRadius;
+    self.numbersButton.frame = gamesButtonsFrames;
+    self.numbersButton.center = CGPointMake(self.view.frame.size.width + self.numbersButton.frame.size.width/2.0, self.colorsButton.center.y - self.colorsButton.bounds.size.height - 20.0);
     [self.numbersButton setTitle:@"Numbers" forState:UIControlStateNormal];
-    [self.numbersButton setTitleColor:[[AppInfo sharedInstance] appColorsArray][0] forState:UIControlStateNormal];
+    [self.numbersButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     self.numbersButton.titleLabel.font = [UIFont fontWithName:fontName size:fontSize];
-    if (!isPad)
-        self.numbersButton.frame = CGRectMake(screenBounds.size.width, self.startButton.frame.origin.y - 10.0 - buttonsHeight, screenBounds.size.width/6.4*2, buttonsHeight);
-    else
-        self.numbersButton.frame = CGRectMake(screenBounds.size.width, self.onePlayerButton.frame.origin.y - 10.0 - buttonsHeight, screenBounds.size.width/6.4*2, buttonsHeight);
     [self.numbersButton addTarget:self action:@selector(goToChaptersVC) forControlEvents:UIControlEventTouchUpInside];
+    self.numbersButton.layer.cornerRadius = 10.0;
+    self.numbersButton.layer.borderWidth = borderWidth;
+    self.numbersButton.layer.borderColor = [UIColor whiteColor].CGColor;
     [self.view addSubview:self.numbersButton];
     
+    //Two Players Button
+    if (isPad) {
+        self.twoPlayerButton = [UIButton buttonWithType:UIButtonTypeSystem];
+        self.twoPlayerButton.frame = gamesButtonsFrames;
+        self.twoPlayerButton.center = CGPointMake(self.view.frame.size.width + self.twoPlayerButton.frame.size.width/2.0, self.colorsButton.center.y + self.colorsButton.frame.size.height + 20.0);
+        self.twoPlayerButton.titleLabel.font = [UIFont fontWithName:fontName size:fontSize];
+        [self.twoPlayerButton setTitle:@"2-Players Vs" forState:UIControlStateNormal];
+        [self.twoPlayerButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [self.twoPlayerButton addTarget:self action:@selector(goToMultiplayerVC) forControlEvents:UIControlEventTouchUpInside];
+        self.twoPlayerButton.layer.cornerRadius = 10.0;
+        self.twoPlayerButton.layer.borderWidth = borderWidth;
+        self.twoPlayerButton.layer.borderColor = [UIColor whiteColor].CGColor;
+        [self.view addSubview:self.twoPlayerButton];
+    }
+    
     //Words Button
-    self.wordsButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    self.wordsButton.layer.borderColor = [UIColor whiteColor].CGColor;
-    self.wordsButton.layer.borderWidth = 1.0;
-    self.wordsButton.layer.cornerRadius = cornerRadius;
+    /*self.wordsButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    self.wordsButton.frame = gamesButtonsFrames;
+    self.wordsButton.center = CGPointMake(self.view.frame.size.width + self.wordsButton.frame.size.width/2.0, self.colorsButton.center.y + self.colorsButton.frame.size.height + 20.0);
     [self.wordsButton setTitle:@"Words" forState:UIControlStateNormal];
     [self.wordsButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    self.wordsButton.layer.borderColor = [UIColor whiteColor].CGColor;
+    self.wordsButton.layer.borderWidth = 1.0;
+    self.wordsButton.layer.cornerRadius = 10.0;
+    [self.wordsButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     self.wordsButton.titleLabel.font = [UIFont fontWithName:fontName size:fontSize];
-    self.wordsButton.frame = CGRectMake(screenBounds.size.width, self.numbersButton.frame.origin.y - 10.0 - buttonsHeight, screenBounds.size.width/6.4*2, buttonsHeight);
     [self.wordsButton addTarget:self action:@selector(goToWordsChaptersVC) forControlEvents:UIControlEventTouchUpInside];
-   // [self.view addSubview:self.wordsButton];
-    
-    //Back button
-    /*UIButton *backButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    backButton.frame = CGRectMake(20.0, screenBounds.size.height - 80.0, screenBounds.size.width/4.57, buttonsHeight);
-    [backButton setTitle:@"Back" forState:UIControlStateNormal];
-    [backButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    backButton.layer.borderColor = [UIColor whiteColor].CGColor;
-    backButton.layer.borderWidth = 1.0;
-    backButton.layer.cornerRadius = cornerRadius;
-    backButton.titleLabel.font = [UIFont fontWithName:fontName size:fontSize];
-    [backButton addTarget:self action:@selector(dismissVC) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:backButton];*/
+    [self.view addSubview:self.wordsButton];*/
     
     //GameCenter BUtton
-    UIButton *gameCenterButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    gameCenterButton.frame = CGRectMake(screenBounds.size.width - 20.0 - (screenBounds.size.width/4.57), screenBounds.size.height - 80.0, screenBounds.size.width/4.57, buttonsHeight);
-    gameCenterButton.backgroundColor = [UIColor colorWithRed:255.0/255.0 green:160.0/255.0 blue:122.0/255.0 alpha:1.0];
-    [gameCenterButton setTitle:@"My Points" forState:UIControlStateNormal];
-    [gameCenterButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    //gameCenterButton.layer.borderColor = [UIColor colorWithRed:255.0/255.0 green:160.0/255.0 blue:122.0/255.0 alpha:1.0].CGColor;
-    //gameCenterButton.layer.borderWidth = 1.0;
-    gameCenterButton.layer.cornerRadius = cornerRadius;
-    gameCenterButton.titleLabel.font = [UIFont fontWithName:fontName size:fontSize - 6.0];
-    [gameCenterButton addTarget:self action:@selector(showGameCenter) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:gameCenterButton];
+    self.gameCenterButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    self.gameCenterButton.frame = gamesButtonsFrames;
+    self.gameCenterButton.center = CGPointMake(self.view.frame.size.width + self.gameCenterButton.frame.size.width/2.0, self.optionsButton.center.y + self.optionsButton.frame.size.height + 20.0);
+    [self.gameCenterButton setTitle:@"Game Center" forState:UIControlStateNormal];
+    [self.gameCenterButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    self.gameCenterButton.layer.cornerRadius = cornerRadius;
+    self.gameCenterButton.layer.borderWidth = borderWidth;
+    self.gameCenterButton.layer.borderColor = [UIColor whiteColor].CGColor;
+    self.gameCenterButton.titleLabel.font = [UIFont fontWithName:fontName size:fontSize - 6.0];
+    [self.gameCenterButton addTarget:self action:@selector(showGameCenter) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:self.gameCenterButton];
+    
+    //BackButton
+    self.backButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    self.backButton.frame = backButtonFrame;
+    self.backButton.center = CGPointMake(self.backButton.frame.size.width/2.0 + 10.0, self.view.frame.size.height + self.backButton.frame.size.height/2.0);
+    [self.backButton setTitle:@"Back" forState:UIControlStateNormal];
+    [self.backButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    self.backButton.titleLabel.font = [UIFont fontWithName:fontName size:fontSize];
+    [self.backButton addTarget:self action:@selector(showInitialMenuButtons) forControlEvents:UIControlEventTouchUpInside];
+    
+    self.backButton.layer.cornerRadius = 7.0;
+    self.backButton.layer.borderWidth = borderWidth;
+    self.backButton.layer.borderColor = [UIColor whiteColor].CGColor;
+    [self.view addSubview:self.backButton];
 }
 
 #pragma mark - Animations 
 
--(void)animateLabel:(UILabel *)label {
+-(void)showOptionsButtons {
+    gamesButtonsDisplayed = NO;
+    
+    [UIView animateWithDuration:1.3
+                          delay:0.0
+         usingSpringWithDamping:0.7
+          initialSpringVelocity:0.0
+                        options:UIViewAnimationOptionCurveEaseOut
+                     animations:^(){
+                         self.gamesMenuButton.center = CGPointMake(-self.gamesMenuButton.frame.size.width + self.gamesMenuButton.frame.size.width/2.0, self.gamesMenuButton.center.y);
+                         self.optionsMenuButton.center = CGPointMake(-self.optionsMenuButton.frame.size.width + self.gamesMenuButton.frame.size.width/2.0, self.optionsMenuButton.center.y);
+                         self.backButton.center = CGPointMake(self.backButton.center.x, self.view.bounds.size.height - self.backButton.frame.size.height/2.0 - 10.0);
+                         
+                         self.optionsButton.center = CGPointMake(self.view.bounds.size.width/2.0, self.optionsButton.center.y);
+                         self.gameCenterButton.center = CGPointMake(self.view.bounds.size.width/2.0, self.gameCenterButton.center.y);
+                         self.removeAdsButton.center = CGPointMake(self.view.bounds.size.width/2.0, self.removeAdsButton.center.y);
+                     } completion:^(BOOL finished){}];
+}
+
+-(void)showInitialMenuButtons {
+    [UIView animateWithDuration:1.3
+                          delay:0.0
+         usingSpringWithDamping:0.7
+          initialSpringVelocity:0.0
+                        options:UIViewAnimationOptionCurveEaseOut
+                     animations:^(){
+                         if (gamesButtonsDisplayed) {
+                             //Hidde Game Buttons
+                             self.numbersButton.center = CGPointMake(self.view.bounds.size.width + self.numbersButton.frame.size.width/2.0, self.numbersButton.center.y);
+                             self.colorsButton.center = CGPointMake(self.view.bounds.size.width + self.colorsButton.frame.size.width/2.0, self.colorsButton.center.y);
+                             //self.wordsButton.center = CGPointMake(self.view.bounds.size.width + self.wordsButton.frame.size.width/2.0, self.wordsButton.center.y);
+                             self.twoPlayerButton.center = CGPointMake(self.view.bounds.size.width + self.twoPlayerButton.frame.size.width/2.0, self.twoPlayerButton.center.y);
+                         
+                         } else {
+                             //Hidde optionsbuttons
+                             self.removeAdsButton.center = CGPointMake(self.view.bounds.size.width + self.removeAdsButton.frame.size.width/2.0, self.removeAdsButton.center.y);
+                             self.gameCenterButton.center = CGPointMake(self.view.bounds.size.width + self.gameCenterButton.frame.size.width/2.0, self.gameCenterButton.center.y);
+                             self.optionsButton.center = CGPointMake(self.view.bounds.size.width + self.optionsButton.frame.size.width/2.0, self.optionsButton.center.y);
+
+                         }
+                         self.backButton.center = CGPointMake(10.0 + self.backButton.frame.size.width/2.0, self.view.bounds.size.height + self.backButton.frame.size.height/2.0);
+                         
+                         self.gamesMenuButton.center = CGPointMake(self.view.bounds.size.width/2.0, self.gamesMenuButton.center.y);
+                         self.optionsMenuButton.center = CGPointMake(self.view.bounds.size.width/2.0, self.optionsMenuButton.center.y);
+                         
+                     } completion:^(BOOL success){}];
+}
+
+-(void)showGameMenuOptions {
+    gamesButtonsDisplayed = YES;
+    
+    [UIView animateWithDuration:1.3
+                          delay:0.0
+         usingSpringWithDamping:0.7
+          initialSpringVelocity:0.0
+                        options:UIViewAnimationOptionCurveEaseOut
+                     animations:^(){
+                         self.gamesMenuButton.center = CGPointMake(-self.gamesMenuButton.frame.size.width + self.gamesMenuButton.frame.size.width/2.0, self.gamesMenuButton.center.y);
+                         self.optionsMenuButton.center = CGPointMake(-self.optionsMenuButton.frame.size.width + self.gamesMenuButton.frame.size.width/2.0, self.optionsMenuButton.center.y);
+                         self.numbersButton.center = CGPointMake(self.view.bounds.size.width/2.0, self.numbersButton.center.y);
+                         self.colorsButton.center = CGPointMake(self.view.bounds.size.width/2.0, self.colorsButton.center.y);
+                         //self.wordsButton.center = CGPointMake(self.view.bounds.size.width/2.0, self.wordsButton.center.y);
+                         self.twoPlayerButton.center = CGPointMake(self.view.bounds.size.width/2.0, self.twoPlayerButton.center.y);
+                         self.backButton.center = CGPointMake(self.backButton.center.x, self.view.bounds.size.height - self.backButton.frame.size.height/2.0 - 20.0);
+                     } completion:^(BOOL finished){}];
+}
+
+/*-(void)animateLabel:(UILabel *)label {
     [UIView animateWithDuration:1.0
                           delay:0.0
                         options:UIViewAnimationOptionCurveEaseOut
@@ -339,11 +417,11 @@
                      } completion:^(BOOL finished){
                          if (viewIsVisible) [self animateLabel:label];
                      }];
-}
+}*/
 
 #pragma mark - Actions
 
--(void)showGameButtons {
+/*-(void)showGameButtons {
     [UIView animateWithDuration:0.8
                           delay:0.0
          usingSpringWithDamping:0.7
@@ -355,10 +433,11 @@
                          self.numbersButton.transform = CGAffineTransformMakeTranslation(-(screenBounds.size.width/2.0 + self.numbersButton.frame.size.width/2.0), 0.0);
                      } completion:^(BOOL finished){}];
 
-}
+}*/
 
 -(void)goToMultiplayerVC {
     MultiplayerGameViewController *multiplayerVC = [self.storyboard instantiateViewControllerWithIdentifier:@"MultiplayerGame"];
+    multiplayerVC.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
     [self presentViewController:multiplayerVC animated:YES completion:nil];
 }
 
@@ -398,7 +477,7 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
--(void)animatePlayersButtons {
+/*-(void)animatePlayersButtons {
     [UIView animateWithDuration:0.8
                           delay:0.0
          usingSpringWithDamping:0.7
@@ -423,7 +502,7 @@
                          self.colorsButton.transform = CGAffineTransformMakeTranslation(-(screenBounds.size.width/2.0 + self.colorsButton.frame.size.width/2.0), 0.0);
                          self.wordsButton.transform = CGAffineTransformMakeTranslation(-(screenBounds.size.width/2.0 + self.colorsButton.frame.size.width/2.0), 0.0);
                      } completion:^(BOOL finished){}];
-}
+}*/
 
 -(void)goToColorsChaptersVC {
     [Flurry logEvent:@"OpenColorsChapters"];
@@ -443,6 +522,7 @@
 -(void)goToTutorialVC {
     [Flurry logEvent:@"OpenTutorial"];
     TutorialViewController *tutorialVC = [self.storyboard instantiateViewControllerWithIdentifier:@"Tutorial"];
+    //tutorialVC.viewControllerAppearedFromInitialLaunching = viewAppearFromFirstTimeTutorial;
     [self presentViewController:tutorialVC animated:YES completion:nil];
 }
 
@@ -455,6 +535,7 @@
 #pragma mark - GameCenterDelegate
 
 -(void)gameCenterViewControllerDidFinish:(GKGameCenterViewController *)gameCenterViewController {
+    NSLog(@"Me saldréeee de game center oiiiiiiiiissssssssssss");
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -477,5 +558,9 @@
     [fileSaver setDictionary:@{@"UserRemovedAdsKey" : @YES} withName:@"UserRemovedAdsDic"];
 }
 
+/*-(void)firsTimeTutorialNotificationReceived:(NSNotification *)notification {
+    NSLog(@"Me llegó la notificacion*****");
+    viewAppearFromFirstTimeTutorial = YES;
+}*/
 
 @end

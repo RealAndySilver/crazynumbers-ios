@@ -11,8 +11,9 @@
 #import <FacebookSDK/FacebookSDK.h>
 #import "Flurry.h"
 #import "FlurryAds.h"
-#import "GameKitHelper.h"
 #import "CPIAPHelper.h"
+#import "FileSaver.h"
+#import "GameKitHelper.h"
 
 @implementation AppDelegate
 
@@ -35,21 +36,28 @@
     } else {
         NSLog(@"No existía el dic");
         [fileSaver setDictionary:@{@"NumberChaptersArray" : @[@[@1],
-                                                              @[@1],
-                                                              @[@1],
-                                                              @[@1]]} withName:@"NumberChaptersDic"];
+                                                              @[],
+                                                              @[],
+                                                              @[]]} withName:@"NumberChaptersDic"];
         
         [fileSaver setDictionary:@{@"ColorChaptersArray" : @[@[@1],
-                                                              @[@1],
-                                                              @[@1],
-                                                              @[@1]]} withName:@"ColorChaptersDic"];
+                                                              @[],
+                                                              @[],
+                                                              @[]]} withName:@"ColorChaptersDic"];
         
         [fileSaver setDictionary:@{@"WordChaptersArray" : @[@[@1],
                                                              @[],
                                                              @[],
                                                              @[]]} withName:@"WordChaptersDic"];
     }
-    [[GameKitHelper sharedGameKitHelper] authenticateLocalPlayer];
+    
+    if ([fileSaver getDictionary:@"FirstAppLaunchDic"][@"FirstAppLaunchKey"]) {
+        //This is the first time the user launches the app
+        //so present the tutorial view controller
+        [[GameKitHelper sharedGameKitHelper] authenticateLocalPlayer];
+    }
+
+    
     return YES;
 }
 

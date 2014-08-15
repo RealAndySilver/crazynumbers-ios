@@ -59,7 +59,7 @@
         //Close button
         UIButton *closeButton = [UIButton buttonWithType:UIButtonTypeSystem];
         closeButton.frame = CGRectMake(frame.size.width/2.0 - 35.0, frame.size.height - 50.0, 70.0, 40.0);
-        closeButton.layer.cornerRadius = 4.0;
+        closeButton.layer.cornerRadius = 10.0;
         closeButton.layer.borderColor = [UIColor lightGrayColor].CGColor;
         closeButton.layer.borderWidth = 1.0;
         closeButton.backgroundColor = [UIColor clearColor];

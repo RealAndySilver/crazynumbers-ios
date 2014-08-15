@@ -16,5 +16,7 @@
 
 @interface MultiplayerWinAlert : UIView
 @property (strong, nonatomic) id <MultiplayerWinAlertDelegate> delegate;
+@property (strong, nonatomic) NSString *alertMessage;
+@property (assign, nonatomic) CGFloat messageTextSize;
 -(void)showAlertInView:(UIView *)view;
 @end

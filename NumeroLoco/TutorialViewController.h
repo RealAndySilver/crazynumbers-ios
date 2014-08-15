@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface TutorialViewController : UIViewController
-
+//@property (assign, nonatomic) BOOL viewControllerAppearedFromInitialLaunching;
 @end

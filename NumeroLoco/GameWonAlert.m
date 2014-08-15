@@ -7,6 +7,7 @@
 //
 
 #import "GameWonAlert.h"
+#import "AppInfo.h"
 
 @interface GameWonAlert()
 @property (strong, nonatomic) UILabel *detailLabel;
@@ -100,9 +101,11 @@
         UIButton *continueButton = [UIButton buttonWithType:UIButtonTypeSystem];
         continueButton.frame = CGRectMake(20.0, frame.size.height - 60.0, frame.size.width - 40.0, 40.0);
         [continueButton setTitle:@"Continue" forState:UIControlStateNormal];
-        [continueButton setTitleColor:[UIColor colorWithRed:0.380 green:0.870 blue:1.000 alpha:1.0] forState:UIControlStateNormal];
+        [continueButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        continueButton.backgroundColor = [[AppInfo sharedInstance] appColorsArray][0];
         continueButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Regular" size:18.0];
         [continueButton addTarget:self action:@selector(closeAlertInView:) forControlEvents:UIControlEventTouchUpInside];
+        continueButton.layer.cornerRadius = 10.0;
         [self addSubview:continueButton];
     }
     return self;
@@ -160,56 +163,5 @@
                          [self.delegate gameWonAlertDidApper:self];
                      }];
 }
-
-/*+(void)showInView:(UIView *)view {
-    UIView *opacityView = [[UIView alloc] initWithFrame:view.frame];
-    opacityView.backgroundColor = [UIColor blackColor];
-    opacityView.alpha = 0.0;
-    [view addSubview:opacityView];
-    
-    UIView *alert = [[UIView alloc] initWithFrame:CGRectMake(view.frame.size.width, view.frame.size.height/2.0 - 75.0, 250.0, 150.0)];
-    alert.backgroundColor = [UIColor whiteColor];
-    alert.layer.cornerRadius = 10.0;
-    [view addSubview:alert];
-    
-    UILabel *mainTitle = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 0.0, alert.frame.size.width, alert.frame.size.height)];
-    mainTitle.text = @"Game Won!";
-    mainTitle.textColor = [UIColor colorWithWhite:0.07 alpha:1.0];
-    mainTitle.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:35.0];
-    mainTitle.textAlignment = NSTextAlignmentCenter;
-    [alert addSubview:mainTitle];
-    alert.transform = CGAffineTransformMakeScale(0.5, 0.5);
-    
-    [UIView animateWithDuration:1.0
-                          delay:0.0
-         usingSpringWithDamping:0.7
-          initialSpringVelocity:0.0
-                        options:UIViewAnimationOptionCurveEaseInOut
-                     animations:^(){
-                         opacityView.alpha = 0.8;
-                         alert.transform = CGAffineTransformMakeScale(1.0, 1.0);
-                         alert.transform = CGAffineTransformMakeTranslation(-(view.frame.size.width/2.0 + alert.frame.size.width/2.0), 0.0);
-                     } completion:^(BOOL finished){
-                         [UIView animateWithDuration:1.0 animations:^(){
-                             alert.transform = CGAffineTransformMakeScale(1.0, 1.0);
-                             alert.transform = CGAffineTransformMakeTranslation(-(view.frame.size.width/2.0 + alert.frame.size.width/2.0), 0.0);
-                         } completion:^(BOOL finished){
-                             [UIView animateWithDuration:1.0
-                                                   delay:0.0
-                                  usingSpringWithDamping:0.7
-                                   initialSpringVelocity:0.0
-                                                 options:UIViewAnimationOptionCurveEaseInOut
-                                              animations:^(){
-                                                  alert.transform = CGAffineTransformMakeScale(0.5, 0.5);
-                                                  alert.transform = CGAffineTransformMakeTranslation(-(view.frame.size.width + alert.frame.size.width*2), 0.0);
-                                                  opacityView.alpha = 0.0;
-
-                                              } completion:^(BOOL finished){
-                                                  [opacityView removeFromSuperview];
-                                                  [alert removeFromSuperview];
-                                              }];
-                         }];
-                     }];
-}*/
 
 @end

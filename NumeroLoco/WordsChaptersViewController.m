@@ -103,7 +103,7 @@
     //Back button
     UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(20.0, screenBounds.size.height - 60.0, 70.0, 40.0)];
     [backButton setTitle:@"Back" forState:UIControlStateNormal];
-    backButton.layer.cornerRadius = 4.0;
+    backButton.layer.cornerRadius = 10.0;
     backButton.layer.borderColor = [UIColor lightGrayColor].CGColor;
     backButton.layer.borderWidth = 1.0;
     [backButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];

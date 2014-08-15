@@ -18,8 +18,9 @@
 #import <Social/Social.h>
 #import "ChallengeFriendsViewController.h"
 #import "Score+AddOns.h"
+#import "AllGamesFinishedView.h"
 
-@interface ColorsGameViewController () <ColorPatternViewDelegate, GameWonAlertDelegate>
+@interface ColorsGameViewController () <ColorPatternViewDelegate, GameWonAlertDelegate, AllGamesFinishedViewDelegate>
 @property (strong, nonatomic) NSMutableArray *columnsButtonsArray; //Of UIButton
 @property (strong, nonatomic) UIView *buttonsContainerView;
 @property (strong, nonatomic) UILabel *numberOfTapsLabel;
@@ -46,6 +47,7 @@
     NSUInteger numberOfTaps;
     NSUInteger matrixSize;
     NSUInteger maxNumber;
+    NSUInteger numberOfChapters;
     BOOL isPad;
     float maxScore;
     float maxTime;
@@ -104,6 +106,7 @@
     NSArray *chaptersDataArray = [NSArray arrayWithContentsOfFile:gamesDatabasePath];
     matrixSize = [chaptersDataArray[self.selectedChapter][self.selectedGame][@"matrixSize"] intValue];
     maxNumber = [chaptersDataArray[self.selectedChapter][self.selectedGame][@"maxNumber"] intValue];
+    numberOfChapters = [chaptersDataArray count];
     
     [self openCoreDataDocument];
     
@@ -169,8 +172,8 @@
     
     //Back Button
     UIButton *backButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    backButton.frame = CGRectMake(20.0, screenBounds.size.height - 60.0, 70.0, 40.0);
-    backButton.layer.cornerRadius = 4.0;
+    backButton.frame = CGRectMake(10.0, screenBounds.size.height - 50.0, 60.0, 40.0);
+    backButton.layer.cornerRadius = 10.0;
     backButton.layer.borderWidth = 1.0;
     backButton.layer.borderColor = [UIColor lightGrayColor].CGColor;
     [backButton setTitle:@"Back" forState:UIControlStateNormal];
@@ -181,8 +184,8 @@
     
     //Reset Button
     UIButton *resetButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    resetButton.frame = CGRectMake(screenBounds.size.width - 90, screenBounds.size.height - 60.0, 70.0, 40.0);
-    resetButton.layer.cornerRadius = 4.0;
+    resetButton.frame = CGRectMake(screenBounds.size.width - 70, screenBounds.size.height - 50.0, 60.0, 40.0);
+    resetButton.layer.cornerRadius = 10.0;
     resetButton.layer.borderColor = [UIColor lightGrayColor].CGColor;
     resetButton.layer.borderWidth = 1.0;
     [resetButton setTitle:@"Restart" forState:UIControlStateNormal];
@@ -193,8 +196,8 @@
     
     //Color patern button
     UIButton *colorPattern = [UIButton buttonWithType:UIButtonTypeSystem];
-    colorPattern.frame = CGRectMake(screenBounds.size.width/2.0 - 35.0, screenBounds.size.height - 60.0, 70.0, 40.0);
-    colorPattern.layer.cornerRadius = 4.0;
+    colorPattern.frame = CGRectMake(screenBounds.size.width/2.0 - 35.0, screenBounds.size.height - 100.0, 70.0, 40.0);
+    colorPattern.layer.cornerRadius = 10.0;
     colorPattern.layer.borderColor = [UIColor lightGrayColor].CGColor;
     colorPattern.layer.borderWidth = 1.0;
     [colorPattern setTitle:@"Pattern" forState:UIControlStateNormal];
@@ -215,10 +218,13 @@
     [self.view addSubview:self.buttonsContainerView];
     
     //Max Score Label
-    self.maxScoreLabel = [[UILabel alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 150.0, screenBounds.size.height - 110.0, 300.0, 40.0)];
+    self.maxScoreLabel = [[UILabel alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 80.0, screenBounds.size.height - 50.0, 160.0, 40.0)];
+    self.maxScoreLabel.layer.cornerRadius = 10.0;
+    self.maxScoreLabel.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    self.maxScoreLabel.layer.borderWidth = 1.0;
     self.maxScoreLabel.textColor = [UIColor lightGrayColor];
     self.maxScoreLabel.textAlignment = NSTextAlignmentCenter;
-    self.maxScoreLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:20.0];
+    self.maxScoreLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:15.0];
     [self.view addSubview:self.maxScoreLabel];
 }
 
@@ -229,6 +235,10 @@
     self.gameTimer = nil;
     
     [self.buttonsContainerView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+    /*for (int i = 0; i < [self.buttonsContainerView.subviews count]; i++) {
+        UIView *view = self.buttonsContainerView.subviews[i];
+        view = nil;
+    }*/
     [self.columnsButtonsArray removeAllObjects];
     
     NSString *gamesDatabasePath = [[NSBundle mainBundle] pathForResource:@"ColorGamesDatabase2" ofType:@"plist"];
@@ -422,7 +432,7 @@
         cornerRadius = 10.0;
     } else {
         buttonDistance = 10.0;
-        cornerRadius = 4.0;
+        cornerRadius = 10.0;
     }
     NSUInteger buttonSize = (self.buttonsContainerView.frame.size.width - ((matrixSize + 1)*buttonDistance)) / matrixSize;
     NSLog(@"Tamaño del boton: %d", buttonSize);
@@ -608,7 +618,7 @@
     NSLog(@"Agregando el número %d a filesaver porque gané", self.selectedGame + 2);
     
     //Check if the user won the last game of the chapter
-    if (self.selectedGame == 8) {
+    if (self.selectedGame == 8 && self.selectedChapter != numberOfChapters - 1) {
         //This is the last game of the chapter
         NSLog(@"Estamos en el último juego del capítulo");
         NSMutableArray *chapterGamesFinishedArray = [NSMutableArray arrayWithArray:chaptersArray[self.selectedChapter + 1]];
@@ -680,8 +690,20 @@
 }
 
 -(void)prepareNextGame {
-    self.selectedGame += 1;
-    [self initGame];
+    if (self.selectedChapter == numberOfChapters - 1 && self.selectedGame == 8) {
+        //The user won the last game of the game. Display a congrats view
+        [self displayAllGamesFinishedView];
+        //[[[UIAlertView alloc] initWithTitle:@"Congrats!" message:@"You have completed all the numbers game!" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil] show];
+    } else {
+        self.selectedGame += 1;
+        [self initGame];
+    }
+}
+
+-(void)displayAllGamesFinishedView {
+    AllGamesFinishedView *allGamesFinishedView = [[AllGamesFinishedView alloc] initWithFrame:CGRectMake(self.view.bounds.size.width/2.0 - 125.0, self.view.bounds.size.height/2.0 - 200.0, 250.0, 400.0)];
+    allGamesFinishedView.delegate = self;
+    [allGamesFinishedView showInView:self.view];
 }
 
 #pragma mark - ColorPatternViewDelegate
@@ -889,6 +911,17 @@ interstitial {
         // Resume app state here
         [self prepareNextGame];
     }
+}
+
+#pragma mark - AllGamesFinishedViewDelegate
+
+-(void)gameFinishedViewDidDissapear:(AllGamesFinishedView *)gamesFinishedView {
+    gamesFinishedView = nil;
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+-(void)gameFinishedViewWillDissapear:(AllGamesFinishedView *)gamesFinishedView {
+    
 }
 
 @end

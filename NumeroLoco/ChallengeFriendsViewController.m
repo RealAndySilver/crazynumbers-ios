@@ -161,7 +161,7 @@
 -(void)challengeFriend {
     //1
     if ([self.messageTextfield.text length] > 0) {
-        
+        self.messageTextfield.layer.borderColor = [UIColor clearColor].CGColor;
         //2
         NSMutableArray *playerIds = [NSMutableArray array];
         NSArray *allValues = [self.dataSource allValues];

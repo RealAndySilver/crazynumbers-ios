@@ -11,8 +11,9 @@
 #import "ChaptersCell.h"
 #import "AppInfo.h"
 #import "FileSaver.h"
+#import "MultiplayerWinAlert.h"
 
-@interface ColorsChaptersViewController () <UICollectionViewDataSource, UICollectionViewDelegate, ChaptersCellDelegate>
+@interface ColorsChaptersViewController () <UICollectionViewDataSource, UICollectionViewDelegate, ChaptersCellDelegate, MultiplayerWinAlertDelegate>
 @property (strong, nonatomic) UICollectionView *collectionView;
 @property (strong, nonatomic) NSArray *chaptersNamesArray;
 @property (strong, nonatomic) UIPageControl *pageControl;
@@ -64,7 +65,7 @@
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     //Animate CollectionView
-    [UIView animateWithDuration:1.0
+    [UIView animateWithDuration:1.3
                           delay:0.0
          usingSpringWithDamping:0.6
           initialSpringVelocity:0.0
@@ -104,11 +105,11 @@
     //Back button
     UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(20.0, screenBounds.size.height - 60.0, 70.0, 40.0)];
     [backButton setTitle:@"Back" forState:UIControlStateNormal];
-    backButton.layer.cornerRadius = 4.0;
+    backButton.layer.cornerRadius = 10.0;
     backButton.layer.borderColor = [UIColor lightGrayColor].CGColor;
     backButton.layer.borderWidth = 1.0;
     [backButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
-    backButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:15.0];
+    backButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:17.0];
     [backButton addTarget:self action:@selector(dismissVC) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:backButton];
 }
@@ -300,7 +301,11 @@
     if (userCanPlayGame) {
         [self goToGameVCWithSelectedGame:game inChapter:self.pageControl.currentPage];
     } else {
-        [[[UIAlertView alloc] initWithTitle:@"Oops!" message:@"You haven't unlocked this game yet!" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil] show];
+        MultiplayerWinAlert *alert = [[MultiplayerWinAlert alloc] initWithFrame:CGRectMake(self.view.bounds.size.width/2.0 - 125.0, self.view.bounds.size.height/2.0 - 75.0, 250.0, 150.0)];
+        alert.alertMessage = @"Oops! You haven't unlocked this game yet!";
+        alert.messageTextSize = 15.0;
+        alert.delegate = self;
+        [alert showAlertInView:self.view];
     }
     NSLog(@"Se seleccionó el juego %d", game);
 }
@@ -313,6 +318,16 @@
     FileSaver *fileSaver = [[FileSaver alloc] init];
     self.colorGamesFinishedArray = [fileSaver getDictionary:@"ColorChaptersDic"][@"ColorChaptersArray"];
     [self.collectionView reloadData];
+}
+
+#pragma mark - MultiplayerWinAlertDelegate
+
+-(void)multiplayerWinAlertDidDissapear:(MultiplayerWinAlert *)winAlert {
+    winAlert = nil;
+}
+
+-(void)acceptButtonPressedInWinAlert:(MultiplayerWinAlert *)winAlert {
+    
 }
 
 @end

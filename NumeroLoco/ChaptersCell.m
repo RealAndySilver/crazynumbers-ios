@@ -77,7 +77,7 @@
             cornerRadius = 10.0;
         } else {
             isPad = NO;
-            cornerRadius = 4.0;
+            cornerRadius = 10.0;
         }
         
         NSUInteger fontSize;
@@ -199,7 +199,7 @@
         
         self.buttonsArray = [NSMutableArray arrayWithArray:@[self.button1, self.button2, self.button3, self.button4, self.button5, self.button6, self.button7, self.button8, self.button9]];
         
-        if (isPad) {
+        /*if (isPad) {
             //Label1
             self.label1 = [[UILabel alloc] init];
             self.label1.textColor = [UIColor lightGrayColor];
@@ -262,7 +262,7 @@
             self.label9.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:17.0];
             self.label9.textAlignment = NSTextAlignmentCenter;
             [self.button9 addSubview:self.label9];
-        }
+        }*/
     }
     return self;
 }
@@ -305,7 +305,7 @@
     self.button9.frame = CGRectMake(self.button6.frame.origin.x, self.button7.frame.origin.y, buttonSize, buttonSize);
     
     //Labels
-    if (isPad) {
+    /*if (isPad) {
         self.label1.frame = CGRectMake(0.0, self.button1.frame.size.height - 20.0, self.button1.frame.size.width, 20.0);
         self.label2.frame = CGRectMake(0.0, self.button2.frame.size.height - 20.0, self.button2.frame.size.width, 20.0);
         self.label3.frame = CGRectMake(0.0, self.button3.frame.size.height - 20.0, self.button3.frame.size.width, 20.0);
@@ -315,7 +315,7 @@
         self.label7.frame = CGRectMake(0.0, self.button7.frame.size.height - 20.0, self.button7.frame.size.width, 20.0);
         self.label8.frame = CGRectMake(0.0, self.button8.frame.size.height - 20.0, self.button8.frame.size.width, 20.0);
         self.label9.frame = CGRectMake(0.0, self.button9.frame.size.height - 20.0, self.button9.frame.size.width, 20.0);
-    }
+    }*/
 }
 
 #pragma mark - Actions

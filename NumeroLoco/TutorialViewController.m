@@ -61,7 +61,7 @@
     [closeButton setTitle:@"Close" forState:UIControlStateNormal];
     closeButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:16.0];
     [closeButton addTarget:self action:@selector(dismissVC) forControlEvents:UIControlEventTouchUpInside];
-    closeButton.layer.cornerRadius = 4.0;
+    closeButton.layer.cornerRadius = 10.0;
     closeButton.layer.borderColor = [UIColor darkGrayColor].CGColor;
     closeButton.layer.borderWidth = 1.0;
     [self.view addSubview:closeButton];
@@ -98,6 +98,11 @@
 #pragma mark - Actions 
 
 -(void)dismissVC {
+    /*if (self.viewControllerAppearedFromInitialLaunching) {
+        //This is the first time the user launches the app, so
+        //post a notification to display game center
+        //[[NSNotificationCenter defaultCenter] postNotificationName:@"FirstTimeTutorialNotification" object:nil];
+    }*/
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 

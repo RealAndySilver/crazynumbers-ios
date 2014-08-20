@@ -6,6 +6,8 @@
 		<dict>
 			<key>maxScore</key>
 			<integer>100</integer>
+			<key>bestTime</key>
+			<integer>1</integer>
 			<key>maxTime</key>
 			<integer>20</integer>
 			<key>maxNumber</key>
@@ -25,6 +27,8 @@
 		<dict>
 			<key>matrixSize</key>
 			<integer>3</integer>
+			<key>bestTime</key>
+			<integer>2</integer>
 			<key>maxScore</key>
 			<integer>200</integer>
 			<key>maxTime</key>
@@ -50,6 +54,8 @@
 		<dict>
 			<key>maxNumber</key>
 			<integer>5</integer>
+			<key>bestTime</key>
+			<integer>3</integer>
 			<key>maxScore</key>
 			<integer>300</integer>
 			<key>maxTime</key>
@@ -81,6 +87,8 @@
 		<dict>
 			<key>maxNumber</key>
 			<integer>5</integer>
+			<key>bestTime</key>
+			<integer>4</integer>
 			<key>maxScore</key>
 			<integer>400</integer>
 			<key>maxTime</key>
@@ -123,6 +131,8 @@
 		</dict>
 		<dict>
 			<key>maxNumber</key>
+			<integer>5</integer>
+			<key>bestTime</key>
 			<integer>5</integer>
 			<key>maxScore</key>
 			<integer>500</integer>
@@ -179,6 +189,8 @@
 		<dict>
 			<key>maxNumber</key>
 			<integer>5</integer>
+			<key>bestTime</key>
+			<integer>6</integer>
 			<key>maxScore</key>
 			<integer>600</integer>
 			<key>maxTime</key>
@@ -234,6 +246,8 @@
 		<dict>
 			<key>maxNumber</key>
 			<integer>5</integer>
+			<key>bestTime</key>
+			<integer>7</integer>
 			<key>maxScore</key>
 			<integer>700</integer>
 			<key>maxTime</key>
@@ -283,6 +297,8 @@
 		<dict>
 			<key>maxNumber</key>
 			<integer>5</integer>
+			<key>bestTime</key>
+			<integer>8</integer>
 			<key>maxTime</key>
 			<integer>50</integer>
 			<key>maxScore</key>
@@ -344,6 +360,8 @@
 		<dict>
 			<key>maxNumber</key>
 			<integer>5</integer>
+			<key>bestTime</key>
+			<integer>9</integer>
 			<key>maxScore</key>
 			<integer>900</integer>
 			<key>maxTime</key>
@@ -419,6 +437,8 @@
 		<dict>
 			<key>maxNumber</key>
 			<integer>5</integer>
+			<key>bestTime</key>
+			<integer>2</integer>
 			<key>maxScore</key>
 			<integer>100</integer>
 			<key>maxTime</key>
@@ -444,6 +464,8 @@
 		<dict>
 			<key>maxNumber</key>
 			<integer>5</integer>
+			<key>bestTime</key>
+			<integer>3</integer>
 			<key>maxScore</key>
 			<integer>200</integer>
 			<key>maxTime</key>
@@ -481,6 +503,8 @@
 		<dict>
 			<key>maxNumber</key>
 			<integer>5</integer>
+			<key>bestTime</key>
+			<integer>4</integer>
 			<key>maxScore</key>
 			<integer>300</integer>
 			<key>maxTime</key>
@@ -529,6 +553,8 @@
 		</dict>
 		<dict>
 			<key>maxNumber</key>
+			<integer>5</integer>
+			<key>bestTime</key>
 			<integer>5</integer>
 			<key>maxTime</key>
 			<integer>40</integer>
@@ -591,6 +617,8 @@
 		<dict>
 			<key>maxNumber</key>
 			<integer>5</integer>
+			<key>bestTime</key>
+			<integer>6</integer>
 			<key>maxTime</key>
 			<integer>40</integer>
 			<key>maxScore</key>
@@ -682,6 +710,8 @@
 		<dict>
 			<key>maxNumber</key>
 			<integer>5</integer>
+			<key>bestTime</key>
+			<integer>7</integer>
 			<key>maxTime</key>
 			<integer>70</integer>
 			<key>maxScore</key>
@@ -785,6 +815,8 @@
 		<dict>
 			<key>maxNumber</key>
 			<integer>5</integer>
+			<key>bestTime</key>
+			<integer>8</integer>
 			<key>maxScore</key>
 			<integer>700</integer>
 			<key>maxTime</key>
@@ -894,6 +926,8 @@
 		<dict>
 			<key>maxNumber</key>
 			<integer>5</integer>
+			<key>bestTime</key>
+			<integer>9</integer>
 			<key>maxScore</key>
 			<integer>800</integer>
 			<key>maxTime</key>
@@ -1015,6 +1049,8 @@
 		<dict>
 			<key>maxNumber</key>
 			<integer>5</integer>
+			<key>bestTime</key>
+			<integer>10</integer>
 			<key>maxScore</key>
 			<integer>900</integer>
 			<key>maxTime</key>
@@ -1144,6 +1180,8 @@
 		<dict>
 			<key>maxNumber</key>
 			<integer>5</integer>
+			<key>bestTime</key>
+			<integer>3</integer>
 			<key>maxScore</key>
 			<integer>100</integer>
 			<key>maxTime</key>
@@ -1181,6 +1219,8 @@
 		<dict>
 			<key>maxNumber</key>
 			<integer>5</integer>
+			<key>bestTime</key>
+			<integer>4</integer>
 			<key>maxTime</key>
 			<integer>30</integer>
 			<key>maxScore</key>
@@ -1217,6 +1257,8 @@
 		</dict>
 		<dict>
 			<key>maxNumber</key>
+			<integer>5</integer>
+			<key>bestTime</key>
 			<integer>5</integer>
 			<key>matrixSize</key>
 			<integer>5</integer>
@@ -1267,6 +1309,8 @@
 		<dict>
 			<key>maxNumber</key>
 			<integer>5</integer>
+			<key>bestTime</key>
+			<integer>6</integer>
 			<key>maxScore</key>
 			<integer>400</integer>
 			<key>maxTime</key>
@@ -1346,6 +1390,8 @@
 		<dict>
 			<key>maxNumber</key>
 			<integer>5</integer>
+			<key>bestTime</key>
+			<integer>7</integer>
 			<key>maxTime</key>
 			<integer>50</integer>
 			<key>maxScore</key>
@@ -1443,6 +1489,8 @@
 		<dict>
 			<key>maxNumber</key>
 			<integer>5</integer>
+			<key>bestTime</key>
+			<integer>8</integer>
 			<key>maxTime</key>
 			<integer>60</integer>
 			<key>maxScore</key>
@@ -1534,6 +1582,8 @@
 		<dict>
 			<key>maxNumber</key>
 			<integer>5</integer>
+			<key>bestTime</key>
+			<integer>11</integer>
 			<key>maxTime</key>
 			<integer>70</integer>
 			<key>maxScore</key>
@@ -1655,6 +1705,8 @@
 		<dict>
 			<key>maxNumber</key>
 			<integer>5</integer>
+			<key>bestTime</key>
+			<integer>12</integer>
 			<key>maxTime</key>
 			<integer>80</integer>
 			<key>maxScore</key>
@@ -1788,6 +1840,8 @@
 		<dict>
 			<key>maxNumber</key>
 			<integer>5</integer>
+			<key>bestTime</key>
+			<integer>13</integer>
 			<key>maxTime</key>
 			<integer>90</integer>
 			<key>maxScore</key>

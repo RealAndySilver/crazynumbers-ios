@@ -52,6 +52,9 @@
     NSUInteger matrixSize;
     NSUInteger maxNumber;
     NSUInteger numberOfChapters;
+    NSUInteger pointsForBestScore;
+    NSUInteger bestTime;
+    NSUInteger pointsWon;
     float maxScore;
     float maxTime;
     float timeElapsed;
@@ -278,6 +281,10 @@
     maxTime = [chaptersDataArray[self.selectedChapter][self.selectedGame][@"maxTime"] floatValue];
     timeElapsed = 0;
     self.maxScoreLabel.text = [NSString stringWithFormat:@"Best Score: %d/%d", [self getScoredStoredInCoreData], (int)maxScore];
+    
+    bestTime = [chaptersDataArray[self.selectedChapter][self.selectedGame][@"bestTime"] intValue];
+    float pointsAtBestTime = [self pointsWonForTime:(float)bestTime];
+    pointsForBestScore = maxScore - pointsAtBestTime;
 
     
     //self.buttonsContainerView.frame = CGRectMake(0.0, 100.0, matrixSize*53.33333, matrixSize*53.33333);
@@ -505,7 +512,8 @@
     
     //User Won
     //Get Points Won
-    NSUInteger pointsWon = [self pointsWonForTime:timeElapsed];
+    pointsWon = [self pointsWonForTime:timeElapsed] + pointsForBestScore;
+    if (pointsWon > maxScore) pointsWon = maxScore;
     NSLog(@"Point Woooon %d", pointsWon);
 
     //Cancel timer
@@ -517,7 +525,7 @@
 }
 
 -(void)userWon {
-    BOOL scoreWasImproved = [self checkIfScoredWasImprovedInCoreDataWithNewScore:[self pointsWonForTime:timeElapsed]];
+    BOOL scoreWasImproved = [self checkIfScoredWasImprovedInCoreDataWithNewScore:pointsWon];
     
     //Send data to Flurry
     [Flurry logEvent:@"NumbersGameWon" withParameters:@{@"Chapter" : @(self.selectedChapter), @"Game" : @(self.selectedGame)}];
@@ -615,7 +623,7 @@
     
     [self playWinSound];
     
-    NSString *winMessage = [NSString stringWithFormat:@"You finished the game in %0.1f seconds. you scored %d points", timeElapsed, [self pointsWonForTime:timeElapsed]];
+    NSString *winMessage = [NSString stringWithFormat:@"You finished the game in %0.1f seconds. you scored %d points", timeElapsed, pointsWon];
     GameWonAlert *gameWonAlert = [[GameWonAlert alloc] initWithFrame:CGRectMake(self.view.bounds.size.width/2.0 - 125.0, self.view.bounds.size.height/2.0 - 200.0, 250.0, 400.0)];
     gameWonAlert.message = winMessage;
     gameWonAlert.delegate = self;
@@ -724,7 +732,7 @@
         serviceType = SLServiceTypeTwitter;
     }
     SLComposeViewController *socialViewController = [SLComposeViewController composeViewControllerForServiceType:serviceType];
-    [socialViewController setInitialText:[NSString stringWithFormat:@"I scored %d points playing Cross: Numbers & Colors", [self pointsWonForTime:timeElapsed]]];
+    [socialViewController setInitialText:[NSString stringWithFormat:@"I scored %d points playing #Cross : Numbers & Colors", [self pointsWonForTime:timeElapsed]]];
     [self presentViewController:socialViewController animated:YES completion:nil];
 }
 
@@ -846,7 +854,7 @@
             gameIdentifier = @((9*(self.selectedChapter)) + (self.selectedGame + 1));
         }
         NSLog(@"Game Identifier: %@", gameIdentifier);
-        [Score scoreWithIdentifier:gameIdentifier type:@"numbers" value:@([self pointsWonForTime:timeElapsed]) inManagedObjectContext:context];
+        [Score scoreWithIdentifier:gameIdentifier type:@"numbers" value:@(pointsWon) inManagedObjectContext:context];
         
     } else {
         //Error in the document state, alert the user.

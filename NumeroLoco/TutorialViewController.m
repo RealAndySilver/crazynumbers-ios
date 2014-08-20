@@ -8,11 +8,14 @@
 
 #import "TutorialViewController.h"
 #import "TutorialCell.h"
+#import "AudioPlayer.h"
+@import AVFoundation;
 
 @interface TutorialViewController () <UICollectionViewDataSource, UICollectionViewDelegate>
 @property (strong, nonatomic) UICollectionView *collectionView;
 @property (strong, nonatomic) UIPageControl *pageControl;
 @property (strong, nonatomic) NSArray *tutorialImagesArray;
+@property (strong, nonatomic) AVAudioPlayer *playerBackSound;
 @end
 
 @implementation TutorialViewController {
@@ -34,6 +37,14 @@
     [super viewDidLoad];
     screenBounds = [UIScreen mainScreen].bounds;
     [self setupUI];
+    [self setupSounds];
+}
+
+-(void)setupSounds {
+    NSString *soundFilePath = [[NSBundle mainBundle] pathForResource:@"back" ofType:@"wav"];
+    NSURL *soundFileURL = [NSURL URLWithString:soundFilePath];
+    self.playerBackSound = [[AVAudioPlayer alloc] initWithContentsOfURL:soundFileURL error:nil];
+    [self.playerBackSound prepareToPlay];
 }
 
 -(void)setupUI {
@@ -103,6 +114,7 @@
         //post a notification to display game center
         //[[NSNotificationCenter defaultCenter] postNotificationName:@"FirstTimeTutorialNotification" object:nil];
     }*/
+    [[AudioPlayer sharedInstance] playBackSound];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 

@@ -200,8 +200,8 @@
     [gkScore issueChallengeToPlayers:players message:message];
 }
 
--(void)gameCenterViewControllerDidFinish:(GKGameCenterViewController *)gameCenterViewController {
+/*-(void)gameCenterViewControllerDidFinish:(GKGameCenterViewController *)gameCenterViewController {
     NSLog(@"************** ME SALIIIII DE GAME CENTEEEEERRRRRRR **********************");
-}
+}*/
 
 @end

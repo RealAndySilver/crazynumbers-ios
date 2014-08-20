@@ -13,6 +13,7 @@
 #import "GameWonAlert.h"
 #import "MultiplayerWinAlert.h"
 #import "MultiplayerAlertView.h"
+@import AVFoundation;
 
 @interface MultiplayerGameViewController () <GameWonAlertDelegate, UIAlertViewDelegate, MultiplayerWinAlertDelegate, MultiplayerAlertDelegate>
 @property (weak, nonatomic) IBOutlet UILabel *gamesWonTopLabel;
@@ -34,6 +35,11 @@
 @property (weak, nonatomic) IBOutlet UIImageView *topHand;
 @property (strong, nonatomic) UIButton *multiplayerButton;
 @property (strong, nonatomic) UIView *littleOpacityView;
+
+//Sounds
+@property (strong, nonatomic) AVAudioPlayer *playerButttonPressed;
+@property (strong, nonatomic) AVAudioPlayer *playerGameWon;
+@property (strong, nonatomic) AVAudioPlayer *playerBackSound;
 @end
 
 @implementation MultiplayerGameViewController {
@@ -90,6 +96,7 @@
     
     [self setupUI];
     [self initGame];
+    [self configureSounds];
 }
 
 -(void)setupUI {
@@ -234,6 +241,27 @@
     self.bottomHand.transform = CGAffineTransformMakeRotation(M_PI);
     self.topHand.tintColor = [[AppInfo sharedInstance] appColorsArray][rand1];
     [self animateHands];
+}
+
+-(void)configureSounds {
+    NSString *soundFilePath = [[NSBundle mainBundle] pathForResource:@"press" ofType:@"wav"];
+    NSURL *soundFileURL = [NSURL URLWithString:soundFilePath];
+    self.playerButttonPressed = [[AVAudioPlayer alloc] initWithContentsOfURL:soundFileURL error:nil];
+    [self.playerButttonPressed prepareToPlay];
+    
+    soundFilePath = nil;
+    soundFilePath = [[NSBundle mainBundle] pathForResource:@"win" ofType:@"wav"];
+    soundFileURL = nil;
+    soundFileURL = [NSURL URLWithString:soundFilePath];
+    self.playerGameWon = [[AVAudioPlayer alloc] initWithContentsOfURL:soundFileURL error:nil];
+    [self.playerGameWon prepareToPlay];
+    
+    soundFilePath = nil;
+    soundFilePath = [[NSBundle mainBundle] pathForResource:@"back" ofType:@"wav"];
+    soundFileURL = nil;
+    soundFileURL = [NSURL URLWithString:soundFilePath];
+    self.playerBackSound = [[AVAudioPlayer alloc] initWithContentsOfURL:soundFileURL error:nil];
+    [self.playerBackSound prepareToPlay];
 }
 
 -(void)animateHands {
@@ -531,10 +559,14 @@
 }
 
 -(void)dismissVC {
+    [self.playerBackSound play];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"PlayMusicNotification" object:nil];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 -(void)topNumberButtonPressed:(UIButton *)numberButton {
+    [self playButtonPressedSound];
+    
     NSLog(@"Oprimí el boton con tag %d", numberButton.tag);
     NSUInteger index = numberButton.tag - 1000;
     NSInteger column = index / matrixSize;
@@ -570,6 +602,8 @@
 }
 
 -(void)bottomNumberButtonPressed:(UIButton *)numberButton {
+    [self playButtonPressedSound];
+    
     NSLog(@"Oprimí el boton con tag %d", numberButton.tag);
     NSUInteger index = numberButton.tag - 2000;
     NSInteger column = index / matrixSize;
@@ -667,6 +701,8 @@
 
 -(void)userWon {
     [self updateUI];
+    [self playWinSound];
+    
     if (topUserWon) {
         MultiplayerWinAlert *winAlert = [[MultiplayerWinAlert alloc] initWithFrame:CGRectMake(self.view.bounds.size.width/2.0 - 125.0, 200.0, 250.0, 150.0)];
         winAlert.delegate = self;
@@ -734,6 +770,20 @@
 -(void)multiplayerWinAlertDidDissapear:(MultiplayerWinAlert *)winAlert {
     winAlert = nil;
     [self prepareNextGame];
+}
+
+#pragma mark - Sounds 
+
+-(void)playButtonPressedSound {
+    [self.playerButttonPressed stop];
+    self.playerButttonPressed.currentTime = 0;
+    [self.playerButttonPressed play];
+}
+
+-(void)playWinSound {
+    [self.playerGameWon stop];
+    self.playerGameWon.currentTime = 0;
+    [self.playerGameWon play];
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////

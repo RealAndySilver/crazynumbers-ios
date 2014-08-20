@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8B105CFC19A4E12700100FB1 /* back.wav in Resources */ = {isa = PBXBuildFile; fileRef = 8B105CFA19A4E12700100FB1 /* back.wav */; };
+		8B105CFD19A4E12700100FB1 /* buttonpress.wav in Resources */ = {isa = PBXBuildFile; fileRef = 8B105CFB19A4E12700100FB1 /* buttonpress.wav */; };
 		8B18CF8F19644AD000F3FB0F /* TutorialPhoneR4_4.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B18CF8E19644AD000F3FB0F /* TutorialPhoneR4_4.png */; };
 		8B18CF9119644BBB00F3FB0F /* TutorialPhoneR4_5.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B18CF9019644BBB00F3FB0F /* TutorialPhoneR4_5.png */; };
 		8B1ED91619799482001FDB2C /* GameKitHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B1ED91519799482001FDB2C /* GameKitHelper.m */; };
@@ -14,6 +16,7 @@
 		8B316B10199151510062FD77 /* MultiplayerWinAlert.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B316B0F199151510062FD77 /* MultiplayerWinAlert.m */; };
 		8B316B14199181670062FD77 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 8B316B12199181670062FD77 /* Model.xcdatamodeld */; };
 		8B316B1D1991824B0062FD77 /* Score+AddOns.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B316B1C1991824B0062FD77 /* Score+AddOns.m */; };
+		8B5F497B19A4F19900C0C7E2 /* AudioPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B5F497A19A4F19900C0C7E2 /* AudioPlayer.m */; };
 		8B61F8FB195C87CC0036BB90 /* GameWonAlert.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B61F8FA195C87CC0036BB90 /* GameWonAlert.m */; };
 		8B6FB8C019507C6B00EB2C4E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B6FB8BF19507C6B00EB2C4E /* Foundation.framework */; };
 		8B6FB8C219507C6B00EB2C4E /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B6FB8C119507C6B00EB2C4E /* CoreGraphics.framework */; };
@@ -61,6 +64,13 @@
 		8BB862A2199BBB2700718843 /* TwoPlayersButton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BB862A0199BBB2700718843 /* TwoPlayersButton@2x.png */; };
 		8BB862A5199BC07500718843 /* Flecha.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BB862A3199BC07500718843 /* Flecha.png */; };
 		8BB862A6199BC07500718843 /* Flecha@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BB862A4199BC07500718843 /* Flecha@2x.png */; };
+		8BB8A9C019A3BDD10076E4A7 /* crossbg.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 8BB8A9BD19A3BDD10076E4A7 /* crossbg.mp3 */; };
+		8BB8A9C119A3BDD10076E4A7 /* press.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 8BB8A9BE19A3BDD10076E4A7 /* press.m4a */; };
+		8BB8A9C219A3BDD10076E4A7 /* win.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 8BB8A9BF19A3BDD10076E4A7 /* win.m4a */; };
+		8BB8A9C419A3C2530076E4A7 /* win.wav in Resources */ = {isa = PBXBuildFile; fileRef = 8BB8A9C319A3C2530076E4A7 /* win.wav */; };
+		8BB8A9C619A3C6220076E4A7 /* press.wav in Resources */ = {isa = PBXBuildFile; fileRef = 8BB8A9C519A3C6220076E4A7 /* press.wav */; };
+		8BB8A9C819A3D99A0076E4A7 /* restart.wav in Resources */ = {isa = PBXBuildFile; fileRef = 8BB8A9C719A3D99A0076E4A7 /* restart.wav */; };
+		8BB8A9CC19A3FA8F0076E4A7 /* restartnuevo.wav in Resources */ = {isa = PBXBuildFile; fileRef = 8BB8A9CB19A3FA8F0076E4A7 /* restartnuevo.wav */; };
 		8BB9EC9319632542007B8C8E /* TutorialViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BB9EC9219632542007B8C8E /* TutorialViewController.m */; };
 		8BB9EC96196345E9007B8C8E /* TutorialCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BB9EC95196345E9007B8C8E /* TutorialCell.m */; };
 		8BC16FCE19780957003405F1 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BC16FCD19780957003405F1 /* GameKit.framework */; };
@@ -103,6 +113,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		8B105CFA19A4E12700100FB1 /* back.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = back.wav; sourceTree = "<group>"; };
+		8B105CFB19A4E12700100FB1 /* buttonpress.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = buttonpress.wav; sourceTree = "<group>"; };
 		8B18CF8E19644AD000F3FB0F /* TutorialPhoneR4_4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TutorialPhoneR4_4.png; sourceTree = "<group>"; };
 		8B18CF9019644BBB00F3FB0F /* TutorialPhoneR4_5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TutorialPhoneR4_5.png; sourceTree = "<group>"; };
 		8B1ED91419799482001FDB2C /* GameKitHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameKitHelper.h; sourceTree = "<group>"; };
@@ -114,6 +126,8 @@
 		8B316B13199181670062FD77 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		8B316B1B1991824B0062FD77 /* Score+AddOns.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Score+AddOns.h"; sourceTree = "<group>"; };
 		8B316B1C1991824B0062FD77 /* Score+AddOns.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Score+AddOns.m"; sourceTree = "<group>"; };
+		8B5F497919A4F19900C0C7E2 /* AudioPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioPlayer.h; sourceTree = "<group>"; };
+		8B5F497A19A4F19900C0C7E2 /* AudioPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioPlayer.m; sourceTree = "<group>"; };
 		8B61F8F9195C87CC0036BB90 /* GameWonAlert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameWonAlert.h; sourceTree = "<group>"; };
 		8B61F8FA195C87CC0036BB90 /* GameWonAlert.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameWonAlert.m; sourceTree = "<group>"; };
 		8B6FB8BC19507C6B00EB2C4E /* NumeroLoco.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NumeroLoco.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -181,6 +195,14 @@
 		8BB862A0199BBB2700718843 /* TwoPlayersButton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "TwoPlayersButton@2x.png"; sourceTree = "<group>"; };
 		8BB862A3199BC07500718843 /* Flecha.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Flecha.png; sourceTree = "<group>"; };
 		8BB862A4199BC07500718843 /* Flecha@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Flecha@2x.png"; sourceTree = "<group>"; };
+		8BB8A9BD19A3BDD10076E4A7 /* crossbg.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = crossbg.mp3; sourceTree = "<group>"; };
+		8BB8A9BE19A3BDD10076E4A7 /* press.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = press.m4a; sourceTree = "<group>"; };
+		8BB8A9BF19A3BDD10076E4A7 /* win.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = win.m4a; sourceTree = "<group>"; };
+		8BB8A9C319A3C2530076E4A7 /* win.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = win.wav; sourceTree = "<group>"; };
+		8BB8A9C519A3C6220076E4A7 /* press.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = press.wav; sourceTree = "<group>"; };
+		8BB8A9C719A3D99A0076E4A7 /* restart.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = restart.wav; sourceTree = "<group>"; };
+		8BB8A9C919A3F3270076E4A7 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		8BB8A9CB19A3FA8F0076E4A7 /* restartnuevo.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = restartnuevo.wav; sourceTree = "<group>"; };
 		8BB9EC9119632542007B8C8E /* TutorialViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TutorialViewController.h; sourceTree = "<group>"; };
 		8BB9EC9219632542007B8C8E /* TutorialViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TutorialViewController.m; sourceTree = "<group>"; };
 		8BB9EC94196345E9007B8C8E /* TutorialCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TutorialCell.h; sourceTree = "<group>"; };
@@ -279,6 +301,15 @@
 			name = CoreData;
 			sourceTree = "<group>";
 		};
+		8B5F497819A4F17D00C0C7E2 /* Custom Objects */ = {
+			isa = PBXGroup;
+			children = (
+				8B5F497919A4F19900C0C7E2 /* AudioPlayer.h */,
+				8B5F497A19A4F19900C0C7E2 /* AudioPlayer.m */,
+			);
+			name = "Custom Objects";
+			sourceTree = "<group>";
+		};
 		8B61F8F8195C87A90036BB90 /* Custom Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -318,6 +349,7 @@
 		8B6FB8BE19507C6B00EB2C4E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				8BB8A9C919A3F3270076E4A7 /* AVFoundation.framework */,
 				8BE1D5F4198697A700CAAFCF /* Social.framework */,
 				8BC16FCD19780957003405F1 /* GameKit.framework */,
 				A0BDEAEB197732BC008BFF4D /* libz.dylib */,
@@ -337,6 +369,7 @@
 		8B6FB8C519507C6B00EB2C4E /* NumeroLoco */ = {
 			isa = PBXGroup;
 			children = (
+				8B5F497819A4F17D00C0C7E2 /* Custom Objects */,
 				8B316B111991801B0062FD77 /* CoreData */,
 				8BA17EE31987E4AA00DFB839 /* MBProgressHUD2 */,
 				8BA17ED91987D4AC00DFB839 /* InApp Purchases */,
@@ -448,6 +481,7 @@
 		8B90453B196359FC000F2E51 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				8BB8A9BC19A3BDD10076E4A7 /* Sounds */,
 				8BB8628E199BA01200718843 /* ButtonsPNGs */,
 				8BAD7B5B1992A00B005DB0C2 /* hand.png */,
 				8BE1D5FE1986D2FE00CAAFCF /* ChallengeIcon.png */,
@@ -529,6 +563,22 @@
 				8BB86292199BA01200718843 /* OptionsButton@2x.png */,
 			);
 			path = ButtonsPNGs;
+			sourceTree = "<group>";
+		};
+		8BB8A9BC19A3BDD10076E4A7 /* Sounds */ = {
+			isa = PBXGroup;
+			children = (
+				8B105CFA19A4E12700100FB1 /* back.wav */,
+				8B105CFB19A4E12700100FB1 /* buttonpress.wav */,
+				8BB8A9CB19A3FA8F0076E4A7 /* restartnuevo.wav */,
+				8BB8A9C719A3D99A0076E4A7 /* restart.wav */,
+				8BB8A9C519A3C6220076E4A7 /* press.wav */,
+				8BB8A9C319A3C2530076E4A7 /* win.wav */,
+				8BB8A9BD19A3BDD10076E4A7 /* crossbg.mp3 */,
+				8BB8A9BE19A3BDD10076E4A7 /* press.m4a */,
+				8BB8A9BF19A3BDD10076E4A7 /* win.m4a */,
+			);
+			path = Sounds;
 			sourceTree = "<group>";
 		};
 		A0BDEAD81976C7E3008BFF4D /* Flurry */ = {
@@ -631,15 +681,19 @@
 				8BB862A5199BC07500718843 /* Flecha.png in Resources */,
 				8BD2CED31951E6B4002EF327 /* GamesDatabase2.plist in Resources */,
 				8BB8629B199BA60900718843 /* ColorsButton.png in Resources */,
+				8BB8A9C419A3C2530076E4A7 /* win.wav in Resources */,
+				8BB8A9C819A3D99A0076E4A7 /* restart.wav in Resources */,
 				8BB86293199BA01200718843 /* GamesButton.png in Resources */,
 				8BB8629C199BA60900718843 /* ColorsButton@2x.png in Resources */,
 				A0BCCCBA195476D1001CD7F1 /* ColorsChaptersNames.plist in Resources */,
 				A0BDEAEE19773C31008BFF4D /* BackgroundPad.png in Resources */,
 				8BB862A2199BBB2700718843 /* TwoPlayersButton@2x.png in Resources */,
 				8B6FB8EF19507CC400EB2C4E /* MainStoryboard.storyboard in Resources */,
+				8B105CFC19A4E12700100FB1 /* back.wav in Resources */,
 				8BB862A1199BBB2700718843 /* TwoPlayersButton.png in Resources */,
 				A0BDEAD71976C0EC008BFF4D /* Background.png in Resources */,
 				8B18CF8F19644AD000F3FB0F /* TutorialPhoneR4_4.png in Resources */,
+				8BB8A9C119A3BDD10076E4A7 /* press.m4a in Resources */,
 				8BE1D6011986D2FE00CAAFCF /* ChallengeIcon.png in Resources */,
 				8BB86296199BA01200718843 /* OptionsButton@2x.png in Resources */,
 				8BB8629E199BA60900718843 /* NumbersButton@2x.png in Resources */,
@@ -648,18 +702,23 @@
 				8B96EAD919795E1C00E60698 /* WordsGamesDatabase2.plist in Resources */,
 				8BE1D6021986D2FE00CAAFCF /* FacebookLogo.png in Resources */,
 				8BE1D6051986F8D200CAAFCF /* ColorGamesDatabase2.plist in Resources */,
+				8BB8A9C219A3BDD10076E4A7 /* win.m4a in Resources */,
 				8BAD7B5C1992A00B005DB0C2 /* hand.png in Resources */,
 				8B90454119635EEF000F2E51 /* TutorialPhoneR4_2.png in Resources */,
 				8B6FB8CA19507C6B00EB2C4E /* InfoPlist.strings in Resources */,
+				8B105CFD19A4E12700100FB1 /* buttonpress.wav in Resources */,
 				8B18CF9119644BBB00F3FB0F /* TutorialPhoneR4_5.png in Resources */,
 				A06520711959B7D100399778 /* PadStoryboard.storyboard in Resources */,
 				8BB8629D199BA60900718843 /* NumbersButton.png in Resources */,
 				8B90453F196359FC000F2E51 /* TutorialPhoneR4_1.png in Resources */,
 				8BE1D5FD1986BF4800CAAFCF /* checkmark.png in Resources */,
+				8BB8A9C019A3BDD10076E4A7 /* crossbg.mp3 in Resources */,
+				8BB8A9C619A3C6220076E4A7 /* press.wav in Resources */,
 				8B90454319636244000F2E51 /* TutorialPhoneR4_3.png in Resources */,
 				8BB86295199BA01200718843 /* OptionsButton.png in Resources */,
 				8B6FB8D219507C6B00EB2C4E /* Images.xcassets in Resources */,
 				8B6FB8FF19508CA200EB2C4E /* ChapterNames.plist in Resources */,
+				8BB8A9CC19A3FA8F0076E4A7 /* restartnuevo.wav in Resources */,
 				8BB86294199BA01200718843 /* GamesButton@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -686,6 +745,7 @@
 				8B9857FC19537C080083FD45 /* AppInfo.m in Sources */,
 				8B316B14199181670062FD77 /* Model.xcdatamodeld in Sources */,
 				8B6FB8F9195084CE00EB2C4E /* ChaptersViewController.m in Sources */,
+				8B5F497B19A4F19900C0C7E2 /* AudioPlayer.m in Sources */,
 				8BB45D7519892CDC00C68B5A /* MultiplayerGameViewController.m in Sources */,
 				8BA17EE11987D4AC00DFB839 /* IAPHelper.m in Sources */,
 				8BA17EE61987E4AA00DFB839 /* MBProgressHUD.m in Sources */,

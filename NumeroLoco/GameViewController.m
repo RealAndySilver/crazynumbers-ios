@@ -18,6 +18,8 @@
 #import "ChallengeFriendsViewController.h"
 #import "Score+AddOns.h"
 #import "AllGamesFinishedView.h"
+#import "AudioPlayer.h"
+@import AVFoundation;
 
 @interface GameViewController () <UIAlertViewDelegate, GameWonAlertDelegate, AllGamesFinishedViewDelegate>
 @property (strong, nonatomic) NSMutableArray *columnsButtonsArray; //Of UIButton
@@ -34,6 +36,11 @@
 //CoreData
 @property (strong, nonatomic) UIManagedDocument *databaseDocument;
 @property (strong, nonatomic) NSURL *databaseDocumentURL;
+
+@property (strong, nonatomic) AVAudioPlayer *playerGameWon;
+@property (strong, nonatomic) AVAudioPlayer *playerButtonPressed;
+@property (strong, nonatomic) AVAudioPlayer *playerGameRestarted;
+@property (strong, nonatomic) AVAudioPlayer *playerBackButton;
 @end
 
 #define FONT_NAME @"HelveticaNeue-Light"
@@ -104,8 +111,8 @@
     
     [self setupUI];
     [self initGame];
-    
     [self openCoreDataDocument];
+    [self configureSounds];
 }
 
 -(void)viewDidAppear:(BOOL)animated {
@@ -133,6 +140,36 @@
     //Remove ads from Flurry
     [FlurryAds removeAdFromSpace:@"FullScreenAd"];
     [FlurryAds setAdDelegate:nil];
+}
+
+-(void)configureSounds {
+    NSString *soundFilePath = [[NSBundle mainBundle] pathForResource:@"win" ofType:@"wav"];
+    NSURL *url = [NSURL URLWithString:soundFilePath];
+    self.playerGameWon = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:nil];
+    [self.playerGameWon prepareToPlay];
+    
+    soundFilePath = nil;
+    soundFilePath = [[NSBundle mainBundle] pathForResource:@"restartnuevo" ofType:@"wav"];
+    url = nil;
+    url = [NSURL URLWithString:soundFilePath];
+    self.playerGameRestarted = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:nil];
+    self.playerGameRestarted.volume = 1.0;
+    [self.playerGameRestarted prepareToPlay];
+    
+    soundFilePath = nil;
+    soundFilePath = [[NSBundle mainBundle] pathForResource:@"press" ofType:@"wav"];
+    url = nil;
+    url = [NSURL URLWithString:soundFilePath];
+    self.playerButtonPressed = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:nil];
+    self.playerButtonPressed.volume = 0.3;
+    [self.playerButtonPressed prepareToPlay];
+    
+    soundFilePath = nil;
+    soundFilePath = [[NSBundle mainBundle] pathForResource:@"back" ofType:@"wav"];
+    url = nil;
+    url = [NSURL URLWithString:soundFilePath];
+    self.playerBackButton = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:nil];
+    [self.playerBackButton prepareToPlay];
 }
 
 -(void)setupUI {
@@ -193,7 +230,7 @@
     [self.resetButton setTitle:@"Restart" forState:UIControlStateNormal];
     [self.resetButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     self.resetButton.titleLabel.font = [UIFont fontWithName:FONT_NAME size:15.0];
-    [self.resetButton addTarget:self action:@selector(initGame) forControlEvents:UIControlEventTouchUpInside];
+    [self.resetButton addTarget:self action:@selector(restartGame) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.resetButton];
     
     //Buttons container view
@@ -403,7 +440,20 @@
 
 #pragma mark - Actions 
 
+-(void)restartGame {
+    self.resetButton.userInteractionEnabled = NO;
+    [self performSelector:@selector(enableResetButton) withObject:nil afterDelay:1.0];
+    [self playRestartSound];
+    [self initGame];
+}
+
+-(void)enableResetButton {
+    self.resetButton.userInteractionEnabled = YES;
+}
+
 -(void)numberButtonPressed:(UIButton *)numberButton {
+    [self playButtonPressedSound];
+    
     NSLog(@"Oprimí el boton con tag %d", numberButton.tag);
     NSUInteger index = numberButton.tag - 1000;
     NSInteger column = index / matrixSize;
@@ -563,11 +613,29 @@
         }
     }
     
+    [self playWinSound];
+    
     NSString *winMessage = [NSString stringWithFormat:@"You finished the game in %0.1f seconds. you scored %d points", timeElapsed, [self pointsWonForTime:timeElapsed]];
     GameWonAlert *gameWonAlert = [[GameWonAlert alloc] initWithFrame:CGRectMake(self.view.bounds.size.width/2.0 - 125.0, self.view.bounds.size.height/2.0 - 200.0, 250.0, 400.0)];
     gameWonAlert.message = winMessage;
     gameWonAlert.delegate = self;
     [gameWonAlert showAlertInView:self.view];
+}
+
+-(void)playRestartSound {
+    [self.playerGameRestarted stop];
+    self.playerGameRestarted.currentTime = 0;
+    [self.playerGameRestarted play];
+}
+
+-(void)playButtonPressedSound {
+    [self.playerButtonPressed stop];
+    self.playerButtonPressed.currentTime = 0;
+    [self.playerButtonPressed play];
+}
+
+-(void)playWinSound {
+    [self.playerGameWon play];
 }
 
 -(void)showFlurryAds {
@@ -596,6 +664,7 @@
 }
 
 -(void)dismissVC {
+    [[AudioPlayer sharedInstance] playBackSound];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -639,10 +708,12 @@
 #pragma mark - Social Stuff
 
 -(void)challengeFriends {
-    ChallengeFriendsViewController *challengeFriendsVC = [self.storyboard instantiateViewControllerWithIdentifier:@"ChallengeFriends"];
+    /*ChallengeFriendsViewController *challengeFriendsVC = [self.storyboard instantiateViewControllerWithIdentifier:@"ChallengeFriends"];
     if (isPad) challengeFriendsVC.modalPresentationStyle = UIModalPresentationFormSheet;
     challengeFriendsVC.score = [self pointsWonForTime:timeElapsed];
-    [self presentViewController:challengeFriendsVC animated:YES completion:nil];
+    [self presentViewController:challengeFriendsVC animated:YES completion:nil];*/
+    
+    [[GameKitHelper sharedGameKitHelper] sendScoreChallengeToPlayers:nil withScore:[self pointsWonForTime:timeElapsed] message:nil];
 }
 
 -(void)shareScoreOnSocialNetwork:(NSString *)socialNetwork {

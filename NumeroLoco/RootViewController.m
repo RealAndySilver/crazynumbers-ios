@@ -20,6 +20,7 @@
 #import "MBProgressHUD.h"
 #import "MultiplayerGameViewController.h"
 #import "GameKitHelper.h"
+@import AVFoundation;
 
 @interface RootViewController () <GKGameCenterControllerDelegate>
 @property (weak, nonatomic) IBOutlet UILabel *rossLabel;
@@ -36,6 +37,9 @@
 @property (strong, nonatomic) UIButton *optionsButton;
 @property (strong, nonatomic) UIButton *gameCenterButton;
 @property (strong, nonatomic) UIButton *backButton;
+@property (strong, nonatomic) AVAudioPlayer *player;
+@property (strong, nonatomic) AVAudioPlayer *playerButtonPressed;
+@property (strong, nonatomic) AVAudioPlayer *playerBackSound;
 @end
 
 #define FONT_NAME @"HelveticaNeue-UltraLight"
@@ -52,6 +56,10 @@
 
 -(void)viewDidLoad {
     [super viewDidLoad];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(playMusicNotificationReceived:)
+                                                 name:@"PlayMusicNotification"
+                                               object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(transactionFailedNotificationReceived:)
                                                  name:@"TransactionFailedNotification"
@@ -77,6 +85,7 @@
     self.navigationController.navigationBarHidden = YES;
     screenBounds = [UIScreen mainScreen].bounds;
     [self setupUI];
+    [self setupMusic];
 }
 
 -(void)viewDidAppear:(BOOL)animated {
@@ -103,6 +112,31 @@
 -(void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
     viewIsVisible = NO;
+}
+
+-(void)setupMusic {
+    NSString *soundFilePath = [[NSBundle mainBundle] pathForResource:@"crossbg" ofType:@"mp3"];
+    NSURL *soundFileURL = [NSURL URLWithString:soundFilePath];
+    NSError *error;
+    self.player = [[AVAudioPlayer alloc] initWithContentsOfURL:soundFileURL error:&error];
+    self.player.numberOfLoops = -1;
+    [self.player prepareToPlay];
+    [self.player play];
+    
+    //Button pressed player
+    soundFilePath = nil;
+    soundFilePath = [[NSBundle mainBundle] pathForResource:@"buttonpress" ofType:@"wav"];
+    soundFileURL = nil;
+    soundFileURL = [NSURL URLWithString:soundFilePath];
+    self.playerButtonPressed = [[AVAudioPlayer alloc] initWithContentsOfURL:soundFileURL error:nil];
+    [self.playerButtonPressed prepareToPlay];
+    
+    soundFilePath = nil;
+    soundFilePath = [[NSBundle mainBundle] pathForResource:@"back" ofType:@"wav"];
+    soundFileURL = nil;
+    soundFileURL = [NSURL URLWithString:soundFilePath];
+    self.playerBackSound = [[AVAudioPlayer alloc] initWithContentsOfURL:soundFileURL error:nil];
+    [self.playerBackSound prepareToPlay];
 }
 
 -(void)setupUI {
@@ -163,49 +197,6 @@
     self.optionsMenuButton.layer.borderColor = [UIColor whiteColor].CGColor;
     [self.optionsMenuButton addTarget:self action:@selector(showOptionsButtons) forControlEvents:UIControlEventTouchUpInside];
     
-    ///////////////////////////////////////////////////////////////////////////////////////////
-    //Numbers labels
-    //5 label
-    /*self.firstLabel.layer.cornerRadius = cornerRadius;
-    self.firstLabel.textColor = [[AppInfo sharedInstance] appColorsArray][0];
-    self.firstLabel.textAlignment = NSTextAlignmentCenter;*/
-    
-    /*//4 label
-    self.secondLabel.text = @"R";
-    self.secondLabel.backgroundColor = [UIColor whiteColor];
-    self.secondLabel.layer.cornerRadius = cornerRadius;
-    self.secondLabel.textColor = [[AppInfo sharedInstance] appColorsArray][0];
-    self.secondLabel.textAlignment = NSTextAlignmentCenter;
-    if (isPad)  self.secondLabel.font = [UIFont fontWithName:FONT_NAME size:90.0];
-    else        self.secondLabel.font = [UIFont fontWithName:FONT_NAME size:40.0];
-    
-    //2 label
-    self.thirdLabel.text = @"O";
-    self.thirdLabel.backgroundColor = [UIColor whiteColor];
-    self.thirdLabel.layer.cornerRadius = cornerRadius;
-    self.thirdLabel.textColor = [[AppInfo sharedInstance] appColorsArray][0];
-    self.thirdLabel.textAlignment = NSTextAlignmentCenter;
-    if (isPad)  self.thirdLabel.font = [UIFont fontWithName:FONT_NAME size:90.0];
-    else        self.thirdLabel.font = [UIFont fontWithName:FONT_NAME size:40.0];
-    
-    //1 label
-    self.fourthLabel.text = @"S";
-    self.fourthLabel.backgroundColor = [UIColor whiteColor];
-    self.fourthLabel.layer.cornerRadius = cornerRadius;
-    self.fourthLabel.textColor = [[AppInfo sharedInstance] appColorsArray][0];
-    self.fourthLabel.textAlignment = NSTextAlignmentCenter;
-    if (isPad)  self.fourthLabel.font = [UIFont fontWithName:FONT_NAME size:90.0];
-    else        self.fourthLabel.font = [UIFont fontWithName:FONT_NAME size:40.0];
-    
-    //0 label
-    self.fifthLabel.text = @"S";
-    self.fifthLabel.backgroundColor = [UIColor whiteColor];
-    self.fifthLabel.layer.cornerRadius = cornerRadius;
-    self.fifthLabel.textColor = [[AppInfo sharedInstance] appColorsArray][0];
-    self.fifthLabel.textAlignment = NSTextAlignmentCenter;
-    if (isPad)  self.fifthLabel.font = [UIFont fontWithName:FONT_NAME size:90.0];
-    else        self.fifthLabel.font = [UIFont fontWithName:FONT_NAME size:40.0];*/
-    
     //Tutorial
     self.optionsButton = [UIButton buttonWithType:UIButtonTypeSystem];
     self.optionsButton.frame = gamesButtonsFrames;
@@ -221,17 +212,21 @@
     
     //////////////////////////////////////////////////////////////////////////////////////////
     //Remove Ads button
-    self.removeAdsButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    self.removeAdsButton.frame = gamesButtonsFrames;
-    self.removeAdsButton.center = CGPointMake(self.view.frame.size.width + self.removeAdsButton.frame.size.width/2.0, self.optionsButton.center.y - self.optionsButton.bounds.size.height - 20.0);
-    [self.removeAdsButton setTitle:@"Remove Ads" forState:UIControlStateNormal];
-    [self.removeAdsButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    self.removeAdsButton.titleLabel.font = [UIFont fontWithName:fontName size:fontSize - 6.0];
-    self.removeAdsButton.layer.cornerRadius = cornerRadius;
-    self.removeAdsButton.layer.borderWidth = borderWidth;
-    self.removeAdsButton.layer.borderColor = [UIColor whiteColor].CGColor;
-    [self.removeAdsButton addTarget:self action:@selector(buyNoAds) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:self.removeAdsButton];
+    //Display it only if the user has not removed the ads
+    FileSaver *fileSaver = [[FileSaver alloc] init];
+    if (![[fileSaver getDictionary:@"UserRemovedAdsDic"][@"UserRemovedAdsKey"] boolValue]) {
+        self.removeAdsButton = [UIButton buttonWithType:UIButtonTypeSystem];
+        self.removeAdsButton.frame = gamesButtonsFrames;
+        self.removeAdsButton.center = CGPointMake(self.view.frame.size.width + self.removeAdsButton.frame.size.width/2.0, self.optionsButton.center.y + self.optionsButton.frame.size.height + 20.0);
+        [self.removeAdsButton setTitle:@"Remove Ads" forState:UIControlStateNormal];
+        [self.removeAdsButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        self.removeAdsButton.titleLabel.font = [UIFont fontWithName:fontName size:fontSize - 6.0];
+        self.removeAdsButton.layer.cornerRadius = cornerRadius;
+        self.removeAdsButton.layer.borderWidth = borderWidth;
+        self.removeAdsButton.layer.borderColor = [UIColor whiteColor].CGColor;
+        [self.removeAdsButton addTarget:self action:@selector(buyNoAds) forControlEvents:UIControlEventTouchUpInside];
+        [self.view addSubview:self.removeAdsButton];
+    }
     
     ////////////////////////////////////////////////////////////////////////////////////////
     //Colors button
@@ -292,7 +287,7 @@
     //GameCenter BUtton
     self.gameCenterButton = [UIButton buttonWithType:UIButtonTypeSystem];
     self.gameCenterButton.frame = gamesButtonsFrames;
-    self.gameCenterButton.center = CGPointMake(self.view.frame.size.width + self.gameCenterButton.frame.size.width/2.0, self.optionsButton.center.y + self.optionsButton.frame.size.height + 20.0);
+    self.gameCenterButton.center = CGPointMake(self.view.frame.size.width + self.gameCenterButton.frame.size.width/2.0, self.optionsButton.center.y - self.optionsButton.bounds.size.height - 20.0);
     [self.gameCenterButton setTitle:@"Game Center" forState:UIControlStateNormal];
     [self.gameCenterButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     self.gameCenterButton.layer.cornerRadius = cornerRadius;
@@ -320,6 +315,7 @@
 #pragma mark - Animations 
 
 -(void)showOptionsButtons {
+    [self playButtonSound];
     gamesButtonsDisplayed = NO;
     
     [UIView animateWithDuration:1.3
@@ -339,6 +335,8 @@
 }
 
 -(void)showInitialMenuButtons {
+    [self playBackSound];
+    
     [UIView animateWithDuration:1.3
                           delay:0.0
          usingSpringWithDamping:0.7
@@ -368,6 +366,7 @@
 }
 
 -(void)showGameMenuOptions {
+    [self playButtonSound];
     gamesButtonsDisplayed = YES;
     
     [UIView animateWithDuration:1.3
@@ -386,62 +385,19 @@
                      } completion:^(BOOL finished){}];
 }
 
-/*-(void)animateLabel:(UILabel *)label {
-    [UIView animateWithDuration:1.0
-                          delay:0.0
-                        options:UIViewAnimationOptionCurveEaseOut
-                     animations:^(){
-                         label.transform = CGAffineTransformMakeTranslation(0.0, -animationDistance);
-                     } completion:^(BOOL finished){
-                         if (viewIsVisible) [self animateLabelSecondMovement:label];
-                     }];
-}
-
--(void)animateLabelSecondMovement:(UILabel *)label {
-    [UIView animateWithDuration:2.0
-                          delay:0.0
-                        options:UIViewAnimationOptionCurveEaseInOut
-                     animations:^(){
-                         label.transform = CGAffineTransformMakeTranslation(0.0, animationDistance);
-                     } completion:^(BOOL finished){
-                         if (viewIsVisible) [self animateLabelThirdMovement:label];
-                     }];
-}
-
--(void)animateLabelThirdMovement:(UILabel *)label {
-    [UIView animateWithDuration:1.0
-                          delay:0.0
-                        options:UIViewAnimationOptionCurveEaseIn
-                     animations:^(){
-                         label.transform = CGAffineTransformMakeTranslation(0.0, 0.0);
-                     } completion:^(BOOL finished){
-                         if (viewIsVisible) [self animateLabel:label];
-                     }];
-}*/
-
 #pragma mark - Actions
 
-/*-(void)showGameButtons {
-    [UIView animateWithDuration:0.8
-                          delay:0.0
-         usingSpringWithDamping:0.7
-          initialSpringVelocity:0.0
-                        options:UIViewAnimationOptionCurveEaseOut
-                     animations:^(){
-                         self.onePlayerButton.transform = CGAffineTransformMakeTranslation(-2*(self.onePlayerButton.frame.origin.x + self.onePlayerButton.frame.size.width + 10), 0.0);
-                         self.colorsButton.transform = CGAffineTransformMakeTranslation(-(screenBounds.size.width/2.0 + self.colorsButton.frame.size.width/2.0), 0.0);
-                         self.numbersButton.transform = CGAffineTransformMakeTranslation(-(screenBounds.size.width/2.0 + self.numbersButton.frame.size.width/2.0), 0.0);
-                     } completion:^(BOOL finished){}];
-
-}*/
-
 -(void)goToMultiplayerVC {
+    [self stopMusic];
+    [self playButtonSound];
     MultiplayerGameViewController *multiplayerVC = [self.storyboard instantiateViewControllerWithIdentifier:@"MultiplayerGame"];
     multiplayerVC.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
     [self presentViewController:multiplayerVC animated:YES completion:nil];
 }
 
 -(void)buyNoAds {
+    [self playButtonSound];
+    
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     [[CPIAPHelper sharedInstance] requestProductsWithCompletionHandler:^(BOOL success, NSArray *products){
         if (success) {
@@ -465,10 +421,13 @@
 }
 
 -(void)showGameCenter {
+    [self playButtonSound];
+    
     GKGameCenterViewController *gameViewController = [[GKGameCenterViewController alloc] init];
-    if (gameViewController) {
+    if (gameViewController != nil) {
         NSLog(@"Entré a mostrar el controlador de game center");
         gameViewController.gameCenterDelegate = self;
+        gameViewController.viewState = GKGameCenterViewControllerStateLeaderboards;
         [self presentViewController:gameViewController animated:YES completion:nil];
     } 
 }
@@ -477,42 +436,20 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-/*-(void)animatePlayersButtons {
-    [UIView animateWithDuration:0.8
-                          delay:0.0
-         usingSpringWithDamping:0.7
-          initialSpringVelocity:0.0
-                        options:UIViewAnimationOptionCurveEaseOut
-                     animations:^(){
-                         self.startButton.transform = CGAffineTransformMakeTranslation(-(self.startButton.frame.origin.x + self.startButton.frame.size.width + 10), 0.0);
-                         self.onePlayerButton.transform = CGAffineTransformMakeTranslation(-(screenBounds.size.width/2.0 + self.numbersButton.frame.size.width/2.0), 0.0);
-                         self.twoPlayerButton.transform = CGAffineTransformMakeTranslation(-(screenBounds.size.width/2.0 + self.colorsButton.frame.size.width/2.0), 0.0);
-                     } completion:^(BOOL finished){}];
-}
-
--(void)animateGameButtons {
-    [UIView animateWithDuration:0.8
-                          delay:0.0
-         usingSpringWithDamping:0.7
-          initialSpringVelocity:0.0
-                        options:UIViewAnimationOptionCurveEaseInOut
-                     animations:^(){
-                         self.startButton.transform = CGAffineTransformMakeTranslation(-(self.startButton.frame.origin.x + self.startButton.frame.size.width + 10), 0.0);
-                         self.numbersButton.transform = CGAffineTransformMakeTranslation(-(screenBounds.size.width/2.0 + self.numbersButton.frame.size.width/2.0), 0.0);
-                         self.colorsButton.transform = CGAffineTransformMakeTranslation(-(screenBounds.size.width/2.0 + self.colorsButton.frame.size.width/2.0), 0.0);
-                         self.wordsButton.transform = CGAffineTransformMakeTranslation(-(screenBounds.size.width/2.0 + self.colorsButton.frame.size.width/2.0), 0.0);
-                     } completion:^(BOOL finished){}];
-}*/
-
 -(void)goToColorsChaptersVC {
+    [self stopMusic];
+    [self playButtonSound];
+    
     [Flurry logEvent:@"OpenColorsChapters"];
     ColorsChaptersViewController *colorsChaptersVC = [self.storyboard instantiateViewControllerWithIdentifier:@"ColorsChapters"];
     colorsChaptersVC.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
     [self presentViewController:colorsChaptersVC animated:YES completion:nil];
-    
 }
 
 -(void)goToChaptersVC {
+    [self stopMusic];
+    [self playButtonSound];
+    
     [Flurry logEvent:@"OpenNumbersChapters"];
     ChaptersViewController *chaptersVC = [self.storyboard instantiateViewControllerWithIdentifier:@"Chapters"];
     chaptersVC.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
@@ -520,6 +457,8 @@
 }
 
 -(void)goToTutorialVC {
+    [self playButtonSound];
+    
     [Flurry logEvent:@"OpenTutorial"];
     TutorialViewController *tutorialVC = [self.storyboard instantiateViewControllerWithIdentifier:@"Tutorial"];
     //tutorialVC.viewControllerAppearedFromInitialLaunching = viewAppearFromFirstTimeTutorial;
@@ -530,6 +469,38 @@
     WordsChaptersViewController *wordsChapterVC = [self.storyboard instantiateViewControllerWithIdentifier:@"WordsChapters"];
     wordsChapterVC.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
     [self presentViewController:wordsChapterVC animated:YES completion:nil];
+}
+
+#pragma mark - Sounds
+
+-(void)playBackSound {
+    [self.playerBackSound play];
+}
+
+-(void)playButtonSound {
+    [self.playerButtonPressed stop];
+    self.playerButtonPressed.currentTime = 0;
+    [self.playerButtonPressed play];
+}
+
+-(void)stopMusic
+{
+    if (self.player.volume > 0.0) {
+        self.player.volume = self.player.volume - 0.02;
+        [self performSelector:@selector(stopMusic) withObject:nil afterDelay:0.02];
+    } else {
+        // Stop and get the sound ready for playing again
+        [self.player stop];
+        [self.player prepareToPlay];
+        self.player.volume = 0.0;
+    }
+}
+
+-(void)fadeInMusic {
+    if (self.player.volume < 1.0) {
+        self.player.volume += 0.02;
+        [self performSelector:@selector(fadeInMusic) withObject:nil afterDelay:0.02];
+    }
 }
 
 #pragma mark - GameCenterDelegate
@@ -556,6 +527,23 @@
     //Save a key in FileSaver indicating that the user has removed the ads
     FileSaver *fileSaver = [[FileSaver alloc] init];
     [fileSaver setDictionary:@{@"UserRemovedAdsKey" : @YES} withName:@"UserRemovedAdsDic"];
+    
+    //Hidde the removed ads button
+    [UIView animateWithDuration:0.3
+                          delay:0.0
+                        options:UIViewAnimationOptionCurveEaseOut
+                     animations:^(){
+                         self.removeAdsButton.alpha = 0.0;
+                     } completion:^(BOOL finished){
+                         if (finished) {
+                             self.removeAdsButton.hidden = YES;
+                         }
+                     }];
+}
+
+-(void)playMusicNotificationReceived:(NSNotification *)notification {
+    [self.player play];
+    [self fadeInMusic];
 }
 
 /*-(void)firsTimeTutorialNotificationReceived:(NSNotification *)notification {

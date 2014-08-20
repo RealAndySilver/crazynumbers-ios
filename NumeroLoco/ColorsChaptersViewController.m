@@ -12,12 +12,16 @@
 #import "AppInfo.h"
 #import "FileSaver.h"
 #import "MultiplayerWinAlert.h"
+#import "AudioPlayer.h"
+@import AVFoundation;
 
 @interface ColorsChaptersViewController () <UICollectionViewDataSource, UICollectionViewDelegate, ChaptersCellDelegate, MultiplayerWinAlertDelegate>
 @property (strong, nonatomic) UICollectionView *collectionView;
 @property (strong, nonatomic) NSArray *chaptersNamesArray;
 @property (strong, nonatomic) UIPageControl *pageControl;
 @property (strong, nonatomic) NSArray *colorGamesFinishedArray;
+@property (strong, nonatomic) AVAudioPlayer *backSoundPlayer;
+@property (strong, nonatomic) AVAudioPlayer *buttonPressedPlayer;
 @end
 
 @implementation ColorsChaptersViewController {
@@ -60,6 +64,7 @@
     self.automaticallyAdjustsScrollViewInsets = NO;
     screenBounds = [UIScreen mainScreen].bounds;
     [self setupUI];
+    [self setupSounds];
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -74,6 +79,20 @@
                          self.collectionView.transform = CGAffineTransformMakeTranslation(-(screenBounds.size.width + 200.0), 0.0);
                      } completion:^(BOOL finished){}];
 
+}
+
+-(void)setupSounds {
+    NSString *soundFilePath = [[NSBundle mainBundle] pathForResource:@"buttonpress" ofType:@"wav"];
+    NSURL *soundFIleURL = [NSURL URLWithString:soundFilePath];
+    self.buttonPressedPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:soundFIleURL error:nil];
+    [self.buttonPressedPlayer prepareToPlay];
+    
+    soundFilePath = nil;
+    soundFilePath = [[NSBundle mainBundle] pathForResource:@"back" ofType:@"wav"];
+    soundFIleURL = nil;
+    soundFIleURL = [NSURL URLWithString:soundFilePath];
+    self.backSoundPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:soundFIleURL error:nil];
+    [self.backSoundPlayer prepareToPlay];
 }
 
 -(void)setupUI {
@@ -204,11 +223,25 @@
     return cell;
 }
 
-#pragma mark - UICollectionViewDelegate
+#pragma mark - Sounds
+
+-(void)playButtonPressedSound {
+    [self.buttonPressedPlayer stop];
+    self.buttonPressedPlayer.currentTime = 0;
+    [self.buttonPressedPlayer play];
+}
+
+-(void)playBackSound {
+    [self.backSoundPlayer stop];
+    self.backSoundPlayer.currentTime = 0;
+    [self.backSoundPlayer play];
+}
 
 #pragma mark - Actions 
 
 -(void)dismissVC {
+    [[AudioPlayer sharedInstance] playBackSound];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"PlayMusicNotification" object:nil];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -296,6 +329,8 @@
 #pragma mark - ChaptersCellDelegate
 
 -(void)chaptersCellDidSelectGame:(NSUInteger)game {
+    [self playButtonPressedSound];
+    
     BOOL userCanPlayGame = [self checkIfUserCanPlayGame:game + 1 inChapter:self.pageControl.currentPage];
     NSLog(@"Se seleccionó el juego %d", game);
     if (userCanPlayGame) {

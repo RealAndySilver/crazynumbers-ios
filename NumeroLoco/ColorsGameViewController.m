@@ -19,6 +19,8 @@
 #import "ChallengeFriendsViewController.h"
 #import "Score+AddOns.h"
 #import "AllGamesFinishedView.h"
+#import "AudioPlayer.h"
+@import AVFoundation;
 
 @interface ColorsGameViewController () <ColorPatternViewDelegate, GameWonAlertDelegate, AllGamesFinishedViewDelegate>
 @property (strong, nonatomic) NSMutableArray *columnsButtonsArray; //Of UIButton
@@ -32,10 +34,16 @@
 @property (strong, nonatomic) UIView *opacityView;
 @property (strong, nonatomic) NSTimer *gameTimer;
 @property (strong, nonatomic) UILabel *maxScoreLabel;
+@property (strong, nonatomic) UIButton *resetButton;
 
 //CoreData
 @property (strong, nonatomic) UIManagedDocument *databaseDocument;
 @property (strong, nonatomic) NSURL *databaseDocumentURL;
+
+@property (strong, nonatomic) AVAudioPlayer *playerGameWon;
+@property (strong, nonatomic) AVAudioPlayer *playerButtonPressed;
+@property (strong, nonatomic) AVAudioPlayer *playerGameRestarted;
+@property (strong, nonatomic) AVAudioPlayer *playerBackButton;
 
 @end
 
@@ -117,6 +125,7 @@
     
     //[self createSquareMatrixOf:matrixSize];
     [self initGame];
+    [self configureSounds];
 }
 
 -(void)viewDidAppear:(BOOL)animated {
@@ -135,6 +144,36 @@
     [super viewDidDisappear:animated];
     [FlurryAds removeAdFromSpace:@"GAME_TOP_BANNER"];
     [FlurryAds setAdDelegate:nil];
+}
+
+-(void)configureSounds {
+    NSString *soundFilePath = [[NSBundle mainBundle] pathForResource:@"win" ofType:@"wav"];
+    NSURL *url = [NSURL URLWithString:soundFilePath];
+    self.playerGameWon = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:nil];
+    [self.playerGameWon prepareToPlay];
+    
+    soundFilePath = nil;
+    soundFilePath = [[NSBundle mainBundle] pathForResource:@"restartnuevo" ofType:@"wav"];
+    url = nil;
+    url = [NSURL URLWithString:soundFilePath];
+    self.playerGameRestarted = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:nil];
+    self.playerGameRestarted.volume = 1.0;
+    [self.playerGameRestarted prepareToPlay];
+    
+    soundFilePath = nil;
+    soundFilePath = [[NSBundle mainBundle] pathForResource:@"press" ofType:@"wav"];
+    url = nil;
+    url = [NSURL URLWithString:soundFilePath];
+    self.playerButtonPressed = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:nil];
+    self.playerButtonPressed.volume = 0.3;
+    [self.playerButtonPressed prepareToPlay];
+    
+    soundFilePath = nil;
+    soundFilePath = [[NSBundle mainBundle] pathForResource:@"back" ofType:@"wav"];
+    url = nil;
+    url = [NSURL URLWithString:soundFilePath];
+    self.playerBackButton = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:nil];
+    [self.playerBackButton prepareToPlay];
 }
 
 -(void)setupUI {
@@ -183,16 +222,16 @@
     [self.view addSubview:backButton];
     
     //Reset Button
-    UIButton *resetButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    resetButton.frame = CGRectMake(screenBounds.size.width - 70, screenBounds.size.height - 50.0, 60.0, 40.0);
-    resetButton.layer.cornerRadius = 10.0;
-    resetButton.layer.borderColor = [UIColor lightGrayColor].CGColor;
-    resetButton.layer.borderWidth = 1.0;
-    [resetButton setTitle:@"Restart" forState:UIControlStateNormal];
-    [resetButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
-    resetButton.titleLabel.font = [UIFont fontWithName:FONT_NAME size:15.0];
-    [resetButton addTarget:self action:@selector(initGame) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:resetButton];
+    self.resetButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    self.resetButton.frame = CGRectMake(screenBounds.size.width - 70, screenBounds.size.height - 50.0, 60.0, 40.0);
+    self.resetButton.layer.cornerRadius = 10.0;
+    self.resetButton.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    self.resetButton.layer.borderWidth = 1.0;
+    [self.resetButton setTitle:@"Restart" forState:UIControlStateNormal];
+    [self.resetButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+    self.resetButton.titleLabel.font = [UIFont fontWithName:FONT_NAME size:15.0];
+    [self.resetButton addTarget:self action:@selector(restartGame) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:self.resetButton];
     
     //Color patern button
     UIButton *colorPattern = [UIButton buttonWithType:UIButtonTypeSystem];
@@ -229,6 +268,17 @@
 }
 
 #pragma mark - Custom Methods
+
+-(void)restartGame {
+    self.resetButton.userInteractionEnabled = NO;
+    [self performSelector:@selector(enableResetButton) withObject:nil afterDelay:1.0];
+    [self.playerGameRestarted play];
+    [self initGame];
+}
+
+-(void)enableResetButton {
+    self.resetButton.userInteractionEnabled = YES;
+}
 
 -(void)resetGame {
     [self.gameTimer invalidate];
@@ -337,15 +387,16 @@
     NSString *buttonTitle = [self getNewValueForButton:self.columnsButtonsArray[column][row]];
     UIColor *buttonColor = [self getNewColorForButton:self.columnsButtonsArray[column][row]];
     
-    //[self.columnsButtonsArray[column][row] setTitle:buttonTitle forState:UIControlStateNormal];
-    [self.columnsButtonsArray[column][row] setBackgroundColor:buttonColor];
-    
+    //[self.columnsButtonsArray[column][row] setTitle:buttonTitle forState:UIControlStateNormal]
+    UIButton *button = self.columnsButtonsArray[column][row];
+    button.backgroundColor = buttonColor;
     if (row + 1 < matrixSize) {
         //Down Button
         buttonTitle = [self getNewValueForButton:self.columnsButtonsArray[column][row + 1]];
         buttonColor = [self getNewColorForButton:self.columnsButtonsArray[column][row + 1]];
         //[self.columnsButtonsArray[column][row + 1] setTitle:buttonTitle forState:UIControlStateNormal];
-        [self.columnsButtonsArray[column][row + 1] setBackgroundColor:buttonColor];
+        UIButton *button = self.columnsButtonsArray[column][row + 1];
+        button.backgroundColor = buttonColor;
     }
     
     if (row - 1 >= 0) {
@@ -354,7 +405,8 @@
         buttonColor = [self getNewColorForButton:self.columnsButtonsArray[column][row - 1]];
 
         //[self.columnsButtonsArray[column][row - 1] setTitle:buttonTitle forState:UIControlStateNormal];
-        [self.columnsButtonsArray[column][row - 1] setBackgroundColor:buttonColor];
+        UIButton *button = self.columnsButtonsArray[column][row - 1];
+        button.backgroundColor = buttonColor;
     }
     
     if (column - 1 >= 0) {
@@ -363,7 +415,8 @@
         buttonColor = [self getNewColorForButton:self.columnsButtonsArray[column - 1][row]];
 
         //[self.columnsButtonsArray[column - 1][row] setTitle:buttonTitle forState:UIControlStateNormal];
-        [self.columnsButtonsArray[column - 1][row] setBackgroundColor:buttonColor];
+        UIButton *button = self.columnsButtonsArray[column - 1][row];
+        button.backgroundColor = buttonColor;
     }
     
     if (column + 1 < matrixSize) {
@@ -372,7 +425,8 @@
         buttonColor = [self getNewColorForButton:self.columnsButtonsArray[column + 1][row]];
         
         //[self.columnsButtonsArray[column + 1][row] setTitle:buttonTitle forState:UIControlStateNormal];
-        [self.columnsButtonsArray[column + 1][row] setBackgroundColor:buttonColor];
+        UIButton *button = self.columnsButtonsArray[column + 1][row];
+        button.backgroundColor = buttonColor;
     }
 }
 
@@ -480,6 +534,9 @@
 }
 
 -(void)numberButtonPressed:(UIButton *)numberButton {
+    //Play sound
+    [self playButtonPressedSound];
+    
     NSLog(@"Oprimí el boton con tag %d", numberButton.tag);
     NSUInteger index = numberButton.tag - 1000;
     NSInteger column = index / matrixSize;
@@ -489,7 +546,7 @@
     //[self.columnsButtonsArray[column][row] setTitle:buttonTitle forState:UIControlStateNormal];
     
     UIColor *buttonColor = [self substractColorForButton:self.columnsButtonsArray[column][row]];
-    [self.columnsButtonsArray[column][row] setBackgroundColor:buttonColor];
+    [(UIButton *)self.columnsButtonsArray[column][row] setBackgroundColor:buttonColor];
     
     if (row + 1 < matrixSize) {
         //Down Button
@@ -497,7 +554,7 @@
         //[self.columnsButtonsArray[column][row + 1] setTitle:buttonTitle forState:UIControlStateNormal];
         
         buttonColor = [self substractColorForButton:self.columnsButtonsArray[column][row + 1]];
-        [self.columnsButtonsArray[column][row + 1] setBackgroundColor:buttonColor];
+        [(UIButton *)self.columnsButtonsArray[column][row + 1] setBackgroundColor:buttonColor];
     }
     
     if (row - 1 >= 0) {
@@ -506,7 +563,7 @@
         //[self.columnsButtonsArray[column][row - 1] setTitle:buttonTitle forState:UIControlStateNormal];
         
         buttonColor = [self substractColorForButton:self.columnsButtonsArray[column][row - 1]];
-        [self.columnsButtonsArray[column][row - 1] setBackgroundColor:buttonColor];
+        [(UIButton *)self.columnsButtonsArray[column][row - 1] setBackgroundColor:buttonColor];
     }
     
     if (column - 1 >= 0) {
@@ -515,7 +572,7 @@
         //[self.columnsButtonsArray[column - 1][row] setTitle:buttonTitle forState:UIControlStateNormal];
         
         buttonColor = [self substractColorForButton:self.columnsButtonsArray[column - 1][row]];
-        [self.columnsButtonsArray[column - 1][row] setBackgroundColor:buttonColor];
+        [(UIButton *)self.columnsButtonsArray[column - 1][row] setBackgroundColor:buttonColor];
     }
     
     if (column + 1 < matrixSize) {
@@ -524,7 +581,7 @@
         //[self.columnsButtonsArray[column + 1][row] setTitle:buttonTitle forState:UIControlStateNormal];
         
         buttonColor = [self substractColorForButton:self.columnsButtonsArray[column + 1][row]];
-        [self.columnsButtonsArray[column + 1][row] setBackgroundColor:buttonColor];
+        [(UIButton *)self.columnsButtonsArray[column + 1][row] setBackgroundColor:buttonColor];
     }
     numberOfTaps += 1;
     [self checkIfUserWon];
@@ -541,7 +598,7 @@
 -(void)checkIfUserWon {
     for (int i = 0; i < matrixSize; i++) {
         for (int j = 0; j < matrixSize; j++) {
-            if (![[self.columnsButtonsArray[i][j] backgroundColor] isEqual:[UIColor whiteColor]]) {
+            if (![((UIButton *)[self.columnsButtonsArray[i][j] backgroundColor]) isEqual:[UIColor whiteColor]]) {
                 return;
             }
         }
@@ -675,6 +732,8 @@
         }
     }
     
+    [self playWinSound];
+    
     NSString *winMessage = [NSString stringWithFormat:@"You finished the game in %0.1f seconds. you scored %d points", timeElapsed, [self pointsWonForTime:timeElapsed]];
     GameWonAlert *gameWonAlert = [[GameWonAlert alloc] initWithFrame:CGRectMake(self.view.bounds.size.width/2.0 - 125.0, self.view.bounds.size.height/2.0 - 200.0, 250.0, 400.0)];
     gameWonAlert.message = winMessage;
@@ -685,7 +744,18 @@
     //[self performSelector:@selector(prepareNextGame) withObject:nil afterDelay:2.5];
 }
 
+-(void)playButtonPressedSound {
+    [self.playerButtonPressed stop];
+    self.playerButtonPressed.currentTime = 0;
+    [self.playerButtonPressed play];
+}
+
+-(void)playWinSound {
+    [self.playerGameWon play];
+}
+
 -(void)dismissVC {
+    [[AudioPlayer sharedInstance] playBackSound];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -720,10 +790,12 @@
 #pragma mark - Social Stuff
 
 -(void)challengeFriends {
-    ChallengeFriendsViewController *challengeFriendsVC = [self.storyboard instantiateViewControllerWithIdentifier:@"ChallengeFriends"];
+    /*ChallengeFriendsViewController *challengeFriendsVC = [self.storyboard instantiateViewControllerWithIdentifier:@"ChallengeFriends"];
     if (isPad) challengeFriendsVC.modalPresentationStyle = UIModalPresentationFormSheet;
     challengeFriendsVC.score = [self pointsWonForTime:timeElapsed];
-    [self presentViewController:challengeFriendsVC animated:YES completion:nil];
+    [self presentViewController:challengeFriendsVC animated:YES completion:nil];*/
+    
+    [[GameKitHelper sharedGameKitHelper] sendScoreChallengeToPlayers:nil withScore:[self pointsWonForTime:timeElapsed] message:nil];
 }
 
 -(void)shareScoreOnSocialNetwork:(NSString *)socialNetwork {

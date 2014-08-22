@@ -21,9 +21,14 @@
 #import "AllGamesFinishedView.h"
 #import "AudioPlayer.h"
 #import "NoTouchesAlertView.h"
+#import "MBProgressHUD.h"
+#import "CPIAPHelper.h"
+#import "IAPProduct.h"
+#import "BuyTouchesView.h"
+#import "TouchesObject.h"
 @import AVFoundation;
 
-@interface ColorsGameViewController () <ColorPatternViewDelegate, GameWonAlertDelegate, AllGamesFinishedViewDelegate, NoTouchesAlertDelegate>
+@interface ColorsGameViewController () <ColorPatternViewDelegate, GameWonAlertDelegate, AllGamesFinishedViewDelegate, NoTouchesAlertDelegate, BuyTouchesViewDelegate>
 @property (strong, nonatomic) NSMutableArray *columnsButtonsArray; //Of UIButton
 @property (strong, nonatomic) UIView *buttonsContainerView;
 @property (strong, nonatomic) UILabel *numberOfTapsLabel;
@@ -37,6 +42,7 @@
 @property (strong, nonatomic) UILabel *maxScoreLabel;
 @property (strong, nonatomic) UIButton *resetButton;
 @property (strong, nonatomic) UILabel *touchesAvailableLabel;
+@property (strong, nonatomic) NSNumberFormatter *purchasesPriceFormatter;
 
 //CoreData
 @property (strong, nonatomic) UIManagedDocument *databaseDocument;
@@ -58,7 +64,12 @@
     NSUInteger matrixSize;
     NSUInteger maxNumber;
     NSUInteger numberOfChapters;
-    NSUInteger touchesAvailable;
+    NSUInteger bestTapCount;
+    NSUInteger bestTapsScore;
+    NSUInteger bestTimeScore;
+    NSUInteger bestTime;
+    NSUInteger pointsWon;
+    NSUInteger pointsForBestScore;
     BOOL isPad;
     float maxScore;
     float maxTime;
@@ -67,6 +78,15 @@
 }
 
 #pragma mark - Lazy Instantiation
+
+-(NSNumberFormatter *)purchasesPriceFormatter {
+    if (!_purchasesPriceFormatter) {
+        _purchasesPriceFormatter = [[NSNumberFormatter alloc] init];
+        _purchasesPriceFormatter.formatterBehavior = NSNumberFormatterBehavior10_4;
+        _purchasesPriceFormatter.numberStyle = NSNumberFormatterCurrencyStyle;
+    }
+    return _purchasesPriceFormatter;
+}
 
 -(NSURL *)databaseDocumentURL {
     if (!_databaseDocumentURL) {
@@ -118,7 +138,7 @@
     matrixSize = [chaptersDataArray[self.selectedChapter][self.selectedGame][@"matrixSize"] intValue];
     maxNumber = [chaptersDataArray[self.selectedChapter][self.selectedGame][@"maxNumber"] intValue];
     numberOfChapters = [chaptersDataArray count];
-    touchesAvailable = [[[NSUserDefaults standardUserDefaults] valueForKey:@"Touches"] intValue];
+    [TouchesObject sharedInstance].totalTouches = [[[NSUserDefaults standardUserDefaults] valueForKey:@"Touches"] intValue];
     
     [self openCoreDataDocument];
     
@@ -131,7 +151,16 @@
     [self initGame];
     [self configureSounds];
     
-    if (touchesAvailable == 0) [self disableButtons];
+    if ([TouchesObject sharedInstance].totalTouches == 0) [self disableButtons];
+}
+
+-(void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    //Register for the notification center
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(newTouchesNotificationReceived:)
+                                                 name:@"NewTouchesAvailable"
+                                               object:nil];
 }
 
 -(void)viewDidAppear:(BOOL)animated {
@@ -146,7 +175,7 @@
     }
     
     //Check number of touches available
-    if (touchesAvailable == 0) {
+    if ([TouchesObject sharedInstance].totalTouches == 0) {
         NoTouchesAlertView *noTouchesAlert = [[NoTouchesAlertView alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 140.0, screenBounds.size.height/2.0 - 100.0, 280.0, 200.0)];
         noTouchesAlert.delegate = self;
         [noTouchesAlert showInView:self.view];
@@ -155,6 +184,7 @@
 
 -(void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     [FlurryAds removeAdFromSpace:@"GAME_TOP_BANNER"];
     [FlurryAds setAdDelegate:nil];
 }
@@ -281,7 +311,7 @@
     
     //Touches available label
     self.touchesAvailableLabel = [[UILabel alloc] initWithFrame:CGRectOffset(self.maxScoreLabel.frame, 0.0, -(self.maxScoreLabel.frame.size.height + 10.0))];
-    self.touchesAvailableLabel.text = [NSString stringWithFormat:@"Touches left: %d", touchesAvailable];
+    self.touchesAvailableLabel.text = [NSString stringWithFormat:@"Touches left: %d", [TouchesObject sharedInstance].totalTouches];
     self.touchesAvailableLabel.font = [UIFont fontWithName:FONT_NAME size:15.0];
     self.touchesAvailableLabel.textColor = [UIColor lightGrayColor];
     self.touchesAvailableLabel.layer.cornerRadius = 10.0;
@@ -289,9 +319,28 @@
     self.touchesAvailableLabel.layer.borderColor = [UIColor lightGrayColor].CGColor;
     self.touchesAvailableLabel.textAlignment = NSTextAlignmentCenter;
     [self.view addSubview:self.touchesAvailableLabel];
+    
+    //Buy button
+    UIButton *buyButton = [[UIButton alloc] initWithFrame:CGRectOffset(backButton.frame, 0.0, -(backButton.frame.size.height + 10.0))];
+    [buyButton setTitle:@"Buy" forState:UIControlStateNormal];
+    [buyButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+    buyButton.titleLabel.font = [UIFont fontWithName:FONT_NAME size:15.0];
+    buyButton.layer.cornerRadius = 10.0;
+    buyButton.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    buyButton.layer.borderWidth = 1.0;
+    [buyButton addTarget:self action:@selector(getPricesForPurchases) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:buyButton];
 }
 
 #pragma mark - Custom Methods
+
+-(void)enableButtons {
+    for (int i = 0; i < [self.buttonsContainerView.subviews count]; i++) {
+        UIButton *numberButton = self.buttonsContainerView.subviews[i];
+        numberButton.userInteractionEnabled = YES;
+        numberButton.alpha = 1.0;
+    }
+}
 
 -(void)disableButtons {
     for (int i = 0; i < [self.buttonsContainerView.subviews count]; i++) {
@@ -338,8 +387,17 @@
     maxNumber = [chaptersDataArray[self.selectedChapter][self.selectedGame][@"maxNumber"] intValue];
     maxScore = [chaptersDataArray[self.selectedChapter][self.selectedGame][@"maxScore"] floatValue];
     maxTime = [chaptersDataArray[self.selectedChapter][self.selectedGame][@"maxTime"] floatValue];
+    bestTapCount = [chaptersDataArray[self.selectedChapter][self.selectedGame][@"puntos"] count];
+    bestTapsScore = bestTapCount * 100;
+    bestTimeScore = bestTapsScore/2;
+    maxScore = bestTapsScore + bestTimeScore;
+    NSLog(@"******* %lu ----- %lu *********", (unsigned long)bestTapsScore, (unsigned long)bestTimeScore);
     timeElapsed = 0;
-    self.maxScoreLabel.text = [NSString stringWithFormat:@"Best Score: %d/%d", [self getScoredStoredInCoreData], (int)maxScore];
+    self.maxScoreLabel.text = [NSString stringWithFormat:@"Best Score: %lu/%d", (unsigned long)[self getScoredStoredInCoreData], (int)maxScore];
+    
+    bestTime = [chaptersDataArray[self.selectedChapter][self.selectedGame][@"bestTime"] intValue];
+    float pointsAtBestTime = [self pointsWonForTime:(float)bestTime];
+    pointsForBestScore = bestTimeScore - pointsAtBestTime;
     
     //Set the new color palette to use
     self.colorPaletteArray = [[AppInfo sharedInstance] arrayOfChaptersColorsArray][self.selectedChapter];
@@ -396,7 +454,7 @@
     }
     
     //Check if user dont have touches available
-    if (touchesAvailable == 0) [self disableButtons];
+    if ([TouchesObject sharedInstance].totalTouches == 0) [self disableButtons];
 }
 
 -(void)initGame {
@@ -624,19 +682,31 @@
         [(UIButton *)self.columnsButtonsArray[column + 1][row] setBackgroundColor:buttonColor];
     }
     numberOfTaps += 1;
-    touchesAvailable --;
-    self.touchesAvailableLabel.text = [NSString stringWithFormat:@"Touches left: %d", touchesAvailable];
+    [TouchesObject sharedInstance].totalTouches--;
+    self.touchesAvailableLabel.text = [NSString stringWithFormat:@"Touches left: %d", [TouchesObject sharedInstance].totalTouches];
     
-    if (touchesAvailable == 0) {
+    if ([TouchesObject sharedInstance].totalTouches == 0) {
         //Show alert
         NoTouchesAlertView *noTouchesAlert = [[NoTouchesAlertView alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 140.0, screenBounds.size.height/2.0 - 100.0, 280.0, 200.0)];
         noTouchesAlert.delegate = self;
         [noTouchesAlert showInView:self.view];
         
         [self disableButtons];
+        [self saveCurrentDateInUserDefaults];
     }
 
     [self checkIfUserWon];
+}
+
+-(void)saveCurrentDateInUserDefaults {
+    NSLog(@"Fecha actual: %@", [NSDate date]);
+    [[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:@"NoTouchesDate"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+-(void)removeSavedDateInUserDefaults {
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"NoTouchesDate"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 -(void)updateUI {
@@ -655,9 +725,22 @@
             }
         }
     }
-    //Get Points won
-    NSUInteger pointsWon = [self pointsWonForTime:timeElapsed];
-    NSLog(@"Point Woooon %d", pointsWon);
+    //User Won
+    //Get Points Won
+    //Taps points
+    NSUInteger tapPointsWon = [self pointsWonForTaps:numberOfTaps];
+    NSLog(@"Puntos ganadoooooooossssss: %lu", (unsigned long)tapPointsWon);
+    
+    //Bonus time points
+    NSUInteger bonusPointsWon = [self pointsWonForTime:timeElapsed] + pointsForBestScore;
+    if (bonusPointsWon > bestTimeScore) bonusPointsWon = bestTimeScore;
+    
+    pointsWon = tapPointsWon + bonusPointsWon;
+    NSLog(@"################################################################################");
+    NSLog(@"Puntos ganados por taps: %lu", (unsigned long)tapPointsWon);
+    NSLog(@"Puntos ganados por tiempo: %lu", (unsigned long)bonusPointsWon);
+    NSLog(@"Puntos totales ganados: %lu", (unsigned long)pointsWon);
+
     
     //Cancel timer
     [self.gameTimer invalidate];
@@ -666,20 +749,22 @@
     //[self userWon];
     [self performSelector:@selector(userWon) withObject:nil afterDelay:0.3];}
 
+-(NSUInteger)pointsWonForTaps:(NSUInteger)tapsMade {
+    float points = 0;
+    points = (bestTapCount * bestTapsScore)/tapsMade;
+    return (int)points;
+}
+
 -(NSUInteger)pointsWonForTime:(float)time {
-    float pointsWon = 0;
-    NSLog(@"*********** Max Time: %f", maxTime);
-    NSLog(@"*********** Max Score: %f", maxScore);
-    NSLog(@"*********** Time Elapsed: %f", time);
-    //pointsWon = 1/((1/maxTime)*time - 1) + (float)maxScore;
-    float pendiente = (0 - maxScore) / (maxTime - 0);
-    NSLog(@"********** Pendiente: %f", pendiente);
-    pointsWon = pendiente * time + maxScore;
+    float points = 0;
+    float pendiente = (0 - (float)bestTimeScore) / (maxTime - 0);
+    NSLog(@"********** formula para los puntos de tiempo: %f * %f + %lu", pendiente, time, (unsigned long)bestTimeScore);
+    points = pendiente * time + bestTimeScore;
     
-    if (pointsWon < 0) {
-        pointsWon = 0;
+    if (points < 0) {
+        points = 0;
     }
-    return (int)pointsWon;
+    return (int)points;
 }
 
 -(void)showFlurryAds {
@@ -706,7 +791,7 @@
 }
 
 -(void)userWon {
-    BOOL scoreWasImproved = [self checkIfScoredWasImprovedInCoreDataWithNewScore:[self pointsWonForTime:timeElapsed]];
+    BOOL scoreWasImproved = [self checkIfScoredWasImprovedInCoreDataWithNewScore:pointsWon];
     
     //Send data to Flurry
     [Flurry logEvent:@"ColorsGameWon" withParameters:@{@"Chapter" : @(self.selectedChapter), @"Game" : @(self.selectedGame)}];
@@ -787,16 +872,21 @@
     [self playWinSound];
     
     //Synchronize touches left in User Defaults
-    [self saveTouchesLeftInUserDefaults:touchesAvailable];
+    [self saveTouchesLeftInUserDefaults:[TouchesObject sharedInstance].totalTouches];
     
-    NSString *winMessage = [NSString stringWithFormat:@"You finished the game in %0.1f seconds. you scored %d points", timeElapsed, [self pointsWonForTime:timeElapsed]];
-    GameWonAlert *gameWonAlert = [[GameWonAlert alloc] initWithFrame:CGRectMake(self.view.bounds.size.width/2.0 - 125.0, self.view.bounds.size.height/2.0 - 200.0, 250.0, 400.0)];
-    gameWonAlert.message = winMessage;
+    GameWonAlert *gameWonAlert = [[GameWonAlert alloc] initWithFrame:CGRectMake(20.0, 20.0, screenBounds.size.width - 40.0, screenBounds.size.height - 40.0)];
     gameWonAlert.delegate = self;
+    gameWonAlert.touchesMade = numberOfTaps;
+    gameWonAlert.touchesForBestScore = bestTapCount;
+    gameWonAlert.touchesScore = [self pointsWonForTaps:numberOfTaps];
+    gameWonAlert.maxTouchesScore = bestTapsScore;
+    gameWonAlert.timeUsed = timeElapsed;
+    gameWonAlert.timeForBestScore = bestTime;
+    NSUInteger bonusPointsWon = [self pointsWonForTime:timeElapsed] + pointsForBestScore;
+    if (bonusPointsWon > bestTimeScore) bonusPointsWon = bestTimeScore;
+    gameWonAlert.bonusScore = bonusPointsWon;
+    gameWonAlert.maxBonusScore = bestTimeScore;
     [gameWonAlert showAlertInView:self.view];
-    
-    //[GameWonAlert showInView:self.view];
-    //[self performSelector:@selector(prepareNextGame) withObject:nil afterDelay:2.5];
 }
 
 -(void)playButtonPressedSound {
@@ -811,7 +901,7 @@
 
 -(void)dismissVC {
     //Synchronize touches left in User Defaults
-    [self saveTouchesLeftInUserDefaults:touchesAvailable];
+    [self saveTouchesLeftInUserDefaults:[TouchesObject sharedInstance].totalTouches];
     
     [[AudioPlayer sharedInstance] playBackSound];
     [self dismissViewControllerAnimated:YES completion:nil];
@@ -986,11 +1076,50 @@
             gameIdentifier = @((9*(self.selectedChapter)) + (self.selectedGame + 1));
         }
         NSLog(@"Game Identifier: %@", gameIdentifier);
-        [Score scoreWithIdentifier:gameIdentifier type:@"colors" value:@([self pointsWonForTime:timeElapsed]) inManagedObjectContext:context];
+        [Score scoreWithIdentifier:gameIdentifier type:@"colors" value:@(pointsWon) inManagedObjectContext:context];
         
     } else {
         //Error in the document state, alert the user.
     }
+}
+
+#pragma mark - Buying stuff
+
+-(void)getPricesForPurchases {
+    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    [[CPIAPHelper sharedInstance] requestProductsWithCompletionHandler:^(BOOL success, NSArray *products){
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+        if (success) {
+            NSMutableDictionary *pricesDic = [[NSMutableDictionary alloc] init];
+            for (int i = 0; i < [products count]; i++) {
+                IAPProduct *product = products[i];
+                self.purchasesPriceFormatter.locale = product.skProduct.priceLocale;
+                if ([product.productIdentifier isEqualToString:@"com.iamstudio.cross.threehundredtouches"]) {
+                    NSString *price = [self.purchasesPriceFormatter stringFromNumber:product.skProduct.price];
+                    [pricesDic setObject:price forKey:@"threehundredprice"];
+                    
+                } else if ([product.productIdentifier isEqualToString:@"com.iamstudio.cross.sevenhundredtouches"]) {
+                    NSString *price = [self.purchasesPriceFormatter stringFromNumber:product.skProduct.price];
+                    [pricesDic setObject:price forKey:@"sevenhundredprice"];
+                    
+                } else if ([product.productIdentifier isEqualToString:@"com.iamstudio.cross.twothousandtouches"]) {
+                    NSString *price = [self.purchasesPriceFormatter stringFromNumber:product.skProduct.price];
+                    [pricesDic setObject:price forKey:@"twothousandprice"];
+                    
+                } else if ([product.productIdentifier isEqualToString:@"com.iamstudio.cross.infinitemode"]) {
+                    NSString *price = [self.purchasesPriceFormatter stringFromNumber:product.skProduct.price];
+                    [pricesDic setObject:price forKey:@"infinitemode"];
+                }
+            }
+            [self showBuyTouchesViewUsingPricesDic:pricesDic];
+        }
+    }];
+}
+
+-(void)showBuyTouchesViewUsingPricesDic:(NSDictionary *)pricesDic {
+    BuyTouchesView *buyTouchesView = [[BuyTouchesView alloc] initWithFrame:CGRectMake(20.0, 20.0, screenBounds.size.width - 40.0, screenBounds.size.height - 40.0) pricesDic:pricesDic];
+    buyTouchesView.delegate = self;
+    [buyTouchesView showInView:self.view];
 }
 
 #pragma mark - GameWonAlert
@@ -1061,11 +1190,37 @@ interstitial {
 }
 
 -(void)buyTouchesButtonPressedInAlert:(NoTouchesAlertView *)noTouchesAlert {
-    
+    [self getPricesForPurchases];
 }
 
 -(void)noTouchesAlertDidDissapear:(NoTouchesAlertView *)noTouchesAlert {
     noTouchesAlert = nil;
+}
+
+#pragma mark - BuyTouchesViewDelegate
+
+-(void)buyTouchesViewDidDisappear:(BuyTouchesView *)buyTouchesView {
+    buyTouchesView = nil;
+}
+
+-(void)closeButtonPressedInView:(BuyTouchesView *)buyTouchesView {
+    
+}
+
+-(void)moreTouchesBought:(NSUInteger)totalTouchesAvailable inView:(BuyTouchesView *)buyTouchesView {
+    [TouchesObject sharedInstance].totalTouches = totalTouchesAvailable;
+    self.touchesAvailableLabel.text = [NSString stringWithFormat:@"Touches left: %d", [TouchesObject sharedInstance].totalTouches];
+    [self enableButtons];
+    
+    //Remove the date when there was no touches left
+    [self removeSavedDateInUserDefaults];
+}
+
+#pragma mark - Notification Handlers
+
+-(void)newTouchesNotificationReceived:(NSNotification *)notification {
+    [self enableButtons];
+    self.touchesAvailableLabel.text = [NSString stringWithFormat:@"Touches left: %d", [TouchesObject sharedInstance].totalTouches];
 }
 
 @end

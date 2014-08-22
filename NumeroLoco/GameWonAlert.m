@@ -12,7 +12,16 @@
 @interface GameWonAlert()
 @property (strong, nonatomic) UILabel *detailLabel;
 @property (strong, nonatomic) UIView *opacityView;
+@property (strong, nonatomic) UILabel *touchesMadeLabel;
+@property (strong, nonatomic) UILabel *touchesBestScoreLabel;
+@property (strong, nonatomic) UILabel *scoreLabel;
+@property (strong, nonatomic) UILabel *timeSpentLabel;
+@property (strong, nonatomic) UILabel *idealTimeLabel;
+@property (strong, nonatomic) UILabel *bonusScoreLabel;
+@property (strong, nonatomic) UILabel *bigScoreLabel;
 @end
+
+#define FONT_NAME @"HelveticaNeue-Light"
 
 @implementation GameWonAlert
 
@@ -21,6 +30,52 @@
 -(void)setMessage:(NSString *)message {
     _message = message;
     self.detailLabel.text = message;
+}
+
+-(void)setTouchesMade:(NSUInteger)touchesMade {
+    _touchesMade = touchesMade;
+    self.touchesMadeLabel.text = [NSString stringWithFormat:@"Touches made: %lu", (unsigned long)touchesMade];
+}
+
+-(void)setTouchesForBestScore:(NSUInteger)touchesForBestScore {
+    _touchesForBestScore = touchesForBestScore;
+    self.touchesBestScoreLabel.text = [NSString stringWithFormat:@"Ideal touches: %lu", (unsigned long)touchesForBestScore];
+}
+
+-(void)setTouchesScore:(NSUInteger)touchesScore {
+    _touchesScore = touchesScore;
+    self.scoreLabel.text = [NSString stringWithFormat:@"Score: %lu/%d", (unsigned long)touchesScore, self.maxTouchesScore];
+}
+
+-(void)setMaxTouchesScore:(NSUInteger)maxTouchesScore {
+    _maxTouchesScore = maxTouchesScore;
+    self.scoreLabel.text = [NSString stringWithFormat:@"Score: %d/%lu", self.touchesScore, (unsigned long)maxTouchesScore];
+}
+
+-(void)setTimeUsed:(float)timeUsed {
+    _timeUsed = timeUsed;
+    self.timeSpentLabel.text = [NSString stringWithFormat:@"Time Spent: %.1fs", timeUsed];
+}
+
+-(void)setTimeForBestScore:(float)timeForBestScore {
+    _timeForBestScore = timeForBestScore;
+    self.idealTimeLabel.text = [NSString stringWithFormat:@"Ideal time: %.1fs", timeForBestScore];
+}
+
+-(void)setBonusScore:(NSUInteger)bonusScore {
+    _bonusScore = bonusScore;
+    self.bonusScoreLabel.text = [NSString stringWithFormat:@"Time Bonus Score: %lu/%d", (unsigned long)bonusScore, self.maxBonusScore];
+}
+
+-(void)setMaxBonusScore:(NSUInteger)maxBonusScore {
+    _maxBonusScore = maxBonusScore;
+    self.bonusScoreLabel.text = [NSString stringWithFormat:@"Time Bonus Score: %d/%lu", self.bonusScore, (unsigned long)maxBonusScore];
+    [self setTotalScoreLabel];
+}
+
+-(void)setTotalScoreLabel {
+    self.bigScoreLabel.text = [NSString stringWithFormat:@"%lu/%lu", (unsigned long)(self.touchesScore + self.bonusScore), (unsigned long)
+                               (self.maxTouchesScore + self.maxBonusScore)];
 }
 
 #pragma mark - Initialization Stuff
@@ -41,71 +96,115 @@
         titleLabel.text = @"Game Won!";
         titleLabel.textColor = [UIColor blackColor];
         titleLabel.textAlignment = NSTextAlignmentCenter;
-        titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:25.0];
+        titleLabel.font = [UIFont fontWithName:FONT_NAME size:25.0];
         [self addSubview:titleLabel];
         
-        //Detail Label
-        self.detailLabel = [[UILabel alloc] initWithFrame:CGRectMake(10.0, 80.0, frame.size.width - 20.0, 80.0)];
-        self.detailLabel.textColor = [UIColor lightGrayColor];
-        self.detailLabel.numberOfLines = 0;
-        self.detailLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:18.0];
-        self.detailLabel.textAlignment = NSTextAlignmentCenter;
-        [self addSubview:self.detailLabel];
+        //Touches made label
+        self.touchesMadeLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0, 80.0, frame.size.width - 40.0, 30.0)];
+        self.touchesMadeLabel.text = @"Touches made: 0";
+        self.touchesMadeLabel.textColor = [UIColor darkGrayColor];
+        self.touchesMadeLabel.font = [UIFont fontWithName:FONT_NAME size:20.0];
+        [self addSubview:self.touchesMadeLabel];
+        
+        //Touches for best score label
+        self.touchesBestScoreLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0, 110.0, frame.size.width - 40.0, 30.0)];
+        self.touchesBestScoreLabel.text = @"Ideal touches: 0";
+        self.touchesBestScoreLabel.textColor = [UIColor darkGrayColor];
+        self.touchesBestScoreLabel.font = [UIFont fontWithName:FONT_NAME size:20.0];
+        [self addSubview:self.touchesBestScoreLabel];
+        
+        //Black line view
+        UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(20.0, 140.0, frame.size.width - 40.0, 1.0)];
+        lineView.backgroundColor = [[AppInfo sharedInstance] appColorsArray][0];
+        [self addSubview:lineView];
+        
+        //Score label
+        self.scoreLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0, 140.0, frame.size.width - 40.0, 30.0)];
+        self.scoreLabel.text = @"Score: 0/0";
+        self.scoreLabel.textColor = [[AppInfo sharedInstance] appColorsArray][0];
+        self.scoreLabel.font = [UIFont fontWithName:FONT_NAME size:20.0];
+        [self addSubview:self.scoreLabel];
+        
+        //time spent label
+        self.timeSpentLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0, 190.0, frame.size.width - 40.0, 30.0)];
+        self.timeSpentLabel.text = @"Time spent: 0.0s";
+        self.timeSpentLabel.textColor = [UIColor darkGrayColor];
+        self.timeSpentLabel.font = [UIFont fontWithName:FONT_NAME size:20.0];
+        [self addSubview:self.timeSpentLabel];
+        
+        //Ideal time label
+        self.idealTimeLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0, 220.0, frame.size.width - 40.0, 30.0)];
+        self.idealTimeLabel.text = @"Ideal time: 0.0s";
+        self.idealTimeLabel.textColor = [UIColor darkGrayColor];
+        self.idealTimeLabel.font = [UIFont fontWithName:FONT_NAME size:20.0];
+        [self addSubview:self.idealTimeLabel];
+        
+        //Black line view
+        UIView *lineView2 = [[UIView alloc] initWithFrame:CGRectMake(20.0, 250.0, frame.size.width - 40.0, 1.0)];
+        lineView2.backgroundColor = [[AppInfo sharedInstance] appColorsArray][0];
+        [self addSubview:lineView2];
+        
+        //Bonus score label
+        self.bonusScoreLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0, 250.0, frame.size.width - 20.0, 30.0)];
+        self.bonusScoreLabel.text = @"Time Bonus Score: 0/0";
+        self.bonusScoreLabel.textColor = [[AppInfo sharedInstance] appColorsArray][0];
+        self.bonusScoreLabel.font = [UIFont fontWithName:FONT_NAME size:18.0];
+        [self addSubview:self.bonusScoreLabel];
+        
+        //Total Score label
+        UILabel *totalScoreLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0, 310.0, frame.size.width - 40.0, 20.0)];
+        totalScoreLabel.text = @"Total Score";
+        totalScoreLabel.textColor = [UIColor darkGrayColor];
+        totalScoreLabel.font = [UIFont fontWithName:FONT_NAME size:20.0];
+        totalScoreLabel.textAlignment = NSTextAlignmentCenter;
+        [self addSubview:totalScoreLabel];
+        
+        //Big Score label
+        self.bigScoreLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0, 320.0, frame.size.width - 40.0, 60.0)];
+        self.bigScoreLabel.text = @"0/0";
+        self.bigScoreLabel.textAlignment = NSTextAlignmentCenter;
+        self.bigScoreLabel.textColor = [[AppInfo sharedInstance] appColorsArray][0];
+        self.bigScoreLabel.font = [UIFont fontWithName:FONT_NAME size:40.0];
+        [self addSubview:self.bigScoreLabel];
+        
+        //Share label
+        UILabel *shareLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0, frame.size.height - 110.0, 125.0, 30.0)];
+        shareLabel.text = @"Share";
+        shareLabel.textColor = [UIColor darkGrayColor];
+        shareLabel.textAlignment = NSTextAlignmentCenter;
+        shareLabel.font = [UIFont fontWithName:FONT_NAME size:20.0];
+        [self addSubview:shareLabel];
+        
+        //Challenge label
+        UILabel *challengeLabel = [[UILabel alloc] initWithFrame:CGRectMake(frame.size.width/2.0, frame.size.height - 110.0, frame.size.width/2.0, 30.0)];
+        challengeLabel.text = @"Challenge";
+        challengeLabel.textColor = [UIColor darkGrayColor];
+        challengeLabel.font = [UIFont fontWithName:FONT_NAME size:20.0];
+        challengeLabel.textAlignment = NSTextAlignmentCenter;
+        [self addSubview:challengeLabel];
         
         //Faebook button
-        UIButton *facebookButton = [UIButton buttonWithType:UIButtonTypeSystem];
-        facebookButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-        facebookButton.frame = CGRectMake(10.0, self.detailLabel.frame.origin.y + self.detailLabel.frame.size.height + 40.0, frame.size.width - 40.0, 30.0);
-        [facebookButton setTitle:@"Share on Facebook" forState:UIControlStateNormal];
-        [facebookButton setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
-        facebookButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:18.0];
+        UIButton *facebookButton = [[UIButton alloc] initWithFrame:CGRectMake(20.0, frame.size.height - 80.0, 60.0, 60.0)];
+        [facebookButton setBackgroundImage:[UIImage imageNamed:@"FacebookLogo.png"] forState:UIControlStateNormal];
         [facebookButton addTarget:self action:@selector(facebookButtonPressed) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:facebookButton];
-        
-        //Facebook ImageView
-        UIImageView *fbImageView = [[UIImageView alloc] initWithFrame:CGRectMake(frame.size.width - 60.0, facebookButton.frame.origin.y - 3.0, 35.0, 35.0)];
-        fbImageView.image = [UIImage imageNamed:@"FacebookLogo.png"];
-        [self addSubview:fbImageView];
-        
+     
         //Twitter button
-        UIButton *twitterButton = [UIButton buttonWithType:UIButtonTypeSystem];
-        twitterButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-        twitterButton.frame = CGRectMake(10.0, facebookButton.frame.origin.y + facebookButton.frame.size.height + 10.0 , frame.size.width - 40.0, 30.0);
-        [twitterButton setTitle:@"Share on Twitter" forState:UIControlStateNormal];
-        [twitterButton setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
-        twitterButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:18.0];
+        UIButton *twitterButton = [[UIButton alloc] initWithFrame:CGRectMake(90.0, frame.size.height - 80.0, 60.0, 60.0)];
+        [twitterButton setBackgroundImage:[UIImage imageNamed:@"TwitterLogo.gif"] forState:UIControlStateNormal];
         [twitterButton addTarget:self action:@selector(twitterButtonPressed) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:twitterButton];
         
-        //Twitter ImageView
-        UIImageView *twitterImageView = [[UIImageView alloc] initWithFrame:CGRectMake(frame.size.width - 60.0, twitterButton.frame.origin.y, 35.0, 35.0)];
-        twitterImageView.image = [UIImage imageNamed:@"TwitterLogo.gif"];
-        [self addSubview:twitterImageView];
-        
         //Challenge button
-        UIButton *challengeButton = [UIButton buttonWithType:UIButtonTypeSystem];
-        challengeButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-        challengeButton.frame = CGRectMake(10.0, twitterButton.frame.origin.y + twitterButton.frame.size.height + 10.0, frame.size.width - 40.0, 30.0);
-        [challengeButton setTitle:@"Challenge Friends" forState:UIControlStateNormal];
-        [challengeButton setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
-        challengeButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:18.0];
+        UIButton *challengeButton = [[UIButton alloc] initWithFrame:CGRectMake(frame.size.width - 100.0, frame.size.height - 80.0, 60.0, 60.0)];
+        [challengeButton setBackgroundImage:[UIImage imageNamed:@"ChallengeIcon.png"] forState:UIControlStateNormal];
         [challengeButton addTarget:self action:@selector(challengeButtonPressed) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:challengeButton];
         
-        //Challenge ImageView
-        UIImageView *challengeImageView = [[UIImageView alloc] initWithFrame:CGRectMake(frame.size.width - 60.0, challengeButton.frame.origin.y, 35.0, 35.0)];
-        challengeImageView.image = [UIImage imageNamed:@"ChallengeIcon.png"];
-        [self addSubview:challengeImageView];
-        
         //Continue Button
-        UIButton *continueButton = [UIButton buttonWithType:UIButtonTypeSystem];
-        continueButton.frame = CGRectMake(20.0, frame.size.height - 60.0, frame.size.width - 40.0, 40.0);
-        [continueButton setTitle:@"Continue" forState:UIControlStateNormal];
-        [continueButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        continueButton.backgroundColor = [[AppInfo sharedInstance] appColorsArray][0];
-        continueButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Regular" size:18.0];
+        UIButton *continueButton = [[UIButton alloc] initWithFrame:CGRectMake(frame.size.width - 47.0, -32.0, 80.0, 80.0)];
+        [continueButton setImage:[UIImage imageNamed:@"Close.png"] forState:UIControlStateNormal];
         [continueButton addTarget:self action:@selector(closeAlertInView:) forControlEvents:UIControlEventTouchUpInside];
-        continueButton.layer.cornerRadius = 10.0;
         [self addSubview:continueButton];
     }
     return self;

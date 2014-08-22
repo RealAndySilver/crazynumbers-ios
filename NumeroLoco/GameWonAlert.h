@@ -20,6 +20,14 @@
 
 @interface GameWonAlert : UIView
 @property (strong, nonatomic) NSString *message;
+@property (assign, nonatomic) NSUInteger touchesMade;
+@property (assign, nonatomic) NSUInteger touchesForBestScore;
+@property (assign, nonatomic) NSUInteger touchesScore;
+@property (assign, nonatomic) NSUInteger maxTouchesScore;
+@property (assign, nonatomic) float timeUsed;
+@property (assign, nonatomic) float timeForBestScore;
+@property (assign, nonatomic) NSUInteger bonusScore;
+@property (assign, nonatomic) NSUInteger maxBonusScore;
 @property (strong, nonatomic) id <GameWonAlertDelegate> delegate;
 -(void)showAlertInView:(UIView *)view;
 @end

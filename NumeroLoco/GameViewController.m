@@ -24,6 +24,7 @@
 #import "CPIAPHelper.h"
 #import "MBProgressHUD.h"
 #import "IAPProduct.h"
+#import "TouchesObject.h"
 @import AVFoundation;
 
 @interface GameViewController () <UIAlertViewDelegate, GameWonAlertDelegate, AllGamesFinishedViewDelegate, NoTouchesAlertDelegate, BuyTouchesViewDelegate>
@@ -62,7 +63,9 @@
     NSUInteger pointsForBestScore;
     NSUInteger bestTime;
     NSUInteger pointsWon;
-    NSUInteger touchesAvailable;
+    NSUInteger bestTapCount;
+    NSUInteger bestTapsScore;
+    NSUInteger bestTimeScore;
     float maxScore;
     float maxTime;
     float timeElapsed;
@@ -128,20 +131,29 @@
     maxNumber = [chaptersDataArray[self.selectedChapter][self.selectedGame][@"maxNumber"] intValue];
     maxScore = [chaptersDataArray[self.selectedChapter][self.selectedGame][@"maxScore"] floatValue];
     numberOfChapters = [chaptersDataArray count];
-    touchesAvailable = [[[NSUserDefaults standardUserDefaults] objectForKey:@"Touches"] intValue];
-    NSLog(@"Toques disponibleeeesss: %d", touchesAvailable);
+    [TouchesObject sharedInstance].totalTouches = [[[NSUserDefaults standardUserDefaults] objectForKey:@"Touches"] intValue];
+    NSLog(@"Toques disponibleeeesss: %lu", (unsigned long)[TouchesObject sharedInstance].totalTouches);
     
     [self setupUI];
     [self initGame];
     [self openCoreDataDocument];
     [self configureSounds];
     
-    if (touchesAvailable == 0) [self disableButtons];
+    if ([TouchesObject sharedInstance].totalTouches == 0) [self disableButtons];
+}
+
+-(void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    //Register for the notification center
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(newTouchesNotificationReceived:)
+                                                 name:@"NewTouchesAvailable"
+                                               object:nil];
 }
 
 -(void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    
+
     //Add adds from Flurry
     [FlurryAds setAdDelegate:self];
     if ([FlurryAds adReadyForSpace:@"FullScreenAd"]) {
@@ -153,7 +165,7 @@
     }
     
     //Check number of touches available
-    if (touchesAvailable == 0) {
+    if ([TouchesObject sharedInstance].totalTouches == 0) {
         NoTouchesAlertView *noTouchesAlert = [[NoTouchesAlertView alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 140.0, screenBounds.size.height/2.0 - 100.0, 280.0, 200.0)];
         noTouchesAlert.delegate = self;
         [noTouchesAlert showInView:self.view];
@@ -162,6 +174,7 @@
 
 -(void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     
     //Stop the timer
     [self.gameTimer invalidate];
@@ -234,7 +247,7 @@
         labelsFontSize = 18.0;
     }
     
-    self.titleLabel.text = [NSString stringWithFormat:@"Chapter %i - Game %i", self.selectedChapter + 1, self.selectedGame + 1];
+    self.titleLabel.text = [NSString stringWithFormat:@"Chapter %u - Game %u", self.selectedChapter + 1, self.selectedGame + 1];
     self.titleLabel.textColor = [UIColor whiteColor];
     self.titleLabel.textAlignment = NSTextAlignmentCenter;
     [self.view addSubview:self.titleLabel];
@@ -283,7 +296,7 @@
     
     //Touches available label
     self.touchesAvailableLabel = [[UILabel alloc] initWithFrame:CGRectOffset(self.maxScoreLabel.frame, 0.0, -(self.maxScoreLabel.frame.size.height + 10.0))];
-    self.touchesAvailableLabel.text = [NSString stringWithFormat:@"Touches left: %d", touchesAvailable];
+    self.touchesAvailableLabel.text = [NSString stringWithFormat:@"Touches left: %lu", (unsigned long)[TouchesObject sharedInstance].totalTouches];
     self.touchesAvailableLabel.font = [UIFont fontWithName:FONT_NAME size:15.0];
     self.touchesAvailableLabel.textColor = [UIColor whiteColor];
     self.touchesAvailableLabel.layer.cornerRadius = 10.0;
@@ -326,14 +339,19 @@
     }
     matrixSize = [chaptersDataArray[self.selectedChapter][self.selectedGame][@"matrixSize"] intValue];
     maxNumber = [chaptersDataArray[self.selectedChapter][self.selectedGame][@"maxNumber"] intValue];
-    maxScore = [chaptersDataArray[self.selectedChapter][self.selectedGame][@"maxScore"] floatValue];
+    //maxScore = [chaptersDataArray[self.selectedChapter][self.selectedGame][@"maxScore"] floatValue];
     maxTime = [chaptersDataArray[self.selectedChapter][self.selectedGame][@"maxTime"] floatValue];
+    bestTapCount = [chaptersDataArray[self.selectedChapter][self.selectedGame][@"puntos"] count];
+    bestTapsScore = bestTapCount * 100;
+    bestTimeScore = bestTapsScore/2;
+    maxScore = bestTapsScore + bestTimeScore;
+    NSLog(@"******* %lu ----- %lu *********", (unsigned long)bestTapsScore, (unsigned long)bestTimeScore);
     timeElapsed = 0;
-    self.maxScoreLabel.text = [NSString stringWithFormat:@"Best Score: %d/%d", [self getScoredStoredInCoreData], (int)maxScore];
+    self.maxScoreLabel.text = [NSString stringWithFormat:@"Best Score: %lu/%d", (unsigned long)[self getScoredStoredInCoreData], (int)maxScore];
     
     bestTime = [chaptersDataArray[self.selectedChapter][self.selectedGame][@"bestTime"] intValue];
     float pointsAtBestTime = [self pointsWonForTime:(float)bestTime];
-    pointsForBestScore = maxScore - pointsAtBestTime;
+    pointsForBestScore = bestTimeScore - pointsAtBestTime;
 
     
     //self.buttonsContainerView.frame = CGRectMake(0.0, 100.0, matrixSize*53.33333, matrixSize*53.33333);
@@ -388,12 +406,12 @@
     }
     
     //Check if the user dont have more touches
-    if (touchesAvailable == 0) [self disableButtons];
+    if ([TouchesObject sharedInstance].totalTouches == 0) [self disableButtons];
 }
 
 -(void)initGame {
     [self resetGame];
-    self.titleLabel.text = [NSString stringWithFormat:@"Chapter %i - Game %i", self.selectedChapter + 1, self.selectedGame + 1];
+    self.titleLabel.text = [NSString stringWithFormat:@"Chapter %u - Game %u", self.selectedChapter + 1, self.selectedGame + 1];
     
     NSString *gamesDatabasePath = [[NSBundle mainBundle] pathForResource:@"GamesDatabase2" ofType:@"plist"];
     NSArray *chaptersDataArray = [NSArray arrayWithContentsOfFile:gamesDatabasePath];
@@ -407,7 +425,7 @@
     }
     //self.maxTapsLabel.text = [NSString stringWithFormat:@"Taps for perfect score: %d", [self.pointsArray count]];
     //self.numberOfTapsLabel.text = @"Number of taps: 0";
-    //numberOfTaps = 0;
+    numberOfTaps = 0;
     
     //Start the game timer
     self.gameTimer = [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(substractTime) userInfo:nil repeats:YES];
@@ -452,7 +470,7 @@
     if (newbuttonValue < 0) {
         newbuttonValue = maxNumber;
     }
-    return [NSString stringWithFormat:@"%i", newbuttonValue];
+    return [NSString stringWithFormat:@"%li", (long)newbuttonValue];
 }
 
 -(void)createSquareMatrixOf:(NSUInteger)size {
@@ -468,7 +486,7 @@
     }
     
     NSUInteger buttonSize = (self.buttonsContainerView.frame.size.width - ((matrixSize + 1)*buttonDistance)) / matrixSize;
-    NSLog(@"Tamaño del boton: %d", buttonSize);
+    NSLog(@"Tamaño del boton: %lu", (unsigned long)buttonSize);
     
     int h = 1000;
     for (int i = 0; i < size; i++) {
@@ -513,7 +531,7 @@
 -(void)numberButtonPressed:(UIButton *)numberButton {
     [self playButtonPressedSound];
     
-    NSLog(@"Oprimí el boton con tag %d", numberButton.tag);
+    NSLog(@"Oprimí el boton con tag %ld", (long)numberButton.tag);
     NSUInteger index = numberButton.tag - 1000;
     NSInteger column = index / matrixSize;
     NSInteger row = index % matrixSize;
@@ -544,17 +562,18 @@
         buttonTitle = [self substractOneForButton:self.columnsButtonsArray[column + 1][row]];
         [self.columnsButtonsArray[column + 1][row] setTitle:buttonTitle forState:UIControlStateNormal];
     }
-    numberOfTaps += 1;
-    touchesAvailable --;
-    self.touchesAvailableLabel.text = [NSString stringWithFormat:@"Touches left: %d", touchesAvailable];
+    numberOfTaps++;
+    [TouchesObject sharedInstance].totalTouches--;
+    self.touchesAvailableLabel.text = [NSString stringWithFormat:@"Touches left: %lu", (unsigned long)[TouchesObject sharedInstance].totalTouches];
     
-    if (touchesAvailable == 0) {
+    if ([TouchesObject sharedInstance].totalTouches == 0) {
         //Show alert
         NoTouchesAlertView *noTouchesAlert = [[NoTouchesAlertView alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 140.0, screenBounds.size.height/2.0 - 100.0, 280.0, 200.0)];
         noTouchesAlert.delegate = self;
         [noTouchesAlert showInView:self.view];
         
         [self disableButtons];
+        [self saveCurrentDateInUserDefaults];
     }
     [self checkIfUserWon];
 }
@@ -576,7 +595,7 @@
 }
 
 -(void)updateUI {
-    self.maxScoreLabel.text = [NSString stringWithFormat:@"Best Score: %d/%d", [self getScoredStoredInCoreData], (int)maxScore];
+    self.maxScoreLabel.text = [NSString stringWithFormat:@"Best Score: %lu/%d", (unsigned long)[self getScoredStoredInCoreData], (int)maxScore];
 }
 
 -(void)checkIfUserWon {
@@ -591,15 +610,27 @@
     
     //User Won
     //Get Points Won
-    pointsWon = [self pointsWonForTime:timeElapsed] + pointsForBestScore;
+    //Taps points
+    NSUInteger tapPointsWon = [self pointsWonForTaps:numberOfTaps];
+    NSLog(@"Puntos ganadoooooooossssss: %lu", (unsigned long)tapPointsWon);
+    
+    //Bonus time points
+    NSUInteger bonusPointsWon = [self pointsWonForTime:timeElapsed] + pointsForBestScore;
+    if (bonusPointsWon > bestTimeScore) bonusPointsWon = bestTimeScore;
+    
+    pointsWon = tapPointsWon + bonusPointsWon;
+    NSLog(@"################################################################################");
+    NSLog(@"Puntos ganados por taps: %lu", (unsigned long)tapPointsWon);
+    NSLog(@"Puntos ganados por tiempo: %lu", (unsigned long)bonusPointsWon);
+    NSLog(@"Puntos totales ganados: %lu", (unsigned long)pointsWon);
+    /*pointsWon = [self pointsWonForTime:timeElapsed] + pointsForBestScore;
     if (pointsWon > maxScore) pointsWon = maxScore;
-    NSLog(@"Point Woooon %d", pointsWon);
+    NSLog(@"Point Woooon %lu", (unsigned long)pointsWon);*/
 
     //Cancel timer
     [self.gameTimer invalidate];
     self.gameTimer = nil;
     
-    //[self userWon];
     [self performSelector:@selector(userWon) withObject:nil afterDelay:0.3];
 }
 
@@ -612,7 +643,7 @@
     if (scoreWasImproved) {
         NSLog(@"EL score se mejoróoooo *************************");
         NSUInteger totalScore = [self getTotalScoreInCoreData];
-        NSLog(@"Score Totaaaaaaaalllllll: %d", totalScore);
+        NSLog(@"Score Totaaaaaaaalllllll: %lu", (unsigned long)totalScore);
         [[GameKitHelper sharedGameKitHelper] submitScore:totalScore category:@"Points_Leaderboard"];
         
         //Post a notification to update the chapters VC with the new score
@@ -626,7 +657,7 @@
     //Unlock the next game saving the game number with FileSaver
     FileSaver *fileSaver = [[FileSaver alloc] init];
     NSMutableArray *chaptersArray = [fileSaver getDictionary:@"NumberChaptersDic"][@"NumberChaptersArray"];
-    NSLog(@"Agregando el número %d a filesaver porque gané", self.selectedGame + 2);
+    NSLog(@"Agregando el número %u a filesaver porque gané", self.selectedGame + 2);
     
     //Check if the user won the last game of the chapter
     if (self.selectedGame == 8 && self.selectedChapter != numberOfChapters - 1) {
@@ -675,12 +706,20 @@
     [self playWinSound];
     
     //Synchronize touches left in User Defaults
-    [self saveTouchesLeftInUserDefaults:touchesAvailable];
+    [self saveTouchesLeftInUserDefaults:[TouchesObject sharedInstance].totalTouches];
     
-    NSString *winMessage = [NSString stringWithFormat:@"You finished the game in %0.1f seconds. you scored %d points", timeElapsed, pointsWon];
-    GameWonAlert *gameWonAlert = [[GameWonAlert alloc] initWithFrame:CGRectMake(self.view.bounds.size.width/2.0 - 125.0, self.view.bounds.size.height/2.0 - 200.0, 250.0, 400.0)];
-    gameWonAlert.message = winMessage;
+    GameWonAlert *gameWonAlert = [[GameWonAlert alloc] initWithFrame:CGRectMake(20.0, 20.0, screenBounds.size.width - 40.0, screenBounds.size.height - 40.0)];
     gameWonAlert.delegate = self;
+    gameWonAlert.touchesMade = numberOfTaps;
+    gameWonAlert.touchesForBestScore = bestTapCount;
+    gameWonAlert.touchesScore = [self pointsWonForTaps:numberOfTaps];
+    gameWonAlert.maxTouchesScore = bestTapsScore;
+    gameWonAlert.timeUsed = timeElapsed;
+    gameWonAlert.timeForBestScore = bestTime;
+    NSUInteger bonusPointsWon = [self pointsWonForTime:timeElapsed] + pointsForBestScore;
+    if (bonusPointsWon > bestTimeScore) bonusPointsWon = bestTimeScore;
+    gameWonAlert.bonusScore = bonusPointsWon;
+    gameWonAlert.maxBonusScore = bestTimeScore;
     [gameWonAlert showAlertInView:self.view];
 }
 
@@ -734,9 +773,20 @@
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
+-(void)saveCurrentDateInUserDefaults {
+    NSLog(@"Fecha actual: %@", [NSDate date]);
+    [[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:@"NoTouchesDate"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+-(void)removeSavedDateInUserDefaults {
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"NoTouchesDate"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
 -(void)dismissVC {
     //Synchronize touches in UserDefault
-    [self saveTouchesLeftInUserDefaults:touchesAvailable];
+    [self saveTouchesLeftInUserDefaults:[TouchesObject sharedInstance].totalTouches];
     
     [[AudioPlayer sharedInstance] playBackSound];
     [self dismissViewControllerAnimated:YES completion:nil];
@@ -758,15 +808,17 @@
     [allGamesFinishedView showInView:self.view];
 }
 
+-(NSUInteger)pointsWonForTaps:(NSUInteger)tapsMade {
+    float points = 0;
+    points = (bestTapCount * bestTapsScore)/tapsMade;
+    return (int)points;
+}
+
 -(NSUInteger)pointsWonForTime:(float)time {
     float points = 0;
-    NSLog(@"*********** Max Time: %f", maxTime);
-    NSLog(@"*********** Max Score: %f", maxScore);
-    NSLog(@"*********** Time Elapsed: %f", time);
-    //pointsWon = 1/((1/maxTime)*time - 1) + (float)maxScore;
-    float pendiente = (0 - maxScore) / (maxTime - 0);
-    NSLog(@"********** Pendiente: %f", pendiente);
-    points = pendiente * time + maxScore;
+    float pendiente = (0 - (float)bestTimeScore) / (maxTime - 0);
+    NSLog(@"********** formula para los puntos de tiempo: %f * %f + %lu", pendiente, time, (unsigned long)bestTimeScore);
+    points = pendiente * time + bestTimeScore;
     
     if (points < 0) {
         points = 0;
@@ -797,7 +849,7 @@
         serviceType = SLServiceTypeTwitter;
     }
     SLComposeViewController *socialViewController = [SLComposeViewController composeViewControllerForServiceType:serviceType];
-    [socialViewController setInitialText:[NSString stringWithFormat:@"I scored %d points playing #Cross : Numbers & Colors", [self pointsWonForTime:timeElapsed]]];
+    [socialViewController setInitialText:[NSString stringWithFormat:@"I scored %lu points playing #Cross : Numbers & Colors", (unsigned long)pointsWon]];
     [self presentViewController:socialViewController animated:YES completion:nil];
 }
 
@@ -809,24 +861,20 @@
         //Open the database document
         [self.databaseDocument openWithCompletionHandler:^(BOOL success){
             if (success) {
-                NSLog(@"Abrí el documento de core data");
                 managedDocumentIsReady = YES;
                 [self updateUI];
             } else {
                 managedDocumentIsReady = NO;
-                NSLog(@"Error opening the document");
             }
         }];
     } else {
         //The database document did not exist, so create it.
         [self.databaseDocument saveToURL:self.databaseDocumentURL forSaveOperation:UIDocumentSaveForCreating completionHandler:^(BOOL success){
             if (success) {
-                NSLog(@"Abrí el documento de core data");
                 managedDocumentIsReady = YES;
                 [self updateUI];
             } else {
                 managedDocumentIsReady = NO;
-                NSLog(@"Error opening the document");
             }
         }];
     }
@@ -859,12 +907,12 @@
                 //The score was improved
                 NSLog(@"***************** SCORE MEJORADO *************************");
                 NSLog(@"**************** SCORE GUARDADO EN COREDATA: %d", [score.value intValue]);
-                NSLog(@"**************** SCORE LOGRADO: %d", newScore);
+                NSLog(@"**************** SCORE LOGRADO: %lu", (unsigned long)newScore);
                 return YES;
             } else {
                 NSLog(@"**************** SCORE NO MEJORADO ************************");
                 NSLog(@"**************** SCORE GUARDADO EN COREDATA: %d", [score.value intValue]);
-                NSLog(@"**************** SCORE LOGRADO: %d", newScore);
+                NSLog(@"**************** SCORE LOGRADO: %lu", (unsigned long)newScore);
                 return NO;
             }
         } else {
@@ -1059,9 +1107,19 @@ interstitial {
 }
 
 -(void)moreTouchesBought:(NSUInteger)totalTouchesAvailable inView:(BuyTouchesView *)buyTouchesView {
-    touchesAvailable = totalTouchesAvailable;
-    self.touchesAvailableLabel.text = [NSString stringWithFormat:@"Touches left: %d", touchesAvailable];
+    [TouchesObject sharedInstance].totalTouches = totalTouchesAvailable;
+    self.touchesAvailableLabel.text = [NSString stringWithFormat:@"Touches left: %lu", (unsigned long)[TouchesObject sharedInstance].totalTouches];
     [self enableButtons];
+    
+    //Remove the date when there was no touches left
+    [self removeSavedDateInUserDefaults];
+}
+
+#pragma mark - Notification Handlers 
+
+-(void)newTouchesNotificationReceived:(NSNotification *)notification {
+    [self enableButtons];
+    self.touchesAvailableLabel.text = [NSString stringWithFormat:@"Touches left: %lu", (unsigned long)[TouchesObject sharedInstance].totalTouches];
 }
 
 @end

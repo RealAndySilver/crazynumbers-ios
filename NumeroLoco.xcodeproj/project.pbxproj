@@ -104,6 +104,7 @@
 		A0BDEAEA197732B0008BFF4D /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A0BDEAE9197732B0008BFF4D /* StoreKit.framework */; };
 		A0BDEAEC197732BC008BFF4D /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A0BDEAEB197732BC008BFF4D /* libz.dylib */; };
 		A0BDEAEE19773C31008BFF4D /* BackgroundPad.png in Resources */ = {isa = PBXBuildFile; fileRef = A0BDEAED19773C31008BFF4D /* BackgroundPad.png */; };
+		A0C35D2919A794A6007898F2 /* TouchesObject.m in Sources */ = {isa = PBXBuildFile; fileRef = A0C35D2819A794A6007898F2 /* TouchesObject.m */; };
 		A0FC85C3196B20AB005A0A7D /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A0FC85C2196B20AA005A0A7D /* LoginViewController.m */; };
 /* End PBXBuildFile section */
 
@@ -253,6 +254,8 @@
 		A0BDEAE9197732B0008BFF4D /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		A0BDEAEB197732BC008BFF4D /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		A0BDEAED19773C31008BFF4D /* BackgroundPad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = BackgroundPad.png; sourceTree = "<group>"; };
+		A0C35D2719A794A6007898F2 /* TouchesObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TouchesObject.h; sourceTree = "<group>"; };
+		A0C35D2819A794A6007898F2 /* TouchesObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TouchesObject.m; sourceTree = "<group>"; };
 		A0FC85C1196B20AA005A0A7D /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		A0FC85C2196B20AA005A0A7D /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -318,6 +321,8 @@
 			children = (
 				8B5F497919A4F19900C0C7E2 /* AudioPlayer.h */,
 				8B5F497A19A4F19900C0C7E2 /* AudioPlayer.m */,
+				A0C35D2719A794A6007898F2 /* TouchesObject.h */,
+				A0C35D2819A794A6007898F2 /* TouchesObject.m */,
 			);
 			name = "Custom Objects";
 			sourceTree = "<group>";
@@ -763,6 +768,7 @@
 				8B96EADC1979666300E60698 /* WordsChaptersViewController.m in Sources */,
 				8B6FB8FC19508B0800EB2C4E /* ChaptersCell.m in Sources */,
 				8BB9EC96196345E9007B8C8E /* TutorialCell.m in Sources */,
+				A0C35D2919A794A6007898F2 /* TouchesObject.m in Sources */,
 				A043BD0519A64A9B00E5B047 /* NoTouchesAlertView.m in Sources */,
 				8BA94021195DC10C0032706E /* ColorPatternView.m in Sources */,
 				8B9857FC19537C080083FD45 /* AppInfo.m in Sources */,

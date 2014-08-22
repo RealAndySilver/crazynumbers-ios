@@ -17,7 +17,15 @@
 
 -(instancetype)init {
     IAPProduct *noAdsProduct = [[IAPProduct alloc] initWithProductIdentifier:@"com.iamstudio.cross.noads"];
-    NSMutableDictionary *products = [@{noAdsProduct.productIdentifier : noAdsProduct} mutableCopy];
+    IAPProduct *threeHundredTouches = [[IAPProduct alloc] initWithProductIdentifier:@"com.iamstudio.cross.threehundredtouches"];
+    IAPProduct *sevenHundredTouches = [[IAPProduct alloc] initWithProductIdentifier:@"com.iamstudio.cross.sevenhundredtouches"];
+    IAPProduct *twoThousandTouches = [[IAPProduct alloc] initWithProductIdentifier:@"com.iamstudio.cross.twothousandtouches"];
+    IAPProduct *infiniteMode = [[IAPProduct alloc] initWithProductIdentifier:@"com.iamstudio.cross.infinitemode"];
+    NSMutableDictionary *products = [@{noAdsProduct.productIdentifier : noAdsProduct,
+                                       threeHundredTouches.productIdentifier : threeHundredTouches,
+                                       sevenHundredTouches.productIdentifier : sevenHundredTouches,
+                                       twoThousandTouches.productIdentifier : twoThousandTouches,
+                                       infiniteMode.productIdentifier : infiniteMode} mutableCopy];
     if (self = [super initWithProducts:products]) {
         
     }
@@ -36,7 +44,10 @@
 - (void)notifyStatusForProduct:(IAPProduct *)product
                  transactionID:(NSString *)transactionID
                         string:(NSString *)string {
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"UserDidSuscribe" object:nil userInfo:@{@"TransactionID": transactionID}];
+    NSLog(@"************* TRANSACTION ID :%@", transactionID);
+    NSLog(@"************* PRODUCT %@", product);
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"UserDidSuscribe" object:nil userInfo:@{@"TransactionID": transactionID,
+                                                                                                        @"Product" : product}];
 }
 
 @end

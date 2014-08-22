@@ -57,7 +57,12 @@
         [[GameKitHelper sharedGameKitHelper] authenticateLocalPlayer];
     }
 
-    
+    //Save maximum touches in User Defaults
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"Touches"] == nil) {
+        [[NSUserDefaults standardUserDefaults] setObject:@10 forKey:@"Touches"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }
+  
     return YES;
 }
 

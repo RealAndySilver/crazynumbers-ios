@@ -60,14 +60,7 @@
                                              selector:@selector(playMusicNotificationReceived:)
                                                  name:@"PlayMusicNotification"
                                                object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(transactionFailedNotificationReceived:)
-                                                 name:@"TransactionFailedNotification"
-                                               object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(userDidSuscribeNotificationReceived:)
-                                                 name:@"UserDidSuscribe"
-                                               object:nil];
+  
     /*[[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(firsTimeTutorialNotificationReceived:)
                                                  name:@"FirstTimeTutorialNotification"
@@ -90,6 +83,14 @@
 
 -(void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(transactionFailedNotificationReceived:)
+                                                 name:@"TransactionFailedNotification"
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(userDidSuscribeNotificationReceived:)
+                                                 name:@"UserDidSuscribe"
+                                               object:nil];
     viewIsVisible = YES;
 
     if (viewAppearFromFirstTimeTutorial) {
@@ -111,6 +112,7 @@
 
 -(void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     viewIsVisible = NO;
 }
 

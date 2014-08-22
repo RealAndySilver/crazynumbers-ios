@@ -12,22 +12,34 @@
 	<dict>
 		<key>ED4BF95E-6FA8-4A5B-BDE2-5B2D46B63D34</key>
 		<string>https://bitbucket.org/iamstudio/crazynumbers.git</string>
+		<key>F4D72E3BCD77A406909F2BEDF84BB8CB63610786</key>
+		<string>https://bitbucket.org/iamstudio/crazynumbers.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>NumeroLoco.xcodeproj/project.xcworkspace</string>
+	<string>NumeroLoco.xcodeproj</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>ED4BF95E-6FA8-4A5B-BDE2-5B2D46B63D34</key>
+		<string>../../../NumeroLoco</string>
+		<key>F4D72E3BCD77A406909F2BEDF84BB8CB63610786</key>
 		<string>../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
 	<string>https://bitbucket.org/iamstudio/crazynumbers.git</string>
 	<key>IDESourceControlProjectVersion</key>
-	<integer>110</integer>
+	<integer>111</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>ED4BF95E-6FA8-4A5B-BDE2-5B2D46B63D34</string>
+	<string>F4D72E3BCD77A406909F2BEDF84BB8CB63610786</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>F4D72E3BCD77A406909F2BEDF84BB8CB63610786</string>
+			<key>IDESourceControlWCCName</key>
+			<string>CrazyNumbers</string>
+		</dict>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>

@@ -20,9 +20,10 @@
 #import "Score+AddOns.h"
 #import "AllGamesFinishedView.h"
 #import "AudioPlayer.h"
+#import "NoTouchesAlertView.h"
 @import AVFoundation;
 
-@interface ColorsGameViewController () <ColorPatternViewDelegate, GameWonAlertDelegate, AllGamesFinishedViewDelegate>
+@interface ColorsGameViewController () <ColorPatternViewDelegate, GameWonAlertDelegate, AllGamesFinishedViewDelegate, NoTouchesAlertDelegate>
 @property (strong, nonatomic) NSMutableArray *columnsButtonsArray; //Of UIButton
 @property (strong, nonatomic) UIView *buttonsContainerView;
 @property (strong, nonatomic) UILabel *numberOfTapsLabel;
@@ -35,6 +36,7 @@
 @property (strong, nonatomic) NSTimer *gameTimer;
 @property (strong, nonatomic) UILabel *maxScoreLabel;
 @property (strong, nonatomic) UIButton *resetButton;
+@property (strong, nonatomic) UILabel *touchesAvailableLabel;
 
 //CoreData
 @property (strong, nonatomic) UIManagedDocument *databaseDocument;
@@ -56,6 +58,7 @@
     NSUInteger matrixSize;
     NSUInteger maxNumber;
     NSUInteger numberOfChapters;
+    NSUInteger touchesAvailable;
     BOOL isPad;
     float maxScore;
     float maxTime;
@@ -115,6 +118,7 @@
     matrixSize = [chaptersDataArray[self.selectedChapter][self.selectedGame][@"matrixSize"] intValue];
     maxNumber = [chaptersDataArray[self.selectedChapter][self.selectedGame][@"maxNumber"] intValue];
     numberOfChapters = [chaptersDataArray count];
+    touchesAvailable = [[[NSUserDefaults standardUserDefaults] valueForKey:@"Touches"] intValue];
     
     [self openCoreDataDocument];
     
@@ -126,6 +130,8 @@
     //[self createSquareMatrixOf:matrixSize];
     [self initGame];
     [self configureSounds];
+    
+    if (touchesAvailable == 0) [self disableButtons];
 }
 
 -(void)viewDidAppear:(BOOL)animated {
@@ -137,6 +143,13 @@
     } else {
         NSLog(@"No mostraré el ad sino que lo cargaré");
         [FlurryAds fetchAdForSpace:@"FullScreenAd" frame:self.view.frame size:FULLSCREEN];
+    }
+    
+    //Check number of touches available
+    if (touchesAvailable == 0) {
+        NoTouchesAlertView *noTouchesAlert = [[NoTouchesAlertView alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 140.0, screenBounds.size.height/2.0 - 100.0, 280.0, 200.0)];
+        noTouchesAlert.delegate = self;
+        [noTouchesAlert showInView:self.view];
     }
 }
 
@@ -235,7 +248,7 @@
     
     //Color patern button
     UIButton *colorPattern = [UIButton buttonWithType:UIButtonTypeSystem];
-    colorPattern.frame = CGRectMake(screenBounds.size.width/2.0 - 35.0, screenBounds.size.height - 100.0, 70.0, 40.0);
+    colorPattern.frame = CGRectMake(screenBounds.size.width - 70.0, screenBounds.size.height - 100.0, 60.0, 40.0);
     colorPattern.layer.cornerRadius = 10.0;
     colorPattern.layer.borderColor = [UIColor lightGrayColor].CGColor;
     colorPattern.layer.borderWidth = 1.0;
@@ -265,9 +278,33 @@
     self.maxScoreLabel.textAlignment = NSTextAlignmentCenter;
     self.maxScoreLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:15.0];
     [self.view addSubview:self.maxScoreLabel];
+    
+    //Touches available label
+    self.touchesAvailableLabel = [[UILabel alloc] initWithFrame:CGRectOffset(self.maxScoreLabel.frame, 0.0, -(self.maxScoreLabel.frame.size.height + 10.0))];
+    self.touchesAvailableLabel.text = [NSString stringWithFormat:@"Touches left: %d", touchesAvailable];
+    self.touchesAvailableLabel.font = [UIFont fontWithName:FONT_NAME size:15.0];
+    self.touchesAvailableLabel.textColor = [UIColor lightGrayColor];
+    self.touchesAvailableLabel.layer.cornerRadius = 10.0;
+    self.touchesAvailableLabel.layer.borderWidth = 1.0;
+    self.touchesAvailableLabel.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    self.touchesAvailableLabel.textAlignment = NSTextAlignmentCenter;
+    [self.view addSubview:self.touchesAvailableLabel];
 }
 
 #pragma mark - Custom Methods
+
+-(void)disableButtons {
+    for (int i = 0; i < [self.buttonsContainerView.subviews count]; i++) {
+        UIButton *numberButton = self.buttonsContainerView.subviews[i];
+        numberButton.userInteractionEnabled = NO;
+        numberButton.alpha = 0.4;
+    }
+}
+
+-(void)saveTouchesLeftInUserDefaults:(NSUInteger)touchesLeft {
+    [[NSUserDefaults standardUserDefaults] setObject:@(touchesLeft) forKey:@"Touches"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
 
 -(void)restartGame {
     self.resetButton.userInteractionEnabled = NO;
@@ -357,6 +394,9 @@
                              } completion:^(BOOL finished){}];
         }
     }
+    
+    //Check if user dont have touches available
+    if (touchesAvailable == 0) [self disableButtons];
 }
 
 -(void)initGame {
@@ -584,6 +624,18 @@
         [(UIButton *)self.columnsButtonsArray[column + 1][row] setBackgroundColor:buttonColor];
     }
     numberOfTaps += 1;
+    touchesAvailable --;
+    self.touchesAvailableLabel.text = [NSString stringWithFormat:@"Touches left: %d", touchesAvailable];
+    
+    if (touchesAvailable == 0) {
+        //Show alert
+        NoTouchesAlertView *noTouchesAlert = [[NoTouchesAlertView alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 140.0, screenBounds.size.height/2.0 - 100.0, 280.0, 200.0)];
+        noTouchesAlert.delegate = self;
+        [noTouchesAlert showInView:self.view];
+        
+        [self disableButtons];
+    }
+
     [self checkIfUserWon];
 }
 
@@ -734,6 +786,9 @@
     
     [self playWinSound];
     
+    //Synchronize touches left in User Defaults
+    [self saveTouchesLeftInUserDefaults:touchesAvailable];
+    
     NSString *winMessage = [NSString stringWithFormat:@"You finished the game in %0.1f seconds. you scored %d points", timeElapsed, [self pointsWonForTime:timeElapsed]];
     GameWonAlert *gameWonAlert = [[GameWonAlert alloc] initWithFrame:CGRectMake(self.view.bounds.size.width/2.0 - 125.0, self.view.bounds.size.height/2.0 - 200.0, 250.0, 400.0)];
     gameWonAlert.message = winMessage;
@@ -755,6 +810,9 @@
 }
 
 -(void)dismissVC {
+    //Synchronize touches left in User Defaults
+    [self saveTouchesLeftInUserDefaults:touchesAvailable];
+    
     [[AudioPlayer sharedInstance] playBackSound];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
@@ -994,6 +1052,20 @@ interstitial {
 
 -(void)gameFinishedViewWillDissapear:(AllGamesFinishedView *)gamesFinishedView {
     
+}
+
+#pragma mark - NoTouchesAlert 
+
+-(void)waitButtonPressedInAlert:(NoTouchesAlertView *)noTouchesAlert {
+    
+}
+
+-(void)buyTouchesButtonPressedInAlert:(NoTouchesAlertView *)noTouchesAlert {
+    
+}
+
+-(void)noTouchesAlertDidDissapear:(NoTouchesAlertView *)noTouchesAlert {
+    noTouchesAlert = nil;
 }
 
 @end

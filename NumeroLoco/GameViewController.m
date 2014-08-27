@@ -71,6 +71,7 @@
     float timeElapsed;
     BOOL managedDocumentIsReady;
     BOOL isPad;
+    BOOL userBoughtInfiniteMode;
 }
 
 #pragma mark - Lazy Instantiation
@@ -116,6 +117,8 @@
 
 -(void)viewDidLoad {
     [super viewDidLoad];
+    if ([self userBoughtInfiniteMode]) userBoughtInfiniteMode = YES;
+    else userBoughtInfiniteMode = NO;
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
         isPad = YES;
     } else {
@@ -139,7 +142,9 @@
     [self openCoreDataDocument];
     [self configureSounds];
     
-    if ([TouchesObject sharedInstance].totalTouches == 0) [self disableButtons];
+    if (!userBoughtInfiniteMode) {
+        if ([TouchesObject sharedInstance].totalTouches == 0) [self disableButtons];
+    }
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -154,18 +159,20 @@
 -(void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
 
-    //Add adds from Flurry
-    [FlurryAds setAdDelegate:self];
-    if ([FlurryAds adReadyForSpace:@"FullScreenAd"]) {
-        NSLog(@"Mostraré el ad");
-        //[FlurryAds displayAdForSpace:@"FullScreenAd" onView:self.view];
-    } else {
-        NSLog(@"No mostraré el ad sino que lo cargaré");
-        [FlurryAds fetchAdForSpace:@"FullScreenAd" frame:self.view.frame size:FULLSCREEN];
+    if (!userBoughtInfiniteMode) {
+        //Add adds from Flurry
+        [FlurryAds setAdDelegate:self];
+        if ([FlurryAds adReadyForSpace:@"FullScreenAd"]) {
+            NSLog(@"Mostraré el ad");
+            //[FlurryAds displayAdForSpace:@"FullScreenAd" onView:self.view];
+        } else {
+            NSLog(@"No mostraré el ad sino que lo cargaré");
+            [FlurryAds fetchAdForSpace:@"FullScreenAd" frame:self.view.frame size:FULLSCREEN];
+        }
     }
     
     //Check number of touches available
-    if ([TouchesObject sharedInstance].totalTouches == 0) {
+    if ([TouchesObject sharedInstance].totalTouches == 0 && !userBoughtInfiniteMode) {
         NoTouchesAlertView *noTouchesAlert = [[NoTouchesAlertView alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 140.0, screenBounds.size.height/2.0 - 100.0, 280.0, 200.0)];
         noTouchesAlert.delegate = self;
         [noTouchesAlert showInView:self.view];
@@ -296,7 +303,9 @@
     
     //Touches available label
     self.touchesAvailableLabel = [[UILabel alloc] initWithFrame:CGRectOffset(self.maxScoreLabel.frame, 0.0, -(self.maxScoreLabel.frame.size.height + 10.0))];
-    self.touchesAvailableLabel.text = [NSString stringWithFormat:@"Touches left: %lu", (unsigned long)[TouchesObject sharedInstance].totalTouches];
+    if (userBoughtInfiniteMode)
+        self.touchesAvailableLabel.text = @"Infinite Touches";
+    else self.touchesAvailableLabel.text = [NSString stringWithFormat:@"Touches left: %lu", (unsigned long)[TouchesObject sharedInstance].totalTouches];
     self.touchesAvailableLabel.font = [UIFont fontWithName:FONT_NAME size:15.0];
     self.touchesAvailableLabel.textColor = [UIColor whiteColor];
     self.touchesAvailableLabel.layer.cornerRadius = 10.0;
@@ -406,7 +415,7 @@
     }
     
     //Check if the user dont have more touches
-    if ([TouchesObject sharedInstance].totalTouches == 0) [self disableButtons];
+    if ([TouchesObject sharedInstance].totalTouches == 0 && !userBoughtInfiniteMode) [self disableButtons];
 }
 
 -(void)initGame {
@@ -423,8 +432,6 @@
         //NSUInteger buttonTag = [self tagForButtonAtRow:row column:column];
         //[self addOneToButtonWithTag:buttonTag];
     }
-    //self.maxTapsLabel.text = [NSString stringWithFormat:@"Taps for perfect score: %d", [self.pointsArray count]];
-    //self.numberOfTapsLabel.text = @"Number of taps: 0";
     numberOfTaps = 0;
     
     //Start the game timer
@@ -461,6 +468,7 @@
 }
 
 -(NSString *)getNewValueForButton:(UIButton *)button {
+    NSLog(@"titulo actual: %@", button.currentTitle);
     NSString *newTitle = [NSString stringWithFormat:@"%i", [button.currentTitle intValue] + 1];
     return newTitle;
 }
@@ -562,18 +570,21 @@
         buttonTitle = [self substractOneForButton:self.columnsButtonsArray[column + 1][row]];
         [self.columnsButtonsArray[column + 1][row] setTitle:buttonTitle forState:UIControlStateNormal];
     }
-    numberOfTaps++;
-    [TouchesObject sharedInstance].totalTouches--;
-    self.touchesAvailableLabel.text = [NSString stringWithFormat:@"Touches left: %lu", (unsigned long)[TouchesObject sharedInstance].totalTouches];
     
-    if ([TouchesObject sharedInstance].totalTouches == 0) {
-        //Show alert
-        NoTouchesAlertView *noTouchesAlert = [[NoTouchesAlertView alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 140.0, screenBounds.size.height/2.0 - 100.0, 280.0, 200.0)];
-        noTouchesAlert.delegate = self;
-        [noTouchesAlert showInView:self.view];
+    numberOfTaps++;
+    if (!userBoughtInfiniteMode) {
+        [TouchesObject sharedInstance].totalTouches--;
+        self.touchesAvailableLabel.text = [NSString stringWithFormat:@"Touches left: %lu", (unsigned long)[TouchesObject sharedInstance].totalTouches];
         
-        [self disableButtons];
-        [self saveCurrentDateInUserDefaults];
+        if ([TouchesObject sharedInstance].totalTouches == 0) {
+            //Show alert
+            NoTouchesAlertView *noTouchesAlert = [[NoTouchesAlertView alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 140.0, screenBounds.size.height/2.0 - 100.0, 280.0, 200.0)];
+            noTouchesAlert.delegate = self;
+            [noTouchesAlert showInView:self.view];
+            
+            [self disableButtons];
+            [self saveCurrentDateInUserDefaults];
+        }
     }
     [self checkIfUserWon];
 }
@@ -748,7 +759,13 @@
     FileSaver *fileSaver = [[FileSaver alloc] init];
     BOOL userHasRemoveAds = [[fileSaver getDictionary:@"UserRemovedAdsDic"][@"UserRemovedAdsKey"] boolValue];
     
-    if (!userHasRemoveAds) {
+    if (userHasRemoveAds || userBoughtInfiniteMode) {
+        //The user removed the ads
+        
+        //Check if this is the last game
+        [self prepareNextGame];
+    
+    } else {
         //The user has not removed the ads, so display them.
         if ([FlurryAds adReadyForSpace:@"FullScreenAd"]) {
             NSLog(@"Mostraré el ad");
@@ -760,11 +777,16 @@
             //Go to the next game
             [self prepareNextGame];
         }
+    }
+}
+
+#pragma mark - User Defaults 
+
+-(BOOL)userBoughtInfiniteMode {
+    if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"infiniteMode"] boolValue]) {
+        return YES;
     } else {
-        //The user removed the ads
-        
-        //Check if this is the last game
-        [self prepareNextGame];
+        return NO;
     }
 }
 
@@ -1112,6 +1134,14 @@ interstitial {
     [self enableButtons];
     
     //Remove the date when there was no touches left
+    [self removeSavedDateInUserDefaults];
+}
+
+-(void)infiniteTouchesBoughtInView:(BuyTouchesView *)buyTouchesView {
+    userBoughtInfiniteMode = YES;
+    self.touchesAvailableLabel.text = @"Infinite Touches";
+    [self enableButtons];
+    
     [self removeSavedDateInUserDefaults];
 }
 

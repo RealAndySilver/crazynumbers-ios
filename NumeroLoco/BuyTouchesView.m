@@ -264,21 +264,28 @@
     
     if ([productBought.productIdentifier isEqualToString:@"com.iamstudio.cross.threehundredtouches"]) {
         [self saveTouchesLeftInUserDefaults:[self getTouchesAvailable] + 300];
+        [self.delegate moreTouchesBought:[self getTouchesAvailable] inView:self];
     
     } else if ([productBought.productIdentifier isEqualToString:@"com.iamstudio.cross.sevenhundredtouches"]) {
         [self saveTouchesLeftInUserDefaults:[self getTouchesAvailable] + 700];
+        [self.delegate moreTouchesBought:[self getTouchesAvailable] inView:self];
     
     } else if ([productBought.productIdentifier isEqualToString:@"com.iamstudio.cross.twothousandtouches"]) {
         [self saveTouchesLeftInUserDefaults:[self getTouchesAvailable] + 2000];
+        [self.delegate moreTouchesBought:[self getTouchesAvailable] inView:self];
     
     } else if ([productBought.productIdentifier isEqualToString:@"com.iamstudio.cross.infinitemode"]) {
-        
+        [self saveInfiniteModeInUserDefaults];
+        [self.delegate infiniteTouchesBoughtInView:self];
     }
-    
-    [self.delegate moreTouchesBought:[self getTouchesAvailable] inView:self];
 }
 
 #pragma mark - Touches Saving 
+
+-(void)saveInfiniteModeInUserDefaults {
+    [[NSUserDefaults standardUserDefaults] setObject:@YES forKey:@"infiniteMode"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
 
 -(NSUInteger)getTouchesAvailable {
     return [[[NSUserDefaults standardUserDefaults] objectForKey:@"Touches"] intValue];

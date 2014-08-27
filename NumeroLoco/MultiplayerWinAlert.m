@@ -10,9 +10,7 @@
 #import "AppInfo.h"
 
 @interface MultiplayerWinAlert()
-@property (strong, nonatomic) UILabel *messageLabel;
 @property (strong, nonatomic) UIView *opacityView;
-@property (strong, nonatomic) UIButton *acceptButton;
 @end
 
 @implementation MultiplayerWinAlert
@@ -41,7 +39,7 @@
         //Winning Label
         self.messageLabel = [[UILabel alloc] initWithFrame:CGRectMake(10.0, 30.0, frame.size.width - 20.0, 50.0)];
         self.messageLabel.text = @"You Won!";
-        self.messageLabel.textColor = [UIColor lightGrayColor];
+        self.messageLabel.textColor = [UIColor darkGrayColor];
         self.messageLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:25.0];
         self.messageLabel.textAlignment = NSTextAlignmentCenter;
         self.messageLabel.numberOfLines = 0;
@@ -53,7 +51,7 @@
         [self.acceptButton setTitle:@"Ok" forState:UIControlStateNormal];
         [self.acceptButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         self.acceptButton.backgroundColor = [[AppInfo sharedInstance] appColorsArray][0];
-        self.acceptButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Regulat" size:20.0];
+        self.acceptButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:20.0];
         [self.acceptButton addTarget:self action:@selector(closeAlertInView:) forControlEvents:UIControlEventTouchUpInside];
         self.acceptButton.layer.cornerRadius = 10.0;
         [self addSubview:self.acceptButton];

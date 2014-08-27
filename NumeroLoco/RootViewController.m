@@ -20,6 +20,7 @@
 #import "MBProgressHUD.h"
 #import "MultiplayerGameViewController.h"
 #import "GameKitHelper.h"
+#import "FastGameModeViewController.h"
 @import AVFoundation;
 
 @interface RootViewController () <GKGameCenterControllerDelegate>
@@ -31,6 +32,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *firstLabel;
 @property (strong, nonatomic) UIButton *numbersButton;
 @property (strong, nonatomic) UIButton *colorsButton;
+@property (strong, nonatomic) UIButton *fastModeButton;
 @property (strong, nonatomic) UIButton *wordsButton;
 @property (strong, nonatomic) UIButton *twoPlayerButton;
 @property (strong, nonatomic) UIButton *removeAdsButton;
@@ -257,6 +259,18 @@
     self.numbersButton.layer.borderColor = [UIColor whiteColor].CGColor;
     [self.view addSubview:self.numbersButton];
     
+    //Fast mode button
+    self.fastModeButton = [[UIButton alloc] initWithFrame:gamesButtonsFrames];
+    self.fastModeButton.center = CGPointMake(self.view.frame.size.width + self.fastModeButton.frame.size.width/2.0, self.colorsButton.center.y + self.colorsButton.frame.size.height + 20.0);
+    [self.fastModeButton setTitle:@"Fast Mode" forState:UIControlStateNormal];
+    [self.fastModeButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    self.fastModeButton.titleLabel.font = [UIFont fontWithName:fontName size:fontSize];
+    self.fastModeButton.layer.cornerRadius = 10.0;
+    self.fastModeButton.layer.borderWidth = 1.0;
+    self.fastModeButton.layer.borderColor = [UIColor whiteColor].CGColor;
+    [self.fastModeButton addTarget:self action:@selector(goToFastModeVC) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:self.fastModeButton];
+    
     //Two Players Button
     if (isPad) {
         self.twoPlayerButton = [UIButton buttonWithType:UIButtonTypeSystem];
@@ -349,6 +363,7 @@
                              //Hidde Game Buttons
                              self.numbersButton.center = CGPointMake(self.view.bounds.size.width + self.numbersButton.frame.size.width/2.0, self.numbersButton.center.y);
                              self.colorsButton.center = CGPointMake(self.view.bounds.size.width + self.colorsButton.frame.size.width/2.0, self.colorsButton.center.y);
+                             self.fastModeButton.center = CGPointMake(self.view.bounds.size.width + self.fastModeButton.frame.size.width/2.0, self.fastModeButton.center.y);
                              //self.wordsButton.center = CGPointMake(self.view.bounds.size.width + self.wordsButton.frame.size.width/2.0, self.wordsButton.center.y);
                              self.twoPlayerButton.center = CGPointMake(self.view.bounds.size.width + self.twoPlayerButton.frame.size.width/2.0, self.twoPlayerButton.center.y);
                          
@@ -381,6 +396,7 @@
                          self.optionsMenuButton.center = CGPointMake(-self.optionsMenuButton.frame.size.width + self.gamesMenuButton.frame.size.width/2.0, self.optionsMenuButton.center.y);
                          self.numbersButton.center = CGPointMake(self.view.bounds.size.width/2.0, self.numbersButton.center.y);
                          self.colorsButton.center = CGPointMake(self.view.bounds.size.width/2.0, self.colorsButton.center.y);
+                         self.fastModeButton.center = CGPointMake(self.view.bounds.size.width/2.0, self.fastModeButton.center.y);
                          //self.wordsButton.center = CGPointMake(self.view.bounds.size.width/2.0, self.wordsButton.center.y);
                          self.twoPlayerButton.center = CGPointMake(self.view.bounds.size.width/2.0, self.twoPlayerButton.center.y);
                          self.backButton.center = CGPointMake(self.backButton.center.x, self.view.bounds.size.height - self.backButton.frame.size.height/2.0 - 20.0);
@@ -388,6 +404,12 @@
 }
 
 #pragma mark - Actions
+
+-(void)goToFastModeVC {
+    FastGameModeViewController *fastModeVC = [self.storyboard instantiateViewControllerWithIdentifier:@"FastGameMode"];
+    fastModeVC.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+    [self presentViewController:fastModeVC animated:YES completion:nil];
+}
 
 -(void)goToMultiplayerVC {
     [self stopMusic];

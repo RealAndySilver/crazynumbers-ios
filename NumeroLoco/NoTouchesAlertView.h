@@ -16,6 +16,8 @@
 @end
 
 @interface NoTouchesAlertView : UIView
+@property (strong, nonatomic) UILabel *message;
+@property (strong, nonatomic) UIButton *acceptButton;
 @property (strong, nonatomic) id <NoTouchesAlertDelegate> delegate;
 -(void)showInView:(UIView *)view;
 @end

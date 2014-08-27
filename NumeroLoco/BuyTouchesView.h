@@ -13,6 +13,7 @@
 -(void)closeButtonPressedInView:(BuyTouchesView *)buyTouchesView;
 -(void)buyTouchesViewDidDisappear:(BuyTouchesView *)buyTouchesView;
 -(void)moreTouchesBought:(NSUInteger)touchesAvailable inView:(BuyTouchesView *)buyTouchesView;
+-(void)infiniteTouchesBoughtInView:(BuyTouchesView *)buyTouchesView;
 @end
 
 @interface BuyTouchesView : UIView

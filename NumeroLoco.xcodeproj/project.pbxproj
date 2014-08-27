@@ -91,6 +91,18 @@
 		A043669E19A6C58F00D071DC /* Close@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A043669C19A6C58F00D071DC /* Close@2x.png */; };
 		A043BD0519A64A9B00E5B047 /* NoTouchesAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = A043BD0419A64A9B00E5B047 /* NoTouchesAlertView.m */; };
 		A06520711959B7D100399778 /* PadStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A06520701959B7D100399778 /* PadStoryboard.storyboard */; };
+		A08EAD1C19AB80AC00F36E23 /* FastGameModeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A08EAD1B19AB80AB00F36E23 /* FastGameModeViewController.m */; };
+		A08EAD1E19AB83F400F36E23 /* FastGamesDatabase.plist in Resources */ = {isa = PBXBuildFile; fileRef = A08EAD1D19AB83F400F36E23 /* FastGamesDatabase.plist */; };
+		A08EAD2119AB96CC00F36E23 /* FastGameWinAlert.m in Sources */ = {isa = PBXBuildFile; fileRef = A08EAD2019AB96CC00F36E23 /* FastGameWinAlert.m */; };
+		A08EAD2419AD1E0E00F36E23 /* heart.png in Resources */ = {isa = PBXBuildFile; fileRef = A08EAD2219AD1E0E00F36E23 /* heart.png */; };
+		A08EAD2519AD1E0E00F36E23 /* heart@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A08EAD2319AD1E0E00F36E23 /* heart@2x.png */; };
+		A08EAD2819AD274C00F36E23 /* BuyLivesView.m in Sources */ = {isa = PBXBuildFile; fileRef = A08EAD2719AD274C00F36E23 /* BuyLivesView.m */; };
+		A0A79F2019AE780F0039E3C7 /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A0A79F1F19AE780F0039E3C7 /* Parse.framework */; };
+		A0A79F2219AE78460039E3C7 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A0A79F2119AE78460039E3C7 /* AudioToolbox.framework */; };
+		A0A79F2419AE784C0039E3C7 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A0A79F2319AE784C0039E3C7 /* CFNetwork.framework */; };
+		A0A79F2619AE78530039E3C7 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A0A79F2519AE78530039E3C7 /* CoreLocation.framework */; };
+		A0A79F2819AE78640039E3C7 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A0A79F2719AE78640039E3C7 /* MobileCoreServices.framework */; };
+		A0A79F2A19AE78730039E3C7 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A0A79F2919AE78730039E3C7 /* QuartzCore.framework */; };
 		A0BCCCB8195474F6001CD7F1 /* ColorsChaptersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A0BCCCB7195474F6001CD7F1 /* ColorsChaptersViewController.m */; };
 		A0BCCCBA195476D1001CD7F1 /* ColorsChaptersNames.plist in Resources */ = {isa = PBXBuildFile; fileRef = A0BCCCB9195476D1001CD7F1 /* ColorsChaptersNames.plist */; };
 		A0BCCCBF19549049001CD7F1 /* ColorsGameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A0BCCCBE19549049001CD7F1 /* ColorsGameViewController.m */; };
@@ -236,6 +248,21 @@
 		A043BD0319A64A9B00E5B047 /* NoTouchesAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NoTouchesAlertView.h; sourceTree = "<group>"; };
 		A043BD0419A64A9B00E5B047 /* NoTouchesAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NoTouchesAlertView.m; sourceTree = "<group>"; };
 		A06520701959B7D100399778 /* PadStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = PadStoryboard.storyboard; sourceTree = "<group>"; };
+		A08EAD1A19AB80AB00F36E23 /* FastGameModeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FastGameModeViewController.h; sourceTree = "<group>"; };
+		A08EAD1B19AB80AB00F36E23 /* FastGameModeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FastGameModeViewController.m; sourceTree = "<group>"; };
+		A08EAD1D19AB83F400F36E23 /* FastGamesDatabase.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = FastGamesDatabase.plist; sourceTree = "<group>"; };
+		A08EAD1F19AB96CC00F36E23 /* FastGameWinAlert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FastGameWinAlert.h; sourceTree = "<group>"; };
+		A08EAD2019AB96CC00F36E23 /* FastGameWinAlert.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FastGameWinAlert.m; sourceTree = "<group>"; };
+		A08EAD2219AD1E0E00F36E23 /* heart.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = heart.png; sourceTree = "<group>"; };
+		A08EAD2319AD1E0E00F36E23 /* heart@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "heart@2x.png"; sourceTree = "<group>"; };
+		A08EAD2619AD274C00F36E23 /* BuyLivesView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BuyLivesView.h; sourceTree = "<group>"; };
+		A08EAD2719AD274C00F36E23 /* BuyLivesView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BuyLivesView.m; sourceTree = "<group>"; };
+		A0A79F1F19AE780F0039E3C7 /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Parse.framework; sourceTree = "<group>"; };
+		A0A79F2119AE78460039E3C7 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		A0A79F2319AE784C0039E3C7 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		A0A79F2519AE78530039E3C7 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		A0A79F2719AE78640039E3C7 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
+		A0A79F2919AE78730039E3C7 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		A0BCCCB6195474F6001CD7F1 /* ColorsChaptersViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ColorsChaptersViewController.h; sourceTree = "<group>"; };
 		A0BCCCB7195474F6001CD7F1 /* ColorsChaptersViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ColorsChaptersViewController.m; sourceTree = "<group>"; };
 		A0BCCCB9195476D1001CD7F1 /* ColorsChaptersNames.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = ColorsChaptersNames.plist; sourceTree = "<group>"; };
@@ -265,10 +292,16 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A0A79F2A19AE78730039E3C7 /* QuartzCore.framework in Frameworks */,
+				A0A79F2819AE78640039E3C7 /* MobileCoreServices.framework in Frameworks */,
+				A0A79F2619AE78530039E3C7 /* CoreLocation.framework in Frameworks */,
+				A0A79F2419AE784C0039E3C7 /* CFNetwork.framework in Frameworks */,
+				A0A79F2219AE78460039E3C7 /* AudioToolbox.framework in Frameworks */,
 				8BE1D5F5198697A700CAAFCF /* Social.framework in Frameworks */,
 				8BC16FCE19780957003405F1 /* GameKit.framework in Frameworks */,
 				A0BDEAEC197732BC008BFF4D /* libz.dylib in Frameworks */,
 				A0BDEAEA197732B0008BFF4D /* StoreKit.framework in Frameworks */,
+				A0A79F2019AE780F0039E3C7 /* Parse.framework in Frameworks */,
 				A0BDEAE8197732A8008BFF4D /* MediaPlayer.framework in Frameworks */,
 				A0BDEAE61977329E008BFF4D /* AdSupport.framework in Frameworks */,
 				A0BDEAE41977326E008BFF4D /* libFlurryAds_5.2.0.a in Frameworks */,
@@ -344,6 +377,10 @@
 				A043BD0419A64A9B00E5B047 /* NoTouchesAlertView.m */,
 				A043669819A6ABEF00D071DC /* BuyTouchesView.h */,
 				A043669919A6ABEF00D071DC /* BuyTouchesView.m */,
+				A08EAD2619AD274C00F36E23 /* BuyLivesView.h */,
+				A08EAD2719AD274C00F36E23 /* BuyLivesView.m */,
+				A08EAD1F19AB96CC00F36E23 /* FastGameWinAlert.h */,
+				A08EAD2019AB96CC00F36E23 /* FastGameWinAlert.m */,
 			);
 			name = "Custom Views";
 			sourceTree = "<group>";
@@ -370,6 +407,12 @@
 		8B6FB8BE19507C6B00EB2C4E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A0A79F2919AE78730039E3C7 /* QuartzCore.framework */,
+				A0A79F2719AE78640039E3C7 /* MobileCoreServices.framework */,
+				A0A79F2519AE78530039E3C7 /* CoreLocation.framework */,
+				A0A79F2319AE784C0039E3C7 /* CFNetwork.framework */,
+				A0A79F2119AE78460039E3C7 /* AudioToolbox.framework */,
+				A0A79F1F19AE780F0039E3C7 /* Parse.framework */,
 				8BB8A9C919A3F3270076E4A7 /* AVFoundation.framework */,
 				8BE1D5F4198697A700CAAFCF /* Social.framework */,
 				8BC16FCD19780957003405F1 /* GameKit.framework */,
@@ -412,6 +455,7 @@
 				8BD2CED21951E6B4002EF327 /* GamesDatabase2.plist */,
 				8B96EAD819795E1C00E60698 /* WordsGamesDatabase2.plist */,
 				8BE1D6041986F8D200CAAFCF /* ColorGamesDatabase2.plist */,
+				A08EAD1D19AB83F400F36E23 /* FastGamesDatabase.plist */,
 			);
 			path = NumeroLoco;
 			sourceTree = "<group>";
@@ -471,6 +515,8 @@
 				8BE1D5F71986A5A300CAAFCF /* ChallengeFriendsViewController.m */,
 				8BB45D7319892CDC00C68B5A /* MultiplayerGameViewController.h */,
 				8BB45D7419892CDC00C68B5A /* MultiplayerGameViewController.m */,
+				A08EAD1A19AB80AB00F36E23 /* FastGameModeViewController.h */,
+				A08EAD1B19AB80AB00F36E23 /* FastGameModeViewController.m */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -505,6 +551,8 @@
 				8BB8A9BC19A3BDD10076E4A7 /* Sounds */,
 				8BB8628E199BA01200718843 /* ButtonsPNGs */,
 				8BAD7B5B1992A00B005DB0C2 /* hand.png */,
+				A08EAD2219AD1E0E00F36E23 /* heart.png */,
+				A08EAD2319AD1E0E00F36E23 /* heart@2x.png */,
 				A043669B19A6C58F00D071DC /* Close.png */,
 				A043669C19A6C58F00D071DC /* Close@2x.png */,
 				A043669619A6AB8D00D071DC /* Touch2.png */,
@@ -707,6 +755,7 @@
 				8BB8629B199BA60900718843 /* ColorsButton.png in Resources */,
 				8BB8A9C419A3C2530076E4A7 /* win.wav in Resources */,
 				8BB8A9C819A3D99A0076E4A7 /* restart.wav in Resources */,
+				A08EAD1E19AB83F400F36E23 /* FastGamesDatabase.plist in Resources */,
 				8BB86293199BA01200718843 /* GamesButton.png in Resources */,
 				8BB8629C199BA60900718843 /* ColorsButton@2x.png in Resources */,
 				A0BCCCBA195476D1001CD7F1 /* ColorsChaptersNames.plist in Resources */,
@@ -722,6 +771,7 @@
 				8BB86296199BA01200718843 /* OptionsButton@2x.png in Resources */,
 				A043669D19A6C58F00D071DC /* Close.png in Resources */,
 				8BB8629E199BA60900718843 /* NumbersButton@2x.png in Resources */,
+				A08EAD2419AD1E0E00F36E23 /* heart.png in Resources */,
 				8BE1D6031986D2FE00CAAFCF /* TwitterLogo.gif in Resources */,
 				8BB862A6199BC07500718843 /* Flecha@2x.png in Resources */,
 				8B96EAD919795E1C00E60698 /* WordsGamesDatabase2.plist in Resources */,
@@ -745,6 +795,7 @@
 				8BB86295199BA01200718843 /* OptionsButton.png in Resources */,
 				8B6FB8D219507C6B00EB2C4E /* Images.xcassets in Resources */,
 				8B6FB8FF19508CA200EB2C4E /* ChapterNames.plist in Resources */,
+				A08EAD2519AD1E0E00F36E23 /* heart@2x.png in Resources */,
 				8BB8A9CC19A3FA8F0076E4A7 /* restartnuevo.wav in Resources */,
 				8BB86294199BA01200718843 /* GamesButton@2x.png in Resources */,
 			);
@@ -770,6 +821,7 @@
 				8BB9EC96196345E9007B8C8E /* TutorialCell.m in Sources */,
 				A0C35D2919A794A6007898F2 /* TouchesObject.m in Sources */,
 				A043BD0519A64A9B00E5B047 /* NoTouchesAlertView.m in Sources */,
+				A08EAD2819AD274C00F36E23 /* BuyLivesView.m in Sources */,
 				8BA94021195DC10C0032706E /* ColorPatternView.m in Sources */,
 				8B9857FC19537C080083FD45 /* AppInfo.m in Sources */,
 				8B316B14199181670062FD77 /* Model.xcdatamodeld in Sources */,
@@ -800,6 +852,8 @@
 				A043669A19A6ABEF00D071DC /* BuyTouchesView.m in Sources */,
 				8BA17EE21987D4AC00DFB839 /* IAPProduct.m in Sources */,
 				A0FC85C3196B20AB005A0A7D /* LoginViewController.m in Sources */,
+				A08EAD2119AB96CC00F36E23 /* FastGameWinAlert.m in Sources */,
+				A08EAD1C19AB80AC00F36E23 /* FastGameModeViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -916,11 +970,12 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Diego Fernando Vidal Illera (9JA65WT89C)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					/Users/diegovidal/Documents/FacebookSDK,
 					/Users/developer/Documents/FacebookSDK,
+					"$(PROJECT_DIR)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "NumeroLoco/NumeroLoco-Prefix.pch";
@@ -932,7 +987,7 @@
 					"$(PROJECT_DIR)/NumeroLoco/FlurryAds",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "5c4209ba-19c2-4466-8b61-4a57bb6bd61c";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
@@ -948,6 +1003,7 @@
 					"$(inherited)",
 					/Users/diegovidal/Documents/FacebookSDK,
 					/Users/developer/Documents/FacebookSDK,
+					"$(PROJECT_DIR)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "NumeroLoco/NumeroLoco-Prefix.pch";
@@ -959,6 +1015,7 @@
 					"$(PROJECT_DIR)/NumeroLoco/FlurryAds",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};

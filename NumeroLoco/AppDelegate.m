@@ -15,14 +15,26 @@
 #import "FileSaver.h"
 #import "GameKitHelper.h"
 #import "TouchesObject.h"
+#import <Parse/Parse.h>
 
-#define TIME_FOR_NEW_TOUCHES 20
-#define NEW_TOUCHES 50
+#define TIME_FOR_NEW_TOUCHES 3600
+#define TIME_FOR_NEW_LIVES 3600
+#define NEW_LIVES 5
+#define NEW_TOUCHES 300
 
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    //Parse setup
+    [Parse setApplicationId:@"Z9VRUjoPPSMl2PQqQYVncx6UPjReI47lKROjPwkW"
+                  clientKey:@"pCLXgoDeQGR6cZZ62DK1CtNzCHFqMheI5qDHSy8e"];
+    
+    //Register for remote notifications
+    [application registerForRemoteNotificationTypes:UIRemoteNotificationTypeBadge|
+     UIRemoteNotificationTypeAlert|
+     UIRemoteNotificationTypeSound];
+    
     //Init our InApp-Purchases Helper Singleton
     [CPIAPHelper sharedInstance];
     
@@ -71,6 +83,20 @@
     } else {
         //Init our touches singleton
         [TouchesObject sharedInstance].totalTouches = [self getTouchesLeftInUserDefaults];
+    }
+    
+    /////////////////////////////////////////////////////////////////
+    //Set initial unlocked game in fast game mode. Just the first game
+    //is unlocked
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"unlockedFastGames"] == nil) {
+        [[NSUserDefaults standardUserDefaults] setObject:@1 forKey:@"unlockedFastGames"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }
+    
+    //Set initial lives for fast game mode
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"lives"] == nil) {
+        [[NSUserDefaults standardUserDefaults] setObject:@1 forKey:@"lives"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
     }
   
     return YES;
@@ -123,6 +149,30 @@
     } else {
         NSLog(@"El usuario compro toques entonces no haré nada de fechas");
     }
+    
+    //////////////////////////////////////////////////////////////////////////////
+    //Check if one hour has pass since the user had no more lives
+    NSDate *savedLivesDate = [self getLivesSavedDate];
+    if (savedLivesDate) {
+        //The date is saved, that means the user has not bought lives yet
+        //Calculate seconds between the two dates
+        NSTimeInterval seconds = [currentDate timeIntervalSinceDate:savedLivesDate];
+        NSLog(@"Lives secoooonnndddsss: %f", seconds);
+        if (seconds >= TIME_FOR_NEW_LIVES) {
+            //Give the user more lives
+            [self saveLivesLeftInUserDefaults:NEW_LIVES];
+            [self removeLivesSavedDateInUserDefaults];
+            //[[[UIAlertView alloc] initWithTitle:@"New Lives!" message:@"You have 5 new lives available!" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil] show];
+            
+            //Post a notification in case the user is on the game screen, to update the screen
+            //with the new lives
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"NewLivesAvailable" object:nil userInfo:nil];
+        } else {
+            [[[UIAlertView alloc] initWithTitle:nil message:@"The new lives are not available yet!" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil] show];
+        }
+    } else {
+        NSLog(@"el usuario tiene vidas entonces no haré nada de fecha de vidas");
+    }
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
@@ -140,7 +190,28 @@
     return wasHandled;
 }
 
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
+{
+    // Store the deviceToken in the current installation and save it to Parse.
+    PFInstallation *currentInstallation = [PFInstallation currentInstallation];
+    [currentInstallation setDeviceTokenFromData:deviceToken];
+    [currentInstallation saveInBackground];
+}
+
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
+    [PFPush handlePush:userInfo];
+}
+
 #pragma mark - Custom Methods 
+
+-(NSDate *)getLivesSavedDate {
+    return [[NSUserDefaults standardUserDefaults] objectForKey:@"NoLivesDate"];
+}
+
+-(void)removeLivesSavedDateInUserDefaults {
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"NoLivesDate"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
 
 -(void)removeSavedDateInUserDefaults {
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"NoTouchesDate"];
@@ -153,6 +224,11 @@
 
 -(NSUInteger)getTouchesLeftInUserDefaults {
     return [[[NSUserDefaults standardUserDefaults] objectForKey:@"Touches"] intValue];
+}
+
+-(void)saveLivesLeftInUserDefaults:(NSUInteger)livesLeft {
+    [[NSUserDefaults standardUserDefaults] setObject:@(livesLeft) forKey:@"lives"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 -(void)saveTouchesLeftInUserDefaults:(NSUInteger)touchesLeft {

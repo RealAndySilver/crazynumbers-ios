@@ -75,6 +75,7 @@
     float maxTime;
     float timeElapsed;
     BOOL managedDocumentIsReady;
+    BOOL userBoughtInfiniteMode;
 }
 
 #pragma mark - Lazy Instantiation
@@ -127,6 +128,8 @@
 
 -(void)viewDidLoad {
     [super viewDidLoad];
+    if ([self userBoughtInfiniteMode]) userBoughtInfiniteMode = YES;
+    else userBoughtInfiniteMode = NO;
     self.view.backgroundColor = [UIColor whiteColor];
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
         isPad = YES;
@@ -151,7 +154,7 @@
     [self initGame];
     [self configureSounds];
     
-    if ([TouchesObject sharedInstance].totalTouches == 0) [self disableButtons];
+    if ([TouchesObject sharedInstance].totalTouches == 0 && !userBoughtInfiniteMode) [self disableButtons];
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -175,7 +178,7 @@
     }
     
     //Check number of touches available
-    if ([TouchesObject sharedInstance].totalTouches == 0) {
+    if ([TouchesObject sharedInstance].totalTouches == 0 && !userBoughtInfiniteMode) {
         NoTouchesAlertView *noTouchesAlert = [[NoTouchesAlertView alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 140.0, screenBounds.size.height/2.0 - 100.0, 280.0, 200.0)];
         noTouchesAlert.delegate = self;
         [noTouchesAlert showInView:self.view];
@@ -311,7 +314,10 @@
     
     //Touches available label
     self.touchesAvailableLabel = [[UILabel alloc] initWithFrame:CGRectOffset(self.maxScoreLabel.frame, 0.0, -(self.maxScoreLabel.frame.size.height + 10.0))];
-    self.touchesAvailableLabel.text = [NSString stringWithFormat:@"Touches left: %d", [TouchesObject sharedInstance].totalTouches];
+    if (userBoughtInfiniteMode)
+        self.touchesAvailableLabel.text = @"Infinite Touches";
+    else
+        self.touchesAvailableLabel.text = [NSString stringWithFormat:@"Touches left: %d", [TouchesObject sharedInstance].totalTouches];
     self.touchesAvailableLabel.font = [UIFont fontWithName:FONT_NAME size:15.0];
     self.touchesAvailableLabel.textColor = [UIColor lightGrayColor];
     self.touchesAvailableLabel.layer.cornerRadius = 10.0;
@@ -454,7 +460,7 @@
     }
     
     //Check if user dont have touches available
-    if ([TouchesObject sharedInstance].totalTouches == 0) [self disableButtons];
+    if ([TouchesObject sharedInstance].totalTouches == 0 && !userBoughtInfiniteMode) [self disableButtons];
 }
 
 -(void)initGame {
@@ -682,20 +688,31 @@
         [(UIButton *)self.columnsButtonsArray[column + 1][row] setBackgroundColor:buttonColor];
     }
     numberOfTaps += 1;
-    [TouchesObject sharedInstance].totalTouches--;
-    self.touchesAvailableLabel.text = [NSString stringWithFormat:@"Touches left: %d", [TouchesObject sharedInstance].totalTouches];
-    
-    if ([TouchesObject sharedInstance].totalTouches == 0) {
-        //Show alert
-        NoTouchesAlertView *noTouchesAlert = [[NoTouchesAlertView alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 140.0, screenBounds.size.height/2.0 - 100.0, 280.0, 200.0)];
-        noTouchesAlert.delegate = self;
-        [noTouchesAlert showInView:self.view];
+    if (!userBoughtInfiniteMode) {
+        [TouchesObject sharedInstance].totalTouches--;
+        self.touchesAvailableLabel.text = [NSString stringWithFormat:@"Touches left: %d", [TouchesObject sharedInstance].totalTouches];
         
-        [self disableButtons];
-        [self saveCurrentDateInUserDefaults];
+        if ([TouchesObject sharedInstance].totalTouches == 0) {
+            //Show alert
+            NoTouchesAlertView *noTouchesAlert = [[NoTouchesAlertView alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 140.0, screenBounds.size.height/2.0 - 100.0, 280.0, 200.0)];
+            noTouchesAlert.delegate = self;
+            [noTouchesAlert showInView:self.view];
+            
+            [self disableButtons];
+            [self saveCurrentDateInUserDefaults];
+        }
     }
-
     [self checkIfUserWon];
+}
+
+#pragma mark - User Defaults 
+
+-(BOOL)userBoughtInfiniteMode {
+    if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"infiniteMode"] boolValue]) {
+        return YES;
+    } else {
+        return NO;
+    }
 }
 
 -(void)saveCurrentDateInUserDefaults {
@@ -747,7 +764,8 @@
     self.gameTimer = nil;
     
     //[self userWon];
-    [self performSelector:@selector(userWon) withObject:nil afterDelay:0.3];}
+    [self performSelector:@selector(userWon) withObject:nil afterDelay:0.3];
+}
 
 -(NSUInteger)pointsWonForTaps:(NSUInteger)tapsMade {
     float points = 0;
@@ -772,7 +790,13 @@
     FileSaver *fileSaver = [[FileSaver alloc] init];
     BOOL userHasRemoveAds = [[fileSaver getDictionary:@"UserRemovedAdsDic"][@"UserRemovedAdsKey"] boolValue];
     
-    if (!userHasRemoveAds) {
+    if (userHasRemoveAds || userBoughtInfiniteMode) {
+        //The user removed the ads
+        
+        //Check if this is the last game
+        [self prepareNextGame];
+        
+    } else {
         //The user has not removed the ads, so display them.
         if ([FlurryAds adReadyForSpace:@"FullScreenAd"]) {
             NSLog(@"Mostraré el ad");
@@ -784,9 +808,6 @@
             //Go to the next game
             [self prepareNextGame];
         }
-    } else {
-        //The user removed the ads
-        [self prepareNextGame];
     }
 }
 
@@ -1213,6 +1234,14 @@ interstitial {
     [self enableButtons];
     
     //Remove the date when there was no touches left
+    [self removeSavedDateInUserDefaults];
+}
+
+-(void)infiniteTouchesBoughtInView:(BuyTouchesView *)buyTouchesView {
+    userBoughtInfiniteMode = YES;
+    self.touchesAvailableLabel.text = @"Infinite Touches";
+    [self enableButtons];
+    
     [self removeSavedDateInUserDefaults];
 }
 

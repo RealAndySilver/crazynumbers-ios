@@ -26,24 +26,24 @@
         self.transform = CGAffineTransformMakeScale(0.5, 0.5);
         
         //Message
-        UILabel *message = [[UILabel alloc] initWithFrame:CGRectMake(20.0, 30.0, frame.size.width - 40.0, 80.0)];
-        message.text = @"You have no more touches left! you can wait one hour to have more or buy some!";
-        message.textColor = [UIColor darkGrayColor];
-        message.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:17.0];
-        message.textAlignment = NSTextAlignmentCenter;
-        message.numberOfLines = 0;
-        [self addSubview:message];
+        self.message = [[UILabel alloc] initWithFrame:CGRectMake(20.0, 30.0, frame.size.width - 40.0, 80.0)];
+        self.message.text = @"You have no more touches left! you can wait one hour to have more or buy some!";
+        self.message.textColor = [UIColor darkGrayColor];
+        self.message.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:17.0];
+        self.message.textAlignment = NSTextAlignmentCenter;
+        self.message.numberOfLines = 0;
+        [self addSubview:self.message];
         
         //Accept button
-        UIButton *acceptButton = [UIButton buttonWithType:UIButtonTypeSystem];
-        acceptButton.frame = CGRectMake(20.0, frame.size.height - 70.0, frame.size.width/2.0 - 40.0, 50.0);
-        [acceptButton setTitle:@"Buy Touches" forState:UIControlStateNormal];
-        [acceptButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        acceptButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:17.0];
-        acceptButton.backgroundColor = [[AppInfo sharedInstance] appColorsArray][0];
-        acceptButton.layer.cornerRadius = 10.0;
-        [acceptButton addTarget:self action:@selector(buyTouchesButtonPressed) forControlEvents:UIControlEventTouchUpInside];
-        [self addSubview:acceptButton];
+        self.acceptButton = [UIButton buttonWithType:UIButtonTypeSystem];
+        self.acceptButton.frame = CGRectMake(20.0, frame.size.height - 70.0, frame.size.width/2.0 - 40.0, 50.0);
+        [self.acceptButton setTitle:@"Buy Touches" forState:UIControlStateNormal];
+        [self.acceptButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        self.acceptButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:17.0];
+        self.acceptButton.backgroundColor = [[AppInfo sharedInstance] appColorsArray][0];
+        self.acceptButton.layer.cornerRadius = 10.0;
+        [self.acceptButton addTarget:self action:@selector(buyTouchesButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+        [self addSubview:self.acceptButton];
         
         //Cancel button
         UIButton *cancelButton = [UIButton buttonWithType:UIButtonTypeSystem];

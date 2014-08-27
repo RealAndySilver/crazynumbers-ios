@@ -21,11 +21,17 @@
     IAPProduct *sevenHundredTouches = [[IAPProduct alloc] initWithProductIdentifier:@"com.iamstudio.cross.sevenhundredtouches"];
     IAPProduct *twoThousandTouches = [[IAPProduct alloc] initWithProductIdentifier:@"com.iamstudio.cross.twothousandtouches"];
     IAPProduct *infiniteMode = [[IAPProduct alloc] initWithProductIdentifier:@"com.iamstudio.cross.infinitemode"];
+    IAPProduct *fiveLives = [[IAPProduct alloc] initWithProductIdentifier:@"com.iamstudio.cross.fivelives"];
+    IAPProduct *twentyLives = [[IAPProduct alloc] initWithProductIdentifier:@"com.iamstudio.cross.twentylives"];
+    IAPProduct *sixtyLives = [[IAPProduct alloc] initWithProductIdentifier:@"com.iamstudio.cross.sixtylives"];
     NSMutableDictionary *products = [@{noAdsProduct.productIdentifier : noAdsProduct,
                                        threeHundredTouches.productIdentifier : threeHundredTouches,
                                        sevenHundredTouches.productIdentifier : sevenHundredTouches,
                                        twoThousandTouches.productIdentifier : twoThousandTouches,
-                                       infiniteMode.productIdentifier : infiniteMode} mutableCopy];
+                                       infiniteMode.productIdentifier : infiniteMode,
+                                       fiveLives.productIdentifier : fiveLives,
+                                       twentyLives.productIdentifier : twentyLives,
+                                       sixtyLives.productIdentifier : sixtyLives} mutableCopy];
     if (self = [super initWithProducts:products]) {
         
     }

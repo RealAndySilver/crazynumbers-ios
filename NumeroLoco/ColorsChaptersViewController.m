@@ -125,9 +125,9 @@
     UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(20.0, screenBounds.size.height - 60.0, 70.0, 40.0)];
     [backButton setTitle:@"Back" forState:UIControlStateNormal];
     backButton.layer.cornerRadius = 10.0;
-    backButton.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    backButton.layer.borderColor = [UIColor darkGrayColor].CGColor;
     backButton.layer.borderWidth = 1.0;
-    [backButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+    [backButton setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
     backButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:17.0];
     [backButton addTarget:self action:@selector(dismissVC) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:backButton];
@@ -141,7 +141,7 @@
 
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     ChaptersCell *cell = (ChaptersCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"CellIdentifier" forIndexPath:indexPath];
-    cell.chapterNameLabel.text = self.chaptersNamesArray[indexPath.item];
+    cell.chapterNameLabel.text = [NSString stringWithFormat:@"Chapter %@", self.chaptersNamesArray[indexPath.item]];
     cell.chapterNameLabel.textColor = [[AppInfo sharedInstance] appColorsArray][indexPath.item];
     cell.buttonsTitleColor = [UIColor whiteColor];
     cell.delegate = self;

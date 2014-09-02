@@ -251,7 +251,7 @@
         labelsFontSize = 18.0;
     }
     self.titleLabel.text = [NSString stringWithFormat:@"Chapter %i - Game %i", self.selectedChapter + 1, self.selectedGame + 1];
-    self.titleLabel.textColor = [UIColor lightGrayColor];
+    self.titleLabel.textColor = [UIColor darkGrayColor];
     self.titleLabel.textAlignment = NSTextAlignmentCenter;
     [self.view addSubview:self.titleLabel];
     
@@ -260,9 +260,9 @@
     backButton.frame = CGRectMake(10.0, screenBounds.size.height - 50.0, 60.0, 40.0);
     backButton.layer.cornerRadius = 10.0;
     backButton.layer.borderWidth = 1.0;
-    backButton.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    backButton.layer.borderColor = [UIColor darkGrayColor].CGColor;
     [backButton setTitle:@"Back" forState:UIControlStateNormal];
-    [backButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+    [backButton setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
     backButton.titleLabel.font = [UIFont fontWithName:FONT_NAME size:15.0];
     [backButton addTarget:self action:@selector(dismissVC) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:backButton];
@@ -271,10 +271,10 @@
     self.resetButton = [UIButton buttonWithType:UIButtonTypeSystem];
     self.resetButton.frame = CGRectMake(screenBounds.size.width - 70, screenBounds.size.height - 50.0, 60.0, 40.0);
     self.resetButton.layer.cornerRadius = 10.0;
-    self.resetButton.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    self.resetButton.layer.borderColor = [UIColor darkGrayColor].CGColor;
     self.resetButton.layer.borderWidth = 1.0;
     [self.resetButton setTitle:@"Restart" forState:UIControlStateNormal];
-    [self.resetButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+    [self.resetButton setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
     self.resetButton.titleLabel.font = [UIFont fontWithName:FONT_NAME size:15.0];
     [self.resetButton addTarget:self action:@selector(restartGame) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.resetButton];
@@ -283,10 +283,10 @@
     UIButton *colorPattern = [UIButton buttonWithType:UIButtonTypeSystem];
     colorPattern.frame = CGRectMake(screenBounds.size.width - 70.0, screenBounds.size.height - 100.0, 60.0, 40.0);
     colorPattern.layer.cornerRadius = 10.0;
-    colorPattern.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    colorPattern.layer.borderColor = [UIColor darkGrayColor].CGColor;
     colorPattern.layer.borderWidth = 1.0;
     [colorPattern setTitle:@"Pattern" forState:UIControlStateNormal];
-    [colorPattern setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+    [colorPattern setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
     [colorPattern addTarget:self action:@selector(showColorPatternView) forControlEvents:UIControlEventTouchUpInside];
     colorPattern.titleLabel.font = [UIFont fontWithName:FONT_NAME size:15.0];
     [self.view addSubview:colorPattern];
@@ -305,9 +305,9 @@
     //Max Score Label
     self.maxScoreLabel = [[UILabel alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 80.0, screenBounds.size.height - 50.0, 160.0, 40.0)];
     self.maxScoreLabel.layer.cornerRadius = 10.0;
-    self.maxScoreLabel.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    self.maxScoreLabel.layer.borderColor = [UIColor darkGrayColor].CGColor;
     self.maxScoreLabel.layer.borderWidth = 1.0;
-    self.maxScoreLabel.textColor = [UIColor lightGrayColor];
+    self.maxScoreLabel.textColor = [UIColor darkGrayColor];
     self.maxScoreLabel.textAlignment = NSTextAlignmentCenter;
     self.maxScoreLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:15.0];
     [self.view addSubview:self.maxScoreLabel];
@@ -319,20 +319,20 @@
     else
         self.touchesAvailableLabel.text = [NSString stringWithFormat:@"Touches left: %d", [TouchesObject sharedInstance].totalTouches];
     self.touchesAvailableLabel.font = [UIFont fontWithName:FONT_NAME size:15.0];
-    self.touchesAvailableLabel.textColor = [UIColor lightGrayColor];
+    self.touchesAvailableLabel.textColor = [UIColor darkGrayColor];
     self.touchesAvailableLabel.layer.cornerRadius = 10.0;
     self.touchesAvailableLabel.layer.borderWidth = 1.0;
-    self.touchesAvailableLabel.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    self.touchesAvailableLabel.layer.borderColor = [UIColor darkGrayColor].CGColor;
     self.touchesAvailableLabel.textAlignment = NSTextAlignmentCenter;
     [self.view addSubview:self.touchesAvailableLabel];
     
     //Buy button
     UIButton *buyButton = [[UIButton alloc] initWithFrame:CGRectOffset(backButton.frame, 0.0, -(backButton.frame.size.height + 10.0))];
     [buyButton setTitle:@"Buy" forState:UIControlStateNormal];
-    [buyButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+    [buyButton setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
     buyButton.titleLabel.font = [UIFont fontWithName:FONT_NAME size:15.0];
     buyButton.layer.cornerRadius = 10.0;
-    buyButton.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    buyButton.layer.borderColor = [UIColor darkGrayColor].CGColor;
     buyButton.layer.borderWidth = 1.0;
     [buyButton addTarget:self action:@selector(getPricesForPurchases) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:buyButton];

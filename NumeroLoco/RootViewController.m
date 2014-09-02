@@ -20,16 +20,25 @@
 #import "MBProgressHUD.h"
 #import "MultiplayerGameViewController.h"
 #import "GameKitHelper.h"
+#import "TutorialContainerViewController.h"
 #import "FastGameModeViewController.h"
 @import AVFoundation;
 
 @interface RootViewController () <GKGameCenterControllerDelegate>
-@property (weak, nonatomic) IBOutlet UILabel *rossLabel;
+@property (strong, nonatomic) IBOutletCollection(UIView) NSArray *views;
+@property (weak, nonatomic) IBOutlet UIView *view9;
+@property (weak, nonatomic) IBOutlet UIView *view8;
+@property (weak, nonatomic) IBOutlet UIView *view7;
+@property (weak, nonatomic) IBOutlet UIView *view6;
+@property (weak, nonatomic) IBOutlet UIView *view5;
+@property (weak, nonatomic) IBOutlet UIView *view4;
+@property (weak, nonatomic) IBOutlet UIView *view3;
+@property (weak, nonatomic) IBOutlet UIView *view2;
+@property (weak, nonatomic) IBOutlet UIView *view1;
 @property (weak, nonatomic) IBOutlet UILabel *bigCLabel;
 @property (weak, nonatomic) IBOutlet UIView *colorBackgroundView;
 @property (weak, nonatomic) IBOutlet UIButton *optionsMenuButton;
 @property (weak, nonatomic) IBOutlet UIButton *gamesMenuButton;
-@property (weak, nonatomic) IBOutlet UILabel *firstLabel;
 @property (strong, nonatomic) UIButton *numbersButton;
 @property (strong, nonatomic) UIButton *colorsButton;
 @property (strong, nonatomic) UIButton *fastModeButton;
@@ -75,12 +84,15 @@
     } else {
         isPad = NO;
         animationDistance = 25.0;
-        cornerRadius = 5.0;
+        cornerRadius = 10.0;
     }
     self.navigationController.navigationBarHidden = YES;
     screenBounds = [UIScreen mainScreen].bounds;
     [self setupUI];
     [self setupMusic];
+    
+    //Start animating views
+    [self startAnimatingViews];
 }
 
 -(void)viewDidAppear:(BOOL)animated {
@@ -162,31 +174,40 @@
     } else {
         borderWidth = 1.0;
         backButtonFrame = CGRectMake(0.0, 0.0, 80.0, 35.0);
-        buttonFrames = CGRectMake(0.0, 0.0, 150.0, 70.0);
+        buttonFrames = CGRectMake(0.0, 0.0, 100.0, 50.0);
         gamesButtonsFrames = CGRectMake(0.0, 0.0, 100.0, 50.0);
         fontSize = 20.0;
         buttonsHeight = 40.0;
         fontName = @"HelveticaNeue-Light";
     }
     
-    if (self.view.bounds.size.height > 500) {
-        self.rossLabel.center = CGPointMake(self.rossLabel.center.x, self.bigCLabel.frame.origin.y + self.bigCLabel.frame.size.height - 40.0);
-    } else {
-        self.rossLabel.center = CGPointMake(self.rossLabel.center.x, self.bigCLabel.frame.origin.y + self.bigCLabel.frame.size.height - 65.0);
+    //Buttons views
+    for (UIView *view in self.views) {
+        view.layer.cornerRadius = 10.0;
+        view.layer.borderColor = [UIColor whiteColor].CGColor;
+        view.layer.borderWidth = 1.0;
+        view.backgroundColor = [UIColor clearColor];
     }
+    
+    //views background color
+    self.view2.backgroundColor = [UIColor whiteColor];
+    self.view4.backgroundColor = [UIColor whiteColor];
+    self.view5.backgroundColor = [UIColor whiteColor];
+    self.view6.backgroundColor = [UIColor whiteColor];
+    self.view8.backgroundColor = [UIColor whiteColor];
     
     //ColorBackgroundView
     self.colorBackgroundView.frame = CGRectMake(0.0, 0.0, self.view.bounds.size.width, self.view.bounds.size.height/2.0);
-    NSUInteger randomColor = arc4random()%3;
-    self.view.backgroundColor = [[AppInfo sharedInstance] appColorsArray][randomColor];
-    self.colorBackgroundView.backgroundColor = [[AppInfo sharedInstance] appColorsArray][randomColor];
-    self.bigCLabel.textColor = [[AppInfo sharedInstance] appColorsArray][randomColor];
+    //NSUInteger randomColor = arc4random()%3;
+    self.view.backgroundColor = [[AppInfo sharedInstance] appColorsArray][0];
+    self.colorBackgroundView.backgroundColor = [[AppInfo sharedInstance] appColorsArray][0];
+    //self.bigCLabel.textColor = [[AppInfo sharedInstance] appColorsArray][randomColor];
     
     //GameMenu & OptionsMenu Buttons
     self.gamesMenuButton.frame = buttonFrames;
     [self.gamesMenuButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     self.gamesMenuButton.center = CGPointMake(self.view.center.x, self.view.center.y + (self.view.bounds.size.height/4.0) - self.gamesMenuButton.bounds.size.height/2.0 - 10.0);
-    self.gamesMenuButton.titleLabel.font = [UIFont fontWithName:fontName size:fontSize + 10.0];
+    self.gamesMenuButton.titleLabel.font = [UIFont fontWithName:fontName size:fontSize];
     [self.gamesMenuButton addTarget:self action:@selector(showGameMenuOptions) forControlEvents:UIControlEventTouchUpInside];
     self.gamesMenuButton.layer.cornerRadius = 10.0;
     self.gamesMenuButton.layer.borderWidth = borderWidth;
@@ -195,7 +216,7 @@
     self.optionsMenuButton.frame = buttonFrames;
     [self.optionsMenuButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     self.optionsMenuButton.center = CGPointMake(self.view.center.x, self.view.center.y + (self.view.bounds.size.height/4.0) + self.optionsMenuButton.frame.size.height/2.0 + 10.0);
-    self.optionsMenuButton.titleLabel.font = [UIFont fontWithName:fontName size:fontSize + 10.0];
+    self.optionsMenuButton.titleLabel.font = [UIFont fontWithName:fontName size:fontSize];
     self.optionsMenuButton.layer.cornerRadius = 10.0;
     self.optionsMenuButton.layer.borderWidth = borderWidth;
     self.optionsMenuButton.layer.borderColor = [UIColor whiteColor].CGColor;
@@ -217,20 +238,17 @@
     //////////////////////////////////////////////////////////////////////////////////////////
     //Remove Ads button
     //Display it only if the user has not removed the ads
-    FileSaver *fileSaver = [[FileSaver alloc] init];
-    if (![[fileSaver getDictionary:@"UserRemovedAdsDic"][@"UserRemovedAdsKey"] boolValue]) {
-        self.removeAdsButton = [UIButton buttonWithType:UIButtonTypeSystem];
-        self.removeAdsButton.frame = gamesButtonsFrames;
-        self.removeAdsButton.center = CGPointMake(self.view.frame.size.width + self.removeAdsButton.frame.size.width/2.0, self.optionsButton.center.y + self.optionsButton.frame.size.height + 20.0);
-        [self.removeAdsButton setTitle:@"Remove Ads" forState:UIControlStateNormal];
-        [self.removeAdsButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        self.removeAdsButton.titleLabel.font = [UIFont fontWithName:fontName size:fontSize - 6.0];
-        self.removeAdsButton.layer.cornerRadius = cornerRadius;
-        self.removeAdsButton.layer.borderWidth = borderWidth;
-        self.removeAdsButton.layer.borderColor = [UIColor whiteColor].CGColor;
-        [self.removeAdsButton addTarget:self action:@selector(buyNoAds) forControlEvents:UIControlEventTouchUpInside];
-        [self.view addSubview:self.removeAdsButton];
-    }
+    self.removeAdsButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    self.removeAdsButton.frame = gamesButtonsFrames;
+    self.removeAdsButton.center = CGPointMake(self.view.frame.size.width + self.removeAdsButton.frame.size.width/2.0, self.optionsButton.center.y + self.optionsButton.frame.size.height + 20.0);
+    [self.removeAdsButton setTitle:@"Store" forState:UIControlStateNormal];
+    [self.removeAdsButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    self.removeAdsButton.titleLabel.font = [UIFont fontWithName:fontName size:fontSize];
+    self.removeAdsButton.layer.cornerRadius = cornerRadius;
+    self.removeAdsButton.layer.borderWidth = borderWidth;
+    self.removeAdsButton.layer.borderColor = [UIColor whiteColor].CGColor;
+    [self.removeAdsButton addTarget:self action:@selector(buyNoAds) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:self.removeAdsButton];
     
     ////////////////////////////////////////////////////////////////////////////////////////
     //Colors button
@@ -304,12 +322,12 @@
     self.gameCenterButton = [UIButton buttonWithType:UIButtonTypeSystem];
     self.gameCenterButton.frame = gamesButtonsFrames;
     self.gameCenterButton.center = CGPointMake(self.view.frame.size.width + self.gameCenterButton.frame.size.width/2.0, self.optionsButton.center.y - self.optionsButton.bounds.size.height - 20.0);
-    [self.gameCenterButton setTitle:@"Game Center" forState:UIControlStateNormal];
+    [self.gameCenterButton setTitle:@"Rankings" forState:UIControlStateNormal];
     [self.gameCenterButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     self.gameCenterButton.layer.cornerRadius = cornerRadius;
     self.gameCenterButton.layer.borderWidth = borderWidth;
     self.gameCenterButton.layer.borderColor = [UIColor whiteColor].CGColor;
-    self.gameCenterButton.titleLabel.font = [UIFont fontWithName:fontName size:fontSize - 6.0];
+    self.gameCenterButton.titleLabel.font = [UIFont fontWithName:fontName size:fontSize];
     [self.gameCenterButton addTarget:self action:@selector(showGameCenter) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.gameCenterButton];
     
@@ -329,6 +347,114 @@
 }
 
 #pragma mark - Animations 
+
+-(void)startAnimatingViews {
+    [self performSelector:@selector(setPosition1) withObject:nil afterDelay:5.0];
+}
+
+-(void)setPosition1 {
+    self.view1.backgroundColor = [UIColor whiteColor];
+    self.view2.backgroundColor = [UIColor clearColor];
+    self.view3.backgroundColor = [UIColor clearColor];
+    self.view4.backgroundColor = [UIColor whiteColor];
+    self.view5.backgroundColor = [UIColor whiteColor];
+    self.view6.backgroundColor = [UIColor clearColor];
+    self.view7.backgroundColor = [UIColor whiteColor];
+    self.view8.backgroundColor = [UIColor clearColor];
+    self.view9.backgroundColor = [UIColor clearColor];
+    [self performSelector:@selector(setPosition2) withObject:nil afterDelay:4.0];
+}
+
+-(void)setPosition2 {
+    self.view1.backgroundColor = [UIColor clearColor];
+    self.view2.backgroundColor = [UIColor clearColor];
+    self.view3.backgroundColor = [UIColor clearColor];
+    self.view4.backgroundColor = [UIColor clearColor];
+    self.view5.backgroundColor = [UIColor clearColor];
+    self.view6.backgroundColor = [UIColor whiteColor];
+    self.view7.backgroundColor = [UIColor clearColor];
+    self.view8.backgroundColor = [UIColor whiteColor];
+    self.view9.backgroundColor = [UIColor whiteColor];
+    [self performSelector:@selector(setPosition3) withObject:nil afterDelay:4.0];
+}
+
+-(void)setPosition3 {
+    self.view1.backgroundColor = [UIColor clearColor];
+    self.view2.backgroundColor = [UIColor clearColor];
+    self.view3.backgroundColor = [UIColor whiteColor];
+    self.view4.backgroundColor = [UIColor clearColor];
+    self.view5.backgroundColor = [UIColor whiteColor];
+    self.view6.backgroundColor = [UIColor whiteColor];
+    self.view7.backgroundColor = [UIColor clearColor];
+    self.view8.backgroundColor = [UIColor clearColor];
+    self.view9.backgroundColor = [UIColor whiteColor];
+    [self performSelector:@selector(setPosition4) withObject:nil afterDelay:4.0];
+}
+
+-(void)setPosition4 {
+    self.view1.backgroundColor = [UIColor whiteColor];
+    self.view2.backgroundColor = [UIColor whiteColor];
+    self.view3.backgroundColor = [UIColor clearColor];
+    self.view4.backgroundColor = [UIColor whiteColor];
+    self.view5.backgroundColor = [UIColor clearColor];
+    self.view6.backgroundColor = [UIColor clearColor];
+    self.view7.backgroundColor = [UIColor clearColor];
+    self.view8.backgroundColor = [UIColor clearColor];
+    self.view9.backgroundColor = [UIColor clearColor];
+    [self performSelector:@selector(setPosition5) withObject:nil afterDelay:4.0];
+}
+
+-(void)setPosition5 {
+    self.view1.backgroundColor = [UIColor clearColor];
+    self.view2.backgroundColor = [UIColor whiteColor];
+    self.view3.backgroundColor = [UIColor clearColor];
+    self.view4.backgroundColor = [UIColor whiteColor];
+    self.view5.backgroundColor = [UIColor whiteColor];
+    self.view6.backgroundColor = [UIColor whiteColor];
+    self.view7.backgroundColor = [UIColor clearColor];
+    self.view8.backgroundColor = [UIColor whiteColor];
+    self.view9.backgroundColor = [UIColor clearColor];
+    [self performSelector:@selector(setPosition6) withObject:nil afterDelay:4.0];
+}
+
+-(void)setPosition6 {
+    self.view1.backgroundColor = [UIColor clearColor];
+    self.view2.backgroundColor = [UIColor clearColor];
+    self.view3.backgroundColor = [UIColor clearColor];
+    self.view4.backgroundColor = [UIColor clearColor];
+    self.view5.backgroundColor = [UIColor whiteColor];
+    self.view6.backgroundColor = [UIColor clearColor];
+    self.view7.backgroundColor = [UIColor whiteColor];
+    self.view8.backgroundColor = [UIColor whiteColor];
+    self.view9.backgroundColor = [UIColor whiteColor];
+    [self performSelector:@selector(setPosition7) withObject:nil afterDelay:4.0];
+}
+
+-(void)setPosition7 {
+    self.view1.backgroundColor = [UIColor clearColor];
+    self.view2.backgroundColor = [UIColor clearColor];
+    self.view3.backgroundColor = [UIColor clearColor];
+    self.view4.backgroundColor = [UIColor whiteColor];
+    self.view5.backgroundColor = [UIColor clearColor];
+    self.view6.backgroundColor = [UIColor clearColor];
+    self.view7.backgroundColor = [UIColor whiteColor];
+    self.view8.backgroundColor = [UIColor whiteColor];
+    self.view9.backgroundColor = [UIColor clearColor];
+    [self performSelector:@selector(setPosition8) withObject:nil afterDelay:4.0];
+}
+
+-(void)setPosition8 {
+    self.view1.backgroundColor = [UIColor clearColor];
+    self.view2.backgroundColor = [UIColor whiteColor];
+    self.view3.backgroundColor = [UIColor clearColor];
+    self.view4.backgroundColor = [UIColor whiteColor];
+    self.view5.backgroundColor = [UIColor whiteColor];
+    self.view6.backgroundColor = [UIColor whiteColor];
+    self.view7.backgroundColor = [UIColor clearColor];
+    self.view8.backgroundColor = [UIColor whiteColor];
+    self.view9.backgroundColor = [UIColor clearColor];
+    [self performSelector:@selector(setPosition1) withObject:nil afterDelay:4.0];
+}
 
 -(void)showOptionsButtons {
     [self playButtonSound];
@@ -484,9 +610,12 @@
     [self playButtonSound];
     
     [Flurry logEvent:@"OpenTutorial"];
-    TutorialViewController *tutorialVC = [self.storyboard instantiateViewControllerWithIdentifier:@"Tutorial"];
+    TutorialContainerViewController *tutContainerVC = [self.storyboard instantiateViewControllerWithIdentifier:@"TutorialContainer"];
+    [self presentViewController:tutContainerVC animated:YES completion:nil];
+    
+    /*TutorialViewController *tutorialVC = [self.storyboard instantiateViewControllerWithIdentifier:@"Tutorial"];
     //tutorialVC.viewControllerAppearedFromInitialLaunching = viewAppearFromFirstTimeTutorial;
-    [self presentViewController:tutorialVC animated:YES completion:nil];
+    [self presentViewController:tutorialVC animated:YES completion:nil];*/
 }
 
 -(void)goToWordsChaptersVC {

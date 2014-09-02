@@ -115,13 +115,13 @@
         
         //Black line view
         UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(20.0, 140.0, frame.size.width - 40.0, 1.0)];
-        lineView.backgroundColor = [[AppInfo sharedInstance] appColorsArray][0];
+        lineView.backgroundColor = [[AppInfo sharedInstance] appColorsArray][2];
         [self addSubview:lineView];
         
         //Score label
         self.scoreLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0, 140.0, frame.size.width - 40.0, 30.0)];
         self.scoreLabel.text = @"Score: 0/0";
-        self.scoreLabel.textColor = [[AppInfo sharedInstance] appColorsArray][0];
+        self.scoreLabel.textColor = [[AppInfo sharedInstance] appColorsArray][2];
         self.scoreLabel.font = [UIFont fontWithName:FONT_NAME size:20.0];
         [self addSubview:self.scoreLabel];
         
@@ -141,13 +141,13 @@
         
         //Black line view
         UIView *lineView2 = [[UIView alloc] initWithFrame:CGRectMake(20.0, 250.0, frame.size.width - 40.0, 1.0)];
-        lineView2.backgroundColor = [[AppInfo sharedInstance] appColorsArray][0];
+        lineView2.backgroundColor = [[AppInfo sharedInstance] appColorsArray][2];
         [self addSubview:lineView2];
         
         //Bonus score label
         self.bonusScoreLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0, 250.0, frame.size.width - 20.0, 30.0)];
         self.bonusScoreLabel.text = @"Time Bonus Score: 0/0";
-        self.bonusScoreLabel.textColor = [[AppInfo sharedInstance] appColorsArray][0];
+        self.bonusScoreLabel.textColor = [[AppInfo sharedInstance] appColorsArray][2];
         self.bonusScoreLabel.font = [UIFont fontWithName:FONT_NAME size:18.0];
         [self addSubview:self.bonusScoreLabel];
         
@@ -163,7 +163,7 @@
         self.bigScoreLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0, 320.0, frame.size.width - 40.0, 60.0)];
         self.bigScoreLabel.text = @"0/0";
         self.bigScoreLabel.textAlignment = NSTextAlignmentCenter;
-        self.bigScoreLabel.textColor = [[AppInfo sharedInstance] appColorsArray][0];
+        self.bigScoreLabel.textColor = [[AppInfo sharedInstance] appColorsArray][2];
         self.bigScoreLabel.font = [UIFont fontWithName:FONT_NAME size:40.0];
         [self addSubview:self.bigScoreLabel];
         

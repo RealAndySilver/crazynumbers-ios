@@ -91,12 +91,19 @@
 		A043669E19A6C58F00D071DC /* Close@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A043669C19A6C58F00D071DC /* Close@2x.png */; };
 		A043BD0519A64A9B00E5B047 /* NoTouchesAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = A043BD0419A64A9B00E5B047 /* NoTouchesAlertView.m */; };
 		A06520711959B7D100399778 /* PadStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A06520701959B7D100399778 /* PadStoryboard.storyboard */; };
+		A08E2DBA19B11FB6009F8F6F /* TutorialContainerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A08E2DB919B11FB6009F8F6F /* TutorialContainerViewController.m */; };
+		A08E2DBD19B11FCA009F8F6F /* FirstPageTutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A08E2DBC19B11FCA009F8F6F /* FirstPageTutViewController.m */; };
+		A08E2DC019B11FD6009F8F6F /* SecondPageTutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A08E2DBF19B11FD6009F8F6F /* SecondPageTutViewController.m */; };
+		A08E2DC319B11FE3009F8F6F /* ThirdPageTutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A08E2DC219B11FE3009F8F6F /* ThirdPageTutViewController.m */; };
+		A08E2DC619B13251009F8F6F /* TutorialAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = A08E2DC519B13251009F8F6F /* TutorialAlertView.m */; };
 		A08EAD1C19AB80AC00F36E23 /* FastGameModeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A08EAD1B19AB80AB00F36E23 /* FastGameModeViewController.m */; };
 		A08EAD1E19AB83F400F36E23 /* FastGamesDatabase.plist in Resources */ = {isa = PBXBuildFile; fileRef = A08EAD1D19AB83F400F36E23 /* FastGamesDatabase.plist */; };
 		A08EAD2119AB96CC00F36E23 /* FastGameWinAlert.m in Sources */ = {isa = PBXBuildFile; fileRef = A08EAD2019AB96CC00F36E23 /* FastGameWinAlert.m */; };
 		A08EAD2419AD1E0E00F36E23 /* heart.png in Resources */ = {isa = PBXBuildFile; fileRef = A08EAD2219AD1E0E00F36E23 /* heart.png */; };
 		A08EAD2519AD1E0E00F36E23 /* heart@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A08EAD2319AD1E0E00F36E23 /* heart@2x.png */; };
 		A08EAD2819AD274C00F36E23 /* BuyLivesView.m in Sources */ = {isa = PBXBuildFile; fileRef = A08EAD2719AD274C00F36E23 /* BuyLivesView.m */; };
+		A0A091CC19B66651001A8EDE /* FastGamesView.m in Sources */ = {isa = PBXBuildFile; fileRef = A0A091CB19B66651001A8EDE /* FastGamesView.m */; };
+		A0A091CF19B6696E001A8EDE /* GameCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A0A091CE19B6696E001A8EDE /* GameCell.m */; };
 		A0A79F2019AE780F0039E3C7 /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A0A79F1F19AE780F0039E3C7 /* Parse.framework */; };
 		A0A79F2219AE78460039E3C7 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A0A79F2119AE78460039E3C7 /* AudioToolbox.framework */; };
 		A0A79F2419AE784C0039E3C7 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A0A79F2319AE784C0039E3C7 /* CFNetwork.framework */; };
@@ -117,6 +124,7 @@
 		A0BDEAEC197732BC008BFF4D /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A0BDEAEB197732BC008BFF4D /* libz.dylib */; };
 		A0BDEAEE19773C31008BFF4D /* BackgroundPad.png in Resources */ = {isa = PBXBuildFile; fileRef = A0BDEAED19773C31008BFF4D /* BackgroundPad.png */; };
 		A0C35D2919A794A6007898F2 /* TouchesObject.m in Sources */ = {isa = PBXBuildFile; fileRef = A0C35D2819A794A6007898F2 /* TouchesObject.m */; };
+		A0CBE4B219B4BEAE00F1F0B8 /* FourthPageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A0CBE4B119B4BEAE00F1F0B8 /* FourthPageViewController.m */; };
 		A0FC85C3196B20AB005A0A7D /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A0FC85C2196B20AA005A0A7D /* LoginViewController.m */; };
 /* End PBXBuildFile section */
 
@@ -248,6 +256,16 @@
 		A043BD0319A64A9B00E5B047 /* NoTouchesAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NoTouchesAlertView.h; sourceTree = "<group>"; };
 		A043BD0419A64A9B00E5B047 /* NoTouchesAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NoTouchesAlertView.m; sourceTree = "<group>"; };
 		A06520701959B7D100399778 /* PadStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = PadStoryboard.storyboard; sourceTree = "<group>"; };
+		A08E2DB819B11FB6009F8F6F /* TutorialContainerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TutorialContainerViewController.h; sourceTree = "<group>"; };
+		A08E2DB919B11FB6009F8F6F /* TutorialContainerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TutorialContainerViewController.m; sourceTree = "<group>"; };
+		A08E2DBB19B11FCA009F8F6F /* FirstPageTutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FirstPageTutViewController.h; sourceTree = "<group>"; };
+		A08E2DBC19B11FCA009F8F6F /* FirstPageTutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FirstPageTutViewController.m; sourceTree = "<group>"; };
+		A08E2DBE19B11FD6009F8F6F /* SecondPageTutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SecondPageTutViewController.h; sourceTree = "<group>"; };
+		A08E2DBF19B11FD6009F8F6F /* SecondPageTutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SecondPageTutViewController.m; sourceTree = "<group>"; };
+		A08E2DC119B11FE3009F8F6F /* ThirdPageTutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThirdPageTutViewController.h; sourceTree = "<group>"; };
+		A08E2DC219B11FE3009F8F6F /* ThirdPageTutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ThirdPageTutViewController.m; sourceTree = "<group>"; };
+		A08E2DC419B13251009F8F6F /* TutorialAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TutorialAlertView.h; sourceTree = "<group>"; };
+		A08E2DC519B13251009F8F6F /* TutorialAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TutorialAlertView.m; sourceTree = "<group>"; };
 		A08EAD1A19AB80AB00F36E23 /* FastGameModeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FastGameModeViewController.h; sourceTree = "<group>"; };
 		A08EAD1B19AB80AB00F36E23 /* FastGameModeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FastGameModeViewController.m; sourceTree = "<group>"; };
 		A08EAD1D19AB83F400F36E23 /* FastGamesDatabase.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = FastGamesDatabase.plist; sourceTree = "<group>"; };
@@ -257,6 +275,10 @@
 		A08EAD2319AD1E0E00F36E23 /* heart@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "heart@2x.png"; sourceTree = "<group>"; };
 		A08EAD2619AD274C00F36E23 /* BuyLivesView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BuyLivesView.h; sourceTree = "<group>"; };
 		A08EAD2719AD274C00F36E23 /* BuyLivesView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BuyLivesView.m; sourceTree = "<group>"; };
+		A0A091CA19B66651001A8EDE /* FastGamesView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FastGamesView.h; sourceTree = "<group>"; };
+		A0A091CB19B66651001A8EDE /* FastGamesView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FastGamesView.m; sourceTree = "<group>"; };
+		A0A091CD19B6696E001A8EDE /* GameCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameCell.h; sourceTree = "<group>"; };
+		A0A091CE19B6696E001A8EDE /* GameCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameCell.m; sourceTree = "<group>"; };
 		A0A79F1F19AE780F0039E3C7 /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Parse.framework; sourceTree = "<group>"; };
 		A0A79F2119AE78460039E3C7 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		A0A79F2319AE784C0039E3C7 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
@@ -283,6 +305,8 @@
 		A0BDEAED19773C31008BFF4D /* BackgroundPad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = BackgroundPad.png; sourceTree = "<group>"; };
 		A0C35D2719A794A6007898F2 /* TouchesObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TouchesObject.h; sourceTree = "<group>"; };
 		A0C35D2819A794A6007898F2 /* TouchesObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TouchesObject.m; sourceTree = "<group>"; };
+		A0CBE4B019B4BEAE00F1F0B8 /* FourthPageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FourthPageViewController.h; sourceTree = "<group>"; };
+		A0CBE4B119B4BEAE00F1F0B8 /* FourthPageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FourthPageViewController.m; sourceTree = "<group>"; };
 		A0FC85C1196B20AA005A0A7D /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		A0FC85C2196B20AA005A0A7D /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -381,6 +405,10 @@
 				A08EAD2719AD274C00F36E23 /* BuyLivesView.m */,
 				A08EAD1F19AB96CC00F36E23 /* FastGameWinAlert.h */,
 				A08EAD2019AB96CC00F36E23 /* FastGameWinAlert.m */,
+				A08E2DC419B13251009F8F6F /* TutorialAlertView.h */,
+				A08E2DC519B13251009F8F6F /* TutorialAlertView.m */,
+				A0A091CA19B66651001A8EDE /* FastGamesView.h */,
+				A0A091CB19B66651001A8EDE /* FastGamesView.m */,
 			);
 			name = "Custom Views";
 			sourceTree = "<group>";
@@ -517,6 +545,7 @@
 				8BB45D7419892CDC00C68B5A /* MultiplayerGameViewController.m */,
 				A08EAD1A19AB80AB00F36E23 /* FastGameModeViewController.h */,
 				A08EAD1B19AB80AB00F36E23 /* FastGameModeViewController.m */,
+				A08E2DB719B11F8A009F8F6F /* Tutorial ViewControllers */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -541,6 +570,8 @@
 				8BB9EC95196345E9007B8C8E /* TutorialCell.m */,
 				8BE1D5F91986AD4D00CAAFCF /* FriendsCell.h */,
 				8BE1D5FA1986AD4D00CAAFCF /* FriendsCell.m */,
+				A0A091CD19B6696E001A8EDE /* GameCell.h */,
+				A0A091CE19B6696E001A8EDE /* GameCell.m */,
 			);
 			name = "Custom Cells";
 			sourceTree = "<group>";
@@ -651,6 +682,23 @@
 				8BB8A9BF19A3BDD10076E4A7 /* win.m4a */,
 			);
 			path = Sounds;
+			sourceTree = "<group>";
+		};
+		A08E2DB719B11F8A009F8F6F /* Tutorial ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				A08E2DB819B11FB6009F8F6F /* TutorialContainerViewController.h */,
+				A08E2DB919B11FB6009F8F6F /* TutorialContainerViewController.m */,
+				A08E2DBB19B11FCA009F8F6F /* FirstPageTutViewController.h */,
+				A08E2DBC19B11FCA009F8F6F /* FirstPageTutViewController.m */,
+				A08E2DBE19B11FD6009F8F6F /* SecondPageTutViewController.h */,
+				A08E2DBF19B11FD6009F8F6F /* SecondPageTutViewController.m */,
+				A08E2DC119B11FE3009F8F6F /* ThirdPageTutViewController.h */,
+				A08E2DC219B11FE3009F8F6F /* ThirdPageTutViewController.m */,
+				A0CBE4B019B4BEAE00F1F0B8 /* FourthPageViewController.h */,
+				A0CBE4B119B4BEAE00F1F0B8 /* FourthPageViewController.m */,
+			);
+			name = "Tutorial ViewControllers";
 			sourceTree = "<group>";
 		};
 		A0BDEAD81976C7E3008BFF4D /* Flurry */ = {
@@ -823,18 +871,25 @@
 				A043BD0519A64A9B00E5B047 /* NoTouchesAlertView.m in Sources */,
 				A08EAD2819AD274C00F36E23 /* BuyLivesView.m in Sources */,
 				8BA94021195DC10C0032706E /* ColorPatternView.m in Sources */,
+				A0A091CF19B6696E001A8EDE /* GameCell.m in Sources */,
 				8B9857FC19537C080083FD45 /* AppInfo.m in Sources */,
+				A08E2DC019B11FD6009F8F6F /* SecondPageTutViewController.m in Sources */,
+				A08E2DC319B11FE3009F8F6F /* ThirdPageTutViewController.m in Sources */,
+				A08E2DBD19B11FCA009F8F6F /* FirstPageTutViewController.m in Sources */,
 				8B316B14199181670062FD77 /* Model.xcdatamodeld in Sources */,
 				8B6FB8F9195084CE00EB2C4E /* ChaptersViewController.m in Sources */,
 				8B5F497B19A4F19900C0C7E2 /* AudioPlayer.m in Sources */,
 				8BB45D7519892CDC00C68B5A /* MultiplayerGameViewController.m in Sources */,
 				8BA17EE11987D4AC00DFB839 /* IAPHelper.m in Sources */,
 				8BA17EE61987E4AA00DFB839 /* MBProgressHUD.m in Sources */,
+				A0CBE4B219B4BEAE00F1F0B8 /* FourthPageViewController.m in Sources */,
 				8B1ED91619799482001FDB2C /* GameKitHelper.m in Sources */,
 				8BA60C37195B33870072A7F4 /* FileSaver.m in Sources */,
 				8BA17EE01987D4AC00DFB839 /* CPIAPHelper.m in Sources */,
 				8B61F8FB195C87CC0036BB90 /* GameWonAlert.m in Sources */,
+				A08E2DC619B13251009F8F6F /* TutorialAlertView.m in Sources */,
 				A0BCCCB8195474F6001CD7F1 /* ColorsChaptersViewController.m in Sources */,
+				A0A091CC19B66651001A8EDE /* FastGamesView.m in Sources */,
 				8B316B1D1991824B0062FD77 /* Score+AddOns.m in Sources */,
 				8B2CEBC1199D56DF00353E43 /* MultiplayerAlertView.m in Sources */,
 				8BE1D5F81986A5A300CAAFCF /* ChallengeFriendsViewController.m in Sources */,
@@ -848,6 +903,7 @@
 				8BAD7B5A19926746005DB0C2 /* Score.m in Sources */,
 				8BB9EC9319632542007B8C8E /* TutorialViewController.m in Sources */,
 				8B6FB8CC19507C6B00EB2C4E /* main.m in Sources */,
+				A08E2DBA19B11FB6009F8F6F /* TutorialContainerViewController.m in Sources */,
 				8B6FB8F419507D7600EB2C4E /* RootViewController.m in Sources */,
 				A043669A19A6ABEF00D071DC /* BuyTouchesView.m in Sources */,
 				8BA17EE21987D4AC00DFB839 /* IAPProduct.m in Sources */,

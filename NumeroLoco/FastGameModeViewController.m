@@ -15,8 +15,10 @@
 #import "BuyLivesView.h"
 #import "NoTouchesAlertView.h"
 #import "MultiplayerWinAlert.h"
+#import "AllGamesFinishedView.h"
+#import "FastGamesView.h"
 
-@interface FastGameModeViewController () <FastGameAlertDelegate, BuyLivesViewDelegate, NoTouchesAlertDelegate, MultiplayerWinAlertDelegate>
+@interface FastGameModeViewController () <FastGameAlertDelegate, BuyLivesViewDelegate, NoTouchesAlertDelegate, MultiplayerWinAlertDelegate, AllGamesFinishedViewDelegate, FastGamesViewDelegate>
 @property (strong, nonatomic) NSArray *pointsArray;
 @property (strong, nonatomic) NSTimer *gameTimer;
 @property (strong, nonatomic) UILabel *titleLabel;
@@ -28,6 +30,8 @@
 @property (strong, nonatomic) NSString *gameType;
 @property (strong, nonatomic) NSArray *colorPaletteArray;
 @property (assign, nonatomic) NSUInteger currentGame;
+@property (strong, nonatomic) NSArray *chaptersDataArray;
+@property (strong, nonatomic) NSString *gamesDatabasePath;
 @end
 
 #define FONT_LIGHT @"HelveticaNeue-Light"
@@ -39,6 +43,7 @@
     NSUInteger maxNumber;
     NSUInteger maxTime;
     NSUInteger timeLeft;
+    NSUInteger totalGames;
     BOOL isPad;
     BOOL userCanPlay;
     BOOL userBoughtInfiniteMode;
@@ -69,6 +74,9 @@
 
 -(void)viewDidLoad {
     [super viewDidLoad];
+    self.gamesDatabasePath = [[NSBundle mainBundle] pathForResource:@"FastGamesDatabase" ofType:@"plist"];
+    self.chaptersDataArray = [NSArray arrayWithContentsOfFile:self.gamesDatabasePath];
+    totalGames = [self.chaptersDataArray count];
     self.currentGame = [self getLastUnlockedLevelInUserDefaults] - 1;
     if ([self userBoughtInfiniteMode]) userBoughtInfiniteMode = YES;
     else userBoughtInfiniteMode = NO;
@@ -136,6 +144,17 @@
     self.timeLeftLabel.layer.borderWidth = 1.0;
     [self.view addSubview:self.timeLeftLabel];
     
+    //Games button
+    UIButton *gamesButton = [[UIButton alloc] initWithFrame:CGRectMake(screenBounds.size.width - 80.0, screenBounds.size.height - 50.0, 70.0, 40.0)];
+    [gamesButton setTitle:@"Games" forState:UIControlStateNormal];
+    [gamesButton setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
+    gamesButton.titleLabel.font = [UIFont fontWithName:FONT_LIGHT size:15.0];
+    gamesButton.layer.cornerRadius = 10.0;
+    gamesButton.layer.borderColor = [UIColor darkGrayColor].CGColor;
+    gamesButton.layer.borderWidth = 1.0;
+    [gamesButton addTarget:self action:@selector(showGamesView) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:gamesButton];
+    
     //Heart image view
     UIImageView *heartImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"heart.png"]];
     heartImageView.frame = CGRectMake(10.0, screenBounds.size.height - 110.0, 50.0, 50.0);
@@ -143,7 +162,7 @@
     
     //HEart number label
     self.heartNumberLabel = [[UILabel alloc] initWithFrame:CGRectMake(heartImageView.frame.origin.x + heartImageView.frame.size.width, screenBounds.size.height - 110.0, 100.0, 50.0)];
-    self.heartNumberLabel.textColor = [[AppInfo sharedInstance] appColorsArray][2];
+    self.heartNumberLabel.textColor = [[AppInfo sharedInstance] appColorsArray][0];
     if (userBoughtInfiniteMode)
         self.heartNumberLabel.text = @"x Infinite";
     else
@@ -159,11 +178,9 @@
 
 -(void)initGame {
     [self resetGame];
-    self.titleLabel.text = [NSString stringWithFormat:@"Game %u", self.currentGame + 1];
+    self.titleLabel.text = [NSString stringWithFormat:@"Game %u / %lu", self.currentGame + 1, (unsigned long)totalGames];
     
-    NSString *gamesDatabasePath = [[NSBundle mainBundle] pathForResource:@"FastGamesDatabase" ofType:@"plist"];
-    NSArray *chaptersDataArray = [NSArray arrayWithContentsOfFile:gamesDatabasePath];
-    self.pointsArray = chaptersDataArray[self.currentGame][@"puntos"];
+    self.pointsArray = self.chaptersDataArray[self.currentGame][@"puntos"];
     NSLog(@"numero de puntos: %d", [self.pointsArray count]);
     for (int i = 0; i < [self.pointsArray count]; i++) {
         NSUInteger row = [self.pointsArray[i][@"fila"] intValue] - 1;
@@ -185,12 +202,10 @@
     [self.buttonsContainerView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
     [self.columnsButtonsArray removeAllObjects];
     
-    NSString *gamesDatabasePath = [[NSBundle mainBundle] pathForResource:@"FastGamesDatabase" ofType:@"plist"];
-    NSArray *chaptersDataArray = [NSArray arrayWithContentsOfFile:gamesDatabasePath];
-    matrixSize = [chaptersDataArray[self.currentGame][@"matrixSize"] intValue];
-    maxNumber = [chaptersDataArray[self.currentGame][@"maxNumber"] intValue];
-    maxTime = [chaptersDataArray[self.currentGame][@"maxTime"] intValue];
-    self.gameType = chaptersDataArray[self.currentGame][@"type"];
+    matrixSize = [self.chaptersDataArray[self.currentGame][@"matrixSize"] intValue];
+    maxNumber = [self.chaptersDataArray[self.currentGame][@"maxNumber"] intValue];
+    maxTime = [self.chaptersDataArray[self.currentGame][@"maxTime"] intValue];
+    self.gameType = self.chaptersDataArray[self.currentGame][@"type"];
     if ([self.gameType isEqualToString:@"number"]) {
         self.buttonsContainerView.backgroundColor = [UIColor whiteColor];
     } else {
@@ -437,6 +452,16 @@
 
 #pragma mark - Actions 
 
+-(void)showGamesView {
+    //Invaldiate timer
+    [self.gameTimer invalidate];
+    self.gameTimer = nil;
+    
+    FastGamesView *fastGamesView = [[FastGamesView alloc] initWithFrame:CGRectMake(20.0, 20.0, self.view.bounds.size.width - 40.0, self.view.bounds.size.height - 40.0)];
+    fastGamesView.delegate = self;
+    [fastGamesView showInView:self.view];
+}
+
 -(void)colorButtonPressed:(UIButton *)numberButton {
     
     NSLog(@"Oprimí el boton con tag %d", numberButton.tag);
@@ -487,7 +512,6 @@
     }
     [self checkIfUserWonAtColorsGame];
 }
-
 
 -(void)numberButtonPressed:(UIButton *)numberButton {
     NSLog(@"Oprimí el boton con tag %ld", (long)numberButton.tag);
@@ -577,8 +601,17 @@
 }
 
 -(void)userWon {
-    [self saveNewUnlockedGameInUserDefaults];
-    [self showWinAlert];
+    if (self.currentGame == totalGames - 1) {
+        NSLog(@"Ganaste el ultim juego");
+        [self showAllGamesWonAlert];
+    } else {
+        //NSLog(@"Current game: %lu", (unsigned long)self.currentGame + 1);
+        //NSLog(@"Nivel desbloqueado en user defaults: %lu", (unsigned long)[self getLastUnlockedLevelInUserDefaults]);
+        if (self.currentGame + 1 >= [self getLastUnlockedLevelInUserDefaults]) {
+            [self saveNewUnlockedGameInUserDefaults];
+        }
+        [self showWinAlert];
+    }
 }
 
 -(void)userLost {
@@ -672,6 +705,16 @@
 }
 
 #pragma mark - Actions 
+
+-(void)showAllGamesWonAlert {
+    AllGamesFinishedView *allGamesWonAlert = [[AllGamesFinishedView alloc] initWithFrame:self.view.bounds];
+    allGamesWonAlert.messageLabel.text = @"You have completed all fast mode games! Wait for more games soon!";
+    allGamesWonAlert.messageLabel.transform = CGAffineTransformMakeTranslation(0.0, 100.0);
+    allGamesWonAlert.closeButton.transform = CGAffineTransformMakeTranslation(0.0, -100.0);
+    allGamesWonAlert.congratsLabel.transform = CGAffineTransformMakeTranslation(0.0, 60.0);
+    allGamesWonAlert.delegate = self;
+    [allGamesWonAlert showInView:self.view];
+}
 
 -(void)showBuyMoreLivesAlert {
     NoTouchesAlertView *noLivesAlert = [[NoTouchesAlertView alloc] initWithFrame:CGRectMake(20.0, self.view.bounds.size.height/2.0 - 100.0, self.view.bounds.size.width - 40.0, 200.0)];
@@ -815,6 +858,28 @@
 
 -(void)multiplayerWinAlertDidDissapear:(MultiplayerWinAlert *)winAlert {
     winAlert = nil;
+}
+
+#pragma mark - AllGamesFinishedViewDleegat
+
+-(void)gameFinishedViewWillDissapear:(AllGamesFinishedView *)gamesFinishedView {
+    
+}
+
+-(void)gameFinishedViewDidDissapear:(AllGamesFinishedView *)gamesFinishedView {
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+#pragma mark - FastGamesViewDelegate
+
+-(void)gameSelected:(NSUInteger)game inFastGamesView:(FastGamesView *)fastGamesView {
+    NSLog(@"Seleccioné el juego %lu", (unsigned long)game);
+    self.currentGame = game;
+    [self initGame];
+}
+
+-(void)closeButtonPressedInFastGameView:(FastGamesView *)fastGamesView {
+    self.gameTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(substractTime) userInfo:nil repeats:YES];
 }
 
 #pragma mark - Notification Handlers 

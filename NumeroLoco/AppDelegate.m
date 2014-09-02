@@ -31,9 +31,19 @@
                   clientKey:@"pCLXgoDeQGR6cZZ62DK1CtNzCHFqMheI5qDHSy8e"];
     
     //Register for remote notifications
-    [application registerForRemoteNotificationTypes:UIRemoteNotificationTypeBadge|
+    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0)
+    {
+        [[UIApplication sharedApplication] registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeSound | UIUserNotificationTypeAlert | UIUserNotificationTypeBadge) categories:nil]];
+        [[UIApplication sharedApplication] registerForRemoteNotifications];
+    }
+    else
+    {
+        [[UIApplication sharedApplication] registerForRemoteNotificationTypes:
+         (UIUserNotificationTypeBadge | UIUserNotificationTypeSound | UIUserNotificationTypeAlert)];
+    }
+    /*[application registerForRemoteNotificationTypes:UIRemoteNotificationTypeBadge|
      UIRemoteNotificationTypeAlert|
-     UIRemoteNotificationTypeSound];
+     UIRemoteNotificationTypeSound];*/
     
     //Init our InApp-Purchases Helper Singleton
     [CPIAPHelper sharedInstance];

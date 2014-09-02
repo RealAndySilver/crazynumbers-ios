@@ -2,10 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <array>
-	<string>Chapter Blue</string>
-	<string>Chapter Violet</string>
-	<string>Chapter Red</string>
-	<string>Chapter Yellow</string>
+	<string>Red</string>
+	<string>Violet</string>
+	<string>Blue</string>
+	<string>Yellow</string>
 	<string>Chapter Blue</string>
 </array>
 </plist>

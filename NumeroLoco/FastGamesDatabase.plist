@@ -33,7 +33,7 @@
 		<key>maxTime</key>
 		<integer>10</integer>
 		<key>maxNumber</key>
-		<integer>3</integer>
+		<integer>1</integer>
 		<key>matrixSize</key>
 		<integer>3</integer>
 		<key>type</key>
@@ -46,18 +46,6 @@
 				<key>columna</key>
 				<string>2</string>
 			</dict>
-			<dict>
-				<key>fila</key>
-				<string>2</string>
-				<key>columna</key>
-				<string>2</string>
-			</dict>
-			<dict>
-				<key>fila</key>
-				<string>2</string>
-				<key>columna</key>
-				<string>2</string>
-			</dict>
 		</array>
 	</dict>
 	<dict>
@@ -66,13 +54,13 @@
 		<key>bestTime</key>
 		<integer>1</integer>
 		<key>maxTime</key>
-		<integer>20</integer>
+		<integer>10</integer>
 		<key>maxNumber</key>
 		<integer>1</integer>
 		<key>matrixSize</key>
 		<integer>3</integer>
 		<key>type</key>
-		<string>number</string>
+		<string>color</string>
 		<key>puntos</key>
 		<array>
 			<dict>
@@ -89,13 +77,13 @@
 		<key>bestTime</key>
 		<integer>1</integer>
 		<key>maxTime</key>
-		<integer>20</integer>
+		<integer>10</integer>
 		<key>maxNumber</key>
 		<integer>1</integer>
 		<key>matrixSize</key>
 		<integer>3</integer>
 		<key>type</key>
-		<string>number</string>
+		<string>color</string>
 		<key>puntos</key>
 		<array>
 			<dict>
@@ -112,13 +100,13 @@
 		<key>bestTime</key>
 		<integer>1</integer>
 		<key>maxTime</key>
-		<integer>20</integer>
+		<integer>10</integer>
 		<key>maxNumber</key>
 		<integer>1</integer>
 		<key>matrixSize</key>
 		<integer>3</integer>
 		<key>type</key>
-		<string>number</string>
+		<string>color</string>
 		<key>puntos</key>
 		<array>
 			<dict>
@@ -135,13 +123,13 @@
 		<key>bestTime</key>
 		<integer>1</integer>
 		<key>maxTime</key>
-		<integer>20</integer>
+		<integer>10</integer>
 		<key>maxNumber</key>
 		<integer>1</integer>
 		<key>matrixSize</key>
 		<integer>3</integer>
 		<key>type</key>
-		<string>number</string>
+		<string>color</string>
 		<key>puntos</key>
 		<array>
 			<dict>
@@ -158,13 +146,13 @@
 		<key>bestTime</key>
 		<integer>1</integer>
 		<key>maxTime</key>
-		<integer>20</integer>
+		<integer>10</integer>
 		<key>maxNumber</key>
 		<integer>1</integer>
 		<key>matrixSize</key>
 		<integer>3</integer>
 		<key>type</key>
-		<string>number</string>
+		<string>color</string>
 		<key>puntos</key>
 		<array>
 			<dict>
@@ -181,13 +169,13 @@
 		<key>bestTime</key>
 		<integer>1</integer>
 		<key>maxTime</key>
-		<integer>20</integer>
+		<integer>10</integer>
 		<key>maxNumber</key>
 		<integer>1</integer>
 		<key>matrixSize</key>
 		<integer>3</integer>
 		<key>type</key>
-		<string>number</string>
+		<string>color</string>
 		<key>puntos</key>
 		<array>
 			<dict>
@@ -204,13 +192,13 @@
 		<key>bestTime</key>
 		<integer>1</integer>
 		<key>maxTime</key>
-		<integer>20</integer>
+		<integer>10</integer>
 		<key>maxNumber</key>
 		<integer>1</integer>
 		<key>matrixSize</key>
 		<integer>3</integer>
 		<key>type</key>
-		<string>number</string>
+		<string>color</string>
 		<key>puntos</key>
 		<array>
 			<dict>
@@ -227,13 +215,13 @@
 		<key>bestTime</key>
 		<integer>1</integer>
 		<key>maxTime</key>
-		<integer>20</integer>
+		<integer>10</integer>
 		<key>maxNumber</key>
 		<integer>1</integer>
 		<key>matrixSize</key>
 		<integer>3</integer>
 		<key>type</key>
-		<string>number</string>
+		<string>color</string>
 		<key>puntos</key>
 		<array>
 			<dict>
@@ -250,13 +238,703 @@
 		<key>bestTime</key>
 		<integer>1</integer>
 		<key>maxTime</key>
-		<integer>20</integer>
+		<integer>10</integer>
 		<key>maxNumber</key>
 		<integer>1</integer>
 		<key>matrixSize</key>
 		<integer>3</integer>
 		<key>type</key>
-		<string>number</string>
+		<string>color</string>
+		<key>puntos</key>
+		<array>
+			<dict>
+				<key>fila</key>
+				<string>2</string>
+				<key>columna</key>
+				<string>2</string>
+			</dict>
+		</array>
+	</dict>
+	<dict>
+		<key>maxScore</key>
+		<integer>100</integer>
+		<key>bestTime</key>
+		<integer>1</integer>
+		<key>maxTime</key>
+		<integer>10</integer>
+		<key>maxNumber</key>
+		<integer>1</integer>
+		<key>matrixSize</key>
+		<integer>3</integer>
+		<key>type</key>
+		<string>color</string>
+		<key>puntos</key>
+		<array>
+			<dict>
+				<key>fila</key>
+				<string>2</string>
+				<key>columna</key>
+				<string>2</string>
+			</dict>
+		</array>
+	</dict>
+	<dict>
+		<key>maxScore</key>
+		<integer>100</integer>
+		<key>bestTime</key>
+		<integer>1</integer>
+		<key>maxTime</key>
+		<integer>10</integer>
+		<key>maxNumber</key>
+		<integer>1</integer>
+		<key>matrixSize</key>
+		<integer>3</integer>
+		<key>type</key>
+		<string>color</string>
+		<key>puntos</key>
+		<array>
+			<dict>
+				<key>fila</key>
+				<string>2</string>
+				<key>columna</key>
+				<string>2</string>
+			</dict>
+		</array>
+	</dict>
+	<dict>
+		<key>maxScore</key>
+		<integer>100</integer>
+		<key>bestTime</key>
+		<integer>1</integer>
+		<key>maxTime</key>
+		<integer>10</integer>
+		<key>maxNumber</key>
+		<integer>1</integer>
+		<key>matrixSize</key>
+		<integer>3</integer>
+		<key>type</key>
+		<string>color</string>
+		<key>puntos</key>
+		<array>
+			<dict>
+				<key>fila</key>
+				<string>2</string>
+				<key>columna</key>
+				<string>2</string>
+			</dict>
+		</array>
+	</dict>
+	<dict>
+		<key>maxScore</key>
+		<integer>100</integer>
+		<key>bestTime</key>
+		<integer>1</integer>
+		<key>maxTime</key>
+		<integer>10</integer>
+		<key>maxNumber</key>
+		<integer>1</integer>
+		<key>matrixSize</key>
+		<integer>3</integer>
+		<key>type</key>
+		<string>color</string>
+		<key>puntos</key>
+		<array>
+			<dict>
+				<key>fila</key>
+				<string>2</string>
+				<key>columna</key>
+				<string>2</string>
+			</dict>
+		</array>
+	</dict>
+	<dict>
+		<key>maxScore</key>
+		<integer>100</integer>
+		<key>bestTime</key>
+		<integer>1</integer>
+		<key>maxTime</key>
+		<integer>10</integer>
+		<key>maxNumber</key>
+		<integer>1</integer>
+		<key>matrixSize</key>
+		<integer>3</integer>
+		<key>type</key>
+		<string>color</string>
+		<key>puntos</key>
+		<array>
+			<dict>
+				<key>fila</key>
+				<string>2</string>
+				<key>columna</key>
+				<string>2</string>
+			</dict>
+		</array>
+	</dict>
+	<dict>
+		<key>maxScore</key>
+		<integer>100</integer>
+		<key>bestTime</key>
+		<integer>1</integer>
+		<key>maxTime</key>
+		<integer>10</integer>
+		<key>maxNumber</key>
+		<integer>1</integer>
+		<key>matrixSize</key>
+		<integer>3</integer>
+		<key>type</key>
+		<string>color</string>
+		<key>puntos</key>
+		<array>
+			<dict>
+				<key>fila</key>
+				<string>2</string>
+				<key>columna</key>
+				<string>2</string>
+			</dict>
+		</array>
+	</dict>
+	<dict>
+		<key>maxScore</key>
+		<integer>100</integer>
+		<key>bestTime</key>
+		<integer>1</integer>
+		<key>maxTime</key>
+		<integer>10</integer>
+		<key>maxNumber</key>
+		<integer>1</integer>
+		<key>matrixSize</key>
+		<integer>3</integer>
+		<key>type</key>
+		<string>color</string>
+		<key>puntos</key>
+		<array>
+			<dict>
+				<key>fila</key>
+				<string>2</string>
+				<key>columna</key>
+				<string>2</string>
+			</dict>
+		</array>
+	</dict>
+	<dict>
+		<key>maxScore</key>
+		<integer>100</integer>
+		<key>bestTime</key>
+		<integer>1</integer>
+		<key>maxTime</key>
+		<integer>10</integer>
+		<key>maxNumber</key>
+		<integer>1</integer>
+		<key>matrixSize</key>
+		<integer>3</integer>
+		<key>type</key>
+		<string>color</string>
+		<key>puntos</key>
+		<array>
+			<dict>
+				<key>fila</key>
+				<string>2</string>
+				<key>columna</key>
+				<string>2</string>
+			</dict>
+		</array>
+	</dict>
+	<dict>
+		<key>maxScore</key>
+		<integer>100</integer>
+		<key>bestTime</key>
+		<integer>1</integer>
+		<key>maxTime</key>
+		<integer>10</integer>
+		<key>maxNumber</key>
+		<integer>1</integer>
+		<key>matrixSize</key>
+		<integer>3</integer>
+		<key>type</key>
+		<string>color</string>
+		<key>puntos</key>
+		<array>
+			<dict>
+				<key>fila</key>
+				<string>2</string>
+				<key>columna</key>
+				<string>2</string>
+			</dict>
+		</array>
+	</dict>
+	<dict>
+		<key>maxScore</key>
+		<integer>100</integer>
+		<key>bestTime</key>
+		<integer>1</integer>
+		<key>maxTime</key>
+		<integer>10</integer>
+		<key>maxNumber</key>
+		<integer>1</integer>
+		<key>matrixSize</key>
+		<integer>3</integer>
+		<key>type</key>
+		<string>color</string>
+		<key>puntos</key>
+		<array>
+			<dict>
+				<key>fila</key>
+				<string>2</string>
+				<key>columna</key>
+				<string>2</string>
+			</dict>
+		</array>
+	</dict>
+	<dict>
+		<key>maxScore</key>
+		<integer>100</integer>
+		<key>bestTime</key>
+		<integer>1</integer>
+		<key>maxTime</key>
+		<integer>10</integer>
+		<key>maxNumber</key>
+		<integer>1</integer>
+		<key>matrixSize</key>
+		<integer>3</integer>
+		<key>type</key>
+		<string>color</string>
+		<key>puntos</key>
+		<array>
+			<dict>
+				<key>fila</key>
+				<string>2</string>
+				<key>columna</key>
+				<string>2</string>
+			</dict>
+		</array>
+	</dict>
+	<dict>
+		<key>maxScore</key>
+		<integer>100</integer>
+		<key>bestTime</key>
+		<integer>1</integer>
+		<key>maxTime</key>
+		<integer>10</integer>
+		<key>maxNumber</key>
+		<integer>1</integer>
+		<key>matrixSize</key>
+		<integer>3</integer>
+		<key>type</key>
+		<string>color</string>
+		<key>puntos</key>
+		<array>
+			<dict>
+				<key>fila</key>
+				<string>2</string>
+				<key>columna</key>
+				<string>2</string>
+			</dict>
+		</array>
+	</dict>
+	<dict>
+		<key>maxScore</key>
+		<integer>100</integer>
+		<key>bestTime</key>
+		<integer>1</integer>
+		<key>maxTime</key>
+		<integer>10</integer>
+		<key>maxNumber</key>
+		<integer>1</integer>
+		<key>matrixSize</key>
+		<integer>3</integer>
+		<key>type</key>
+		<string>color</string>
+		<key>puntos</key>
+		<array>
+			<dict>
+				<key>fila</key>
+				<string>2</string>
+				<key>columna</key>
+				<string>2</string>
+			</dict>
+		</array>
+	</dict>
+	<dict>
+		<key>maxScore</key>
+		<integer>100</integer>
+		<key>bestTime</key>
+		<integer>1</integer>
+		<key>maxTime</key>
+		<integer>10</integer>
+		<key>maxNumber</key>
+		<integer>1</integer>
+		<key>matrixSize</key>
+		<integer>3</integer>
+		<key>type</key>
+		<string>color</string>
+		<key>puntos</key>
+		<array>
+			<dict>
+				<key>fila</key>
+				<string>2</string>
+				<key>columna</key>
+				<string>2</string>
+			</dict>
+		</array>
+	</dict>
+	<dict>
+		<key>maxScore</key>
+		<integer>100</integer>
+		<key>bestTime</key>
+		<integer>1</integer>
+		<key>maxTime</key>
+		<integer>10</integer>
+		<key>maxNumber</key>
+		<integer>1</integer>
+		<key>matrixSize</key>
+		<integer>3</integer>
+		<key>type</key>
+		<string>color</string>
+		<key>puntos</key>
+		<array>
+			<dict>
+				<key>fila</key>
+				<string>2</string>
+				<key>columna</key>
+				<string>2</string>
+			</dict>
+		</array>
+	</dict>
+	<dict>
+		<key>maxScore</key>
+		<integer>100</integer>
+		<key>bestTime</key>
+		<integer>1</integer>
+		<key>maxTime</key>
+		<integer>10</integer>
+		<key>maxNumber</key>
+		<integer>1</integer>
+		<key>matrixSize</key>
+		<integer>3</integer>
+		<key>type</key>
+		<string>color</string>
+		<key>puntos</key>
+		<array>
+			<dict>
+				<key>fila</key>
+				<string>2</string>
+				<key>columna</key>
+				<string>2</string>
+			</dict>
+		</array>
+	</dict>
+	<dict>
+		<key>maxScore</key>
+		<integer>100</integer>
+		<key>bestTime</key>
+		<integer>1</integer>
+		<key>maxTime</key>
+		<integer>10</integer>
+		<key>maxNumber</key>
+		<integer>1</integer>
+		<key>matrixSize</key>
+		<integer>3</integer>
+		<key>type</key>
+		<string>color</string>
+		<key>puntos</key>
+		<array>
+			<dict>
+				<key>fila</key>
+				<string>2</string>
+				<key>columna</key>
+				<string>2</string>
+			</dict>
+		</array>
+	</dict>
+	<dict>
+		<key>maxScore</key>
+		<integer>100</integer>
+		<key>bestTime</key>
+		<integer>1</integer>
+		<key>maxTime</key>
+		<integer>10</integer>
+		<key>maxNumber</key>
+		<integer>1</integer>
+		<key>matrixSize</key>
+		<integer>3</integer>
+		<key>type</key>
+		<string>color</string>
+		<key>puntos</key>
+		<array>
+			<dict>
+				<key>fila</key>
+				<string>2</string>
+				<key>columna</key>
+				<string>2</string>
+			</dict>
+		</array>
+	</dict>
+	<dict>
+		<key>maxScore</key>
+		<integer>100</integer>
+		<key>bestTime</key>
+		<integer>1</integer>
+		<key>maxTime</key>
+		<integer>10</integer>
+		<key>maxNumber</key>
+		<integer>1</integer>
+		<key>matrixSize</key>
+		<integer>3</integer>
+		<key>type</key>
+		<string>color</string>
+		<key>puntos</key>
+		<array>
+			<dict>
+				<key>fila</key>
+				<string>2</string>
+				<key>columna</key>
+				<string>2</string>
+			</dict>
+		</array>
+	</dict>
+	<dict>
+		<key>maxScore</key>
+		<integer>100</integer>
+		<key>bestTime</key>
+		<integer>1</integer>
+		<key>maxTime</key>
+		<integer>10</integer>
+		<key>maxNumber</key>
+		<integer>1</integer>
+		<key>matrixSize</key>
+		<integer>3</integer>
+		<key>type</key>
+		<string>color</string>
+		<key>puntos</key>
+		<array>
+			<dict>
+				<key>fila</key>
+				<string>2</string>
+				<key>columna</key>
+				<string>2</string>
+			</dict>
+		</array>
+	</dict>
+	<dict>
+		<key>maxScore</key>
+		<integer>100</integer>
+		<key>bestTime</key>
+		<integer>1</integer>
+		<key>maxTime</key>
+		<integer>10</integer>
+		<key>maxNumber</key>
+		<integer>1</integer>
+		<key>matrixSize</key>
+		<integer>3</integer>
+		<key>type</key>
+		<string>color</string>
+		<key>puntos</key>
+		<array>
+			<dict>
+				<key>fila</key>
+				<string>2</string>
+				<key>columna</key>
+				<string>2</string>
+			</dict>
+		</array>
+	</dict>
+	<dict>
+		<key>maxScore</key>
+		<integer>100</integer>
+		<key>bestTime</key>
+		<integer>1</integer>
+		<key>maxTime</key>
+		<integer>10</integer>
+		<key>maxNumber</key>
+		<integer>1</integer>
+		<key>matrixSize</key>
+		<integer>3</integer>
+		<key>type</key>
+		<string>color</string>
+		<key>puntos</key>
+		<array>
+			<dict>
+				<key>fila</key>
+				<string>2</string>
+				<key>columna</key>
+				<string>2</string>
+			</dict>
+		</array>
+	</dict>
+	<dict>
+		<key>maxScore</key>
+		<integer>100</integer>
+		<key>bestTime</key>
+		<integer>1</integer>
+		<key>maxTime</key>
+		<integer>10</integer>
+		<key>maxNumber</key>
+		<integer>1</integer>
+		<key>matrixSize</key>
+		<integer>3</integer>
+		<key>type</key>
+		<string>color</string>
+		<key>puntos</key>
+		<array>
+			<dict>
+				<key>fila</key>
+				<string>2</string>
+				<key>columna</key>
+				<string>2</string>
+			</dict>
+		</array>
+	</dict>
+	<dict>
+		<key>maxScore</key>
+		<integer>100</integer>
+		<key>bestTime</key>
+		<integer>1</integer>
+		<key>maxTime</key>
+		<integer>10</integer>
+		<key>maxNumber</key>
+		<integer>1</integer>
+		<key>matrixSize</key>
+		<integer>3</integer>
+		<key>type</key>
+		<string>color</string>
+		<key>puntos</key>
+		<array>
+			<dict>
+				<key>fila</key>
+				<string>2</string>
+				<key>columna</key>
+				<string>2</string>
+			</dict>
+		</array>
+	</dict>
+	<dict>
+		<key>maxScore</key>
+		<integer>100</integer>
+		<key>bestTime</key>
+		<integer>1</integer>
+		<key>maxTime</key>
+		<integer>10</integer>
+		<key>maxNumber</key>
+		<integer>1</integer>
+		<key>matrixSize</key>
+		<integer>3</integer>
+		<key>type</key>
+		<string>color</string>
+		<key>puntos</key>
+		<array>
+			<dict>
+				<key>fila</key>
+				<string>2</string>
+				<key>columna</key>
+				<string>2</string>
+			</dict>
+		</array>
+	</dict>
+	<dict>
+		<key>maxScore</key>
+		<integer>100</integer>
+		<key>bestTime</key>
+		<integer>1</integer>
+		<key>maxTime</key>
+		<integer>10</integer>
+		<key>maxNumber</key>
+		<integer>1</integer>
+		<key>matrixSize</key>
+		<integer>3</integer>
+		<key>type</key>
+		<string>color</string>
+		<key>puntos</key>
+		<array>
+			<dict>
+				<key>fila</key>
+				<string>2</string>
+				<key>columna</key>
+				<string>2</string>
+			</dict>
+		</array>
+	</dict>
+	<dict>
+		<key>maxScore</key>
+		<integer>100</integer>
+		<key>bestTime</key>
+		<integer>1</integer>
+		<key>maxTime</key>
+		<integer>10</integer>
+		<key>maxNumber</key>
+		<integer>1</integer>
+		<key>matrixSize</key>
+		<integer>3</integer>
+		<key>type</key>
+		<string>color</string>
+		<key>puntos</key>
+		<array>
+			<dict>
+				<key>fila</key>
+				<string>2</string>
+				<key>columna</key>
+				<string>2</string>
+			</dict>
+		</array>
+	</dict>
+	<dict>
+		<key>maxScore</key>
+		<integer>100</integer>
+		<key>bestTime</key>
+		<integer>1</integer>
+		<key>maxTime</key>
+		<integer>10</integer>
+		<key>maxNumber</key>
+		<integer>1</integer>
+		<key>matrixSize</key>
+		<integer>3</integer>
+		<key>type</key>
+		<string>color</string>
+		<key>puntos</key>
+		<array>
+			<dict>
+				<key>fila</key>
+				<string>2</string>
+				<key>columna</key>
+				<string>2</string>
+			</dict>
+		</array>
+	</dict>
+	<dict>
+		<key>maxScore</key>
+		<integer>100</integer>
+		<key>bestTime</key>
+		<integer>1</integer>
+		<key>maxTime</key>
+		<integer>10</integer>
+		<key>maxNumber</key>
+		<integer>1</integer>
+		<key>matrixSize</key>
+		<integer>3</integer>
+		<key>type</key>
+		<string>color</string>
+		<key>puntos</key>
+		<array>
+			<dict>
+				<key>fila</key>
+				<string>2</string>
+				<key>columna</key>
+				<string>2</string>
+			</dict>
+		</array>
+	</dict>
+	<dict>
+		<key>maxScore</key>
+		<integer>100</integer>
+		<key>bestTime</key>
+		<integer>1</integer>
+		<key>maxTime</key>
+		<integer>10</integer>
+		<key>maxNumber</key>
+		<integer>1</integer>
+		<key>matrixSize</key>
+		<integer>3</integer>
+		<key>type</key>
+		<string>color</string>
 		<key>puntos</key>
 		<array>
 			<dict>

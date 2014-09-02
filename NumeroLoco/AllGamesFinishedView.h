@@ -17,5 +17,7 @@
 @interface AllGamesFinishedView : UIView
 @property (strong, nonatomic) id <AllGamesFinishedViewDelegate> delegate;
 @property (strong, nonatomic) UILabel *messageLabel;
+@property (strong, nonatomic) UIButton *closeButton;
+@property (strong, nonatomic) UILabel *congratsLabel;
 -(void)showInView:(UIView *)view;
 @end

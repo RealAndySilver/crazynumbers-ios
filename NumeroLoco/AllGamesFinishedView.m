@@ -25,23 +25,23 @@
         self.transform = CGAffineTransformMakeScale(0.5, 0.5);
         
         //Close Button
-        UIButton *closeButton = [UIButton buttonWithType:UIButtonTypeSystem];
-        closeButton.frame = CGRectMake(frame.size.width/2.0 - 75.0, frame.size.height - 130.0, 150.0, 60.0);
-        [closeButton setTitle:@"Accept" forState:UIControlStateNormal];
-        [closeButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        closeButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:20.0];
-        closeButton.layer.cornerRadius = 10.0;
-        closeButton.backgroundColor = [[AppInfo sharedInstance] appColorsArray][0];
-        [closeButton addTarget:self action:@selector(closeView) forControlEvents:UIControlEventTouchUpInside];
-        [self addSubview:closeButton];
+        self.closeButton = [UIButton buttonWithType:UIButtonTypeSystem];
+        self.closeButton.frame = CGRectMake(frame.size.width/2.0 - 75.0, frame.size.height - 130.0, 150.0, 60.0);
+        [self.closeButton setTitle:@"Accept" forState:UIControlStateNormal];
+        [self.closeButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        self.closeButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:20.0];
+        self.closeButton.layer.cornerRadius = 10.0;
+        self.closeButton.backgroundColor = [[AppInfo sharedInstance] appColorsArray][0];
+        [self.closeButton addTarget:self action:@selector(closeView) forControlEvents:UIControlEventTouchUpInside];
+        [self addSubview:self.closeButton];
         
         //Congratulations label
-        UILabel *congratsLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0, 50.0, frame.size.width - 40.0, 30.0)];
-        congratsLabel.text = @"Congratulations!";
-        congratsLabel.textColor = [UIColor whiteColor];
-        congratsLabel.textAlignment = NSTextAlignmentCenter;
-        congratsLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:25.0];
-        [self addSubview:congratsLabel];
+        self.congratsLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0, 50.0, frame.size.width - 40.0, 30.0)];
+        self.congratsLabel.text = @"Congratulations!";
+        self.congratsLabel.textColor = [UIColor whiteColor];
+        self.congratsLabel.textAlignment = NSTextAlignmentCenter;
+        self.congratsLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:25.0];
+        [self addSubview:self.congratsLabel];
         
         //Message label
         self.messageLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0, 120.0, frame.size.width - 40.0, 100.0)];
@@ -79,7 +79,7 @@
 -(void)showInView:(UIView *)view {
     self.opacityView = [[UIView alloc] initWithFrame:view.frame];
     self.opacityView.backgroundColor = [UIColor blackColor];
-    self.opacityView.alpha = 0.8;
+    self.opacityView.alpha = 0.0;
     [view addSubview:self.opacityView];
     
     [view addSubview:self];
@@ -90,6 +90,7 @@
                         options:UIViewAnimationOptionCurveEaseOut
                      animations:^(){
                          self.alpha = 1.0;
+                         self.opacityView.alpha = 0.9;
                          self.transform = CGAffineTransformMakeScale(1.0, 1.0);
                      } completion:^(BOOL success){}];
 }

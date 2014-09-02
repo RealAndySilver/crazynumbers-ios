@@ -46,7 +46,7 @@
         //Title
         UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 20.0, frame.size.width, 50.0)];
         title.text = @"Buy Touches";
-        title.textColor = [[AppInfo sharedInstance] appColorsArray][0];
+        title.textColor = [[AppInfo sharedInstance] appColorsArray][2];
         title.font = [UIFont fontWithName:FONT_NAME size:25.0];
         title.textAlignment = NSTextAlignmentCenter;
         [self addSubview:title];
@@ -70,7 +70,7 @@
         UIButton *threeTouchesButton = [[UIButton alloc] initWithFrame:CGRectMake(frame.size.width - 130.0, threeTouchesImageView.frame.origin.y + 10.0, 110.0, threeTouchesImageView.frame.size.height - 20.0)];
         [threeTouchesButton setTitle:buttonTitle forState:UIControlStateNormal];
         [threeTouchesButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        threeTouchesButton.backgroundColor = [[AppInfo sharedInstance] appColorsArray][0];
+        threeTouchesButton.backgroundColor = [[AppInfo sharedInstance] appColorsArray][2];
         threeTouchesButton.titleLabel.font = [UIFont fontWithName:FONT_NAME size:17.0];
         threeTouchesButton.layer.cornerRadius = 10.0;
         threeTouchesButton.tag = 1;
@@ -98,7 +98,7 @@
         UIButton *sevenTouchesButton = [[UIButton alloc] initWithFrame:CGRectOffset(threeTouchesButton.frame, 0.0, threeTouchesButton.frame.size.height + ITEMS_DISTANCE*2)];
         [sevenTouchesButton setTitle:buttonTitle forState:UIControlStateNormal];
         [sevenTouchesButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        sevenTouchesButton.backgroundColor = [[AppInfo sharedInstance] appColorsArray][0];
+        sevenTouchesButton.backgroundColor = [[AppInfo sharedInstance] appColorsArray][2];
         sevenTouchesButton.titleLabel.font = [UIFont fontWithName:FONT_NAME size:17.0];
         sevenTouchesButton.layer.cornerRadius = 10.0;
         sevenTouchesButton.tag = 2;
@@ -126,7 +126,7 @@
         UIButton *twoThousandButton = [[UIButton alloc] initWithFrame:CGRectOffset(sevenTouchesButton.frame, 0.0, sevenTouchesButton.frame.size.height + ITEMS_DISTANCE*2)];
         [twoThousandButton setTitle:buttonTitle forState:UIControlStateNormal];
         [twoThousandButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        twoThousandButton.backgroundColor = [[AppInfo sharedInstance] appColorsArray][0];
+        twoThousandButton.backgroundColor = [[AppInfo sharedInstance] appColorsArray][2];
         twoThousandButton.titleLabel.font = [UIFont fontWithName:FONT_NAME size:17.0];
         twoThousandButton.layer.cornerRadius = 10.0;
         twoThousandButton.tag = 3;
@@ -153,7 +153,7 @@
         UIButton *infiniteButton = [[UIButton alloc] initWithFrame:CGRectMake(infiniteLabel.frame.origin.x, infiniteLabel.frame.origin.y + infiniteLabel.frame.size.height, 110.0, 40.0)];
         [infiniteButton setTitle:buttonTitle forState:UIControlStateNormal];
         [infiniteButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        infiniteButton.backgroundColor = [[AppInfo sharedInstance] appColorsArray][0];
+        infiniteButton.backgroundColor = [[AppInfo sharedInstance] appColorsArray][2];
         infiniteButton.titleLabel.font = [UIFont fontWithName:FONT_NAME size:17.0];
         infiniteButton.layer.cornerRadius = 10.0;
         infiniteButton.tag = 4;

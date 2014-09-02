@@ -21,9 +21,9 @@
 
 -(NSArray *)appColorsArray {
     NSMutableArray *colorsArray = [[NSMutableArray alloc] init];
-    UIColor *firstColor = [UIColor colorWithRed:0.380 green:0.870 blue:1.000 alpha:1.0];
+    UIColor *thirdColor = [UIColor colorWithRed:0.380 green:0.870 blue:1.000 alpha:1.0];
     UIColor *secondColor = [UIColor colorWithRed:0.636 green:0.380 blue:1.000 alpha:1.0];
-    UIColor *thirdColor = [UIColor colorWithRed:1.000 green:0.386 blue:0.380 alpha:1.0];
+    UIColor *firstColor = [UIColor colorWithRed:1.000 green:0.386 blue:0.380 alpha:1.0];
     UIColor *fourthColor = [UIColor colorWithRed:1.000 green:0.801 blue:0.380 alpha:1.0];
     UIColor *fifthColor = [UIColor colorWithRed:0.654 green:1.000 blue:0.380 alpha:1.0];
     [colorsArray addObject:firstColor];
@@ -73,7 +73,7 @@
     color10 = [UIColor colorWithRed:0.200 green:0.157 blue:0.090 alpha:1.0];
     [fourthChapterColors addObjectsFromArray:@[color1, color3 ,color5, color7, color9, color10]];
 
-    [chapterColorsArray addObjectsFromArray:@[blueScaleArray, secondChapterColors, thirdChapterColors, fourthChapterColors]];
+    [chapterColorsArray addObjectsFromArray:@[thirdChapterColors, secondChapterColors, blueScaleArray, fourthChapterColors]];
     return chapterColorsArray;
 }
 

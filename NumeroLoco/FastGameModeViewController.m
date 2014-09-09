@@ -749,7 +749,7 @@
     FastGameWinAlert *fastGameWinAlert = [[FastGameWinAlert alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 140.0, self.view.bounds.size.height/2.0 - 140.0, 280.0, 280.0)];
     fastGameWinAlert.delegate = self;
     fastGameWinAlert.tag = 1;
-    fastGameWinAlert.alertLabel.text = [NSString stringWithFormat:@"You have won the game %lu, keep going!", (unsigned long)self.currentGame + 1];
+    fastGameWinAlert.alertLabel.text = [NSString stringWithFormat:@"You have won game %lu, keep going!", (unsigned long)self.currentGame + 1];
     [fastGameWinAlert showInView:self.view];
 }
 

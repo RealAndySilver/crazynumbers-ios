@@ -1,25 +1,24 @@
 //
-//  TwoButtonsAlert.m
+//  OneButtonAlert.m
 //  MiRed
 //
 //  Created by Diego Vidal on 22/08/14.
 //  Copyright (c) 2014 Diego Fernando Vidal Illera. All rights reserved.
 //
 
-#import "TwoButtonsAlert.h"
+#import "OneButtonAlert.h"
 #import "AppInfo.h"
-
-@interface TwoButtonsAlert()
-@property (strong, nonatomic) UIView *opacityView;
-@property (strong, nonatomic) UILabel *messageLabel;
-@property (strong, nonatomic) UIButton *leftButton;
-@property (strong, nonatomic) UIButton *rightButton;
-@end
 
 #define FONT_NAME @"HelveticaNeue-Light"
 #define ANIMATION_DURATION 0.3
 
-@implementation TwoButtonsAlert
+@interface OneButtonAlert()
+@property (strong, nonatomic) UIView *opacityView;
+@property (strong, nonatomic) UILabel *messageLabel;
+@property (strong, nonatomic) UIButton *button;
+@end
+
+@implementation OneButtonAlert
 
 #pragma mark - Setters & Getters 
 
@@ -28,14 +27,9 @@
     self.messageLabel.text = alertText;
 }
 
--(void)setLeftButtonTitle:(NSString *)leftButtonTitle {
-    _leftButtonTitle = leftButtonTitle;
-    [self.leftButton setTitle:leftButtonTitle forState:UIControlStateNormal];
-}
-
--(void)setRightButtonTitle:(NSString *)rightButtonTitle {
-    _rightButtonTitle = rightButtonTitle;
-    [self.rightButton setTitle:rightButtonTitle forState:UIControlStateNormal];
+-(void)setButtonTitle:(NSString *)buttonTitle {
+    _buttonTitle = buttonTitle;
+    [self.button setTitle:buttonTitle forState:UIControlStateNormal];
 }
 
 -(instancetype)initWithFrame:(CGRect)frame {
@@ -46,7 +40,7 @@
         self.backgroundColor = [UIColor whiteColor];
         
         //Message label
-        self.messageLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0, 20.0, frame.size.width - 40.0, 70.0)];
+        self.messageLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0, 10.0, frame.size.width - 40.0, 60.0)];
         self.messageLabel.textColor = [UIColor darkGrayColor];
         self.messageLabel.font = [UIFont fontWithName:FONT_NAME size:18.0];
         self.messageLabel.numberOfLines = 0;
@@ -60,22 +54,13 @@
         [self addSubview:closeButton];
         
         //Camera button
-        self.leftButton = [[UIButton alloc] initWithFrame:CGRectMake(20.0, frame.size.height - 60.0, frame.size.width/2.0 - 40.0, 40.0)];
-        [self.leftButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        self.leftButton.titleLabel.font = [UIFont fontWithName:FONT_NAME size:15.0];
-        self.leftButton.backgroundColor = [UIColor colorWithRed:52.0/255.0 green:75.0/255.0 blue:139.0/255.0 alpha:1.0];
-        self.leftButton.layer.cornerRadius = 5.0;
-        [self.leftButton addTarget:self action:@selector(leftButtonClicked) forControlEvents:UIControlEventTouchUpInside];
-        [self addSubview:self.leftButton];
-        
-        //Library button
-        self.rightButton = [[UIButton alloc] initWithFrame:CGRectMake(frame.size.width/2.0 + 20.0, frame.size.height - 60.0, frame.size.width/2.0 - 40.0, 40.0)];
-        [self.rightButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        self.rightButton.titleLabel.font = [UIFont fontWithName:FONT_NAME size:15.0];
-        self.rightButton.backgroundColor = [[AppInfo sharedInstance] appColorsArray][1];
-        [self.rightButton addTarget:self action:@selector(rightButtonClicked) forControlEvents:UIControlEventTouchUpInside];
-        self.rightButton.layer.cornerRadius = 5.0;
-        [self addSubview:self.rightButton];
+        self.button = [[UIButton alloc] initWithFrame:CGRectMake(frame.size.width/2.0 - 50.0, frame.size.height - 50.0, 100.0, 40.0)];
+        [self.button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        self.button.titleLabel.font = [UIFont fontWithName:FONT_NAME size:15.0];
+        self.button.backgroundColor = [UIColor colorWithRed:52.0/255.0 green:75.0/255.0 blue:139.0/255.0 alpha:1.0];
+        self.button.layer.cornerRadius = 5.0;
+        [self.button addTarget:self action:@selector(buttonPressed) forControlEvents:UIControlEventTouchUpInside];
+        [self addSubview:self.button];
     }
     return self;
 }
@@ -97,15 +82,10 @@
                      } completion:^(BOOL finished){}];
 }
 
-#pragma mark -Actions 
+#pragma mark - Actions 
 
--(void)leftButtonClicked {
-    [self.delegate leftButtonPressedInAlert:self];
-    [self closeView];
-}
-
--(void)rightButtonClicked {
-    [self.delegate rightButtonPressedInAlert:self];
+-(void)buttonPressed {
+    [self.delegate buttonClickedInAlert:self];
     [self closeView];
 }
 
@@ -122,9 +102,9 @@
                              [self.opacityView removeFromSuperview];
                              self.opacityView = nil;
                              [self removeFromSuperview];
-                             [self.delegate twoButtonsAlertDidDisappear:self];
                          }
                      }];
 }
+
 
 @end

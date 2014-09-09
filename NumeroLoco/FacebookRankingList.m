@@ -8,12 +8,17 @@
 
 #import "FacebookRankingList.h"
 #import <ParseFacebookUtils/PFFacebookUtils.h>
+#import "FriendsCell.h"
+#import "SDWebImage/UIImageView+WebCache.h"
 
-@interface FacebookRankingList()
+@interface FacebookRankingList() <UITableViewDataSource, UITableViewDelegate>
 @property (strong, nonatomic) UIView *opacityView;
+@property (strong, nonatomic) UITableView *tableView;
 @end
 
 @implementation FacebookRankingList
+
+#define CELL_IDENTIFIER @"cellID"
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -26,13 +31,13 @@
         self.backgroundColor = [UIColor whiteColor];
         
         //Close button
-        UIButton *closeButton = [[UIButton alloc] initWithFrame:CGRectMake(frame.size.width - 47.0, -32.0, 80.0, 80.0)];
+        UIButton *closeButton = [[UIButton alloc] initWithFrame:CGRectMake(-32.0, -32.0, 80.0, 80.0)];
         [closeButton setImage:[UIImage imageNamed:@"Close.png"] forState:UIControlStateNormal];
         [closeButton addTarget:self action:@selector(closeView) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:closeButton];
 
         //Title
-        UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 20.0, frame.size.width, 40.0)];
+        UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 30.0, frame.size.width, 40.0)];
         title.text = @"Rankings";
         title.textColor = [UIColor colorWithRed:56.0/255.0 green:78.0/255.0 blue:140.0/255.0 alpha:1.0];
         title.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:20.0];
@@ -40,7 +45,7 @@
         [self addSubview:title];
         
         //Invite friends button
-        UIButton *inviteButton = [[UIButton alloc] initWithFrame:CGRectMake(10.0, 24.0, 70.0, 35.0)];
+        UIButton *inviteButton = [[UIButton alloc] initWithFrame:CGRectMake(frame.size.width - 80.0, 34.0, 70.0, 35.0)];
         [inviteButton setTitle:@"Invite" forState:UIControlStateNormal];
         [inviteButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         inviteButton.backgroundColor = [UIColor colorWithRed:56.0/255.0 green:78.0/255.0 blue:140.0/255.0 alpha:1.0];
@@ -48,14 +53,53 @@
         inviteButton.layer.cornerRadius = 10.0;
         [inviteButton addTarget:self action:@selector(inviteFriends) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:inviteButton];
+        
+        //Table view
+        self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0.0, 80.0, frame.size.width, frame.size.height - 70.0) style:UITableViewStylePlain];
+        self.tableView.delegate = self;
+        self.tableView.dataSource = self;
+        self.tableView.rowHeight = 80.0;
+        self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
+        [self.tableView registerClass:[FriendsCell class] forCellReuseIdentifier:CELL_IDENTIFIER];
+        self.tableView.layer.cornerRadius = 10.0;
+        [self addSubview:self.tableView];
     }
     return self;
 }
 
+#pragma mark - UITableViewDataSource 
+
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return [self.resultsArray count];
+}
+
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    FriendsCell *cell = (FriendsCell *)[tableView dequeueReusableCellWithIdentifier:CELL_IDENTIFIER forIndexPath:indexPath];
+    if (!cell) {
+        cell = [[FriendsCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CELL_IDENTIFIER];
+    }
+    cell.friendName.text = self.resultsArray[indexPath.row][@"name"];
+    cell.friendScore.text = [self.resultsArray[indexPath.row][@"score"] description];
+    
+    //Get friend image
+    NSString *photoPath = [NSString stringWithFormat:@"https://graph.facebook.com/%@/picture", self.resultsArray[indexPath.row][@"userID"]];
+    NSURL *photoURL = [NSURL URLWithString:photoPath];
+    [cell.friendImageView sd_setImageWithURL:photoURL placeholderImage:[UIImage imageNamed:@"ProfilePic.png"]];
+    return cell;
+}
+
 -(void)inviteFriends {
-    [FBWebDialogs presentRequestsDialogModallyWithSession:[PFFacebookUtils session] message:@"Hey! I'm playing Cross for iOS, try to beat my score!"
+    [FBWebDialogs presentRequestsDialogModallyWithSession:nil message:@"Hey! I'm playing Cross for iOS, try to beat my score!"
                                                     title:nil parameters:nil handler:^(FBWebDialogResult result, NSURL *resultURL, NSError *error) {
-                                                        
+                                                        if (error) {
+                                                            NSLog(@"Error sending request: %@ %@", error, [error localizedDescription]);
+                                                        } else {
+                                                            if (result == FBWebDialogResultDialogNotCompleted) {
+                                                                NSLog(@"User cancelled the request");
+                                                            } else {
+                                                                NSLog(@"Result URL: %@", resultURL);
+                                                            }
+                                                        }
                                                     }];
 }
 

@@ -824,6 +824,7 @@
         NSUInteger totalScore = [self getTotalScoreInCoreData];
         NSLog(@"Score Totaaaaaaaalllllll: %d", totalScore);
         [[GameKitHelper sharedGameKitHelper] submitScore:totalScore category:@"Points_Leaderboard"];
+        [self postScoreToFacebook:totalScore];
         
     } else {
         NSLog(@"El score no se mejoróooooot *************************");
@@ -918,6 +919,28 @@
     gameWonAlert.bonusScore = bonusPointsWon;
     gameWonAlert.maxBonusScore = bestTimeScore;
     [gameWonAlert showAlertInView:self.view];
+}
+
+-(void)postScoreToFacebook:(NSUInteger)score {
+    //Post to facebook only if the user is logged in
+    if ([PFUser currentUser] && [PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]) {
+        NSString *userScore = [NSString stringWithFormat:@"%lu", (unsigned long)score];
+        NSString *accessToken = [PFFacebookUtils session].accessTokenData.accessToken;
+        NSDictionary *params = @{@"score" : userScore, @"access_token" : accessToken};
+        
+        [FBRequestConnection startWithGraphPath:@"me/scores"
+                                     parameters:params
+                                     HTTPMethod:@"POST"
+                              completionHandler:
+         ^(FBRequestConnection *connection, id result, NSError *error) {
+             // Handle results
+             if (!error) {
+                 NSLog(@"Posted Successfuly: %@", result);
+             } else {
+                 NSLog(@"error: %@ %@", error, [error localizedDescription]);
+             }
+         }];
+    }
 }
 
 -(void)playButtonPressedSound {

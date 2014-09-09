@@ -57,10 +57,10 @@
     
     //Dont login button
     UIButton *enterButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    enterButton.frame = CGRectMake(self.view.bounds.size.width/2.0 - 120.0, screenBounds.size.height - 60.0, 240.0, 50.0);
+    enterButton.frame = CGRectMake(self.view.bounds.size.width/2.0 - 90, screenBounds.size.height - 60.0, 180.0, 50.0);
     [enterButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [enterButton setTitle:@"Don't Login" forState:UIControlStateNormal];
-    enterButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:18.0];
+    enterButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:15.0];
     enterButton.layer.cornerRadius = 10.0;
     enterButton.layer.borderColor = [UIColor whiteColor].CGColor;
     enterButton.layer.borderWidth = 1.0;
@@ -72,7 +72,7 @@
     [facebookButton setTitle:@"Login With Facebook" forState:UIControlStateNormal];
     [facebookButton addTarget:self action:@selector(startLoginProcess) forControlEvents:UIControlEventTouchUpInside];
     facebookButton.layer.cornerRadius = 10.0;
-    facebookButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:18.0];
+    facebookButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:15.0];
     facebookButton.backgroundColor = [UIColor colorWithRed:52.0/255.0 green:75.0/255.0 blue:139.0/255.0 alpha:1.0];
     [self.view addSubview:facebookButton];
 }

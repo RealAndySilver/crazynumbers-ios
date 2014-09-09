@@ -25,6 +25,7 @@
 #import <ParseFacebookUtils/PFFacebookUtils.h>
 #import "TwoButtonsAlert.h"
 #import "FacebookRankingList.h"
+#import "OneButtonAlert.h"
 @import AVFoundation;
 
 @interface RootViewController () <GKGameCenterControllerDelegate, TwoButtonsAlertDelegate>
@@ -51,6 +52,8 @@
 @property (strong, nonatomic) UIButton *optionsButton;
 @property (strong, nonatomic) UIButton *gameCenterButton;
 @property (strong, nonatomic) UIButton *backButton;
+@property (strong, nonatomic) UIButton *enterButton;
+@property (strong, nonatomic) UIButton *facebookButton;
 @property (strong, nonatomic) AVAudioPlayer *player;
 @property (strong, nonatomic) AVAudioPlayer *playerButtonPressed;
 @property (strong, nonatomic) AVAudioPlayer *playerBackSound;
@@ -65,6 +68,8 @@
     BOOL viewIsVisible;
     CGFloat animationDistance;
     BOOL gamesButtonsDisplayed;
+    BOOL optionsButtonsDisplayed;
+    BOOL mainMenuButtonsDisplayed;
     BOOL viewAppearFromFirstTimeTutorial;
 }
 
@@ -110,20 +115,23 @@
                                                object:nil];
     viewIsVisible = YES;
 
-    /*if (viewAppearFromFirstTimeTutorial) {
+    if (viewAppearFromFirstTimeTutorial) {
         [[GameKitHelper sharedGameKitHelper] authenticateLocalPlayer];
         viewAppearFromFirstTimeTutorial = NO;
-    }*/
+    }
     
     //Check if this is the first time the user launch the app
     FileSaver *fileSaver = [[FileSaver alloc] init];
     if (![[fileSaver getDictionary:@"FirstAppLaunchDic"][@"FirstAppLaunchKey"] boolValue]) {
         //This is the first time the user launches the app
         //so present the tutorial view controller
-        //viewAppearFromFirstTimeTutorial = YES;
+        viewAppearFromFirstTimeTutorial = YES;
         
         [fileSaver setDictionary:@{@"FirstAppLaunchKey" : @YES} withName:@"FirstAppLaunchDic"];
+        NSLog(@"Iré al tutorial");
         [self goToTutorialVC];
+    } else {
+        NSLog(@"No iré al tutorial");
     }
 }
 
@@ -200,17 +208,36 @@
     self.view6.backgroundColor = [UIColor whiteColor];
     self.view8.backgroundColor = [UIColor whiteColor];
     
+    //Dont login button
+    self.enterButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    self.enterButton.frame = CGRectMake(self.view.bounds.size.width/2.0 - 90, screenBounds.size.height - 60.0, 180.0, 50.0);
+    [self.enterButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [self.enterButton setTitle:@"Don't Login" forState:UIControlStateNormal];
+    self.enterButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:15.0];
+    self.enterButton.layer.cornerRadius = 10.0;
+    self.enterButton.layer.borderColor = [UIColor whiteColor].CGColor;
+    self.enterButton.layer.borderWidth = 1.0;
+    [self.enterButton addTarget:self action:@selector(animateMainButtons) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:self.enterButton];
+    
+    //Facebook button
+    self.facebookButton = [[UIButton alloc]initWithFrame:CGRectOffset(self.enterButton.frame, 0.0, -(self.enterButton.frame.size.height + 10.0))];
+    [self.facebookButton setTitle:@"Login With Facebook" forState:UIControlStateNormal];
+    [self.facebookButton addTarget:self action:@selector(startLoginProcess) forControlEvents:UIControlEventTouchUpInside];
+    self.facebookButton.layer.cornerRadius = 10.0;
+    self.facebookButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:15.0];
+    self.facebookButton.backgroundColor = [UIColor colorWithRed:52.0/255.0 green:75.0/255.0 blue:139.0/255.0 alpha:1.0];
+    [self.view addSubview:self.facebookButton];
+    
     //ColorBackgroundView
     self.colorBackgroundView.frame = CGRectMake(0.0, 0.0, self.view.bounds.size.width, self.view.bounds.size.height/2.0);
-    //NSUInteger randomColor = arc4random()%3;
     self.view.backgroundColor = [[AppInfo sharedInstance] appColorsArray][0];
     self.colorBackgroundView.backgroundColor = [[AppInfo sharedInstance] appColorsArray][0];
-    //self.bigCLabel.textColor = [[AppInfo sharedInstance] appColorsArray][randomColor];
     
     //GameMenu & OptionsMenu Buttons
     self.gamesMenuButton.frame = buttonFrames;
     [self.gamesMenuButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    self.gamesMenuButton.center = CGPointMake(self.view.center.x, self.view.center.y + (self.view.bounds.size.height/4.0) - self.gamesMenuButton.bounds.size.height/2.0 + 20.0);
+    self.gamesMenuButton.center = CGPointMake(self.view.bounds.size.width + self.gamesMenuButton.frame.size.width/2.0, self.view.center.y + (self.view.bounds.size.height/4.0) - self.gamesMenuButton.bounds.size.height/2.0 + 20.0);
     self.gamesMenuButton.titleLabel.font = [UIFont fontWithName:fontName size:fontSize];
     [self.gamesMenuButton addTarget:self action:@selector(showGameMenuOptions) forControlEvents:UIControlEventTouchUpInside];
     self.gamesMenuButton.layer.cornerRadius = 10.0;
@@ -219,7 +246,7 @@
     
     self.optionsMenuButton.frame = buttonFrames;
     [self.optionsMenuButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    self.optionsMenuButton.center = CGPointMake(self.view.center.x, self.gamesMenuButton.center.y + self.gamesMenuButton.frame.size.height + 20.0);
+    self.optionsMenuButton.center = CGPointMake(self.view.bounds.size.width + self.optionsMenuButton.frame.size.width/2.0, self.gamesMenuButton.center.y + self.gamesMenuButton.frame.size.height + 20.0);
     self.optionsMenuButton.titleLabel.font = [UIFont fontWithName:fontName size:fontSize];
     self.optionsMenuButton.layer.cornerRadius = 10.0;
     self.optionsMenuButton.layer.borderWidth = borderWidth;
@@ -461,9 +488,30 @@
     [self performSelector:@selector(setPosition1) withObject:nil afterDelay:4.0];
 }
 
+-(void)animateMainButtons {
+    mainMenuButtonsDisplayed = YES;
+    gamesButtonsDisplayed = NO;
+    optionsButtonsDisplayed = NO;
+    
+    [UIView animateWithDuration:1.1
+                          delay:0.0
+         usingSpringWithDamping:0.7
+          initialSpringVelocity:0.0
+                        options:UIViewAnimationOptionCurveEaseOut
+                     animations:^{
+                         self.enterButton.center = CGPointMake(-self.enterButton.frame.size.width/2.0, self.enterButton.center.y);
+                         self.facebookButton.center = CGPointMake(-self.facebookButton.frame.size.width/2.0, self.facebookButton.center.y);
+                         self.gamesMenuButton.center = CGPointMake(self.view.frame.size.width/2.0, self.gamesMenuButton.center.y);
+                         self.optionsMenuButton.center = CGPointMake(self.view.frame.size.width/2.0, self.optionsMenuButton.center.y);
+                         self.backButton.center = CGPointMake(self.backButton.center.x, self.view.bounds.size.height - self.backButton.frame.size.height/2.0 - 10.0);
+                     } completion:nil];
+}
+
 -(void)showOptionsButtons {
     [self playButtonSound];
     gamesButtonsDisplayed = NO;
+    optionsButtonsDisplayed = YES;
+    mainMenuButtonsDisplayed = NO;
     
     [UIView animateWithDuration:1.3
                           delay:0.0
@@ -473,7 +521,6 @@
                      animations:^(){
                          self.gamesMenuButton.center = CGPointMake(-self.gamesMenuButton.frame.size.width + self.gamesMenuButton.frame.size.width/2.0, self.gamesMenuButton.center.y);
                          self.optionsMenuButton.center = CGPointMake(-self.optionsMenuButton.frame.size.width + self.gamesMenuButton.frame.size.width/2.0, self.optionsMenuButton.center.y);
-                         self.backButton.center = CGPointMake(self.backButton.center.x, self.view.bounds.size.height - self.backButton.frame.size.height/2.0 - 10.0);
                          
                          self.optionsButton.center = CGPointMake(self.view.bounds.size.width/2.0, self.optionsButton.center.y);
                          self.gameCenterButton.center = CGPointMake(self.view.bounds.size.width/2.0, self.gameCenterButton.center.y);
@@ -495,27 +542,47 @@
                              self.numbersButton.center = CGPointMake(self.view.bounds.size.width + self.numbersButton.frame.size.width/2.0, self.numbersButton.center.y);
                              self.colorsButton.center = CGPointMake(self.view.bounds.size.width + self.colorsButton.frame.size.width/2.0, self.colorsButton.center.y);
                              self.fastModeButton.center = CGPointMake(self.view.bounds.size.width + self.fastModeButton.frame.size.width/2.0, self.fastModeButton.center.y);
-                             //self.wordsButton.center = CGPointMake(self.view.bounds.size.width + self.wordsButton.frame.size.width/2.0, self.wordsButton.center.y);
                              self.twoPlayerButton.center = CGPointMake(self.view.bounds.size.width + self.twoPlayerButton.frame.size.width/2.0, self.twoPlayerButton.center.y);
+                             
+                             self.gamesMenuButton.center = CGPointMake(self.view.bounds.size.width/2.0, self.gamesMenuButton.center.y);
+                             self.optionsMenuButton.center = CGPointMake(self.view.bounds.size.width/2.0, self.optionsMenuButton.center.y);
+                             
+                             gamesButtonsDisplayed = NO;
+                             mainMenuButtonsDisplayed = YES;
+                             optionsButtonsDisplayed = NO;
                          
-                         } else {
+                         } else if (optionsButtonsDisplayed) {
                              //Hidde optionsbuttons
                              self.removeAdsButton.center = CGPointMake(self.view.bounds.size.width + self.removeAdsButton.frame.size.width/2.0, self.removeAdsButton.center.y);
                              self.gameCenterButton.center = CGPointMake(self.view.bounds.size.width + self.gameCenterButton.frame.size.width/2.0, self.gameCenterButton.center.y);
                              self.optionsButton.center = CGPointMake(self.view.bounds.size.width + self.optionsButton.frame.size.width/2.0, self.optionsButton.center.y);
-
+                             
+                             self.gamesMenuButton.center = CGPointMake(self.view.bounds.size.width/2.0, self.gamesMenuButton.center.y);
+                             self.optionsMenuButton.center = CGPointMake(self.view.bounds.size.width/2.0, self.optionsMenuButton.center.y);
+                             
+                             optionsButtonsDisplayed = NO;
+                             gamesButtonsDisplayed = NO;
+                             mainMenuButtonsDisplayed = YES;
+                             
+                         } else if (mainMenuButtonsDisplayed) {
+                             self.facebookButton.center = CGPointMake(self.view.bounds.size.width/2.0, self.facebookButton.center.y);
+                             self.enterButton.center = CGPointMake(self.view.bounds.size.width/2.0, self.enterButton.center.y);
+                             self.backButton.center = CGPointMake(self.backButton.center.x, self.view.bounds.size.height + self.backButton.frame.size.height/2.0);
+                             self.gamesMenuButton.center = CGPointMake(self.view.bounds.size.width + self.gamesMenuButton.frame.size.width/2.0, self.gamesMenuButton.center.y);
+                             self.optionsMenuButton.center = CGPointMake(self.view.bounds.size.width + self.optionsMenuButton.frame.size.width/2.0, self.optionsMenuButton.center.y);
+                             
+                             optionsButtonsDisplayed = NO;
+                             gamesButtonsDisplayed = NO;
+                             mainMenuButtonsDisplayed = YES;
                          }
-                         self.backButton.center = CGPointMake(10.0 + self.backButton.frame.size.width/2.0, self.view.bounds.size.height + self.backButton.frame.size.height/2.0);
-                         
-                         self.gamesMenuButton.center = CGPointMake(self.view.bounds.size.width/2.0, self.gamesMenuButton.center.y);
-                         self.optionsMenuButton.center = CGPointMake(self.view.bounds.size.width/2.0, self.optionsMenuButton.center.y);
-                         
                      } completion:^(BOOL success){}];
 }
 
 -(void)showGameMenuOptions {
     [self playButtonSound];
     gamesButtonsDisplayed = YES;
+    optionsButtonsDisplayed = NO;
+    mainMenuButtonsDisplayed = NO;
     
     [UIView animateWithDuration:1.3
                           delay:0.0
@@ -528,9 +595,7 @@
                          self.numbersButton.center = CGPointMake(self.view.bounds.size.width/2.0, self.numbersButton.center.y);
                          self.colorsButton.center = CGPointMake(self.view.bounds.size.width/2.0, self.colorsButton.center.y);
                          self.fastModeButton.center = CGPointMake(self.view.bounds.size.width/2.0, self.fastModeButton.center.y);
-                         //self.wordsButton.center = CGPointMake(self.view.bounds.size.width/2.0, self.wordsButton.center.y);
                          self.twoPlayerButton.center = CGPointMake(self.view.bounds.size.width/2.0, self.twoPlayerButton.center.y);
-                         self.backButton.center = CGPointMake(self.backButton.center.x, self.view.bounds.size.height - self.backButton.frame.size.height/2.0 - 10.0);
                      } completion:^(BOOL finished){}];
 }
 
@@ -587,6 +652,13 @@
     [twoButtonsAlert showInView:self.view];
 }
 
+-(void)showSuccessfullLoginAlert {
+    OneButtonAlert *loginSuccessAlert = [[OneButtonAlert alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 120.0, screenBounds.size.height/2.0 - 60.0, 240.0, 120.0)];
+    loginSuccessAlert.alertText = @"Succesfull Login!";
+    loginSuccessAlert.buttonTitle = @"Ok";
+    [loginSuccessAlert showInView:self.view];
+}
+
 -(void)showGameCenter {    
     [self playButtonSound];
     
@@ -624,7 +696,7 @@
 }
 
 -(void)goToTutorialVC {
-    NSString *accessToken = [PFFacebookUtils session].accessTokenData.accessToken;
+    /*NSString *accessToken = [PFFacebookUtils session].accessTokenData.accessToken;
     NSDictionary *params = @{@"score" : @"500", @"access_token" : accessToken};
     
     [FBRequestConnection startWithGraphPath:@"me/scores"
@@ -638,19 +710,53 @@
          } else {
              NSLog(@"error: %@ %@", error, [error localizedDescription]);
          }
-     }];
+     }];*/
     
-    /*[self playButtonSound];
+    [self playButtonSound];
     
     [Flurry logEvent:@"OpenTutorial"];
     TutorialContainerViewController *tutContainerVC = [self.storyboard instantiateViewControllerWithIdentifier:@"TutorialContainer"];
-    [self presentViewController:tutContainerVC animated:YES completion:nil];*/
+    [self presentViewController:tutContainerVC animated:YES completion:nil];
 }
 
 -(void)goToWordsChaptersVC {
     WordsChaptersViewController *wordsChapterVC = [self.storyboard instantiateViewControllerWithIdentifier:@"WordsChapters"];
     wordsChapterVC.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
     [self presentViewController:wordsChapterVC animated:YES completion:nil];
+}
+
+#pragma mark - Facebook Stuff
+
+-(void)startLoginProcess {
+    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    NSArray *permissions = @[@"public_profile", @"user_friends", @"publish_actions"];
+    [PFFacebookUtils logInWithPermissions:permissions block:^(PFUser *user, NSError *error) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+        
+        //Error with the login
+        if (!user) {
+            NSString *errorMessage = nil;
+            if (!error) {
+                errorMessage = @"Uh oh. The user cancelled the Facebook login.";
+            } else {
+                errorMessage = [error localizedDescription];
+            }
+            [[[UIAlertView alloc] initWithTitle:@"Log In Error"
+                                        message:errorMessage
+                                       delegate:nil
+                              cancelButtonTitle:nil
+                              otherButtonTitles:@"Dismiss", nil] show];
+        } else {
+            //Success login
+            [self showSuccessfullLoginAlert];
+            [self animateMainButtons];
+            if (user.isNew) {
+                NSLog(@"User with facebook signed up and logged in!");
+            } else {
+                NSLog(@"User with facebook logged in!");
+            }
+        }
+    }];
 }
 
 -(void)showFacebookRankings {
@@ -665,15 +771,29 @@
                               [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
                               if (!error) {
                                   NSLog(@"Rspuesta correcta: %@", result);
-                                  [self showFacebookRankingsList];
+                                  [self parseRankingsFromResult:(NSDictionary *)result];
                               } else {
                                   NSLog(@"Error: %@ %@", error, [error localizedDescription]);
                               }
                           }];
 }
 
--(void)showFacebookRankingsList {
+-(void)parseRankingsFromResult:(NSDictionary *)rankingsDic {
+    NSMutableArray *parsedResults = [[NSMutableArray alloc] init];
+    NSArray *rankingsArray = rankingsDic[@"data"];
+    for (int i = 0; i < [rankingsArray count]; i++) {
+        NSDictionary *resultDic = rankingsArray[i];
+        NSDictionary *parsedDic = @{@"name" : resultDic[@"user"][@"name"],
+                                    @"userID" : resultDic[@"user"][@"id"],
+                                    @"score" : resultDic[@"score"]};
+        [parsedResults addObject:parsedDic];
+    }
+    [self showFacebookRankingsListWithResults:parsedResults];
+}
+
+-(void)showFacebookRankingsListWithResults:(NSArray *)resultsArray {
     FacebookRankingList *fbRankingsList = [[FacebookRankingList alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 140.0, 20.0, 280., screenBounds.size.height - 40.0)];
+    fbRankingsList.resultsArray = resultsArray;
     [fbRankingsList showInView:self.view];
 }
 
@@ -755,7 +875,13 @@
 #pragma mark - TwoButtonsAlertDelegate
 
 -(void)leftButtonPressedInAlert:(TwoButtonsAlert *)twoButtonsAlert {
-    [self showFacebookRankings];
+    if ([PFUser currentUser] && [PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]) {
+        //El usuario está logueado con Facebook
+        [self showFacebookRankings];
+    } else {
+        //Mostrar login con Facebook
+        [self startLoginProcess];
+    }
 }
 
 -(void)rightButtonPressedInAlert:(TwoButtonsAlert *)twoButtonsAlert {

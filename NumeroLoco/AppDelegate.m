@@ -33,7 +33,7 @@
     [PFFacebookUtils initializeFacebook];
     
     //Register for remote notifications
-    /*if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0)
+    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0)
     {
         [[UIApplication sharedApplication] registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeSound | UIUserNotificationTypeAlert | UIUserNotificationTypeBadge) categories:nil]];
         [[UIApplication sharedApplication] registerForRemoteNotifications];
@@ -42,10 +42,10 @@
     {
         [[UIApplication sharedApplication] registerForRemoteNotificationTypes:
          (UIUserNotificationTypeBadge | UIUserNotificationTypeSound | UIUserNotificationTypeAlert)];
-    }*/
-    [application registerForRemoteNotificationTypes:UIRemoteNotificationTypeBadge|
+    }
+    /*[application registerForRemoteNotificationTypes:UIRemoteNotificationTypeBadge|
      UIRemoteNotificationTypeAlert|
-     UIRemoteNotificationTypeSound];
+     UIRemoteNotificationTypeSound];*/
     
     //Init our InApp-Purchases Helper Singleton
     [CPIAPHelper sharedInstance];
@@ -100,6 +100,11 @@
     if ([[NSUserDefaults standardUserDefaults] objectForKey:@"lives"] == nil) {
         [[NSUserDefaults standardUserDefaults] setObject:@1 forKey:@"lives"];
         [[NSUserDefaults standardUserDefaults] synchronize];
+    }
+    
+    //Check if the user has already launch the app, and show game center inmediatly
+    if ([[fileSaver getDictionary:@"FirstAppLaunchDic"][@"FirstAppLaunchKey"] boolValue]) {
+        [[GameKitHelper sharedGameKitHelper] authenticateLocalPlayer];
     }
   
     return YES;

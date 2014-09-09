@@ -203,7 +203,7 @@
         [self addSubview:challengeLabel];
         
         //Continue Button
-        UIButton *continueButton = [[UIButton alloc] initWithFrame:CGRectMake(frame.size.width - 47.0, -32.0, 80.0, 80.0)];
+        UIButton *continueButton = [[UIButton alloc] initWithFrame:CGRectMake(-32, -32.0, 80.0, 80.0)];
         [continueButton setImage:[UIImage imageNamed:@"Close.png"] forState:UIControlStateNormal];
         [continueButton addTarget:self action:@selector(closeAlertInView:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:continueButton];

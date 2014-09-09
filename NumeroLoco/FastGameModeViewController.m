@@ -17,6 +17,7 @@
 #import "MultiplayerWinAlert.h"
 #import "AllGamesFinishedView.h"
 #import "FastGamesView.h"
+#import "AudioPlayer.h"
 
 @interface FastGameModeViewController () <FastGameAlertDelegate, BuyLivesViewDelegate, NoTouchesAlertDelegate, MultiplayerWinAlertDelegate, AllGamesFinishedViewDelegate, FastGamesViewDelegate>
 @property (strong, nonatomic) NSArray *pointsArray;
@@ -128,8 +129,15 @@
     [self.view addSubview:backButton];
     
     //Title label
-    self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 50.0, screenBounds.size.width, 50.0)];
-    self.titleLabel.font = [UIFont fontWithName:FONT_ULTRALIGHT size:40.0];
+    if (isPad) {
+        NSLog(@"IPAAAAAAAD");
+        self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 100.0, screenBounds.size.width, 100.0)];
+        self.titleLabel.font = [UIFont fontWithName:FONT_ULTRALIGHT size:80.0];
+    } else {
+        NSLog(@"NO IPAAAAAD");
+        self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 50.0, screenBounds.size.width, 50.0)];
+        self.titleLabel.font = [UIFont fontWithName:FONT_ULTRALIGHT size:40.0];
+    }
     self.titleLabel.textAlignment = NSTextAlignmentCenter;
     self.titleLabel.textColor = [UIColor darkGrayColor];
     [self.view addSubview:self.titleLabel];
@@ -178,7 +186,7 @@
 
 -(void)initGame {
     [self resetGame];
-    self.titleLabel.text = [NSString stringWithFormat:@"Game %u / %lu", self.currentGame + 1, (unsigned long)totalGames];
+    self.titleLabel.text = [NSString stringWithFormat:@"Game %u", self.currentGame + 1];
     
     self.pointsArray = self.chaptersDataArray[self.currentGame][@"puntos"];
     NSLog(@"numero de puntos: %d", [self.pointsArray count]);
@@ -457,7 +465,12 @@
     [self.gameTimer invalidate];
     self.gameTimer = nil;
     
-    FastGamesView *fastGamesView = [[FastGamesView alloc] initWithFrame:CGRectMake(20.0, 20.0, self.view.bounds.size.width - 40.0, self.view.bounds.size.height - 40.0)];
+    FastGamesView *fastGamesView;
+    if (isPad) {
+        fastGamesView = [[FastGamesView alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 280.0/2.0, screenBounds.size.height/2.0 - 528.0/2.0, 280.0, 528.0)];
+    } else {
+         fastGamesView = [[FastGamesView alloc] initWithFrame:CGRectMake(20.0, 20.0, self.view.bounds.size.width - 40.0, self.view.bounds.size.height - 40.0)];
+    }
     fastGamesView.delegate = self;
     [fastGamesView showInView:self.view];
 }
@@ -575,6 +588,9 @@
         }
     }
     //User won
+    //Play sound
+    [[AudioPlayer sharedInstance] playWinSound];
+    
     //Cancel timer
     [self.gameTimer invalidate];
     self.gameTimer = nil;
@@ -593,6 +609,9 @@
     }
     
     //User Won
+    //Play sound
+    [[AudioPlayer sharedInstance] playWinSound];
+    
     //Cancel timer
     [self.gameTimer invalidate];
     self.gameTimer = nil;
@@ -627,6 +646,8 @@
             [self disableButtons];
             userCanPlay = NO;
             [self saveCurrentDateInUserDefaults];
+        } else {
+            [self showLossAlert];
         }
     } else {
         //Show loss alert
@@ -717,7 +738,7 @@
 }
 
 -(void)showBuyMoreLivesAlert {
-    NoTouchesAlertView *noLivesAlert = [[NoTouchesAlertView alloc] initWithFrame:CGRectMake(20.0, self.view.bounds.size.height/2.0 - 100.0, self.view.bounds.size.width - 40.0, 200.0)];
+    NoTouchesAlertView *noLivesAlert = [[NoTouchesAlertView alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 140.0, self.view.bounds.size.height/2.0 - 100.0, 280.0, 200.0)];
     noLivesAlert.message.text = @"You have no more lives left! You can buy more right now or wait one hour.";
     [noLivesAlert.acceptButton setTitle:@"Buy Lives" forState:UIControlStateNormal];
     noLivesAlert.delegate = self;
@@ -725,7 +746,7 @@
 }
 
 -(void)showWinAlert {
-    FastGameWinAlert *fastGameWinAlert = [[FastGameWinAlert alloc] initWithFrame:CGRectMake(20.0, self.view.bounds.size.height/2.0 - 140.0, self.view.bounds.size.width - 40.0, 280.0)];
+    FastGameWinAlert *fastGameWinAlert = [[FastGameWinAlert alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 140.0, self.view.bounds.size.height/2.0 - 140.0, 280.0, 280.0)];
     fastGameWinAlert.delegate = self;
     fastGameWinAlert.tag = 1;
     fastGameWinAlert.alertLabel.text = [NSString stringWithFormat:@"You have won the game %lu, keep going!", (unsigned long)self.currentGame + 1];
@@ -733,7 +754,7 @@
 }
 
 -(void)showLossAlert {
-    FastGameWinAlert *lossAlert = [[FastGameWinAlert alloc] initWithFrame:CGRectMake(20.0, self.view.bounds.size.height/2.0 - 140.0, self.view.bounds.size.width - 40.0, 280.0)];
+    FastGameWinAlert *lossAlert = [[FastGameWinAlert alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 140.0, self.view.bounds.size.height/2.0 - 140.0, 280.0, 280.0)];
     lossAlert.delegate = self;
     lossAlert.tag = 2;
     [lossAlert.continueButton setTitle:@"Try again" forState:UIControlStateNormal];
@@ -742,7 +763,7 @@
 }
 
 -(void)showStartGameAlert {
-    MultiplayerWinAlert *startGameAlert = [[MultiplayerWinAlert alloc] initWithFrame:CGRectMake(20.0, self.view.bounds.size.height/2.0 - 85.0, self.view.bounds.size.width - 40.0, 170.)];
+    MultiplayerWinAlert *startGameAlert = [[MultiplayerWinAlert alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 140.0, self.view.bounds.size.height/2.0 - 85.0, 280.0, 170.)];
     startGameAlert.delegate = self;
     startGameAlert.alertMessage = @"Congratulations! You have more lives available, start playing!";
     [startGameAlert.acceptButton setTitle:@"Start Game" forState:UIControlStateNormal];
@@ -751,6 +772,8 @@
 }
 
 -(void)dismissVC {
+    [[AudioPlayer sharedInstance] playBackSound];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"PlayMusicNotification" object:nil];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -788,7 +811,12 @@
 }
 
 -(void)showBuyLivesViewUsingPricesDic:(NSDictionary *)pricesDic {
-    BuyLivesView *buyLivesView = [[BuyLivesView alloc] initWithFrame:CGRectMake(20.0, 20.0, self.view.bounds.size.width - 40.0, self.view.bounds.size.height - 40.0) pricesDic:pricesDic];
+    BuyLivesView *buyLivesView;
+    if (isPad) {
+        buyLivesView = [[BuyLivesView alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 280.0/2.0, screenBounds.size.height/2.0 - 528.0/2.0, 280.0, 528.0) pricesDic:pricesDic];
+    } else {
+           buyLivesView = [[BuyLivesView alloc] initWithFrame:CGRectMake(20.0, 20.0, self.view.bounds.size.width - 40.0, self.view.bounds.size.height - 40.0) pricesDic:pricesDic];
+    }
     buyLivesView.delegate = self;
     [buyLivesView showInView:self.view];
 }
@@ -796,6 +824,7 @@
 #pragma mark - FastGameWinAlertDelegate
 
 -(void)exitButtonPressedInAlert:(FastGameWinAlert *)fastGameWinAlert {
+    [[AudioPlayer sharedInstance] playBackSound];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -876,10 +905,15 @@
     NSLog(@"Seleccioné el juego %lu", (unsigned long)game);
     self.currentGame = game;
     [self initGame];
+    if (!userCanPlay) {
+        [self disableGame];
+    }
 }
 
 -(void)closeButtonPressedInFastGameView:(FastGamesView *)fastGamesView {
-    self.gameTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(substractTime) userInfo:nil repeats:YES];
+    if (userCanPlay) {
+        self.gameTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(substractTime) userInfo:nil repeats:YES];
+    }
 }
 
 #pragma mark - Notification Handlers 

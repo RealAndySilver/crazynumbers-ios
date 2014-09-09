@@ -84,7 +84,12 @@
 		8BE1D6021986D2FE00CAAFCF /* FacebookLogo.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BE1D5FF1986D2FE00CAAFCF /* FacebookLogo.png */; };
 		8BE1D6031986D2FE00CAAFCF /* TwitterLogo.gif in Resources */ = {isa = PBXBuildFile; fileRef = 8BE1D6001986D2FE00CAAFCF /* TwitterLogo.gif */; };
 		8BE1D6051986F8D200CAAFCF /* ColorGamesDatabase2.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8BE1D6041986F8D200CAAFCF /* ColorGamesDatabase2.plist */; };
-		8BF4A7131978047C00F2B531 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BF4A7121978047C00F2B531 /* FacebookSDK.framework */; };
+		A02E3DEE19BE2926009FDC1C /* BackgroundiPadPortrait.png in Resources */ = {isa = PBXBuildFile; fileRef = A02E3DEA19BE2926009FDC1C /* BackgroundiPadPortrait.png */; };
+		A02E3DEF19BE2926009FDC1C /* BackgroundiPadPortrait@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A02E3DEB19BE2926009FDC1C /* BackgroundiPadPortrait@2x.png */; };
+		A02E3DF019BE2926009FDC1C /* BackgroundiPhonePortrait.png in Resources */ = {isa = PBXBuildFile; fileRef = A02E3DEC19BE2926009FDC1C /* BackgroundiPhonePortrait.png */; };
+		A02E3DF119BE2926009FDC1C /* BackgroundiPhonePortraitR4.png in Resources */ = {isa = PBXBuildFile; fileRef = A02E3DED19BE2926009FDC1C /* BackgroundiPhonePortraitR4.png */; };
+		A02E3DF419BE3228009FDC1C /* TwoButtonsAlert.m in Sources */ = {isa = PBXBuildFile; fileRef = A02E3DF319BE3228009FDC1C /* TwoButtonsAlert.m */; };
+		A02E3DF719BE4BD4009FDC1C /* FacebookRankingList.m in Sources */ = {isa = PBXBuildFile; fileRef = A02E3DF619BE4BD4009FDC1C /* FacebookRankingList.m */; };
 		A043669719A6AB8D00D071DC /* Touch2.png in Resources */ = {isa = PBXBuildFile; fileRef = A043669619A6AB8D00D071DC /* Touch2.png */; };
 		A043669A19A6ABEF00D071DC /* BuyTouchesView.m in Sources */ = {isa = PBXBuildFile; fileRef = A043669919A6ABEF00D071DC /* BuyTouchesView.m */; };
 		A043669D19A6C58F00D071DC /* Close.png in Resources */ = {isa = PBXBuildFile; fileRef = A043669B19A6C58F00D071DC /* Close.png */; };
@@ -102,6 +107,9 @@
 		A08EAD2419AD1E0E00F36E23 /* heart.png in Resources */ = {isa = PBXBuildFile; fileRef = A08EAD2219AD1E0E00F36E23 /* heart.png */; };
 		A08EAD2519AD1E0E00F36E23 /* heart@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A08EAD2319AD1E0E00F36E23 /* heart@2x.png */; };
 		A08EAD2819AD274C00F36E23 /* BuyLivesView.m in Sources */ = {isa = PBXBuildFile; fileRef = A08EAD2719AD274C00F36E23 /* BuyLivesView.m */; };
+		A0A0640219BDF97E000202D1 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A0A0640119BDF97E000202D1 /* Accounts.framework */; };
+		A0A0640519BDFCC2000202D1 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A0A0640319BDFCC2000202D1 /* FacebookSDK.framework */; };
+		A0A0640619BDFCC2000202D1 /* ParseFacebookUtils.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A0A0640419BDFCC2000202D1 /* ParseFacebookUtils.framework */; };
 		A0A091CC19B66651001A8EDE /* FastGamesView.m in Sources */ = {isa = PBXBuildFile; fileRef = A0A091CB19B66651001A8EDE /* FastGamesView.m */; };
 		A0A091CF19B6696E001A8EDE /* GameCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A0A091CE19B6696E001A8EDE /* GameCell.m */; };
 		A0A79F2019AE780F0039E3C7 /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A0A79F1F19AE780F0039E3C7 /* Parse.framework */; };
@@ -247,7 +255,14 @@
 		8BE1D5FF1986D2FE00CAAFCF /* FacebookLogo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = FacebookLogo.png; sourceTree = "<group>"; };
 		8BE1D6001986D2FE00CAAFCF /* TwitterLogo.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = TwitterLogo.gif; sourceTree = "<group>"; };
 		8BE1D6041986F8D200CAAFCF /* ColorGamesDatabase2.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = ColorGamesDatabase2.plist; sourceTree = "<group>"; };
-		8BF4A7121978047C00F2B531 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FacebookSDK.framework; path = ../../Documents/FacebookSDK/FacebookSDK.framework; sourceTree = "<group>"; };
+		A02E3DEA19BE2926009FDC1C /* BackgroundiPadPortrait.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = BackgroundiPadPortrait.png; sourceTree = "<group>"; };
+		A02E3DEB19BE2926009FDC1C /* BackgroundiPadPortrait@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "BackgroundiPadPortrait@2x.png"; sourceTree = "<group>"; };
+		A02E3DEC19BE2926009FDC1C /* BackgroundiPhonePortrait.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = BackgroundiPhonePortrait.png; sourceTree = "<group>"; };
+		A02E3DED19BE2926009FDC1C /* BackgroundiPhonePortraitR4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = BackgroundiPhonePortraitR4.png; sourceTree = "<group>"; };
+		A02E3DF219BE3228009FDC1C /* TwoButtonsAlert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TwoButtonsAlert.h; sourceTree = "<group>"; };
+		A02E3DF319BE3228009FDC1C /* TwoButtonsAlert.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TwoButtonsAlert.m; sourceTree = "<group>"; };
+		A02E3DF519BE4BD4009FDC1C /* FacebookRankingList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FacebookRankingList.h; sourceTree = "<group>"; };
+		A02E3DF619BE4BD4009FDC1C /* FacebookRankingList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FacebookRankingList.m; sourceTree = "<group>"; };
 		A043669619A6AB8D00D071DC /* Touch2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Touch2.png; sourceTree = "<group>"; };
 		A043669819A6ABEF00D071DC /* BuyTouchesView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BuyTouchesView.h; sourceTree = "<group>"; };
 		A043669919A6ABEF00D071DC /* BuyTouchesView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BuyTouchesView.m; sourceTree = "<group>"; };
@@ -275,6 +290,9 @@
 		A08EAD2319AD1E0E00F36E23 /* heart@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "heart@2x.png"; sourceTree = "<group>"; };
 		A08EAD2619AD274C00F36E23 /* BuyLivesView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BuyLivesView.h; sourceTree = "<group>"; };
 		A08EAD2719AD274C00F36E23 /* BuyLivesView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BuyLivesView.m; sourceTree = "<group>"; };
+		A0A0640119BDF97E000202D1 /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
+		A0A0640319BDFCC2000202D1 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FacebookSDK.framework; sourceTree = "<group>"; };
+		A0A0640419BDFCC2000202D1 /* ParseFacebookUtils.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ParseFacebookUtils.framework; sourceTree = "<group>"; };
 		A0A091CA19B66651001A8EDE /* FastGamesView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FastGamesView.h; sourceTree = "<group>"; };
 		A0A091CB19B66651001A8EDE /* FastGamesView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FastGamesView.m; sourceTree = "<group>"; };
 		A0A091CD19B6696E001A8EDE /* GameCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameCell.h; sourceTree = "<group>"; };
@@ -316,6 +334,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A0A0640519BDFCC2000202D1 /* FacebookSDK.framework in Frameworks */,
+				A0A0640619BDFCC2000202D1 /* ParseFacebookUtils.framework in Frameworks */,
+				A0A0640219BDF97E000202D1 /* Accounts.framework in Frameworks */,
 				A0A79F2A19AE78730039E3C7 /* QuartzCore.framework in Frameworks */,
 				A0A79F2819AE78640039E3C7 /* MobileCoreServices.framework in Frameworks */,
 				A0A79F2619AE78530039E3C7 /* CoreLocation.framework in Frameworks */,
@@ -329,7 +350,6 @@
 				A0BDEAE8197732A8008BFF4D /* MediaPlayer.framework in Frameworks */,
 				A0BDEAE61977329E008BFF4D /* AdSupport.framework in Frameworks */,
 				A0BDEAE41977326E008BFF4D /* libFlurryAds_5.2.0.a in Frameworks */,
-				8BF4A7131978047C00F2B531 /* FacebookSDK.framework in Frameworks */,
 				A0BDEADF1976C806008BFF4D /* Security.framework in Frameworks */,
 				A0BDEADD1976C7FC008BFF4D /* SystemConfiguration.framework in Frameworks */,
 				8B6FB8C219507C6B00EB2C4E /* CoreGraphics.framework in Frameworks */,
@@ -387,6 +407,8 @@
 		8B61F8F8195C87A90036BB90 /* Custom Views */ = {
 			isa = PBXGroup;
 			children = (
+				A02E3DF219BE3228009FDC1C /* TwoButtonsAlert.h */,
+				A02E3DF319BE3228009FDC1C /* TwoButtonsAlert.m */,
 				8B61F8F9195C87CC0036BB90 /* GameWonAlert.h */,
 				8B61F8FA195C87CC0036BB90 /* GameWonAlert.m */,
 				8BA9401F195DC10C0032706E /* ColorPatternView.h */,
@@ -409,6 +431,8 @@
 				A08E2DC519B13251009F8F6F /* TutorialAlertView.m */,
 				A0A091CA19B66651001A8EDE /* FastGamesView.h */,
 				A0A091CB19B66651001A8EDE /* FastGamesView.m */,
+				A02E3DF519BE4BD4009FDC1C /* FacebookRankingList.h */,
+				A02E3DF619BE4BD4009FDC1C /* FacebookRankingList.m */,
 			);
 			name = "Custom Views";
 			sourceTree = "<group>";
@@ -435,6 +459,9 @@
 		8B6FB8BE19507C6B00EB2C4E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A0A0640319BDFCC2000202D1 /* FacebookSDK.framework */,
+				A0A0640419BDFCC2000202D1 /* ParseFacebookUtils.framework */,
+				A0A0640119BDF97E000202D1 /* Accounts.framework */,
 				A0A79F2919AE78730039E3C7 /* QuartzCore.framework */,
 				A0A79F2719AE78640039E3C7 /* MobileCoreServices.framework */,
 				A0A79F2519AE78530039E3C7 /* CoreLocation.framework */,
@@ -466,7 +493,6 @@
 				8BA17EE31987E4AA00DFB839 /* MBProgressHUD2 */,
 				8BA17ED91987D4AC00DFB839 /* InApp Purchases */,
 				8B1ED910197990A3001FDB2C /* GameCenter */,
-				8BF4A7121978047C00F2B531 /* FacebookSDK.framework */,
 				A0BDEAE01977326E008BFF4D /* FlurryAds */,
 				A0BDEAD81976C7E3008BFF4D /* Flurry */,
 				8BA60C34195B33870072A7F4 /* FileSaver */,
@@ -579,6 +605,7 @@
 		8B90453B196359FC000F2E51 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				A02E3DE919BE2926009FDC1C /* BackgroundImages */,
 				8BB8A9BC19A3BDD10076E4A7 /* Sounds */,
 				8BB8628E199BA01200718843 /* ButtonsPNGs */,
 				8BAD7B5B1992A00B005DB0C2 /* hand.png */,
@@ -682,6 +709,17 @@
 				8BB8A9BF19A3BDD10076E4A7 /* win.m4a */,
 			);
 			path = Sounds;
+			sourceTree = "<group>";
+		};
+		A02E3DE919BE2926009FDC1C /* BackgroundImages */ = {
+			isa = PBXGroup;
+			children = (
+				A02E3DEA19BE2926009FDC1C /* BackgroundiPadPortrait.png */,
+				A02E3DEB19BE2926009FDC1C /* BackgroundiPadPortrait@2x.png */,
+				A02E3DEC19BE2926009FDC1C /* BackgroundiPhonePortrait.png */,
+				A02E3DED19BE2926009FDC1C /* BackgroundiPhonePortraitR4.png */,
+			);
+			path = BackgroundImages;
 			sourceTree = "<group>";
 		};
 		A08E2DB719B11F8A009F8F6F /* Tutorial ViewControllers */ = {
@@ -836,12 +874,16 @@
 				8BB8629D199BA60900718843 /* NumbersButton.png in Resources */,
 				8B90453F196359FC000F2E51 /* TutorialPhoneR4_1.png in Resources */,
 				A043669719A6AB8D00D071DC /* Touch2.png in Resources */,
+				A02E3DF019BE2926009FDC1C /* BackgroundiPhonePortrait.png in Resources */,
 				8BE1D5FD1986BF4800CAAFCF /* checkmark.png in Resources */,
+				A02E3DEF19BE2926009FDC1C /* BackgroundiPadPortrait@2x.png in Resources */,
 				8BB8A9C019A3BDD10076E4A7 /* crossbg.mp3 in Resources */,
+				A02E3DEE19BE2926009FDC1C /* BackgroundiPadPortrait.png in Resources */,
 				8BB8A9C619A3C6220076E4A7 /* press.wav in Resources */,
 				8B90454319636244000F2E51 /* TutorialPhoneR4_3.png in Resources */,
 				8BB86295199BA01200718843 /* OptionsButton.png in Resources */,
 				8B6FB8D219507C6B00EB2C4E /* Images.xcassets in Resources */,
+				A02E3DF119BE2926009FDC1C /* BackgroundiPhonePortraitR4.png in Resources */,
 				8B6FB8FF19508CA200EB2C4E /* ChapterNames.plist in Resources */,
 				A08EAD2519AD1E0E00F36E23 /* heart@2x.png in Resources */,
 				8BB8A9CC19A3FA8F0076E4A7 /* restartnuevo.wav in Resources */,
@@ -876,9 +918,11 @@
 				A08E2DC019B11FD6009F8F6F /* SecondPageTutViewController.m in Sources */,
 				A08E2DC319B11FE3009F8F6F /* ThirdPageTutViewController.m in Sources */,
 				A08E2DBD19B11FCA009F8F6F /* FirstPageTutViewController.m in Sources */,
+				A02E3DF419BE3228009FDC1C /* TwoButtonsAlert.m in Sources */,
 				8B316B14199181670062FD77 /* Model.xcdatamodeld in Sources */,
 				8B6FB8F9195084CE00EB2C4E /* ChaptersViewController.m in Sources */,
 				8B5F497B19A4F19900C0C7E2 /* AudioPlayer.m in Sources */,
+				A02E3DF719BE4BD4009FDC1C /* FacebookRankingList.m in Sources */,
 				8BB45D7519892CDC00C68B5A /* MultiplayerGameViewController.m in Sources */,
 				8BA17EE11987D4AC00DFB839 /* IAPHelper.m in Sources */,
 				8BA17EE61987E4AA00DFB839 /* MBProgressHUD.m in Sources */,

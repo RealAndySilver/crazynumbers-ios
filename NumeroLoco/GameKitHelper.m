@@ -7,6 +7,7 @@
 //
 
 #import "GameKitHelper.h"
+#import "RootViewController.h"
 
 @interface GameKitHelper () <GKGameCenterControllerDelegate> {
     BOOL _gameCenterFeaturesEnabled;
@@ -65,6 +66,7 @@
 -(UIViewController*) getRootViewController {
     return [UIApplication
             sharedApplication].keyWindow.rootViewController;
+    
 }
 
 -(void)presentViewController:(UIViewController*)vc {

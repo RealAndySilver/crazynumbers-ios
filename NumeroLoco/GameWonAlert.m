@@ -84,7 +84,8 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        
+        NSUInteger socialButtonsWidth = frame.size.height/8.8;
+
         // Initialization code
         self.backgroundColor = [UIColor whiteColor];
         self.layer.cornerRadius = 10.0;
@@ -152,7 +153,7 @@
         [self addSubview:self.bonusScoreLabel];
         
         //Total Score label
-        UILabel *totalScoreLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0, 310.0, frame.size.width - 40.0, 20.0)];
+        UILabel *totalScoreLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0, frame.size.height - frame.size.height/2.93, frame.size.width - 40.0, 20.0)];
         totalScoreLabel.text = @"Total Score";
         totalScoreLabel.textColor = [UIColor darkGrayColor];
         totalScoreLabel.font = [UIFont fontWithName:FONT_NAME size:20.0];
@@ -160,15 +161,33 @@
         [self addSubview:totalScoreLabel];
         
         //Big Score label
-        self.bigScoreLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0, 320.0, frame.size.width - 40.0, 60.0)];
+        self.bigScoreLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0, totalScoreLabel.frame.origin.y + totalScoreLabel.frame.size.height - 10.0, frame.size.width - 40.0, 60.0)];
         self.bigScoreLabel.text = @"0/0";
         self.bigScoreLabel.textAlignment = NSTextAlignmentCenter;
         self.bigScoreLabel.textColor = [[AppInfo sharedInstance] appColorsArray][2];
         self.bigScoreLabel.font = [UIFont fontWithName:FONT_NAME size:40.0];
         [self addSubview:self.bigScoreLabel];
         
+        //Faebook button
+        UIButton *facebookButton = [[UIButton alloc] initWithFrame:CGRectMake(10.0, frame.size.height - (socialButtonsWidth + 10.0), socialButtonsWidth, socialButtonsWidth)];
+        [facebookButton setBackgroundImage:[UIImage imageNamed:@"FacebookLogo.png"] forState:UIControlStateNormal];
+        [facebookButton addTarget:self action:@selector(facebookButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+        [self addSubview:facebookButton];
+     
+        //Twitter button
+        UIButton *twitterButton = [[UIButton alloc] initWithFrame:CGRectMake(facebookButton.frame.origin.x + facebookButton.frame.size.width + 10.0, frame.size.height - (socialButtonsWidth + 10.0), socialButtonsWidth, socialButtonsWidth)];
+        [twitterButton setBackgroundImage:[UIImage imageNamed:@"TwitterLogo.gif"] forState:UIControlStateNormal];
+        [twitterButton addTarget:self action:@selector(twitterButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+        [self addSubview:twitterButton];
+        
+        //Challenge button
+        UIButton *challengeButton = [[UIButton alloc] initWithFrame:CGRectMake(frame.size.width - 100.0, frame.size.height - (socialButtonsWidth + 10.0), socialButtonsWidth, socialButtonsWidth)];
+        [challengeButton setBackgroundImage:[UIImage imageNamed:@"ChallengeIcon.png"] forState:UIControlStateNormal];
+        [challengeButton addTarget:self action:@selector(challengeButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+        [self addSubview:challengeButton];
+        
         //Share label
-        UILabel *shareLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0, frame.size.height - 110.0, 125.0, 30.0)];
+        UILabel *shareLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0, facebookButton.frame.origin.y - 30.0, 125.0, 30.0)];
         shareLabel.text = @"Share";
         shareLabel.textColor = [UIColor darkGrayColor];
         shareLabel.textAlignment = NSTextAlignmentCenter;
@@ -176,30 +195,12 @@
         [self addSubview:shareLabel];
         
         //Challenge label
-        UILabel *challengeLabel = [[UILabel alloc] initWithFrame:CGRectMake(frame.size.width/2.0, frame.size.height - 110.0, frame.size.width/2.0, 30.0)];
+        UILabel *challengeLabel = [[UILabel alloc] initWithFrame:CGRectMake(frame.size.width/2.0, challengeButton.frame.origin.y - 30.0, frame.size.width/2.0, 30.0)];
         challengeLabel.text = @"Challenge";
         challengeLabel.textColor = [UIColor darkGrayColor];
         challengeLabel.font = [UIFont fontWithName:FONT_NAME size:20.0];
         challengeLabel.textAlignment = NSTextAlignmentCenter;
         [self addSubview:challengeLabel];
-        
-        //Faebook button
-        UIButton *facebookButton = [[UIButton alloc] initWithFrame:CGRectMake(20.0, frame.size.height - 80.0, 60.0, 60.0)];
-        [facebookButton setBackgroundImage:[UIImage imageNamed:@"FacebookLogo.png"] forState:UIControlStateNormal];
-        [facebookButton addTarget:self action:@selector(facebookButtonPressed) forControlEvents:UIControlEventTouchUpInside];
-        [self addSubview:facebookButton];
-     
-        //Twitter button
-        UIButton *twitterButton = [[UIButton alloc] initWithFrame:CGRectMake(90.0, frame.size.height - 80.0, 60.0, 60.0)];
-        [twitterButton setBackgroundImage:[UIImage imageNamed:@"TwitterLogo.gif"] forState:UIControlStateNormal];
-        [twitterButton addTarget:self action:@selector(twitterButtonPressed) forControlEvents:UIControlEventTouchUpInside];
-        [self addSubview:twitterButton];
-        
-        //Challenge button
-        UIButton *challengeButton = [[UIButton alloc] initWithFrame:CGRectMake(frame.size.width - 100.0, frame.size.height - 80.0, 60.0, 60.0)];
-        [challengeButton setBackgroundImage:[UIImage imageNamed:@"ChallengeIcon.png"] forState:UIControlStateNormal];
-        [challengeButton addTarget:self action:@selector(challengeButtonPressed) forControlEvents:UIControlEventTouchUpInside];
-        [self addSubview:challengeButton];
         
         //Continue Button
         UIButton *continueButton = [[UIButton alloc] initWithFrame:CGRectMake(frame.size.width - 47.0, -32.0, 80.0, 80.0)];

@@ -53,7 +53,7 @@
         
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //300 touches image view
-        UIImageView *threeTouchesImageView = [[UIImageView alloc] initWithFrame:CGRectMake(20.0, 120.0, 60.0, 60.0)];
+        UIImageView *threeTouchesImageView = [[UIImageView alloc] initWithFrame:CGRectMake(20.0, frame.size.height/4.4 - 10.0, 60.0, 60.0)];
         threeTouchesImageView.image = [UIImage imageNamed:@"Touch2.png"];
         [self addSubview:threeTouchesImageView];
         

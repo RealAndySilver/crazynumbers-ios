@@ -26,12 +26,29 @@
 @property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *buttons;
 @end
 
-@implementation ThirdPageTutViewController
+@implementation ThirdPageTutViewController {
+    CGRect screenBounds;
+    NSUInteger fontSize;
+    BOOL isPad;
+}
 
 -(void)viewDidLoad {
     [super viewDidLoad];
+    screenBounds = [UIScreen mainScreen].bounds;
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        isPad = YES;
+        fontSize = 30.0;
+    } else {
+        isPad = NO;
+        fontSize = 15.0;
+    }
     
     //Back button
+    if (screenBounds.size.height < 500.0) {
+        //Small iphone
+        self.backButton.center = CGPointMake(self.backButton.center.x, screenBounds.size.height - 40.0);
+        self.continueButton.center = CGPointMake(self.continueButton.center.x, screenBounds.size.height - 40.0);
+    }
     [self.backButton setTitleColor:[[AppInfo sharedInstance] appColorsArray][2] forState:UIControlStateNormal];
     self.backButton.layer.cornerRadius = 10.0;
     self.backButton.layer.borderWidth = 1.0;
@@ -44,6 +61,9 @@
         button.tag = i+1;
         button.layer.cornerRadius = 10.0;
         button.backgroundColor = [[AppInfo sharedInstance] appColorsArray][2];
+        if (isPad) {
+            button.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:40.0];
+        }
     }
     self.continueButton.hidden = YES;
     self.continueButton.layer.cornerRadius = 10.0;
@@ -57,7 +77,7 @@
     self.textView = [[UITextView alloc] initWithFrame:CGRectMake(40.0, 50.0, self.view.bounds.size.width - 80.0, 140.0)];
     self.textView.text = @"Let's practice! remember, when you touch a button, it's value will decrease by one, as well as the value of the upper, left, bottom and right button. \n\nTouch the center button!";
     self.textView.textColor = [UIColor darkGrayColor];
-    self.textView.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:15.0];
+    self.textView.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:fontSize];
     self.textView.textAlignment = NSTextAlignmentCenter;
     [self.view addSubview:self.textView];
 }
@@ -81,14 +101,14 @@
 }
 
 -(void)showFirstAlert {
-    TutorialAlertView *tutorialAlert = [[TutorialAlertView alloc] initWithFrame:CGRectMake(20.0, 20.0, self.view.bounds.size.width - 40.0, 200.0)];
+    TutorialAlertView *tutorialAlert = [[TutorialAlertView alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 140.0, 20.0, 280.0, 200.0)];
     tutorialAlert.textView.text = @"Excellent!\nYou set all the buttons to zero! The yellow buttons were the ones affected by your touch. Let's practice again!";
     tutorialAlert.tag = 1;
     tutorialAlert.delegate = self;
     [tutorialAlert showInView:self.view];
     
     self.textView.text = @"Now, touch the upper left button!";
-    self.textView.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:15.0];
+    self.textView.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:fontSize];
     self.textView.textColor = [UIColor darkGrayColor];
     self.textView.textAlignment = NSTextAlignmentCenter;
     /*[self.button5 setTitle:@"0" forState:UIControlStateNormal];
@@ -152,7 +172,7 @@
 
 -(void)showSecondAlert {
     self.textView.text = @"Now, you will have to make two touches to win. Touch the center button and then the upper left button";
-    TutorialAlertView *tutorialAlert = [[TutorialAlertView alloc] initWithFrame:CGRectMake(20.0, 20.0, self.view.bounds.size.width - 40.0, 200.0)];
+    TutorialAlertView *tutorialAlert = [[TutorialAlertView alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 140.0, 20.0, 280.0, 200.0)];
     tutorialAlert.tag = 2;
     tutorialAlert.delegate = self;
     tutorialAlert.textView.text = @"Excellent!\nBecause in this case there weren't upper and left buttons, the buttons that you affected were the right and bottom ones. Let's practice one last time!";
@@ -182,7 +202,7 @@
 -(void)showLastAlert {
     self.textView.text = @"Congratulations!\nNow you can play the numbers game. Let's continue and see how the colors game works!";
     
-    TutorialAlertView *tutorialAlert = [[TutorialAlertView alloc] initWithFrame:CGRectMake(20.0, 20.0, self.view.bounds.size.width - 40.0, 200.0)];
+    TutorialAlertView *tutorialAlert = [[TutorialAlertView alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 140.0, 20.0, 280.0, 200.0)];
     tutorialAlert.textView.text = @"Congratulations!\nNow you can play the numbers game. Let's continue and see how the colors game works!";
     tutorialAlert.delegate = self;
     tutorialAlert.tag = 3;

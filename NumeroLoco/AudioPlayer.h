@@ -11,4 +11,6 @@
 @interface AudioPlayer : NSObject
 +(AudioPlayer *)sharedInstance;
 -(void)playBackSound;
+-(void)playButtonPressSound;
+-(void)playWinSound;
 @end

@@ -26,9 +26,11 @@
 #import "IAPProduct.h"
 #import "BuyTouchesView.h"
 #import "TouchesObject.h"
+#import "TwoButtonsAlert.h"
+#import <ParseFacebookUtils/PFFacebookUtils.h>
 @import AVFoundation;
 
-@interface ColorsGameViewController () <ColorPatternViewDelegate, GameWonAlertDelegate, AllGamesFinishedViewDelegate, NoTouchesAlertDelegate, BuyTouchesViewDelegate>
+@interface ColorsGameViewController () <ColorPatternViewDelegate, GameWonAlertDelegate, AllGamesFinishedViewDelegate, NoTouchesAlertDelegate, BuyTouchesViewDelegate, TwoButtonsAlertDelegate>
 @property (strong, nonatomic) NSMutableArray *columnsButtonsArray; //Of UIButton
 @property (strong, nonatomic) UIView *buttonsContainerView;
 @property (strong, nonatomic) UILabel *numberOfTapsLabel;
@@ -445,7 +447,7 @@
     for (int i = 0; i < matrixSize; i++) {
         for (int j = 0; j < matrixSize; j++) {
             //[self.columnsButtonsArray[i][j] setTitle:@"0" forState:UIControlStateNormal];
-            CGPoint originalButtonCenter = [self.columnsButtonsArray[i][j] center];
+            CGPoint originalButtonCenter = [(UIButton *)self.columnsButtonsArray[i][j] center];
             CGPoint randomCenter = CGPointMake(arc4random()%1000, arc4random()%500);
             [self.columnsButtonsArray[i][j] setCenter:randomCenter];
             [UIView animateWithDuration:0.8
@@ -895,7 +897,15 @@
     //Synchronize touches left in User Defaults
     [self saveTouchesLeftInUserDefaults:[TouchesObject sharedInstance].totalTouches];
     
-    GameWonAlert *gameWonAlert = [[GameWonAlert alloc] initWithFrame:CGRectMake(20.0, 20.0, screenBounds.size.width - 40.0, screenBounds.size.height - 40.0)];
+    GameWonAlert *gameWonAlert;
+    if (isPad) {
+        gameWonAlert = [[GameWonAlert alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 280.0/2.0, screenBounds.size.height/2.0 - 528.0/2.0, 280.0, 528.0)];
+        
+    } else {
+        gameWonAlert = [[GameWonAlert alloc]
+                        initWithFrame:CGRectMake(20.0, 20.0, screenBounds.size.width - 40.0, screenBounds.size.height - 40.0)];
+    }
+
     gameWonAlert.delegate = self;
     gameWonAlert.touchesMade = numberOfTaps;
     gameWonAlert.touchesForBestScore = bestTapCount;
@@ -958,12 +968,23 @@
 
 #pragma mark - Social Stuff
 
--(void)challengeFriends {
-    /*ChallengeFriendsViewController *challengeFriendsVC = [self.storyboard instantiateViewControllerWithIdentifier:@"ChallengeFriends"];
-    if (isPad) challengeFriendsVC.modalPresentationStyle = UIModalPresentationFormSheet;
-    challengeFriendsVC.score = [self pointsWonForTime:timeElapsed];
-    [self presentViewController:challengeFriendsVC animated:YES completion:nil];*/
-    
+-(void)showChallengeAlert {
+    TwoButtonsAlert *challengeAlert = [[TwoButtonsAlert alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 140.0, screenBounds.size.height/2.0 - 85.0, 280.0, 170.0)];
+    challengeAlert.alertText = @"Which friends do you want to challenge?";
+    challengeAlert.leftButtonTitle = @"Facebook";
+    challengeAlert.rightButtonTitle = @"GameCenter";
+    challengeAlert.delegate = self;
+    [challengeAlert showInView:self.view];
+}
+
+-(void)challengeFacebookFriends {
+    [FBWebDialogs presentRequestsDialogModallyWithSession:[PFFacebookUtils session] message:@"Hey! I'm playing Cross for iOS, try to beat my score!"
+                                                    title:nil parameters:nil handler:^(FBWebDialogResult result, NSURL *resultURL, NSError *error) {
+                                                        
+                                                    }];
+}
+
+-(void)challengeGameCenterFriends {
     [[GameKitHelper sharedGameKitHelper] sendScoreChallengeToPlayers:nil withScore:[self pointsWonForTime:timeElapsed] message:nil];
 }
 
@@ -1138,7 +1159,13 @@
 }
 
 -(void)showBuyTouchesViewUsingPricesDic:(NSDictionary *)pricesDic {
-    BuyTouchesView *buyTouchesView = [[BuyTouchesView alloc] initWithFrame:CGRectMake(20.0, 20.0, screenBounds.size.width - 40.0, screenBounds.size.height - 40.0) pricesDic:pricesDic];
+    BuyTouchesView *buyTouchesView;
+    if (isPad) {
+        buyTouchesView = [[BuyTouchesView alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 280.0/2.0, screenBounds.size.height/2.0 - 528.0/2.0, 280.0, 528.0) pricesDic:pricesDic];
+    } else {
+        buyTouchesView = [[BuyTouchesView alloc] initWithFrame:CGRectMake(20.0, 20.0, screenBounds.size.width - 40.0, screenBounds.size.height - 40.0) pricesDic:pricesDic];
+    }
+
     buyTouchesView.delegate = self;
     [buyTouchesView showInView:self.view];
 }
@@ -1154,7 +1181,8 @@
 }
 
 -(void)challengeButtonPressedInAlert:(GameWonAlert *)gameWonAlert {
-    [self challengeFriends];
+    [self showChallengeAlert];
+    //[self challengeGameCenterFriends];
 }
 
 -(void)twitterButtonPressedInAlert:(GameWonAlert *)gameWonAlert {
@@ -1243,6 +1271,20 @@ interstitial {
     [self enableButtons];
     
     [self removeSavedDateInUserDefaults];
+}
+
+#pragma mark - TwoButtonsAlertDelegate
+
+-(void)rightButtonPressedInAlert:(TwoButtonsAlert *)twoButtonsAlert {
+    [self challengeGameCenterFriends];
+}
+
+-(void)leftButtonPressedInAlert:(TwoButtonsAlert *)twoButtonsAlert {
+    [self challengeFacebookFriends];
+}
+
+-(void)twoButtonsAlertDidDisappear:(TwoButtonsAlert *)twoButtonsAlert {
+    
 }
 
 #pragma mark - Notification Handlers

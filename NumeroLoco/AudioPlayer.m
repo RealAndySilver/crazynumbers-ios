@@ -11,6 +11,8 @@
 
 @interface AudioPlayer()
 @property (strong, nonatomic) AVAudioPlayer *backSoundPlayer;
+@property (strong, nonatomic) AVAudioPlayer *buttonPressSound;
+@property (strong, nonatomic) AVAudioPlayer *winSound;
 @end
 
 @implementation AudioPlayer
@@ -23,6 +25,26 @@
         [_backSoundPlayer prepareToPlay];
     }
     return _backSoundPlayer;
+}
+
+-(AVAudioPlayer *)buttonPressSound {
+    if (!_buttonPressSound) {
+        NSString *soundFilePath = [[NSBundle mainBundle] pathForResource:@"press" ofType:@"wav"];
+        NSURL *soundFileURL = [NSURL URLWithString:soundFilePath];
+        _buttonPressSound = [[AVAudioPlayer alloc] initWithContentsOfURL:soundFileURL error:nil];
+        [_buttonPressSound prepareToPlay];
+    }
+    return _buttonPressSound;
+}
+
+-(AVAudioPlayer *)winSound {
+    if (!_winSound) {
+        NSString *soundFilePath = [[NSBundle mainBundle] pathForResource:@"win" ofType:@"wav"];
+        NSURL *soundFileURL = [NSURL URLWithString:soundFilePath];
+        _winSound = [[AVAudioPlayer alloc] initWithContentsOfURL:soundFileURL error:nil];
+        [_winSound prepareToPlay];
+    }
+    return _winSound;
 }
 
 +(AudioPlayer *)sharedInstance {
@@ -40,6 +62,16 @@
     [self.backSoundPlayer stop];
     self.backSoundPlayer.currentTime = 0;
     [self.backSoundPlayer play];
+}
+
+-(void)playWinSound {
+    [self.winSound play];
+}
+
+-(void)playButtonPressSound {
+    [self.buttonPressSound stop];
+    self.buttonPressSound.currentTime = 0;
+    [self.buttonPressSound play];
 }
 
 @end

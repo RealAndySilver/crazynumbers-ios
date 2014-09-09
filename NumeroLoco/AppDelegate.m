@@ -9,6 +9,7 @@
 #import "AppDelegate.h"
 #import "FileSaver.h"
 #import <FacebookSDK/FacebookSDK.h>
+#import <ParseFacebookUtils/PFFacebookUtils.h>
 #import "Flurry.h"
 #import "FlurryAds.h"
 #import "CPIAPHelper.h"
@@ -26,12 +27,13 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    //Parse setup
+    //Parse & Facebook setup
     [Parse setApplicationId:@"Z9VRUjoPPSMl2PQqQYVncx6UPjReI47lKROjPwkW"
                   clientKey:@"pCLXgoDeQGR6cZZ62DK1CtNzCHFqMheI5qDHSy8e"];
+    [PFFacebookUtils initializeFacebook];
     
     //Register for remote notifications
-    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0)
+    /*if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0)
     {
         [[UIApplication sharedApplication] registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeSound | UIUserNotificationTypeAlert | UIUserNotificationTypeBadge) categories:nil]];
         [[UIApplication sharedApplication] registerForRemoteNotifications];
@@ -40,17 +42,14 @@
     {
         [[UIApplication sharedApplication] registerForRemoteNotificationTypes:
          (UIUserNotificationTypeBadge | UIUserNotificationTypeSound | UIUserNotificationTypeAlert)];
-    }
-    /*[application registerForRemoteNotificationTypes:UIRemoteNotificationTypeBadge|
+    }*/
+    [application registerForRemoteNotificationTypes:UIRemoteNotificationTypeBadge|
      UIRemoteNotificationTypeAlert|
-     UIRemoteNotificationTypeSound];*/
+     UIRemoteNotificationTypeSound];
     
     //Init our InApp-Purchases Helper Singleton
     [CPIAPHelper sharedInstance];
-    
-    //Facebook Setup
-    [FBLoginView class];
-    
+ 
     //Flurry Setup
     [Flurry setCrashReportingEnabled:YES];
     [Flurry startSession:@"F3B2NR3G33WX6BTWXFFQ"];
@@ -77,12 +76,6 @@
                                                              @[]]} withName:@"WordChaptersDic"];
     }
     
-    if ([fileSaver getDictionary:@"FirstAppLaunchDic"][@"FirstAppLaunchKey"]) {
-        //This is the first time the user launches the app
-        //so present the tutorial view controller
-        [[GameKitHelper sharedGameKitHelper] authenticateLocalPlayer];
-    }
-
     //Save maximum touches in User Defaults
     if ([[NSUserDefaults standardUserDefaults] objectForKey:@"Touches"] == nil) {
         //First time the user launches the app
@@ -134,6 +127,8 @@
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+    
+    [FBAppCall handleDidBecomeActiveWithSession:[PFFacebookUtils session]];
     
     //Check if one hour has pass since the user had no more touches available
     NSDate *currentDate = [NSDate date];
@@ -193,11 +188,9 @@
 
 -(BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
     // Call FBAppCall's handleOpenURL:sourceApplication to handle Facebook app responses
-    BOOL wasHandled = [FBAppCall handleOpenURL:url sourceApplication:sourceApplication];
-    
-    // You can add your app-specific url handling code here if needed
-    
-    return wasHandled;
+    return [FBAppCall handleOpenURL:url
+                  sourceApplication:sourceApplication
+                        withSession:[PFFacebookUtils session]];
 }
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken

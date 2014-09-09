@@ -29,7 +29,10 @@
 
 @end
 
-@implementation FourthPageViewController
+@implementation FourthPageViewController {
+    BOOL isPad;
+    NSUInteger fontSize;
+}
 
 -(NSArray *)bluePaletteArray {
     if (!_bluePaletteArray) {
@@ -40,6 +43,13 @@
 
 -(void)viewDidLoad {
     [super viewDidLoad];
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        isPad = YES;
+        fontSize = 30.0;
+    } else {
+        isPad = NO;
+        fontSize = 15.0;
+    }
     
     //Back button
     [self.backButton setTitleColor:[[AppInfo sharedInstance] appColorsArray][2] forState:UIControlStateNormal];
@@ -72,10 +82,14 @@
     [self.continueButton addTarget:self action:@selector(continueButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     
     //Textview setup
-    self.textView = [[UITextView alloc] initWithFrame:CGRectMake(40.0, 50.0, self.view.bounds.size.width - 80.0, 140.0)];
+    if (isPad) {
+        self.textView = [[UITextView alloc] initWithFrame:CGRectMake(40.0, 50.0, self.view.bounds.size.width - 80.0, 160.0)];
+    } else {
+        self.textView = [[UITextView alloc] initWithFrame:CGRectMake(40.0, 50.0, self.view.bounds.size.width - 80.0, 140.0)];
+    }
     self.textView.text = @"Colors Game\nObjective: Set all buttons to white color. Everytime you touch a button, it's color will become whiter.\nTouch the center button to begin the practice!";
     self.textView.textColor = [UIColor darkGrayColor];
-    self.textView.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:15.0];
+    self.textView.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:fontSize];
     self.textView.textAlignment = NSTextAlignmentCenter;
     [self.view addSubview:self.textView];
     
@@ -96,7 +110,7 @@
 }
 
 -(void)showFirstAlert {
-    TutorialAlertView *tutorialAlert = [[TutorialAlertView alloc] initWithFrame:CGRectMake(20.0, 20.0, self.view.bounds.size.width - 40.0, 200.0)];
+    TutorialAlertView *tutorialAlert = [[TutorialAlertView alloc] initWithFrame:CGRectMake(self.view.bounds.size.width/2.0 - 140.0, 20.0, 280.0, 200.0)];
     tutorialAlert.textView.text = @"You won! As well as in the numbers game, when you touch a button, you also affect the upper,left, bottom and right buttons. Let's practice again!";
     tutorialAlert.tag = 1;
     tutorialAlert.delegate = self;
@@ -150,7 +164,7 @@
 }
 
 -(void)showSecondAlert {
-    TutorialAlertView *tutorialAlert = [[TutorialAlertView alloc] initWithFrame:CGRectMake(20.0, 20.0, self.view.bounds.size.width - 40.0, 200.0)];
+    TutorialAlertView *tutorialAlert = [[TutorialAlertView alloc] initWithFrame:CGRectMake(self.view.bounds.size.width/2.0 - 140.0, 20.0, 280.0, 200.0)];
     tutorialAlert.textView.text = @"Excellent! You're becoming a Cross master!. \n\nLet's practice one last time!";
     tutorialAlert.tag = 2;
     tutorialAlert.delegate = self;
@@ -181,7 +195,7 @@
 }
 
 -(void)showFinalAlert {
-    TutorialAlertView *tutorialAlert = [[TutorialAlertView alloc] initWithFrame:CGRectMake(20.0, 20.0, self.view.bounds.size.width - 40.0, 260.0)];
+    TutorialAlertView *tutorialAlert = [[TutorialAlertView alloc] initWithFrame:CGRectMake(self.view.bounds.size.width/2.0 - 140.0, 20.0, 280.0, 260.0)];
     tutorialAlert.textView.text = @"Congratulations! You have completed the tutorial! Start playing!\n\n *General Tip: If you affect a button that is already white (or has a value of zero, in the case of the numbers game), it will get colorized again";
     tutorialAlert.tag = 3;
     tutorialAlert.delegate = self;

@@ -8,10 +8,12 @@
 
 #import "LoginViewController.h"
 #import "RootViewController.h"
-#import <FacebookSDK/FacebookSDK.h>
-#import <GameKit/GameKit.h>
+#import "AppInfo.h"
+#import <ParseFacebookUtils/PFFacebookUtils.h>
+#import "MBProgressHUD.h"
+#import "GameKitHelper.h"
 
-@interface LoginViewController () <FBLoginViewDelegate>
+@interface LoginViewController ()
 
 @end
 
@@ -23,142 +25,95 @@
 
 -(void)viewDidLoad {
     [super viewDidLoad];
-    
-    //Init gameCenter
-    //[self authenticateLocalPlayer];
-    
+    [[GameKitHelper sharedGameKitHelper] authenticateLocalPlayer];
     screenBounds = [UIScreen mainScreen].bounds;
     [self setupUI];
 }
 
+-(void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    if ([PFUser currentUser] && [PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]) {
+        //The user is loggin with facebook, go to root VC
+        //[self goToRootVC];
+    }
+}
+
 -(void)setupUI {
+    self.view.backgroundColor = [[AppInfo sharedInstance] appColorsArray][0];
+    
     //Background Image
     UIImageView *backgroundImageView = [[UIImageView alloc] initWithFrame:screenBounds];
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        backgroundImageView.image = [UIImage imageNamed:@"BackgroundPad.png"];
+        backgroundImageView.image = [UIImage imageNamed:@"BackgroundiPadPortrait.png"];
     } else {
-        backgroundImageView.image = [UIImage imageNamed:@"Background.png"];
+        if (screenBounds.size.height > 500) {
+            //Big Screen iPhone
+            backgroundImageView.image = [UIImage imageNamed:@"BackgroundiPhonePortraitR4.png"];
+        } else {
+            backgroundImageView.image = [UIImage imageNamed:@"BackgroundiPhonePortrait.png"];
+        }
     }
     [self.view addSubview:backgroundImageView];
     
-    //Facebook Button
-    FBLoginView *loginView = [[FBLoginView alloc] initWithReadPermissions:@[@"public_profile", @"email", @"user_friends"]];
-    loginView.delegate = self;
-    loginView.frame = CGRectOffset(loginView.frame, screenBounds.size.width/2.0 - loginView.frame.size.width/2.0 , screenBounds.size.height - 100.0);
-    [self.view addSubview:loginView];
-    
-    /*UIButton *facebookButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    facebookButton.frame = CGRectMake(self.view.bounds.size.width/2.0 - 150.0, self.view.bounds.size.height/2.0, 300.0, 40.0);
-    [facebookButton setTitle:@"Login With Facebook" forState:UIControlStateNormal];
-    [facebookButton addTarget:self action:@selector(startLoginProcess) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:facebookButton];*/
-    
     //Dont login button
     UIButton *enterButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    enterButton.frame = CGRectMake(self.view.bounds.size.width/2.0 - 150.0, screenBounds.size.height - 50.0, 300.0, 40.0);
+    enterButton.frame = CGRectMake(self.view.bounds.size.width/2.0 - 120.0, screenBounds.size.height - 60.0, 240.0, 50.0);
     [enterButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [enterButton setTitle:@"Ingresar sin Facebook" forState:UIControlStateNormal];
+    [enterButton setTitle:@"Don't Login" forState:UIControlStateNormal];
+    enterButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:18.0];
+    enterButton.layer.cornerRadius = 10.0;
+    enterButton.layer.borderColor = [UIColor whiteColor].CGColor;
+    enterButton.layer.borderWidth = 1.0;
     [enterButton addTarget:self action:@selector(goToRootVC) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:enterButton];
+    
+    //Facebook button
+    UIButton *facebookButton = [[UIButton alloc]initWithFrame:CGRectOffset(enterButton.frame, 0.0, -(enterButton.frame.size.height + 10.0))];
+    [facebookButton setTitle:@"Login With Facebook" forState:UIControlStateNormal];
+    [facebookButton addTarget:self action:@selector(startLoginProcess) forControlEvents:UIControlEventTouchUpInside];
+    facebookButton.layer.cornerRadius = 10.0;
+    facebookButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:18.0];
+    facebookButton.backgroundColor = [UIColor colorWithRed:52.0/255.0 green:75.0/255.0 blue:139.0/255.0 alpha:1.0];
+    [self.view addSubview:facebookButton];
 }
 
-#pragma mark - Custom Methods
+#pragma mark - Actions 
 
-/*-(void)authenticateLocalPlayer{
-    GKLocalPlayer *localPlayer = [GKLocalPlayer localPlayer];
-    
-    localPlayer.authenticateHandler = ^(UIViewController *viewController, NSError *error){
-        if (viewController != nil) {
-            NSLog(@"Mostraré el controlador de game center");
-            [self presentViewController:viewController animated:YES completion:nil];
-        }
-        else{
-            NSLog(@"No mostraré el controlador de game center");
-            if ([GKLocalPlayer localPlayer].authenticated) {
-                NSLog(@"El suaurio ya estaba autenticado");
-                _gameCenterEnabled = YES;
-                
-                // Get the default leaderboard identifier.
-                [[GKLocalPlayer localPlayer] loadDefaultLeaderboardIdentifierWithCompletionHandler:^(NSString *leaderboardIdentifier, NSError *error) {
-                    
-                    if (error != nil) {
-                        NSLog(@"%@", [error localizedDescription]);
-                    }
-                    else{
-                        _leaderboardIdentifier = leaderboardIdentifier;
-                    }
-                }];
+-(void)startLoginProcess {
+    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    NSArray *permissions = @[@"public_profile", @"user_friends", @"publish_actions"];
+    [PFFacebookUtils logInWithPermissions:permissions block:^(PFUser *user, NSError *error) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+        
+        //Error with the login
+        if (!user) {
+            NSString *errorMessage = nil;
+            if (!error) {
+                errorMessage = @"Uh oh. The user cancelled the Facebook login.";
+            } else {
+                errorMessage = [error localizedDescription];
             }
-            
-            else{
-                NSLog(@"EL usuario no está autenticado");
-                _gameCenterEnabled = NO;
+            [[[UIAlertView alloc] initWithTitle:@"Log In Error"
+                                       message:errorMessage
+                                      delegate:nil
+                             cancelButtonTitle:nil
+                             otherButtonTitles:@"Dismiss", nil] show];
+        } else {
+            //Success login
+            if (user.isNew) {
+                NSLog(@"User with facebook signed up and logged in!");
+            } else {
+                NSLog(@"User with facebook logged in!");
             }
+            [self goToRootVC];
         }
-    };
-}*/
-
-#pragma mark - Actions
+    }];
+}
 
 -(void)goToRootVC {
     RootViewController *rootVC = [self.storyboard instantiateViewControllerWithIdentifier:@"Root"];
     rootVC.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
     [self presentViewController:rootVC animated:YES completion:nil];
-}
-
-#pragma mark - FBLoginViewDelegate 
-
--(void)loginViewFetchedUserInfo:(FBLoginView *)loginView user:(id<FBGraphUser>)user {
-    NSLog(@"Me logueé con Facebook");
-    NSLog(@"UserName: %@", user.name);
-    [self goToRootVC];
-}
-
--(void)loginViewShowingLoggedOutUser:(FBLoginView *)loginView {
-    NSLog(@"Cerré sesión con Facebook");
-}
-
-// Handle possible errors that can occur during login
-- (void)loginView:(FBLoginView *)loginView handleError:(NSError *)error {
-    NSString *alertMessage, *alertTitle;
-    
-    // If the user should perform an action outside of you app to recover,
-    // the SDK will provide a message for the user, you just need to surface it.
-    // This conveniently handles cases like Facebook password change or unverified Facebook accounts.
-    if ([FBErrorUtility shouldNotifyUserForError:error]) {
-        alertTitle = @"Facebook error";
-        alertMessage = [FBErrorUtility userMessageForError:error];
-        
-        // This code will handle session closures that happen outside of the app
-        // You can take a look at our error handling guide to know more about it
-        // https://developers.facebook.com/docs/ios/errors
-    } else if ([FBErrorUtility errorCategoryForError:error] == FBErrorCategoryAuthenticationReopenSession) {
-        alertTitle = @"Session Error";
-        alertMessage = @"Your current session is no longer valid. Please log in again.";
-        
-        // If the user has cancelled a login, we will do nothing.
-        // You can also choose to show the user a message if cancelling login will result in
-        // the user not being able to complete a task they had initiated in your app
-        // (like accessing FB-stored information or posting to Facebook)
-    } else if ([FBErrorUtility errorCategoryForError:error] == FBErrorCategoryUserCancelled) {
-        NSLog(@"user cancelled login");
-        
-        // For simplicity, this sample handles other errors with a generic message
-        // You can checkout our error handling guide for more detailed information
-        // https://developers.facebook.com/docs/ios/errors
-    } else {
-        alertTitle  = @"Something went wrong";
-        alertMessage = @"Please try again later.";
-        NSLog(@"Unexpected error:%@", error);
-    }
-    
-    if (alertMessage) {
-        [[[UIAlertView alloc] initWithTitle:alertTitle
-                                    message:alertMessage
-                                   delegate:nil
-                          cancelButtonTitle:@"OK"
-                          otherButtonTitles:nil] show];
-    }
 }
 
 @end

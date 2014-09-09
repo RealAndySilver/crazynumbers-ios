@@ -22,9 +22,12 @@
 #import "GameKitHelper.h"
 #import "TutorialContainerViewController.h"
 #import "FastGameModeViewController.h"
+#import <ParseFacebookUtils/PFFacebookUtils.h>
+#import "TwoButtonsAlert.h"
+#import "FacebookRankingList.h"
 @import AVFoundation;
 
-@interface RootViewController () <GKGameCenterControllerDelegate>
+@interface RootViewController () <GKGameCenterControllerDelegate, TwoButtonsAlertDelegate>
 @property (strong, nonatomic) IBOutletCollection(UIView) NSArray *views;
 @property (weak, nonatomic) IBOutlet UIView *view9;
 @property (weak, nonatomic) IBOutlet UIView *view8;
@@ -107,17 +110,17 @@
                                                object:nil];
     viewIsVisible = YES;
 
-    if (viewAppearFromFirstTimeTutorial) {
+    /*if (viewAppearFromFirstTimeTutorial) {
         [[GameKitHelper sharedGameKitHelper] authenticateLocalPlayer];
         viewAppearFromFirstTimeTutorial = NO;
-    }
+    }*/
     
     //Check if this is the first time the user launch the app
     FileSaver *fileSaver = [[FileSaver alloc] init];
-    if (![fileSaver getDictionary:@"FirstAppLaunchDic"][@"FirstAppLaunchKey"]) {
+    if (![[fileSaver getDictionary:@"FirstAppLaunchDic"][@"FirstAppLaunchKey"] boolValue]) {
         //This is the first time the user launches the app
         //so present the tutorial view controller
-        viewAppearFromFirstTimeTutorial = YES;
+        //viewAppearFromFirstTimeTutorial = YES;
         
         [fileSaver setDictionary:@{@"FirstAppLaunchKey" : @YES} withName:@"FirstAppLaunchDic"];
         [self goToTutorialVC];
@@ -126,7 +129,8 @@
 
 -(void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"TransactionFailedNotification" object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"UserDidSuscribe" object:nil];
     viewIsVisible = NO;
 }
 
@@ -167,7 +171,7 @@
         borderWidth = 2.0;
         backButtonFrame = CGRectMake(0.0, 0.0, 150.0, 70.0);
         buttonFrames = CGRectMake(0.0, 0.0, 237.0, 97.0);
-        gamesButtonsFrames = CGRectMake(0.0, 0.0, 237.0, 97.0);
+        gamesButtonsFrames = CGRectMake(0.0, 0.0, 237.0, 60.0);
         fontSize = 40.0;
         buttonsHeight = 70.0;
         fontName = @"HelveticaNeue-Light";
@@ -175,7 +179,7 @@
         borderWidth = 1.0;
         backButtonFrame = CGRectMake(0.0, 0.0, 80.0, 35.0);
         buttonFrames = CGRectMake(0.0, 0.0, 100.0, 50.0);
-        gamesButtonsFrames = CGRectMake(0.0, 0.0, 100.0, 50.0);
+        gamesButtonsFrames = CGRectMake(0.0, 0.0, 100.0, screenBounds.size.height/11.36);
         fontSize = 20.0;
         buttonsHeight = 40.0;
         fontName = @"HelveticaNeue-Light";
@@ -206,7 +210,7 @@
     //GameMenu & OptionsMenu Buttons
     self.gamesMenuButton.frame = buttonFrames;
     [self.gamesMenuButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    self.gamesMenuButton.center = CGPointMake(self.view.center.x, self.view.center.y + (self.view.bounds.size.height/4.0) - self.gamesMenuButton.bounds.size.height/2.0 - 10.0);
+    self.gamesMenuButton.center = CGPointMake(self.view.center.x, self.view.center.y + (self.view.bounds.size.height/4.0) - self.gamesMenuButton.bounds.size.height/2.0 + 20.0);
     self.gamesMenuButton.titleLabel.font = [UIFont fontWithName:fontName size:fontSize];
     [self.gamesMenuButton addTarget:self action:@selector(showGameMenuOptions) forControlEvents:UIControlEventTouchUpInside];
     self.gamesMenuButton.layer.cornerRadius = 10.0;
@@ -215,7 +219,7 @@
     
     self.optionsMenuButton.frame = buttonFrames;
     [self.optionsMenuButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    self.optionsMenuButton.center = CGPointMake(self.view.center.x, self.view.center.y + (self.view.bounds.size.height/4.0) + self.optionsMenuButton.frame.size.height/2.0 + 10.0);
+    self.optionsMenuButton.center = CGPointMake(self.view.center.x, self.gamesMenuButton.center.y + self.gamesMenuButton.frame.size.height + 20.0);
     self.optionsMenuButton.titleLabel.font = [UIFont fontWithName:fontName size:fontSize];
     self.optionsMenuButton.layer.cornerRadius = 10.0;
     self.optionsMenuButton.layer.borderWidth = borderWidth;
@@ -225,7 +229,7 @@
     //Tutorial
     self.optionsButton = [UIButton buttonWithType:UIButtonTypeSystem];
     self.optionsButton.frame = gamesButtonsFrames;
-    self.optionsButton.center = CGPointMake(self.view.bounds.size.width + self.optionsButton.frame.size.width/2.0, self.view.center.y + self.view.frame.size.height/4.0);
+    self.optionsButton.center = CGPointMake(self.view.bounds.size.width + self.optionsButton.frame.size.width/2.0, screenBounds.size.height - screenBounds.size.height/4.0 + 40.0);
     [self.optionsButton setTitle:@"Tutorial" forState:UIControlStateNormal];
     [self.optionsButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     self.optionsButton.layer.cornerRadius = cornerRadius;
@@ -240,7 +244,7 @@
     //Display it only if the user has not removed the ads
     self.removeAdsButton = [UIButton buttonWithType:UIButtonTypeSystem];
     self.removeAdsButton.frame = gamesButtonsFrames;
-    self.removeAdsButton.center = CGPointMake(self.view.frame.size.width + self.removeAdsButton.frame.size.width/2.0, self.optionsButton.center.y + self.optionsButton.frame.size.height + 20.0);
+    self.removeAdsButton.center = CGPointMake(self.view.frame.size.width + self.removeAdsButton.frame.size.width/2.0, self.optionsButton.center.y + self.optionsButton.frame.size.height + 10.0);
     [self.removeAdsButton setTitle:@"Store" forState:UIControlStateNormal];
     [self.removeAdsButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     self.removeAdsButton.titleLabel.font = [UIFont fontWithName:fontName size:fontSize];
@@ -254,7 +258,8 @@
     //Colors button
     self.colorsButton = [UIButton buttonWithType:UIButtonTypeSystem];
     self.colorsButton.frame = gamesButtonsFrames;
-    self.colorsButton.center = CGPointMake(self.view.bounds.size.width + self.colorsButton.frame.size.width/2.0, self.view.center.y + self.view.frame.size.height/4.0);
+    //self.colorsButton.center = CGPointMake(self.view.bounds.size.width + self.colorsButton.frame.size.width/2.0, self.view.center.y + self.view.frame.size.height/4.0);
+    self.colorsButton.center = CGPointMake(self.view.bounds.size.width + self.colorsButton.frame.size.width/2.0, screenBounds.size.height - screenBounds.size.height/4.0 + 40.0);
     [self.colorsButton setTitle:@"Colors" forState:UIControlStateNormal];
     [self.colorsButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     self.colorsButton.titleLabel.font = [UIFont fontWithName:fontName size:fontSize];
@@ -267,7 +272,7 @@
     //Numbers Button
     self.numbersButton = [UIButton buttonWithType:UIButtonTypeSystem];
     self.numbersButton.frame = gamesButtonsFrames;
-    self.numbersButton.center = CGPointMake(self.view.frame.size.width + self.numbersButton.frame.size.width/2.0, self.colorsButton.center.y - self.colorsButton.bounds.size.height - 20.0);
+    self.numbersButton.center = CGPointMake(self.view.frame.size.width + self.numbersButton.frame.size.width/2.0, self.colorsButton.center.y - self.colorsButton.bounds.size.height - 10.0);
     [self.numbersButton setTitle:@"Numbers" forState:UIControlStateNormal];
     [self.numbersButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     self.numbersButton.titleLabel.font = [UIFont fontWithName:fontName size:fontSize];
@@ -279,7 +284,7 @@
     
     //Fast mode button
     self.fastModeButton = [[UIButton alloc] initWithFrame:gamesButtonsFrames];
-    self.fastModeButton.center = CGPointMake(self.view.frame.size.width + self.fastModeButton.frame.size.width/2.0, self.colorsButton.center.y + self.colorsButton.frame.size.height + 20.0);
+    self.fastModeButton.center = CGPointMake(self.view.frame.size.width + self.fastModeButton.frame.size.width/2.0, self.colorsButton.center.y + self.colorsButton.frame.size.height + 10.0);
     [self.fastModeButton setTitle:@"Fast Mode" forState:UIControlStateNormal];
     [self.fastModeButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     self.fastModeButton.titleLabel.font = [UIFont fontWithName:fontName size:fontSize];
@@ -293,7 +298,7 @@
     if (isPad) {
         self.twoPlayerButton = [UIButton buttonWithType:UIButtonTypeSystem];
         self.twoPlayerButton.frame = gamesButtonsFrames;
-        self.twoPlayerButton.center = CGPointMake(self.view.frame.size.width + self.twoPlayerButton.frame.size.width/2.0, self.colorsButton.center.y + self.colorsButton.frame.size.height + 20.0);
+        self.twoPlayerButton.center = CGPointMake(self.view.frame.size.width + self.twoPlayerButton.frame.size.width/2.0, self.colorsButton.center.y + self.colorsButton.frame.size.height + 80.0);
         self.twoPlayerButton.titleLabel.font = [UIFont fontWithName:fontName size:fontSize];
         [self.twoPlayerButton setTitle:@"2-Players Vs" forState:UIControlStateNormal];
         [self.twoPlayerButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
@@ -321,14 +326,14 @@
     //GameCenter BUtton
     self.gameCenterButton = [UIButton buttonWithType:UIButtonTypeSystem];
     self.gameCenterButton.frame = gamesButtonsFrames;
-    self.gameCenterButton.center = CGPointMake(self.view.frame.size.width + self.gameCenterButton.frame.size.width/2.0, self.optionsButton.center.y - self.optionsButton.bounds.size.height - 20.0);
+    self.gameCenterButton.center = CGPointMake(self.view.frame.size.width + self.gameCenterButton.frame.size.width/2.0, self.optionsButton.center.y - self.optionsButton.bounds.size.height - 10.0);
     [self.gameCenterButton setTitle:@"Rankings" forState:UIControlStateNormal];
     [self.gameCenterButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     self.gameCenterButton.layer.cornerRadius = cornerRadius;
     self.gameCenterButton.layer.borderWidth = borderWidth;
     self.gameCenterButton.layer.borderColor = [UIColor whiteColor].CGColor;
     self.gameCenterButton.titleLabel.font = [UIFont fontWithName:fontName size:fontSize];
-    [self.gameCenterButton addTarget:self action:@selector(showGameCenter) forControlEvents:UIControlEventTouchUpInside];
+    [self.gameCenterButton addTarget:self action:@selector(showRankingsAlert) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.gameCenterButton];
     
     //BackButton
@@ -525,13 +530,16 @@
                          self.fastModeButton.center = CGPointMake(self.view.bounds.size.width/2.0, self.fastModeButton.center.y);
                          //self.wordsButton.center = CGPointMake(self.view.bounds.size.width/2.0, self.wordsButton.center.y);
                          self.twoPlayerButton.center = CGPointMake(self.view.bounds.size.width/2.0, self.twoPlayerButton.center.y);
-                         self.backButton.center = CGPointMake(self.backButton.center.x, self.view.bounds.size.height - self.backButton.frame.size.height/2.0 - 20.0);
+                         self.backButton.center = CGPointMake(self.backButton.center.x, self.view.bounds.size.height - self.backButton.frame.size.height/2.0 - 10.0);
                      } completion:^(BOOL finished){}];
 }
 
 #pragma mark - Actions
 
 -(void)goToFastModeVC {
+    [self playButtonSound];
+    [self stopMusic];
+    
     FastGameModeViewController *fastModeVC = [self.storyboard instantiateViewControllerWithIdentifier:@"FastGameMode"];
     fastModeVC.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
     [self presentViewController:fastModeVC animated:YES completion:nil];
@@ -570,7 +578,16 @@
     }];
 }
 
--(void)showGameCenter {
+-(void)showRankingsAlert {
+    TwoButtonsAlert *twoButtonsAlert = [[TwoButtonsAlert alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 140.0, screenBounds.size.height/2.0 - 85.0, 280.0, 170.0)];
+    twoButtonsAlert.alertText = @"Which rankings would you like to see?";
+    twoButtonsAlert.leftButtonTitle = @"Facebook";
+    twoButtonsAlert.rightButtonTitle = @"GameCenter";
+    twoButtonsAlert.delegate = self;
+    [twoButtonsAlert showInView:self.view];
+}
+
+-(void)showGameCenter {    
     [self playButtonSound];
     
     GKGameCenterViewController *gameViewController = [[GKGameCenterViewController alloc] init];
@@ -579,7 +596,7 @@
         gameViewController.gameCenterDelegate = self;
         gameViewController.viewState = GKGameCenterViewControllerStateLeaderboards;
         [self presentViewController:gameViewController animated:YES completion:nil];
-    } 
+    }
 }
 
 -(void)dismissVC {
@@ -607,21 +624,57 @@
 }
 
 -(void)goToTutorialVC {
-    [self playButtonSound];
+    NSString *accessToken = [PFFacebookUtils session].accessTokenData.accessToken;
+    NSDictionary *params = @{@"score" : @"500", @"access_token" : accessToken};
+    
+    [FBRequestConnection startWithGraphPath:@"me/scores"
+                                 parameters:params
+                                 HTTPMethod:@"POST"
+                          completionHandler:
+     ^(FBRequestConnection *connection, id result, NSError *error) {
+         // Handle results
+         if (!error) {
+             NSLog(@"%@", result);
+         } else {
+             NSLog(@"error: %@ %@", error, [error localizedDescription]);
+         }
+     }];
+    
+    /*[self playButtonSound];
     
     [Flurry logEvent:@"OpenTutorial"];
     TutorialContainerViewController *tutContainerVC = [self.storyboard instantiateViewControllerWithIdentifier:@"TutorialContainer"];
-    [self presentViewController:tutContainerVC animated:YES completion:nil];
-    
-    /*TutorialViewController *tutorialVC = [self.storyboard instantiateViewControllerWithIdentifier:@"Tutorial"];
-    //tutorialVC.viewControllerAppearedFromInitialLaunching = viewAppearFromFirstTimeTutorial;
-    [self presentViewController:tutorialVC animated:YES completion:nil];*/
+    [self presentViewController:tutContainerVC animated:YES completion:nil];*/
 }
 
 -(void)goToWordsChaptersVC {
     WordsChaptersViewController *wordsChapterVC = [self.storyboard instantiateViewControllerWithIdentifier:@"WordsChapters"];
     wordsChapterVC.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
     [self presentViewController:wordsChapterVC animated:YES completion:nil];
+}
+
+-(void)showFacebookRankings {
+    //746952778700195
+    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    NSString *accessToken = [PFFacebookUtils session].accessTokenData.accessToken;
+    NSDictionary *params = @{@"access_token" : accessToken};
+    [FBRequestConnection startWithGraphPath:@"746952778700195/scores"
+                                 parameters:params
+                                 HTTPMethod:@"GET"
+                          completionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
+                              [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+                              if (!error) {
+                                  NSLog(@"Rspuesta correcta: %@", result);
+                                  [self showFacebookRankingsList];
+                              } else {
+                                  NSLog(@"Error: %@ %@", error, [error localizedDescription]);
+                              }
+                          }];
+}
+
+-(void)showFacebookRankingsList {
+    FacebookRankingList *fbRankingsList = [[FacebookRankingList alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 140.0, 20.0, 280., screenBounds.size.height - 40.0)];
+    [fbRankingsList showInView:self.view];
 }
 
 #pragma mark - Sounds
@@ -697,6 +750,20 @@
 -(void)playMusicNotificationReceived:(NSNotification *)notification {
     [self.player play];
     [self fadeInMusic];
+}
+
+#pragma mark - TwoButtonsAlertDelegate
+
+-(void)leftButtonPressedInAlert:(TwoButtonsAlert *)twoButtonsAlert {
+    [self showFacebookRankings];
+}
+
+-(void)rightButtonPressedInAlert:(TwoButtonsAlert *)twoButtonsAlert {
+    [self showGameCenter];
+}
+
+-(void)twoButtonsAlertDidDisappear:(TwoButtonsAlert *)twoButtonsAlert {
+    
 }
 
 /*-(void)firsTimeTutorialNotificationReceived:(NSNotification *)notification {

@@ -49,10 +49,10 @@
         self.backButton.center = CGPointMake(self.backButton.center.x, screenBounds.size.height - 40.0);
         self.continueButton.center = CGPointMake(self.continueButton.center.x, screenBounds.size.height - 40.0);
     }
-    [self.backButton setTitleColor:[[AppInfo sharedInstance] appColorsArray][2] forState:UIControlStateNormal];
+    [self.backButton setTitleColor:[[AppInfo sharedInstance] appColorsArray][0] forState:UIControlStateNormal];
     self.backButton.layer.cornerRadius = 10.0;
     self.backButton.layer.borderWidth = 1.0;
-    self.backButton.layer.borderColor = ((UIColor *)[[AppInfo sharedInstance] appColorsArray][2]).CGColor;
+    self.backButton.layer.borderColor = ((UIColor *)[[AppInfo sharedInstance] appColorsArray][0]).CGColor;
     [self.backButton addTarget:self action:@selector(backButtonPressed) forControlEvents:UIControlEventTouchUpInside];
 
     //Buttons
@@ -60,7 +60,7 @@
         UIButton *button = self.buttons[i];
         button.tag = i+1;
         button.layer.cornerRadius = 10.0;
-        button.backgroundColor = [[AppInfo sharedInstance] appColorsArray][2];
+        button.backgroundColor = [[AppInfo sharedInstance] appColorsArray][0];
         if (isPad) {
             button.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:40.0];
         }
@@ -68,7 +68,8 @@
     self.continueButton.hidden = YES;
     self.continueButton.layer.cornerRadius = 10.0;
     self.continueButton.layer.borderWidth = 1.0;
-    self.continueButton.layer.borderColor = ((UIColor *)[[AppInfo sharedInstance] appColorsArray][2]).CGColor;
+    [self.continueButton setTitleColor:[[AppInfo sharedInstance] appColorsArray][0] forState:UIControlStateNormal];
+    self.continueButton.layer.borderColor = ((UIColor *)[[AppInfo sharedInstance] appColorsArray][0]).CGColor;
     [self.continueButton addTarget:self action:@selector(continueButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     
     [self.button5 addTarget:self action:@selector(centerButtonPressed) forControlEvents:UIControlEventTouchUpInside];
@@ -88,21 +89,21 @@
     [self.button5 removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
     
     [self.button5 setTitle:@"0" forState:UIControlStateNormal];
-    self.button5.backgroundColor = [[AppInfo sharedInstance] appColorsArray][3];
+    self.button5.backgroundColor = [UIColor colorWithWhite:0.8 alpha:1.0];
     [self.button2 setTitle:@"0" forState:UIControlStateNormal];
-    self.button2.backgroundColor = [[AppInfo sharedInstance] appColorsArray][3];
+    self.button2.backgroundColor = [UIColor colorWithWhite:0.8 alpha:1.0];
     [self.button4 setTitle:@"0" forState:UIControlStateNormal];
-    self.button4.backgroundColor = [[AppInfo sharedInstance] appColorsArray][3];
+    self.button4.backgroundColor = [UIColor colorWithWhite:0.8 alpha:1.0];
     [self.button6 setTitle:@"0" forState:UIControlStateNormal];
-    self.button6.backgroundColor = [[AppInfo sharedInstance] appColorsArray][3];
+    self.button6.backgroundColor = [UIColor colorWithWhite:0.8 alpha:1.0];
     [self.button8 setTitle:@"0" forState:UIControlStateNormal];
-    self.button8.backgroundColor = [[AppInfo sharedInstance] appColorsArray][3];
+    self.button8.backgroundColor = [UIColor colorWithWhite:0.8 alpha:1.0];
     [self performSelector:@selector(showFirstAlert) withObject:nil afterDelay:0.7];
 }
 
 -(void)showFirstAlert {
     TutorialAlertView *tutorialAlert = [[TutorialAlertView alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 140.0, 20.0, 280.0, 200.0)];
-    tutorialAlert.textView.text = @"Excellent!\nYou set all the buttons to zero! The yellow buttons were the ones affected by your touch. Let's practice again!";
+    tutorialAlert.textView.text = @"Excellent!\nYou set all the buttons to zero! The light gray buttons were the ones affected by your touch. Let's practice again!";
     tutorialAlert.tag = 1;
     tutorialAlert.delegate = self;
     [tutorialAlert showInView:self.view];
@@ -132,7 +133,7 @@
 
 -(void)acceptButtonPressedInAlert:(TutorialAlertView *)tutorialAlertView {
     for (UIButton *button in self.buttons) {
-        button.backgroundColor = [[AppInfo sharedInstance] appColorsArray][2];
+        button.backgroundColor = [[AppInfo sharedInstance] appColorsArray][0];
         [button setTitle:@"0" forState:UIControlStateNormal];
     }
     
@@ -160,12 +161,12 @@
 -(void)button1Pressed {
     [self.button1 removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
     
-    self.button1.backgroundColor = [[AppInfo sharedInstance] appColorsArray][3];
+    self.button1.backgroundColor = [UIColor colorWithWhite:0.8 alpha:1.0];
     [self.button1 setTitle:@"0" forState:UIControlStateNormal];
     [self.button2 setTitle:@"0" forState:UIControlStateNormal];
     [self.button4 setTitle:@"0" forState:UIControlStateNormal];
-    self.button2.backgroundColor = [[AppInfo sharedInstance] appColorsArray][3];
-    self.button4.backgroundColor = [[AppInfo sharedInstance] appColorsArray][3];
+    self.button2.backgroundColor = [UIColor colorWithWhite:0.8 alpha:1.0];
+    self.button4.backgroundColor = [UIColor colorWithWhite:0.8 alpha:1.0];
     
     [self performSelector:@selector(showSecondAlert) withObject:nil afterDelay:0.7];
 }

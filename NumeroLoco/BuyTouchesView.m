@@ -38,8 +38,12 @@
         self.backgroundColor = [UIColor whiteColor];
         
         //Close button
-        UIButton *closeButton = [[UIButton alloc] initWithFrame:CGRectMake(-32.0, -32.0, 80.0, 80.0)];
-        [closeButton setImage:[UIImage imageNamed:@"Close.png"] forState:UIControlStateNormal];
+        UIButton *closeButton = [[UIButton alloc] initWithFrame:CGRectMake(5.0, 5.0, 30.0, 30.0)];
+        [closeButton setTitle:@"✕" forState:UIControlStateNormal];
+        [closeButton setTitleColor:[UIColor colorWithWhite:0.7 alpha:1.0] forState:UIControlStateNormal];
+        closeButton.layer.borderColor = [UIColor colorWithWhite:0.7 alpha:1.0].CGColor;
+        closeButton.layer.borderWidth = 1.0;
+        closeButton.layer.cornerRadius = 10.0;
         [closeButton addTarget:self action:@selector(closeAlert) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:closeButton];
         

@@ -18,6 +18,7 @@
         self.gameNumberLabel.textAlignment = NSTextAlignmentCenter;
         self.gameNumberLabel.layer.borderColor = [UIColor darkGrayColor].CGColor;
         self.gameNumberLabel.layer.borderWidth = 1.0;
+        self.gameNumberLabel.clipsToBounds = YES;
         [self.contentView addSubview:self.gameNumberLabel];
     }
     return self;

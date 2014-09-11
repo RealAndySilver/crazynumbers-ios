@@ -36,7 +36,7 @@
         [self.acceptButton setTitle:@"Ok" forState:UIControlStateNormal];
         [self.acceptButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         self.acceptButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:15.0];
-        self.acceptButton.backgroundColor = [[AppInfo sharedInstance] appColorsArray][2];
+        self.acceptButton.backgroundColor = [[AppInfo sharedInstance] appColorsArray][0];
         self.acceptButton.layer.cornerRadius = 10.0;
         [self.acceptButton addTarget:self action:@selector(closeView) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:self.acceptButton];

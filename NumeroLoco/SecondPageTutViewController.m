@@ -29,20 +29,20 @@
     
     UIButton *continueButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.bounds.size.width - 120.0, self.view.bounds.size.height - 90.0, 70.0, 40.0)];
     [continueButton setTitle:@"Continue" forState:UIControlStateNormal];
-    [continueButton setTitleColor:[[AppInfo sharedInstance] appColorsArray][2] forState:UIControlStateNormal];
+    [continueButton setTitleColor:[[AppInfo sharedInstance] appColorsArray][0] forState:UIControlStateNormal];
     continueButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:15.0];
     continueButton.layer.cornerRadius = 10.0;
-    continueButton.layer.borderColor = ((UIColor *)[[AppInfo sharedInstance] appColorsArray][2]).CGColor;
+    continueButton.layer.borderColor = ((UIColor *)[[AppInfo sharedInstance] appColorsArray][0]).CGColor;
     continueButton.layer.borderWidth = 1.0;
     [continueButton addTarget:self action:@selector(continueButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:continueButton];
     
     UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(50.0, self.view.bounds.size.height - 90.0, 70.0, 40.0)];
     [backButton setTitle:@"Back" forState:UIControlStateNormal];
-    [backButton setTitleColor:[[AppInfo sharedInstance] appColorsArray][2] forState:UIControlStateNormal];
+    [backButton setTitleColor:[[AppInfo sharedInstance] appColorsArray][0] forState:UIControlStateNormal];
     backButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:15.0];
     backButton.layer.cornerRadius = 10.0;
-    backButton.layer.borderColor = ((UIColor *)[[AppInfo sharedInstance] appColorsArray][2]).CGColor;
+    backButton.layer.borderColor = ((UIColor *)[[AppInfo sharedInstance] appColorsArray][0]).CGColor;
     backButton.layer.borderWidth = 1.0;
     [backButton addTarget:self action:@selector(backButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:backButton];

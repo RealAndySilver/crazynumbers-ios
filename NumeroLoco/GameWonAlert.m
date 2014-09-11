@@ -203,10 +203,14 @@
         [self addSubview:challengeLabel];
         
         //Continue Button
-        UIButton *continueButton = [[UIButton alloc] initWithFrame:CGRectMake(-32, -32.0, 80.0, 80.0)];
-        [continueButton setImage:[UIImage imageNamed:@"Close.png"] forState:UIControlStateNormal];
-        [continueButton addTarget:self action:@selector(closeAlertInView:) forControlEvents:UIControlEventTouchUpInside];
-        [self addSubview:continueButton];
+        UIButton *closeButton = [[UIButton alloc] initWithFrame:CGRectMake(5.0, 5.0, 30.0, 30.0)];
+        [closeButton setTitle:@"✕" forState:UIControlStateNormal];
+        [closeButton setTitleColor:[UIColor colorWithWhite:0.7 alpha:1.0] forState:UIControlStateNormal];
+        closeButton.layer.borderColor = [UIColor colorWithWhite:0.7 alpha:1.0].CGColor;
+        closeButton.layer.borderWidth = 1.0;
+        closeButton.layer.cornerRadius = 10.0;
+        [closeButton addTarget:self action:@selector(closeAlertInView:) forControlEvents:UIControlEventTouchUpInside];
+        [self addSubview:closeButton];
     }
     return self;
 }

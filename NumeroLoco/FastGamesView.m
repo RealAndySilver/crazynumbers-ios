@@ -36,15 +36,19 @@
         NSLog(@"unlcoked games: %d", self.gamesCompleted);
         
         //Close button
-        UIButton *closeButton = [[UIButton alloc] initWithFrame:CGRectMake(-32.0, -32.0, 80.0, 80.0)];
-        [closeButton setImage:[UIImage imageNamed:@"Close.png"] forState:UIControlStateNormal];
+        UIButton *closeButton = [[UIButton alloc] initWithFrame:CGRectMake(5.0, 5.0, 30.0, 30.0)];
+        [closeButton setTitle:@"✕" forState:UIControlStateNormal];
+        closeButton.layer.cornerRadius = 10.0;
+        closeButton.layer.borderWidth = 1.0;
+        [closeButton setTitleColor:[UIColor colorWithWhite:0.7 alpha:1.0] forState:UIControlStateNormal];
+        closeButton.layer.borderColor = [UIColor colorWithWhite:0.7 alpha:1.0].CGColor;
         [closeButton addTarget:self action:@selector(closeButtonPressed) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:closeButton];
         
         //Title label
         UILabel *fastGamesTitle = [[UILabel alloc] initWithFrame:CGRectMake(20.0, 40.0, frame.size.width - 40.0, 50.0)];
         fastGamesTitle.text = @"Fast Games";
-        fastGamesTitle.textColor = [[AppInfo sharedInstance] appColorsArray][1];
+        fastGamesTitle.textColor = [[AppInfo sharedInstance] appColorsArray][0];
         fastGamesTitle.font = [UIFont fontWithName:@"HelveticaNeue-UltraLight" size:35.0];
         fastGamesTitle.textAlignment = NSTextAlignmentCenter;
         [self addSubview:fastGamesTitle];
@@ -75,10 +79,12 @@
     GameCell *cell = (GameCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"identifier" forIndexPath:indexPath];
     cell.gameNumberLabel.text = [NSString stringWithFormat:@"%d", indexPath.row + 1];
     if (self.gamesCompleted >= indexPath.row + 1) {
-        cell.gameNumberLabel.layer.borderColor = ((UIColor *)[[AppInfo sharedInstance] appColorsArray][1]).CGColor;
-        cell.gameNumberLabel.textColor = [[AppInfo sharedInstance] appColorsArray][1];
+        cell.gameNumberLabel.layer.borderColor = ((UIColor *)[[AppInfo sharedInstance] appColorsArray][0]).CGColor;
+        cell.gameNumberLabel.backgroundColor = [[AppInfo sharedInstance] appColorsArray][0];
+        cell.gameNumberLabel.textColor = [UIColor whiteColor];
         cell.userInteractionEnabled = YES;
     } else {
+        cell.gameNumberLabel.backgroundColor = [UIColor whiteColor];
         cell.gameNumberLabel.layer.borderColor = [UIColor colorWithWhite:0.8 alpha:1.0].CGColor;
         cell.gameNumberLabel.textColor = [UIColor colorWithWhite:0.8 alpha:1.0];
         cell.userInteractionEnabled = NO;

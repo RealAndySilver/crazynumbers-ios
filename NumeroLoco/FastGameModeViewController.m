@@ -18,8 +18,9 @@
 #import "AllGamesFinishedView.h"
 #import "FastGamesView.h"
 #import "AudioPlayer.h"
+#import "OneButtonAlert.h"
 
-@interface FastGameModeViewController () <FastGameAlertDelegate, BuyLivesViewDelegate, NoTouchesAlertDelegate, MultiplayerWinAlertDelegate, AllGamesFinishedViewDelegate, FastGamesViewDelegate>
+@interface FastGameModeViewController () <FastGameAlertDelegate, BuyLivesViewDelegate, NoTouchesAlertDelegate, MultiplayerWinAlertDelegate, AllGamesFinishedViewDelegate, FastGamesViewDelegate, OneButtonAlertDelegate>
 @property (strong, nonatomic) NSArray *pointsArray;
 @property (strong, nonatomic) NSTimer *gameTimer;
 @property (strong, nonatomic) UILabel *titleLabel;
@@ -106,6 +107,10 @@
     [super viewDidAppear:animated];
     if (!userCanPlay && !userBoughtInfiniteMode) {
         [self showBuyMoreLivesAlert];
+    } else  {
+        [self.gameTimer invalidate];
+        self.gameTimer = nil;
+        [self showStartAlert];
     }
 }
 
@@ -200,7 +205,7 @@
     }
     
     //Start the game timer
-    self.gameTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(substractTime) userInfo:nil repeats:YES];
+    self.gameTimer = [NSTimer scheduledTimerWithTimeInterval:100.0 target:self selector:@selector(substractTime) userInfo:nil repeats:YES];
 }
 
 -(void)resetGame {
@@ -727,6 +732,17 @@
 
 #pragma mark - Actions 
 
+-(void)showStartAlert {
+    OneButtonAlert *startAlert = [[OneButtonAlert alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 140.0, screenBounds.size.height/2.0 - 85.0, 280.0, 170.0)];
+    startAlert.alertText = @"Welcome to Fast Mode! You have just few seconds (10s - 20s) to complete each level! Be fast!";
+    startAlert.buttonTitle = @"Start!";
+    startAlert.delegate = self;
+    startAlert.button.backgroundColor = [[AppInfo sharedInstance] appColorsArray][0];
+    startAlert.messageLabel.frame = CGRectMake(20.0, 20.0, startAlert.bounds.size.width - 40.0, 100.0);
+    startAlert.messageLabel.font = [UIFont fontWithName:FONT_LIGHT size:15.0];
+    [startAlert showInView:self.view];
+}
+
 -(void)showAllGamesWonAlert {
     AllGamesFinishedView *allGamesWonAlert = [[AllGamesFinishedView alloc] initWithFrame:self.view.bounds];
     allGamesWonAlert.messageLabel.text = @"You have completed all fast mode games! Wait for more games soon!";
@@ -912,8 +928,18 @@
 
 -(void)closeButtonPressedInFastGameView:(FastGamesView *)fastGamesView {
     if (userCanPlay) {
-        self.gameTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(substractTime) userInfo:nil repeats:YES];
+        self.gameTimer = [NSTimer scheduledTimerWithTimeInterval:100.0 target:self selector:@selector(substractTime) userInfo:nil repeats:YES];
     }
+}
+
+#pragma mark - OneButtonAlertDelegate
+
+-(void)oneButtonAlertDidDisappear:(OneButtonAlert *)oneButtonAlert {
+    self.gameTimer = [NSTimer scheduledTimerWithTimeInterval:100.0 target:self selector:@selector(substractTime) userInfo:nil repeats:YES];
+}
+
+-(void)buttonClickedInAlert:(OneButtonAlert *)oneButtonAlert {
+    self.gameTimer = [NSTimer scheduledTimerWithTimeInterval:100.0 target:self selector:@selector(substractTime) userInfo:nil repeats:YES];
 }
 
 #pragma mark - Notification Handlers 

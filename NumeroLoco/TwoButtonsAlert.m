@@ -46,7 +46,7 @@
         self.backgroundColor = [UIColor whiteColor];
         
         //Message label
-        self.messageLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0, 20.0, frame.size.width - 40.0, 70.0)];
+        self.messageLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0, 25.0, frame.size.width - 40.0, 70.0)];
         self.messageLabel.textColor = [UIColor darkGrayColor];
         self.messageLabel.font = [UIFont fontWithName:FONT_NAME size:18.0];
         self.messageLabel.numberOfLines = 0;
@@ -54,8 +54,13 @@
         [self addSubview:self.messageLabel];
         
         //Close button
-        UIButton *closeButton = [[UIButton alloc] initWithFrame:CGRectMake(-32.0, -32.0, 80.0, 80.0)];
-        [closeButton setImage:[UIImage imageNamed:@"Close.png"] forState:UIControlStateNormal];
+        UIButton *closeButton = [[UIButton alloc] initWithFrame:CGRectMake(5.0, 5.0, 30.0, 30.0)];
+        //[closeButton setImage:[UIImage imageNamed:@"Close.png"] forState:UIControlStateNormal];
+        [closeButton setTitle:@"✕" forState:UIControlStateNormal];
+        [closeButton setTitleColor:[UIColor colorWithWhite:0.7 alpha:1.0] forState:UIControlStateNormal];
+        closeButton.layer.borderWidth = 1.0;
+        closeButton.layer.cornerRadius = 10.0;
+        closeButton.layer.borderColor = [UIColor colorWithWhite:0.7 alpha:1.0].CGColor;
         [closeButton addTarget:self action:@selector(closeView) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:closeButton];
         

@@ -36,7 +36,7 @@
 
 -(NSArray *)bluePaletteArray {
     if (!_bluePaletteArray) {
-        _bluePaletteArray = [[AppInfo sharedInstance] arrayOfChaptersColorsArray][2];
+        _bluePaletteArray = [[AppInfo sharedInstance] arrayOfChaptersColorsArray][0];
     }
     return _bluePaletteArray;
 }
@@ -52,10 +52,10 @@
     }
     
     //Back button
-    [self.backButton setTitleColor:[[AppInfo sharedInstance] appColorsArray][2] forState:UIControlStateNormal];
+    [self.backButton setTitleColor:[[AppInfo sharedInstance] appColorsArray][0] forState:UIControlStateNormal];
     self.backButton.layer.cornerRadius = 10.0;
     self.backButton.layer.borderWidth = 1.0;
-    self.backButton.layer.borderColor = ((UIColor *)[[AppInfo sharedInstance] appColorsArray][2]).CGColor;
+    self.backButton.layer.borderColor = ((UIColor *)[[AppInfo sharedInstance] appColorsArray][0]).CGColor;
     [self.backButton addTarget:self action:@selector(backButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     
     //Buttons
@@ -78,7 +78,8 @@
     self.continueButton.hidden = YES;
     self.continueButton.layer.cornerRadius = 10.0;
     self.continueButton.layer.borderWidth = 1.0;
-    self.continueButton.layer.borderColor = ((UIColor *)[[AppInfo sharedInstance] appColorsArray][2]).CGColor;
+    [self.continueButton setTitleColor:[[AppInfo sharedInstance] appColorsArray][0] forState:UIControlStateNormal];
+    self.continueButton.layer.borderColor = ((UIColor *)[[AppInfo sharedInstance] appColorsArray][0]).CGColor;
     [self.continueButton addTarget:self action:@selector(continueButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     
     //Textview setup

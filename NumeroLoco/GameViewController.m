@@ -580,9 +580,7 @@
         
         if ([TouchesObject sharedInstance].totalTouches == 0) {
             //Show alert
-            NoTouchesAlertView *noTouchesAlert = [[NoTouchesAlertView alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 140.0, screenBounds.size.height/2.0 - 100.0, 280.0, 200.0)];
-            noTouchesAlert.delegate = self;
-            [noTouchesAlert showInView:self.view];
+            [self showNoTouchesAlert];
             
             [self disableButtons];
             [self saveCurrentDateInUserDefaults];
@@ -591,10 +589,18 @@
     [self checkIfUserWon];
 }
 
+-(void)showNoTouchesAlert {
+    NoTouchesAlertView *noTouchesAlert = [[NoTouchesAlertView alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 140.0, screenBounds.size.height/2.0 - 100.0, 280.0, 200.0)];
+    noTouchesAlert.delegate = self;
+    [noTouchesAlert showInView:self.view];
+}
+
 -(void)enableButtons {
     for (int i = 0; i < [self.buttonsContainerView.subviews count]; i++) {
         UIButton *numberButton = self.buttonsContainerView.subviews[i];
-        numberButton.userInteractionEnabled = YES;
+        //numberButton.userInteractionEnabled = YES;
+        [numberButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+        [numberButton addTarget:self action:@selector(numberButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
         numberButton.alpha = 1.0;
     }
 }
@@ -602,7 +608,9 @@
 -(void)disableButtons {
     for (int i = 0; i < [self.buttonsContainerView.subviews count]; i++) {
         UIButton *numberButton = self.buttonsContainerView.subviews[i];
-        numberButton.userInteractionEnabled = NO;
+        //numberButton.userInteractionEnabled = NO;
+        [numberButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+        [numberButton addTarget:self action:@selector(showNoTouchesAlert) forControlEvents:UIControlEventTouchUpInside];
         numberButton.alpha = 0.5;
     }
 }

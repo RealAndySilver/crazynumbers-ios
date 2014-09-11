@@ -10,12 +10,10 @@
 #import "AppInfo.h"
 
 #define FONT_NAME @"HelveticaNeue-Light"
-#define ANIMATION_DURATION 0.3
+#define ANIMATION_DURATION 0.2
 
 @interface OneButtonAlert()
 @property (strong, nonatomic) UIView *opacityView;
-@property (strong, nonatomic) UILabel *messageLabel;
-@property (strong, nonatomic) UIButton *button;
 @end
 
 @implementation OneButtonAlert
@@ -48,9 +46,13 @@
         [self addSubview:self.messageLabel];
         
         //Close button
-        UIButton *closeButton = [[UIButton alloc] initWithFrame:CGRectMake(-32.0, -32.0, 80.0, 80.0)];
-        [closeButton setImage:[UIImage imageNamed:@"Close.png"] forState:UIControlStateNormal];
-        [closeButton addTarget:self action:@selector(closeView) forControlEvents:UIControlEventTouchUpInside];
+        UIButton *closeButton = [[UIButton alloc] initWithFrame:CGRectMake(5.0, 5.0, 30.0, 30.0)];
+        [closeButton setTitle:@"✕" forState:UIControlStateNormal];
+        [closeButton setTitleColor:[UIColor colorWithWhite:0.7 alpha:1.0] forState:UIControlStateNormal];
+        closeButton.layer.borderWidth = 1.0;
+        closeButton.layer.cornerRadius = 10.0;
+        closeButton.layer.borderColor = [UIColor colorWithWhite:0.7 alpha:1.0].CGColor;
+        [closeButton addTarget:self action:@selector(closeButtonPressed) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:closeButton];
         
         //Camera button
@@ -77,7 +79,7 @@
                         options:UIViewAnimationOptionCurveEaseOut
                      animations:^(){
                          self.alpha = 1.0;
-                         self.opacityView.alpha = 0.7;
+                         self.opacityView.alpha = 0.8;
                          self.transform = CGAffineTransformMakeScale(1.0, 1.0);
                      } completion:^(BOOL finished){}];
 }
@@ -86,6 +88,11 @@
 
 -(void)buttonPressed {
     [self.delegate buttonClickedInAlert:self];
+    [self closeView];
+}
+
+-(void)closeButtonPressed {
+    [self.delegate oneButtonAlertDidDisappear:self];
     [self closeView];
 }
 

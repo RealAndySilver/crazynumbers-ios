@@ -26,6 +26,7 @@
 #import "TwoButtonsAlert.h"
 #import "FacebookRankingList.h"
 #import "OneButtonAlert.h"
+#import "StoreView.h"
 @import AVFoundation;
 
 @interface RootViewController () <GKGameCenterControllerDelegate, TwoButtonsAlertDelegate>
@@ -54,6 +55,7 @@
 @property (strong, nonatomic) UIButton *backButton;
 @property (strong, nonatomic) UIButton *enterButton;
 @property (strong, nonatomic) UIButton *facebookButton;
+@property (strong, nonatomic) UIButton *logoutButton;
 @property (strong, nonatomic) AVAudioPlayer *player;
 @property (strong, nonatomic) AVAudioPlayer *playerButtonPressed;
 @property (strong, nonatomic) AVAudioPlayer *playerBackSound;
@@ -71,6 +73,7 @@
     BOOL optionsButtonsDisplayed;
     BOOL mainMenuButtonsDisplayed;
     BOOL viewAppearFromFirstTimeTutorial;
+    BOOL userIsLoggedIn;
 }
 
 -(void)viewDidLoad {
@@ -80,11 +83,6 @@
                                                  name:@"PlayMusicNotification"
                                                object:nil];
   
-    /*[[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(firsTimeTutorialNotificationReceived:)
-                                                 name:@"FirstTimeTutorialNotification"
-                                               object:nil];*/
-    
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
         isPad = YES;
         animationDistance = 50.0;
@@ -101,18 +99,40 @@
     
     //Start animating views
     [self startAnimatingViews];
+    
+    //Check if user is logged in with facebook
+    if ([PFUser currentUser] && [PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]) {
+        userIsLoggedIn = YES;
+    } else {
+        userIsLoggedIn = NO;
+    }
+    
+    if (userIsLoggedIn) {
+        //Dont show login buttons
+        [self showMainButtonsDirectly];
+    } else {
+        self.logoutButton.hidden = YES;
+    }
+}
+
+-(void)showMainButtonsDirectly {
+    self.facebookButton.center = CGPointMake(-(self.facebookButton.frame.size.width/2.0), self.facebookButton.center.y);
+    self.enterButton.center = CGPointMake(-(self.enterButton.frame.size.width/2.0), self.enterButton.center.y);
+    self.gamesMenuButton.center = CGPointMake(self.view.bounds.size.width/2.0, self.gamesMenuButton.center.y);
+    self.optionsMenuButton.center = CGPointMake(self.view.bounds.size.width/2.0, self.optionsMenuButton.center.y);
+    self.logoutButton.center = CGPointMake(self.view.bounds.size.width/2.0, self.logoutButton.center.y);
 }
 
 -(void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    [[NSNotificationCenter defaultCenter] addObserver:self
+    /*[[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(transactionFailedNotificationReceived:)
                                                  name:@"TransactionFailedNotification"
                                                object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(userDidSuscribeNotificationReceived:)
                                                  name:@"UserDidSuscribe"
-                                               object:nil];
+                                               object:nil];*/
     viewIsVisible = YES;
 
     if (viewAppearFromFirstTimeTutorial) {
@@ -237,7 +257,7 @@
     //GameMenu & OptionsMenu Buttons
     self.gamesMenuButton.frame = buttonFrames;
     [self.gamesMenuButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    self.gamesMenuButton.center = CGPointMake(self.view.bounds.size.width + self.gamesMenuButton.frame.size.width/2.0, self.view.center.y + (self.view.bounds.size.height/4.0) - self.gamesMenuButton.bounds.size.height/2.0 + 20.0);
+    self.gamesMenuButton.center = CGPointMake(self.view.bounds.size.width + self.gamesMenuButton.frame.size.width/2.0, self.view.center.y + (self.view.bounds.size.height/4.0) - self.gamesMenuButton.bounds.size.height/2.0 + 10.0);
     self.gamesMenuButton.titleLabel.font = [UIFont fontWithName:fontName size:fontSize];
     [self.gamesMenuButton addTarget:self action:@selector(showGameMenuOptions) forControlEvents:UIControlEventTouchUpInside];
     self.gamesMenuButton.layer.cornerRadius = 10.0;
@@ -246,12 +266,22 @@
     
     self.optionsMenuButton.frame = buttonFrames;
     [self.optionsMenuButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    self.optionsMenuButton.center = CGPointMake(self.view.bounds.size.width + self.optionsMenuButton.frame.size.width/2.0, self.gamesMenuButton.center.y + self.gamesMenuButton.frame.size.height + 20.0);
+    self.optionsMenuButton.center = CGPointMake(self.view.bounds.size.width + self.optionsMenuButton.frame.size.width/2.0, self.gamesMenuButton.center.y + self.gamesMenuButton.frame.size.height + 10.0);
     self.optionsMenuButton.titleLabel.font = [UIFont fontWithName:fontName size:fontSize];
     self.optionsMenuButton.layer.cornerRadius = 10.0;
     self.optionsMenuButton.layer.borderWidth = borderWidth;
     self.optionsMenuButton.layer.borderColor = [UIColor whiteColor].CGColor;
     [self.optionsMenuButton addTarget:self action:@selector(showOptionsButtons) forControlEvents:UIControlEventTouchUpInside];
+    
+    self.logoutButton = [[UIButton alloc] initWithFrame:CGRectOffset(self.optionsMenuButton.frame, 0.0, self.optionsMenuButton.frame.size.height + 10.0)];
+    [self.logoutButton addTarget:self action:@selector(facebookLogout) forControlEvents:UIControlEventTouchUpInside];
+    [self.logoutButton setTitle:@"Logout" forState:UIControlStateNormal];
+    [self.logoutButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    self.logoutButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:fontSize];
+    self.logoutButton.layer.cornerRadius = 10.0;
+    self.logoutButton.layer.borderColor = [UIColor whiteColor].CGColor;
+    self.logoutButton.layer.borderWidth = 1.0;
+    [self.view addSubview:self.logoutButton];
     
     //Tutorial
     self.optionsButton = [UIButton buttonWithType:UIButtonTypeSystem];
@@ -278,7 +308,7 @@
     self.removeAdsButton.layer.cornerRadius = cornerRadius;
     self.removeAdsButton.layer.borderWidth = borderWidth;
     self.removeAdsButton.layer.borderColor = [UIColor whiteColor].CGColor;
-    [self.removeAdsButton addTarget:self action:@selector(buyNoAds) forControlEvents:UIControlEventTouchUpInside];
+    [self.removeAdsButton addTarget:self action:@selector(showPurchases) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.removeAdsButton];
     
     ////////////////////////////////////////////////////////////////////////////////////////
@@ -488,6 +518,22 @@
     [self performSelector:@selector(setPosition1) withObject:nil afterDelay:4.0];
 }
 
+-(void)returnToMainButtons {
+    [UIView animateWithDuration:1.1
+                          delay:0.0
+         usingSpringWithDamping:0.7
+          initialSpringVelocity:0.0
+                        options:UIViewAnimationOptionCurveEaseOut
+                     animations:^{
+                         self.facebookButton.center = CGPointMake(self.view.bounds.size.width/2.0, self.facebookButton.center.y);
+                         self.enterButton.center = CGPointMake(self.view.bounds.size.width/2.0, self.enterButton.center.y);
+                         
+                         self.gamesMenuButton.center = CGPointMake(self.view.bounds.size.width + self.gamesMenuButton.frame.size.width/2.0, self.gamesMenuButton.center.y);
+                         self.optionsMenuButton.center = CGPointMake(self.view.bounds.size.width + self.optionsMenuButton.frame.size.width/2.0, self.optionsMenuButton.center.y);
+                         self.logoutButton.center = CGPointMake(self.view.bounds.size.width + self.logoutButton.frame.size.width/2.0, self.logoutButton.center.y);
+                     } completion:nil];
+
+}
 -(void)animateMainButtons {
     mainMenuButtonsDisplayed = YES;
     gamesButtonsDisplayed = NO;
@@ -503,7 +549,11 @@
                          self.facebookButton.center = CGPointMake(-self.facebookButton.frame.size.width/2.0, self.facebookButton.center.y);
                          self.gamesMenuButton.center = CGPointMake(self.view.frame.size.width/2.0, self.gamesMenuButton.center.y);
                          self.optionsMenuButton.center = CGPointMake(self.view.frame.size.width/2.0, self.optionsMenuButton.center.y);
-                         self.backButton.center = CGPointMake(self.backButton.center.x, self.view.bounds.size.height - self.backButton.frame.size.height/2.0 - 10.0);
+                         self.logoutButton.center = CGPointMake(self.view.frame.size.width/2.0, self.logoutButton.center.y);
+                         
+                         if (!userIsLoggedIn) {
+                             self.backButton.center = CGPointMake(self.backButton.center.x, self.view.bounds.size.height - self.backButton.frame.size.height/2.0 - 10.0);
+                         }
                      } completion:nil];
 }
 
@@ -521,7 +571,9 @@
                      animations:^(){
                          self.gamesMenuButton.center = CGPointMake(-self.gamesMenuButton.frame.size.width + self.gamesMenuButton.frame.size.width/2.0, self.gamesMenuButton.center.y);
                          self.optionsMenuButton.center = CGPointMake(-self.optionsMenuButton.frame.size.width + self.gamesMenuButton.frame.size.width/2.0, self.optionsMenuButton.center.y);
+                         self.logoutButton.center = CGPointMake(-self.logoutButton.frame.size.width + self.logoutButton.frame.size.width/2.0, self.logoutButton.center.y);
                          
+                         self.backButton.center = CGPointMake(self.backButton.center.x, self.view.bounds.size.height - self.backButton.frame.size.height/2.0 - 10.0);
                          self.optionsButton.center = CGPointMake(self.view.bounds.size.width/2.0, self.optionsButton.center.y);
                          self.gameCenterButton.center = CGPointMake(self.view.bounds.size.width/2.0, self.gameCenterButton.center.y);
                          self.removeAdsButton.center = CGPointMake(self.view.bounds.size.width/2.0, self.removeAdsButton.center.y);
@@ -546,6 +598,12 @@
                              
                              self.gamesMenuButton.center = CGPointMake(self.view.bounds.size.width/2.0, self.gamesMenuButton.center.y);
                              self.optionsMenuButton.center = CGPointMake(self.view.bounds.size.width/2.0, self.optionsMenuButton.center.y);
+                             self.logoutButton.center = CGPointMake(self.view.bounds.size.width/2.0, self.logoutButton.center.y);
+                             
+                             if (userIsLoggedIn) {
+                                 //Hidde back button
+                                 self.backButton.center = CGPointMake(self.backButton.center.x, self.view.bounds.size.height + self.backButton.frame.size.height/2.0);
+                             }
                              
                              gamesButtonsDisplayed = NO;
                              mainMenuButtonsDisplayed = YES;
@@ -559,6 +617,12 @@
                              
                              self.gamesMenuButton.center = CGPointMake(self.view.bounds.size.width/2.0, self.gamesMenuButton.center.y);
                              self.optionsMenuButton.center = CGPointMake(self.view.bounds.size.width/2.0, self.optionsMenuButton.center.y);
+                             self.logoutButton.center = CGPointMake(self.view.bounds.size.width/2.0, self.logoutButton.center.y);
+                             
+                             if (userIsLoggedIn) {
+                                 //Hidde back button
+                                 self.backButton.center = CGPointMake(self.backButton.center.x, self.view.bounds.size.height + self.backButton.frame.size.height/2.0);
+                             }
                              
                              optionsButtonsDisplayed = NO;
                              gamesButtonsDisplayed = NO;
@@ -592,6 +656,9 @@
                      animations:^(){
                          self.gamesMenuButton.center = CGPointMake(-self.gamesMenuButton.frame.size.width + self.gamesMenuButton.frame.size.width/2.0, self.gamesMenuButton.center.y);
                          self.optionsMenuButton.center = CGPointMake(-self.optionsMenuButton.frame.size.width + self.gamesMenuButton.frame.size.width/2.0, self.optionsMenuButton.center.y);
+                         self.logoutButton.center = CGPointMake(-self.logoutButton.frame.size.width + self.logoutButton.frame.size.width/2.0, self.logoutButton.center.y);
+                         
+                         self.backButton.center = CGPointMake(self.backButton.center.x, self.view.bounds.size.height - self.backButton.frame.size.height/2.0 - 10.0);
                          self.numbersButton.center = CGPointMake(self.view.bounds.size.width/2.0, self.numbersButton.center.y);
                          self.colorsButton.center = CGPointMake(self.view.bounds.size.width/2.0, self.colorsButton.center.y);
                          self.fastModeButton.center = CGPointMake(self.view.bounds.size.width/2.0, self.fastModeButton.center.y);
@@ -600,6 +667,24 @@
 }
 
 #pragma mark - Actions
+
+-(void)facebookLogout {
+    [PFUser logOut];
+    userIsLoggedIn = NO;
+    self.logoutButton.hidden = YES;
+    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    [self performSelector:@selector(showLogoutAlert) withObject:nil afterDelay:0.5];
+}
+
+-(void)showLogoutAlert {
+    [self returnToMainButtons];
+    
+    [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+    OneButtonAlert *logoutAlert = [[OneButtonAlert alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 110.0, screenBounds.size.height/2.0 - 65.0, 220.0, 130.0)];
+    logoutAlert.alertText = @"Logout Succesfull!";
+    logoutAlert.buttonTitle = @"Ok";
+    [logoutAlert showInView:self.view];
+}
 
 -(void)goToFastModeVC {
     [self playButtonSound];
@@ -618,7 +703,48 @@
     [self presentViewController:multiplayerVC animated:YES completion:nil];
 }
 
--(void)buyNoAds {
+-(void)showPurchases {
+    NSMutableDictionary *purchasesDic = [[NSMutableDictionary alloc] init];
+    
+    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    [[CPIAPHelper sharedInstance] requestProductsWithCompletionHandler:^(BOOL success, NSArray *products) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+        if (success) {
+            for (IAPProduct *product in products) {
+                NSLog(@"*******************************************************************");
+                NSLog(@"Nombre del producto: %@", product.skProduct.localizedTitle);
+                NSLog(@"Precio del producto: %@", product.skProduct.price);
+                if ([product.productIdentifier isEqualToString:@"com.iamstudio.cross.twentylives"]) {
+                    [purchasesDic setObject:product forKey:@"twentyLives"];
+                } else if ([product.productIdentifier isEqualToString:@"com.iamstudio.cross.fivelives"]) {
+                    [purchasesDic setObject:product forKey:@"fiveLives"];
+                } else if ([product.productIdentifier isEqualToString:@"com.iamstudio.cross.sixtylives"]) {
+                    [purchasesDic setObject:product forKey:@"sixtyLives"];
+                } else if ([product.productIdentifier isEqualToString:@"com.iamstudio.cross.threehundredtouches"]) {
+                    [purchasesDic setObject:product forKey:@"threeHundredTouches"];
+                } else if ([product.productIdentifier isEqualToString:@"com.iamstudio.cross.sevenhundredtouches"]) {
+                    [purchasesDic setObject:product forKey:@"sevenHundredTouches"];
+                } else if ([product.productIdentifier isEqualToString:@"com.iamstudio.cross.twothousandtouches"]) {
+                    [purchasesDic setObject:product forKey:@"twoThousandTouches"];
+                } else if ([product.productIdentifier isEqualToString:@"com.iamstudio.cross.noads"]) {
+                    [purchasesDic setObject:product forKey:@"noAds"];
+                } else if ([product.productIdentifier isEqualToString:@"com.iamstudio.cross.infinitemode"]) {
+                    [purchasesDic setObject:product forKey:@"infiniteMode"];
+                }
+            }
+            NSLog(@"Purchases dic: %@", purchasesDic);
+            [self showStoreViewWithProductsDic:purchasesDic];
+        }
+    }];
+}
+
+-(void)showStoreViewWithProductsDic:(NSMutableDictionary *)purchasesDic {
+    StoreView *storeView = [[StoreView alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 140.0, screenBounds.size.height/2.0 - 264.0, 280.0, 528.0)];
+    storeView.purchasesDic = purchasesDic;
+    [storeView showInView:self.view];
+}
+
+/*-(void)buyNoAds {
     [self playButtonSound];
     
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
@@ -641,7 +767,7 @@
             [[[UIAlertView alloc] initWithTitle:@"Oops!" message:@"There was an error trying to connect. Please try again." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil] show];
         }
     }];
-}
+}*/
 
 -(void)showRankingsAlert {
     TwoButtonsAlert *twoButtonsAlert = [[TwoButtonsAlert alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 140.0, screenBounds.size.height/2.0 - 85.0, 280.0, 170.0)];
@@ -727,6 +853,14 @@
 
 #pragma mark - Facebook Stuff
 
+-(void)showNoFacebookLoginAlert {
+    OneButtonAlert *noFacebookAlert = [[OneButtonAlert alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 140.0, screenBounds.size.height/2.0 - 85.0, 280.0, 170.0)];
+    noFacebookAlert.alertText = @"You must log in with Facebook to access the rankings. You can log in from the main screen.";
+    noFacebookAlert.buttonTitle = @"Ok";
+    noFacebookAlert.messageLabel.frame = CGRectMake(20.0, 10.0, noFacebookAlert.bounds.size.width - 40.0, 120.0);
+    [noFacebookAlert showInView:self.view];
+}
+
 -(void)startLoginProcess {
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     NSArray *permissions = @[@"public_profile", @"user_friends", @"publish_actions"];
@@ -748,6 +882,8 @@
                               otherButtonTitles:@"Dismiss", nil] show];
         } else {
             //Success login
+            userIsLoggedIn = YES;
+            self.logoutButton.hidden = NO;
             [self showSuccessfullLoginAlert];
             [self animateMainButtons];
             if (user.isNew) {
@@ -836,7 +972,7 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-#pragma mark - Notification Handlers
+/*#pragma mark - Notification Handlers
 
 -(void)transactionFailedNotificationReceived:(NSNotification *)notification {
     [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
@@ -865,7 +1001,7 @@
                              self.removeAdsButton.hidden = YES;
                          }
                      }];
-}
+}*/
 
 -(void)playMusicNotificationReceived:(NSNotification *)notification {
     [self.player play];
@@ -880,7 +1016,8 @@
         [self showFacebookRankings];
     } else {
         //Mostrar login con Facebook
-        [self startLoginProcess];
+        //[self startLoginProcess];
+        [self showNoFacebookLoginAlert];
     }
 }
 

@@ -51,12 +51,12 @@
     BOOL userBoughtInfiniteMode;
 }
 
--(NSArray *)colorPaletteArray {
+/*-(NSArray *)colorPaletteArray {
     if (!_colorPaletteArray) {
         _colorPaletteArray = [[AppInfo sharedInstance] arrayOfChaptersColorsArray][0];
     }
     return _colorPaletteArray;
-}
+}*/
 
 -(NSNumberFormatter *)purchasesPriceFormatter {
     if (!_purchasesPriceFormatter) {
@@ -219,6 +219,8 @@
     maxNumber = [self.chaptersDataArray[self.currentGame][@"maxNumber"] intValue];
     maxTime = [self.chaptersDataArray[self.currentGame][@"maxTime"] intValue];
     self.gameType = self.chaptersDataArray[self.currentGame][@"type"];
+    NSUInteger randColor = arc4random()%4;
+    self.colorPaletteArray = [[AppInfo sharedInstance] arrayOfChaptersColorsArray][randColor];
     if ([self.gameType isEqualToString:@"number"]) {
         self.buttonsContainerView.backgroundColor = [UIColor whiteColor];
     } else {

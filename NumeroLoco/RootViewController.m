@@ -858,6 +858,7 @@
     noFacebookAlert.alertText = @"You must log in with Facebook to access the rankings. You can log in from the main screen.";
     noFacebookAlert.buttonTitle = @"Ok";
     noFacebookAlert.messageLabel.frame = CGRectMake(20.0, 10.0, noFacebookAlert.bounds.size.width - 40.0, 120.0);
+    noFacebookAlert.messageLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:15.0];
     [noFacebookAlert showInView:self.view];
 }
 

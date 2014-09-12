@@ -1246,7 +1246,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: iAm Studio S.A.S. (4U39LJL48R)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					/Users/diegovidal/Documents/FacebookSDK,
@@ -1263,7 +1263,7 @@
 					"$(PROJECT_DIR)/NumeroLoco/FlurryAds",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "7ba80f39-1032-4dc2-8ac4-f457dc191f91";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};

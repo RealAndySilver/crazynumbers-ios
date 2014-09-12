@@ -82,7 +82,7 @@
         [[NSUserDefaults standardUserDefaults] setObject:@10 forKey:@"Touches"];
         [[NSUserDefaults standardUserDefaults] synchronize];
         
-        [TouchesObject sharedInstance].totalTouches = 10.0;
+        [TouchesObject sharedInstance].totalTouches = 120.0;
     } else {
         //Init our touches singleton
         [TouchesObject sharedInstance].totalTouches = [self getTouchesLeftInUserDefaults];
@@ -98,7 +98,7 @@
     
     //Set initial lives for fast game mode
     if ([[NSUserDefaults standardUserDefaults] objectForKey:@"lives"] == nil) {
-        [[NSUserDefaults standardUserDefaults] setObject:@1 forKey:@"lives"];
+        [[NSUserDefaults standardUserDefaults] setObject:@5 forKey:@"lives"];
         [[NSUserDefaults standardUserDefaults] synchronize];
     }
     

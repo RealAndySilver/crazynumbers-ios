@@ -49,7 +49,7 @@
         
         //Title
         UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 20.0, frame.size.width, 50.0)];
-        title.text = @"Buy Lives";
+        title.text = @"Buy Lifes";
         title.textColor = [[AppInfo sharedInstance] appColorsArray][0];
         title.font = [UIFont fontWithName:FONT_NAME size:25.0];
         title.textAlignment = NSTextAlignmentCenter;

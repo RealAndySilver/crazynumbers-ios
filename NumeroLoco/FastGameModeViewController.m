@@ -19,8 +19,9 @@
 #import "FastGamesView.h"
 #import "AudioPlayer.h"
 #import "OneButtonAlert.h"
+#import "TwoButtonsAlert.h"
 
-@interface FastGameModeViewController () <FastGameAlertDelegate, BuyLivesViewDelegate, NoTouchesAlertDelegate, MultiplayerWinAlertDelegate, AllGamesFinishedViewDelegate, FastGamesViewDelegate, OneButtonAlertDelegate>
+@interface FastGameModeViewController () <FastGameAlertDelegate, BuyLivesViewDelegate, NoTouchesAlertDelegate, MultiplayerWinAlertDelegate, AllGamesFinishedViewDelegate, FastGamesViewDelegate, OneButtonAlertDelegate, TwoButtonsAlertDelegate>
 @property (strong, nonatomic) NSArray *pointsArray;
 @property (strong, nonatomic) NSTimer *gameTimer;
 @property (strong, nonatomic) UILabel *titleLabel;
@@ -123,7 +124,7 @@
 
 -(void)setupUI {
     //Back button
-    UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(10.0, screenBounds.size.height - 50.0, 70.0, 40.0)];
+    /*UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(10.0, screenBounds.size.height - 50.0, 70.0, 40.0)];
     [backButton setTitle:@"Back" forState:UIControlStateNormal];
     [backButton setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
     backButton.titleLabel.font = [UIFont fontWithName:FONT_LIGHT size:15.0];
@@ -131,7 +132,7 @@
     backButton.layer.borderColor = [UIColor darkGrayColor].CGColor;
     backButton.layer.borderWidth = 1.0;
     [backButton addTarget:self action:@selector(dismissVC) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:backButton];
+    [self.view addSubview:backButton];*/
     
     //Title label
     if (isPad) {
@@ -148,13 +149,11 @@
     [self.view addSubview:self.titleLabel];
     
     //Time left label
-    self.timeLeftLabel = [[UILabel alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 70.0, screenBounds.size.height - 50.0, 140.0, 40.0)];
+    //self.timeLeftLabel = [[UILabel alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 70.0, screenBounds.size.height - 50.0, 140.0, 40.0)];
+    self.timeLeftLabel = [[UILabel alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 90.0, screenBounds.size.height - 120.0, 180.0, 30.0)];
     self.timeLeftLabel.textAlignment = NSTextAlignmentCenter;
     self.timeLeftLabel.textColor = [UIColor darkGrayColor];
-    self.timeLeftLabel.font = [UIFont fontWithName:FONT_LIGHT size:15.0];
-    self.timeLeftLabel.layer.cornerRadius = 10.0;
-    self.timeLeftLabel.layer.borderColor = [UIColor darkGrayColor].CGColor;
-    self.timeLeftLabel.layer.borderWidth = 1.0;
+    self.timeLeftLabel.font = [UIFont fontWithName:FONT_ULTRALIGHT size:28.0];
     [self.view addSubview:self.timeLeftLabel];
     
     //Games button
@@ -170,11 +169,11 @@
     
     //Heart image view
     UIImageView *heartImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"heart.png"]];
-    heartImageView.frame = CGRectMake(10.0, screenBounds.size.height - 110.0, 50.0, 50.0);
+    heartImageView.frame = CGRectMake(10.0, screenBounds.size.height - 60, 50.0, 50.0);
     [self.view addSubview:heartImageView];
     
     //HEart number label
-    self.heartNumberLabel = [[UILabel alloc] initWithFrame:CGRectMake(heartImageView.frame.origin.x + heartImageView.frame.size.width, screenBounds.size.height - 110.0, 100.0, 50.0)];
+    self.heartNumberLabel = [[UILabel alloc] initWithFrame:CGRectMake(heartImageView.frame.origin.x + heartImageView.frame.size.width, screenBounds.size.height - 60, 100.0, 50.0)];
     self.heartNumberLabel.textColor = [[AppInfo sharedInstance] appColorsArray][0];
     if (userBoughtInfiniteMode)
         self.heartNumberLabel.text = @"x Infinite";
@@ -205,7 +204,7 @@
     }
     
     //Start the game timer
-    self.gameTimer = [NSTimer scheduledTimerWithTimeInterval:100.0 target:self selector:@selector(substractTime) userInfo:nil repeats:YES];
+    self.gameTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(substractTime) userInfo:nil repeats:YES];
 }
 
 -(void)resetGame {
@@ -734,7 +733,7 @@
 
 #pragma mark - Actions 
 
--(void)showStartAlert {
+/*-(void)showStartAlert {
     OneButtonAlert *startAlert = [[OneButtonAlert alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 140.0, screenBounds.size.height/2.0 - 85.0, 280.0, 170.0)];
     startAlert.alertText = @"Welcome to Fast Mode! You have just few seconds (10s - 20s) to complete each level! Be fast!";
     startAlert.buttonTitle = @"Start!";
@@ -742,6 +741,19 @@
     startAlert.button.backgroundColor = [[AppInfo sharedInstance] appColorsArray][0];
     startAlert.messageLabel.frame = CGRectMake(20.0, 20.0, startAlert.bounds.size.width - 40.0, 100.0);
     startAlert.messageLabel.font = [UIFont fontWithName:FONT_LIGHT size:15.0];
+    [startAlert showInView:self.view];
+}*/
+
+-(void)showStartAlert {
+    TwoButtonsAlert *startAlert = [[TwoButtonsAlert alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 140.0, screenBounds.size.height/2.0 - 85.0, 280.0, 170.0)];
+    startAlert.alertText = @"Welcome to Fast Mode! You have just few seconds (10s - 30s) to complete each level! Be fast!";
+    startAlert.leftButtonTitle = @"Start!";
+    startAlert.rightButtonTitle = @"Exit";
+    startAlert.delegate = self;
+    startAlert.leftButton.backgroundColor = [[AppInfo sharedInstance] appColorsArray][1];
+    startAlert.rightButton.backgroundColor = [[AppInfo sharedInstance] appColorsArray][0];
+    startAlert.messageLabel.font = [UIFont fontWithName:FONT_LIGHT size:15.0];
+    startAlert.messageLabel.frame = CGRectMake(20.0, 20.0, startAlert.bounds.size.width - 40.0, 100.0);
     [startAlert showInView:self.view];
 }
 
@@ -758,7 +770,7 @@
 -(void)showBuyMoreLivesAlert {
     NoTouchesAlertView *noLivesAlert = [[NoTouchesAlertView alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 140.0, self.view.bounds.size.height/2.0 - 100.0, 280.0, 200.0)];
     noLivesAlert.message.text = @"You have no more lives left! You can buy more right now or wait one hour.";
-    [noLivesAlert.acceptButton setTitle:@"Buy Lives" forState:UIControlStateNormal];
+    [noLivesAlert.acceptButton setTitle:@"Buy Lifes" forState:UIControlStateNormal];
     noLivesAlert.delegate = self;
     [noLivesAlert showInView:self.view];
 }
@@ -776,7 +788,7 @@
     lossAlert.delegate = self;
     lossAlert.tag = 2;
     [lossAlert.continueButton setTitle:@"Try again" forState:UIControlStateNormal];
-    lossAlert.alertLabel.text = [NSString stringWithFormat:@"You have lost game %lu. Try to be faster next time!", (unsigned long)self.currentGame + 1];
+    lossAlert.alertLabel.text = [NSString stringWithFormat:@"You have lost one life. Try to be faster next time!"];
     [lossAlert showInView:self.view];
 }
 
@@ -921,8 +933,14 @@
 
 -(void)gameSelected:(NSUInteger)game inFastGamesView:(FastGamesView *)fastGamesView {
     NSLog(@"Seleccioné el juego %lu", (unsigned long)game);
-    self.currentGame = game;
-    [self initGame];
+    if (self.currentGame == game) {
+        NSLog(@"Escogí el mismo juego, que siga corriendo el timer");
+        self.gameTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(substractTime) userInfo:nil repeats:YES];
+
+    } else {
+        self.currentGame = game;
+        [self initGame];
+    }
     if (!userCanPlay) {
         [self disableGame];
     }
@@ -930,18 +948,32 @@
 
 -(void)closeButtonPressedInFastGameView:(FastGamesView *)fastGamesView {
     if (userCanPlay) {
-        self.gameTimer = [NSTimer scheduledTimerWithTimeInterval:100.0 target:self selector:@selector(substractTime) userInfo:nil repeats:YES];
+        self.gameTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(substractTime) userInfo:nil repeats:YES];
     }
 }
 
 #pragma mark - OneButtonAlertDelegate
 
--(void)oneButtonAlertDidDisappear:(OneButtonAlert *)oneButtonAlert {
-    self.gameTimer = [NSTimer scheduledTimerWithTimeInterval:100.0 target:self selector:@selector(substractTime) userInfo:nil repeats:YES];
+/*-(void)oneButtonAlertDidDisappear:(OneButtonAlert *)oneButtonAlert {
+    self.gameTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(substractTime) userInfo:nil repeats:YES];
 }
 
 -(void)buttonClickedInAlert:(OneButtonAlert *)oneButtonAlert {
-    self.gameTimer = [NSTimer scheduledTimerWithTimeInterval:100.0 target:self selector:@selector(substractTime) userInfo:nil repeats:YES];
+    self.gameTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(substractTime) userInfo:nil repeats:YES];
+}*/
+
+#pragma mark - TwoButtonsAlert 
+
+-(void)leftButtonPressedInAlert:(TwoButtonsAlert *)twoButtonsAlert {
+    self.gameTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(substractTime) userInfo:nil repeats:YES];
+}
+
+-(void)rightButtonPressedInAlert:(TwoButtonsAlert *)twoButtonsAlert {
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+-(void)twoButtonsAlertDidDisappear:(TwoButtonsAlert *)twoButtonsAlert {
+    self.gameTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(substractTime) userInfo:nil repeats:YES];
 }
 
 #pragma mark - Notification Handlers 

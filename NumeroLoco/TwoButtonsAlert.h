@@ -20,5 +20,8 @@
 @property (strong, nonatomic) NSString *alertText;
 @property (strong, nonatomic) NSString *leftButtonTitle;
 @property (strong, nonatomic) NSString *rightButtonTitle;
+@property (strong, nonatomic) UILabel *messageLabel;
+@property (strong, nonatomic) UIButton *leftButton;
+@property (strong, nonatomic) UIButton *rightButton;
 -(void)showInView:(UIView *)view;
 @end

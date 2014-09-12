@@ -11,9 +11,6 @@
 
 @interface TwoButtonsAlert()
 @property (strong, nonatomic) UIView *opacityView;
-@property (strong, nonatomic) UILabel *messageLabel;
-@property (strong, nonatomic) UIButton *leftButton;
-@property (strong, nonatomic) UIButton *rightButton;
 @end
 
 #define FONT_NAME @"HelveticaNeue-Light"
@@ -61,7 +58,7 @@
         closeButton.layer.borderWidth = 1.0;
         closeButton.layer.cornerRadius = 10.0;
         closeButton.layer.borderColor = [UIColor colorWithWhite:0.7 alpha:1.0].CGColor;
-        [closeButton addTarget:self action:@selector(closeView) forControlEvents:UIControlEventTouchUpInside];
+        [closeButton addTarget:self action:@selector(closeButtonPressed) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:closeButton];
         
         //Camera button
@@ -114,6 +111,11 @@
     [self closeView];
 }
 
+-(void)closeButtonPressed {
+    [self.delegate twoButtonsAlertDidDisappear:self];
+    [self closeView];
+}
+
 -(void)closeView {
     [UIView animateWithDuration:ANIMATION_DURATION
                           delay:0.0
@@ -127,7 +129,6 @@
                              [self.opacityView removeFromSuperview];
                              self.opacityView = nil;
                              [self removeFromSuperview];
-                             [self.delegate twoButtonsAlertDidDisappear:self];
                          }
                      }];
 }

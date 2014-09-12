@@ -10,7 +10,7 @@
 #import "AppInfo.h"
 
 #define FONT_NAME @"HelveticaNeue-Light"
-#define ANIMATION_DURATION 0.2
+#define ANIMATION_DURATION 0.15
 
 @interface OneButtonAlert()
 @property (strong, nonatomic) UIView *opacityView;

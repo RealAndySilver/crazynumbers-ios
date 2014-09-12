@@ -15,6 +15,7 @@
 #import "CPIAPHelper.h"
 #import "TouchesObject.h"
 #import "FileSaver.h"
+#import "Flurry.h"
 
 @interface StoreView() <UITableViewDataSource, UITableViewDelegate, StoreProductsCellDelegate>
 @property (strong, nonatomic) UIView *opacityView;
@@ -131,6 +132,12 @@
     return cell;
 }
 
+#pragma mark - UITableViewDelegate
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
 -(void)showInView:(UIView *)view {
     self.opacityView = [[UIView alloc] initWithFrame:view.frame];
     self.opacityView.backgroundColor = [UIColor blackColor];
@@ -236,6 +243,7 @@
     NSLog(@"me llegó la notficación de que el usuario compró la suscripción");
     
     IAPProduct *productBought = [notification userInfo][@"Product"];
+    [Flurry logEvent:@"ItemBought" withParameters:@{@"ItemID" : productBought.productIdentifier}];
     NSLog(@"Producto comprado: %@", productBought.productIdentifier);
     
     if ([productBought.productIdentifier isEqualToString:@"com.iamstudio.cross.fivelives"]) {

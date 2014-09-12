@@ -103,9 +103,9 @@
     }
     
     //Check if the user has already launch the app, and show game center inmediatly
-    if ([[fileSaver getDictionary:@"FirstAppLaunchDic"][@"FirstAppLaunchKey"] boolValue]) {
-        [[GameKitHelper sharedGameKitHelper] authenticateLocalPlayer];
-    }
+    /*if ([[fileSaver getDictionary:@"FirstAppLaunchDic"][@"FirstAppLaunchKey"] boolValue]) {
+    }*/
+    [[GameKitHelper sharedGameKitHelper] authenticateLocalPlayer];
   
     return YES;
 }

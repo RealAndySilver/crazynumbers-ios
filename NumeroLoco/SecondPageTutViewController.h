@@ -11,6 +11,7 @@
 @protocol SecondPageTutDelegate <NSObject>
 -(void)secondPageContinueButtonPressed;
 -(void)secondPageBackButtonPressed;
+-(void)secondPageCloseButtonPressed;
 @end
 
 @interface SecondPageTutViewController : UIViewController

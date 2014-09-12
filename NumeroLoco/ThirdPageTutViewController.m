@@ -14,6 +14,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
 @property (weak, nonatomic) IBOutlet UIButton *continueButton;
 @property (strong, nonatomic) UITextView *textView;
+@property (strong, nonatomic) UILabel *touchLabel;
 @property (weak, nonatomic) IBOutlet UIButton *button1;
 @property (weak, nonatomic) IBOutlet UIButton *button2;
 @property (weak, nonatomic) IBOutlet UIButton *button3;
@@ -42,6 +43,16 @@
         isPad = NO;
         fontSize = 15.0;
     }
+    
+    //Close button
+    UIButton *closeButton = [[UIButton alloc] initWithFrame:CGRectMake(10.0, 10.0, 30.0, 30.0)];
+    [closeButton setTitle:@"✕" forState:UIControlStateNormal];
+    [closeButton setTitleColor:[UIColor colorWithWhite:0.6 alpha:1.0] forState:UIControlStateNormal];
+    closeButton.layer.borderWidth = 1.0;
+    closeButton.layer.cornerRadius = 10.0;
+    closeButton.layer.borderColor = [UIColor colorWithWhite:0.6 alpha:1.0].CGColor;
+    [closeButton addTarget:self action:@selector(closeButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:closeButton];
     
     //Back button
     if (screenBounds.size.height < 500.0) {
@@ -75,12 +86,23 @@
     [self.button5 addTarget:self action:@selector(centerButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     
     //Textview setup
-    self.textView = [[UITextView alloc] initWithFrame:CGRectMake(40.0, 50.0, self.view.bounds.size.width - 80.0, 140.0)];
-    self.textView.text = @"Let's practice! remember, when you touch a button, it's value will decrease by one, as well as the value of the upper, left, bottom and right button. \n\nTouch the center button!";
+    self.textView = [[UITextView alloc] initWithFrame:CGRectMake(40.0, 45.0, self.view.bounds.size.width - 80.0, 115.0)];
+    self.textView.text = @"Let's practice! remember, when you touch a button, it's value will decrease by one, as well as the value of the upper, left, bottom and right button.";
     self.textView.textColor = [UIColor darkGrayColor];
     self.textView.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:fontSize];
     self.textView.textAlignment = NSTextAlignmentCenter;
+    self.textView.editable = NO;
+    self.textView.userInteractionEnabled = NO;
     [self.view addSubview:self.textView];
+    
+    //Touch label
+    self.touchLabel = [[UILabel alloc] initWithFrame:CGRectMake(40.0, self.textView.frame.origin.y + self.textView.frame.size.height, self.view.bounds.size.width - 80.0, 50.0)];
+    self.touchLabel.text = @"Touch the center button";
+    self.touchLabel.textAlignment = NSTextAlignmentCenter;
+    self.touchLabel.textColor = [UIColor darkGrayColor];
+    self.touchLabel.numberOfLines = 0;
+    self.touchLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:20.0];
+    [self.view addSubview:self.touchLabel];
 }
 
 #pragma mark - Actions 
@@ -108,21 +130,14 @@
     tutorialAlert.delegate = self;
     [tutorialAlert showInView:self.view];
     
-    self.textView.text = @"Now, touch the upper left button!";
+    self.touchLabel.transform = CGAffineTransformMakeTranslation(0.0, -70.0);
+    self.touchLabel.text = @"Now, touch the upper left button to win";
+    
+    self.textView.text = nil;
+    /*self.textView.text = @"Now, touch the upper left button!";
     self.textView.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:fontSize];
     self.textView.textColor = [UIColor darkGrayColor];
-    self.textView.textAlignment = NSTextAlignmentCenter;
-    /*[self.button5 setTitle:@"0" forState:UIControlStateNormal];
-    self.button5.backgroundColor = [[AppInfo sharedInstance] appColorsArray][0];
-    [self.button2 setTitle:@"1" forState:UIControlStateNormal];
-    self.button2.backgroundColor = [[AppInfo sharedInstance] appColorsArray][0];
-    [self.button4 setTitle:@"1" forState:UIControlStateNormal];
-    self.button4.backgroundColor = [[AppInfo sharedInstance] appColorsArray][0];
-    [self.button6 setTitle:@"0" forState:UIControlStateNormal];
-    self.button6.backgroundColor = [[AppInfo sharedInstance] appColorsArray][0];
-    [self.button8 setTitle:@"0" forState:UIControlStateNormal];
-    self.button8.backgroundColor = [[AppInfo sharedInstance] appColorsArray][0];
-    [self.button1 setTitle:@"1" forState:UIControlStateNormal];*/
+    self.textView.textAlignment = NSTextAlignmentCenter;*/
 }
 
 -(void)backButtonPressed {
@@ -172,6 +187,9 @@
 }
 
 -(void)showSecondAlert {
+    self.touchLabel.hidden = YES;
+    
+    self.textView.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:18.0];
     self.textView.text = @"Now, you will have to make two touches to win. Touch the center button and then the upper left button";
     TutorialAlertView *tutorialAlert = [[TutorialAlertView alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 140.0, 20.0, 280.0, 200.0)];
     tutorialAlert.tag = 2;
@@ -212,6 +230,10 @@
 
 -(void)continueButtonPressed {
     [self.delegate thirdPageContinueButtonPressed];
+}
+
+-(void)closeButtonPressed {
+    [self.delegate thirdPageCloseButtonPressed];
 }
 
 @end

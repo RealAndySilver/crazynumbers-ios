@@ -27,6 +27,7 @@
 #import "TouchesObject.h"
 #import "TwoButtonsAlert.h"
 #import <ParseFacebookUtils/PFFacebookUtils.h>
+#import "TutorialContainerViewController.h"
 @import AVFoundation;
 
 @interface GameViewController () <UIAlertViewDelegate, GameWonAlertDelegate, AllGamesFinishedViewDelegate, NoTouchesAlertDelegate, BuyTouchesViewDelegate, TwoButtonsAlertDelegate>
@@ -178,6 +179,18 @@
         NoTouchesAlertView *noTouchesAlert = [[NoTouchesAlertView alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 140.0, screenBounds.size.height/2.0 - 100.0, 280.0, 200.0)];
         noTouchesAlert.delegate = self;
         [noTouchesAlert showInView:self.view];
+    }
+    
+    //Check if this is the first time the user launch the app
+    FileSaver *fileSaver = [[FileSaver alloc] init];
+    if (![[fileSaver getDictionary:@"FirstAppLaunchDic"][@"FirstAppLaunchKey"] boolValue]) {
+        //This is the first time the user launches the app
+        //so present the tutorial view controller
+        [fileSaver setDictionary:@{@"FirstAppLaunchKey" : @YES} withName:@"FirstAppLaunchDic"];
+        NSLog(@"Iré al tutorial");
+        [self goToTutorialVC];
+    } else {
+        NSLog(@"No iré al tutorial");
     }
 }
 
@@ -526,6 +539,11 @@
 }
 
 #pragma mark - Actions 
+
+-(void)goToTutorialVC {
+    TutorialContainerViewController *tutContainerVC = [self.storyboard instantiateViewControllerWithIdentifier:@"TutorialContainer"];
+    [self presentViewController:tutContainerVC animated:YES completion:nil];
+}
 
 -(void)restartGame {
     self.resetButton.userInteractionEnabled = NO;

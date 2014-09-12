@@ -11,6 +11,7 @@
 @protocol FourthPageDelegate <NSObject>
 -(void)fourthPageBackButtonPressed;
 -(void)fourthPageContinueButtonPressed;
+-(void)fourthPageCloseButtonPressed;
 @end
 
 @interface FourthPageViewController : UIViewController

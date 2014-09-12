@@ -13,9 +13,20 @@
 @property (strong, nonatomic) AVAudioPlayer *backSoundPlayer;
 @property (strong, nonatomic) AVAudioPlayer *buttonPressSound;
 @property (strong, nonatomic) AVAudioPlayer *winSound;
+@property (strong, nonatomic) AVAudioPlayer *restartSound;
 @end
 
 @implementation AudioPlayer
+
+-(AVAudioPlayer *)restartSound {
+    if (!_restartSound) {
+        NSString *soundFilePath = [[NSBundle mainBundle] pathForResource:@"restartnuevo" ofType:@"wav"];
+        NSURL *soundFileURL = [NSURL URLWithString:soundFilePath];
+        _restartSound = [[AVAudioPlayer alloc] initWithContentsOfURL:soundFileURL error:nil];
+        [_restartSound prepareToPlay];
+    }
+    return _restartSound;
+}
 
 -(AVAudioPlayer *)backSoundPlayer {
     if (!_backSoundPlayer) {
@@ -56,6 +67,10 @@
         });
     }
     return shared;
+}
+
+-(void)playRestartSound {
+    [self.restartSound play];
 }
 
 -(void)playBackSound {

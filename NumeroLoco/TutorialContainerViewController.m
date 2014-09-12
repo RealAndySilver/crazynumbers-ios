@@ -106,4 +106,20 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
+-(void)firstPageCloseButtonPressed {
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+-(void)secondPageCloseButtonPressed {
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+-(void)thirdPageCloseButtonPressed {
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+-(void)fourthPageCloseButtonPressed {
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
 @end

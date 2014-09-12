@@ -14,7 +14,7 @@
 @end
 
 #define FONT_NAME @"HelveticaNeue-Light"
-#define ANIMATION_DURATION 0.3
+#define ANIMATION_DURATION 0.15
 
 @implementation TwoButtonsAlert
 

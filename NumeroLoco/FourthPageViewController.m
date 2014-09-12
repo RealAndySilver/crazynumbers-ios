@@ -51,6 +51,16 @@
         fontSize = 15.0;
     }
     
+    //Close button
+    UIButton *closeButton = [[UIButton alloc] initWithFrame:CGRectMake(10.0, 10.0, 30.0, 30.0)];
+    [closeButton setTitle:@"✕" forState:UIControlStateNormal];
+    [closeButton setTitleColor:[UIColor colorWithWhite:0.6 alpha:1.0] forState:UIControlStateNormal];
+    closeButton.layer.borderWidth = 1.0;
+    closeButton.layer.cornerRadius = 10.0;
+    closeButton.layer.borderColor = [UIColor colorWithWhite:0.6 alpha:1.0].CGColor;
+    [closeButton addTarget:self action:@selector(closeButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:closeButton];
+    
     //Back button
     [self.backButton setTitleColor:[[AppInfo sharedInstance] appColorsArray][0] forState:UIControlStateNormal];
     self.backButton.layer.cornerRadius = 10.0;
@@ -84,14 +94,16 @@
     
     //Textview setup
     if (isPad) {
-        self.textView = [[UITextView alloc] initWithFrame:CGRectMake(40.0, 50.0, self.view.bounds.size.width - 80.0, 160.0)];
+        self.textView = [[UITextView alloc] initWithFrame:CGRectMake(30.0, 50.0, self.view.bounds.size.width - 60.0, 160.0)];
     } else {
-        self.textView = [[UITextView alloc] initWithFrame:CGRectMake(40.0, 50.0, self.view.bounds.size.width - 80.0, 140.0)];
+        self.textView = [[UITextView alloc] initWithFrame:CGRectMake(30.0, 50.0, self.view.bounds.size.width - 60.0, 140.0)];
     }
     self.textView.text = @"Colors Game\nObjective: Set all buttons to white color. Everytime you touch a button, it's color will become whiter.\nTouch the center button to begin the practice!";
     self.textView.textColor = [UIColor darkGrayColor];
     self.textView.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:fontSize];
+    self.textView.userInteractionEnabled = NO;
     self.textView.textAlignment = NSTextAlignmentCenter;
+    self.textView.editable = NO;
     [self.view addSubview:self.textView];
     
     self.butonsContainer.layer.cornerRadius = 10.0;
@@ -209,6 +221,10 @@
 
 -(void)continueButtonPressed {
     [self.delegate fourthPageContinueButtonPressed];
+}
+
+-(void)closeButtonPressed {
+    [self.delegate fourthPageCloseButtonPressed];
 }
 
 @end

@@ -130,9 +130,9 @@
     [super viewWillAppear:animated];
     
     //Animate CollectionView
-    [UIView animateWithDuration:1.3
+    [UIView animateWithDuration:0.5
                           delay:0.0
-         usingSpringWithDamping:0.6
+         usingSpringWithDamping:0.7
           initialSpringVelocity:0.0
                         options:UIViewAnimationOptionCurveEaseInOut
                      animations:^(){

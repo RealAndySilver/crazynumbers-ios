@@ -27,6 +27,16 @@
     tutorialImageView.contentMode = UIViewContentModeScaleAspectFit;
     [self.view addSubview:tutorialImageView];
     
+    //Close button
+    UIButton *closeButton = [[UIButton alloc] initWithFrame:CGRectMake(10.0, 10.0, 30.0, 30.0)];
+    [closeButton setTitle:@"✕" forState:UIControlStateNormal];
+    [closeButton setTitleColor:[UIColor colorWithWhite:0.6 alpha:1.0] forState:UIControlStateNormal];
+    closeButton.layer.borderWidth = 1.0;
+    closeButton.layer.cornerRadius = 10.0;
+    closeButton.layer.borderColor = [UIColor colorWithWhite:0.6 alpha:1.0].CGColor;
+    [closeButton addTarget:self action:@selector(closeButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:closeButton];
+    
     UIButton *continueButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.bounds.size.width/2.0 - 35.0, self.view.bounds.size.height - 90.0, 70.0, 40.0)];
     [continueButton setTitle:@"Continue" forState:UIControlStateNormal];
     [continueButton setTitleColor:[[AppInfo sharedInstance] appColorsArray][0] forState:UIControlStateNormal];
@@ -42,6 +52,10 @@
 
 -(void)continueButtonPressed {
     [self.delegate firstPageButtonPressed];
+}
+
+-(void)closeButtonPressed {
+    [self.delegate firstPageCloseButtonPressed];
 }
 
 @end

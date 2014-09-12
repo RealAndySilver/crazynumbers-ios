@@ -13,4 +13,5 @@
 -(void)playBackSound;
 -(void)playButtonPressSound;
 -(void)playWinSound;
+-(void)playRestartSound;
 @end

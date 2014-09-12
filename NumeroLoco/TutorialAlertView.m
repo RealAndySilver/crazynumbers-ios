@@ -29,6 +29,7 @@
         self.textView.textColor = [UIColor darkGrayColor];
         self.textView.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:15.0];
         self.textView.textAlignment = NSTextAlignmentCenter;
+        self.textView.editable = NO;
         [self addSubview:self.textView];
         
         //accept button

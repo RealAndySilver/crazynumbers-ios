@@ -11,6 +11,7 @@
 #import "MBProgressHUD.h"
 #import "CPIAPHelper.h"
 #import "IAPProduct.h"
+#import "Flurry.h"
 
 @interface BuyLivesView()
 @property (strong, nonatomic) UIView *opacityView;
@@ -262,6 +263,7 @@
     NSLog(@"me llegó la notficación de que el usuario compró la suscripción");
     
     IAPProduct *productBought = [notification userInfo][@"Product"];
+    [Flurry logEvent:@"ItemBought" withParameters:@{@"ItemID" : productBought.productIdentifier}];
     NSLog(@"Producto comprado: %@", productBought.productIdentifier);
     
     if ([productBought.productIdentifier isEqualToString:@"com.iamstudio.cross.fivelives"]) {

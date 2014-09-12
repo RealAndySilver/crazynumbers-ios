@@ -156,8 +156,19 @@
     self.timeLeftLabel.font = [UIFont fontWithName:FONT_ULTRALIGHT size:28.0];
     [self.view addSubview:self.timeLeftLabel];
     
+    //Restart button
+    UIButton *restartButton = [[UIButton alloc] initWithFrame:CGRectMake(screenBounds.size.width - 80.0, screenBounds.size.height - 50.0, 70.0, 40.0)];
+    [restartButton setTitle:@"Reset" forState:UIControlStateNormal];
+    [restartButton setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
+    restartButton.titleLabel.font = [UIFont fontWithName:FONT_LIGHT size:15.0];
+    restartButton.layer.cornerRadius = 10.0;
+    restartButton.layer.borderColor = [UIColor darkGrayColor].CGColor;
+    restartButton.layer.borderWidth = 1.0;
+    [restartButton addTarget:self action:@selector(restartGame) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:restartButton];
+    
     //Games button
-    UIButton *gamesButton = [[UIButton alloc] initWithFrame:CGRectMake(screenBounds.size.width - 80.0, screenBounds.size.height - 50.0, 70.0, 40.0)];
+    UIButton *gamesButton = [[UIButton alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 35.0, screenBounds.size.height - 50.0, 70.0, 40.0)];
     [gamesButton setTitle:@"Games" forState:UIControlStateNormal];
     [gamesButton setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
     gamesButton.titleLabel.font = [UIFont fontWithName:FONT_LIGHT size:15.0];
@@ -175,11 +186,14 @@
     //HEart number label
     self.heartNumberLabel = [[UILabel alloc] initWithFrame:CGRectMake(heartImageView.frame.origin.x + heartImageView.frame.size.width, screenBounds.size.height - 60, 100.0, 50.0)];
     self.heartNumberLabel.textColor = [[AppInfo sharedInstance] appColorsArray][0];
-    if (userBoughtInfiniteMode)
+    if (userBoughtInfiniteMode) {
         self.heartNumberLabel.text = @"x Infinite";
-    else
+        self.heartNumberLabel.font = [UIFont fontWithName:FONT_LIGHT size:15.0];
+    }
+    else {
         self.heartNumberLabel.text = [NSString stringWithFormat:@"x %lu", (unsigned long)[self getLivesFromUserDefaults]];
-    self.heartNumberLabel.font = [UIFont fontWithName:FONT_LIGHT size:20.0];
+        self.heartNumberLabel.font = [UIFont fontWithName:FONT_LIGHT size:20.0];
+    }
     [self.view addSubview:self.heartNumberLabel];
     
     //Buttons container view
@@ -202,21 +216,31 @@
         else
             [self addColorToButtonAtRow:row column:column];
     }
+}
+
+-(void)startTimer {
+    timeLeft = maxTime;
+    self.timeLeftLabel.text = [NSString stringWithFormat:@"Time left: %lus", (unsigned long)timeLeft];
     
-    //Start the game timer
+    [self.gameTimer invalidate];
+    self.gameTimer = nil;
     self.gameTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(substractTime) userInfo:nil repeats:YES];
 }
 
 -(void)resetGame {
-    [self.gameTimer invalidate];
-    self.gameTimer = nil;
-    
     [self.buttonsContainerView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
     [self.columnsButtonsArray removeAllObjects];
     
     matrixSize = [self.chaptersDataArray[self.currentGame][@"matrixSize"] intValue];
     maxNumber = [self.chaptersDataArray[self.currentGame][@"maxNumber"] intValue];
-    maxTime = [self.chaptersDataArray[self.currentGame][@"maxTime"] intValue];
+    //maxTime = [self.chaptersDataArray[self.currentGame][@"maxTime"] intValue];
+    if (self.currentGame < 100) {
+        maxTime = 15.0;
+    } else if (self.currentGame < 200) {
+        maxTime = 25.0;
+    } else  {
+        maxTime = 30.0;
+    }
     self.gameType = self.chaptersDataArray[self.currentGame][@"type"];
     NSUInteger randColor = arc4random()%4;
     self.colorPaletteArray = [[AppInfo sharedInstance] arrayOfChaptersColorsArray][randColor];
@@ -225,8 +249,6 @@
     } else {
         self.buttonsContainerView.backgroundColor = [UIColor colorWithWhite:0.9 alpha:1.0];
     }
-    timeLeft = maxTime;
-    self.timeLeftLabel.text = [NSString stringWithFormat:@"Time left: %lus", (unsigned long)timeLeft];
  
     if (matrixSize < 5) {
         if (isPad) {
@@ -466,6 +488,11 @@
 
 #pragma mark - Actions 
 
+-(void)restartGame {
+    [[AudioPlayer sharedInstance] playRestartSound];
+    [self initGame];
+}
+
 -(void)showGamesView {
     //Invaldiate timer
     [self.gameTimer invalidate];
@@ -482,6 +509,7 @@
 }
 
 -(void)colorButtonPressed:(UIButton *)numberButton {
+    [[AudioPlayer sharedInstance] playButtonPressSound];
     
     NSLog(@"Oprimí el boton con tag %d", numberButton.tag);
     NSUInteger index = numberButton.tag - 1000;
@@ -533,6 +561,8 @@
 }
 
 -(void)numberButtonPressed:(UIButton *)numberButton {
+    [[AudioPlayer sharedInstance] playButtonPressSound];
+    
     NSLog(@"Oprimí el boton con tag %ld", (long)numberButton.tag);
     NSUInteger index = numberButton.tag - 1000;
     NSInteger column = index / matrixSize;
@@ -854,16 +884,18 @@
 #pragma mark - FastGameWinAlertDelegate
 
 -(void)exitButtonPressedInAlert:(FastGameWinAlert *)fastGameWinAlert {
-    [[AudioPlayer sharedInstance] playBackSound];
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self dismissVC];
 }
 
 -(void)continueButtonPressedInAlert:(FastGameWinAlert *)fastGameWinAlert {
+    [[AudioPlayer sharedInstance] playRestartSound];
     if (fastGameWinAlert.tag == 1) {
         self.currentGame++;
         [self initGame];
+        [self startTimer];
     } else if (fastGameWinAlert.tag == 2){
         [self initGame];
+        [self startTimer];
     }
 }
 
@@ -882,6 +914,7 @@
 -(void)infiniteModeBoughtInView:(BuyLivesView *)buyLivesView {
     userBoughtInfiniteMode = YES;
     self.heartNumberLabel.text = @"x Infinite";
+    self.heartNumberLabel.font = [UIFont fontWithName:FONT_LIGHT size:15.0];
     [self enableButtons];
     [self removeSavedDateInUserDefaults];
 }
@@ -926,7 +959,7 @@
 }
 
 -(void)gameFinishedViewDidDissapear:(AllGamesFinishedView *)gamesFinishedView {
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self dismissVC];
 }
 
 #pragma mark - FastGamesViewDelegate
@@ -938,8 +971,10 @@
         self.gameTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(substractTime) userInfo:nil repeats:YES];
 
     } else {
+        [[AudioPlayer sharedInstance] playRestartSound];
         self.currentGame = game;
         [self initGame];
+        [self startTimer];
     }
     if (!userCanPlay) {
         [self disableGame];
@@ -965,15 +1000,15 @@
 #pragma mark - TwoButtonsAlert 
 
 -(void)leftButtonPressedInAlert:(TwoButtonsAlert *)twoButtonsAlert {
-    self.gameTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(substractTime) userInfo:nil repeats:YES];
+    [self startTimer];
 }
 
 -(void)rightButtonPressedInAlert:(TwoButtonsAlert *)twoButtonsAlert {
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self dismissVC];
 }
 
 -(void)twoButtonsAlertDidDisappear:(TwoButtonsAlert *)twoButtonsAlert {
-    self.gameTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(substractTime) userInfo:nil repeats:YES];
+    [self startTimer];
 }
 
 #pragma mark - Notification Handlers 

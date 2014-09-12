@@ -135,13 +135,13 @@
                                                object:nil];*/
     viewIsVisible = YES;
 
-    if (viewAppearFromFirstTimeTutorial) {
+    /*if (viewAppearFromFirstTimeTutorial) {
         [[GameKitHelper sharedGameKitHelper] authenticateLocalPlayer];
         viewAppearFromFirstTimeTutorial = NO;
-    }
+    }*/
     
     //Check if this is the first time the user launch the app
-    FileSaver *fileSaver = [[FileSaver alloc] init];
+    /*FileSaver *fileSaver = [[FileSaver alloc] init];
     if (![[fileSaver getDictionary:@"FirstAppLaunchDic"][@"FirstAppLaunchKey"] boolValue]) {
         //This is the first time the user launches the app
         //so present the tutorial view controller
@@ -152,7 +152,7 @@
         [self goToTutorialVC];
     } else {
         NSLog(@"No iré al tutorial");
-    }
+    }*/
 }
 
 -(void)viewDidDisappear:(BOOL)animated {
@@ -519,7 +519,7 @@
 }
 
 -(void)returnToMainButtons {
-    [UIView animateWithDuration:1.1
+    [UIView animateWithDuration:0.5
                           delay:0.0
          usingSpringWithDamping:0.7
           initialSpringVelocity:0.0
@@ -535,11 +535,13 @@
 
 }
 -(void)animateMainButtons {
+    [self.playerButtonPressed play];
+    
     mainMenuButtonsDisplayed = YES;
     gamesButtonsDisplayed = NO;
     optionsButtonsDisplayed = NO;
     
-    [UIView animateWithDuration:1.1
+    [UIView animateWithDuration:0.5
                           delay:0.0
          usingSpringWithDamping:0.7
           initialSpringVelocity:0.0
@@ -563,7 +565,7 @@
     optionsButtonsDisplayed = YES;
     mainMenuButtonsDisplayed = NO;
     
-    [UIView animateWithDuration:1.3
+    [UIView animateWithDuration:0.5
                           delay:0.0
          usingSpringWithDamping:0.7
           initialSpringVelocity:0.0
@@ -583,7 +585,7 @@
 -(void)showInitialMenuButtons {
     [self playBackSound];
     
-    [UIView animateWithDuration:1.3
+    [UIView animateWithDuration:0.5
                           delay:0.0
          usingSpringWithDamping:0.7
           initialSpringVelocity:0.0
@@ -648,7 +650,7 @@
     optionsButtonsDisplayed = NO;
     mainMenuButtonsDisplayed = NO;
     
-    [UIView animateWithDuration:1.3
+    [UIView animateWithDuration:0.5
                           delay:0.0
          usingSpringWithDamping:0.7
           initialSpringVelocity:0.0
@@ -863,6 +865,8 @@
 }
 
 -(void)startLoginProcess {
+    [self.playerButtonPressed play];
+    
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     NSArray *permissions = @[@"public_profile", @"user_friends", @"publish_actions"];
     [PFFacebookUtils logInWithPermissions:permissions block:^(PFUser *user, NSError *error) {

@@ -10,6 +10,7 @@
 
 @protocol FirstPageTutDelegate <NSObject>
 -(void)firstPageButtonPressed;
+-(void)firstPageCloseButtonPressed;
 @end
 
 @interface FirstPageTutViewController : UIViewController

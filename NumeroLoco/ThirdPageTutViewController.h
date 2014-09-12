@@ -11,6 +11,7 @@
 @protocol ThirdPageDelegate <NSObject>
 -(void)thirdPageBackButtonPressed;
 -(void)thirdPageContinueButtonPressed;
+-(void)thirdPageCloseButtonPressed;
 @end
 
 @interface ThirdPageTutViewController : UIViewController

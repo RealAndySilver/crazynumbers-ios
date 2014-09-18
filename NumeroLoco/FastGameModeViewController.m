@@ -28,6 +28,7 @@
 @property (strong, nonatomic) UILabel *timeLeftLabel;
 @property (strong, nonatomic) UILabel *heartNumberLabel;
 @property (strong, nonatomic) UIView *buttonsContainerView;
+@property (strong, nonatomic) UIButton *restartButton;
 @property (strong, nonatomic) NSMutableArray *columnsButtonsArray;
 @property (strong, nonatomic) NSNumberFormatter *purchasesPriceFormatter;
 @property (strong, nonatomic) NSString *gameType;
@@ -35,10 +36,12 @@
 @property (assign, nonatomic) NSUInteger currentGame;
 @property (strong, nonatomic) NSArray *chaptersDataArray;
 @property (strong, nonatomic) NSString *gamesDatabasePath;
+@property (strong, nonatomic) UIImageView *heartImageView;
 @end
 
 #define FONT_LIGHT @"HelveticaNeue-Light"
 #define FONT_ULTRALIGHT @"HelveticaNeue-UltraLight"
+#define TIME_FOR_NEW_LIVES 7200
 
 @implementation FastGameModeViewController {
     CGRect screenBounds;
@@ -47,17 +50,15 @@
     NSUInteger maxTime;
     NSUInteger timeLeft;
     NSUInteger totalGames;
+    NSUInteger selectedGameInFastView;
+    NSUInteger randomColorIndex;
+    float timeAnimationDuration;
+    BOOL timeLabelAnimationActive;
+    
     BOOL isPad;
     BOOL userCanPlay;
     BOOL userBoughtInfiniteMode;
 }
-
-/*-(NSArray *)colorPaletteArray {
-    if (!_colorPaletteArray) {
-        _colorPaletteArray = [[AppInfo sharedInstance] arrayOfChaptersColorsArray][0];
-    }
-    return _colorPaletteArray;
-}*/
 
 -(NSNumberFormatter *)purchasesPriceFormatter {
     if (!_purchasesPriceFormatter) {
@@ -77,6 +78,8 @@
 
 -(void)viewDidLoad {
     [super viewDidLoad];
+    timeAnimationDuration = 0.5;
+    
     self.gamesDatabasePath = [[NSBundle mainBundle] pathForResource:@"FastGamesDatabase" ofType:@"plist"];
     self.chaptersDataArray = [NSArray arrayWithContentsOfFile:self.gamesDatabasePath];
     totalGames = [self.chaptersDataArray count];
@@ -124,7 +127,7 @@
 
 -(void)setupUI {
     //Back button
-    /*UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(10.0, screenBounds.size.height - 50.0, 70.0, 40.0)];
+    UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(10.0, screenBounds.size.height - 50.0, 70.0, 40.0)];
     [backButton setTitle:@"Back" forState:UIControlStateNormal];
     [backButton setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
     backButton.titleLabel.font = [UIFont fontWithName:FONT_LIGHT size:15.0];
@@ -132,7 +135,7 @@
     backButton.layer.borderColor = [UIColor darkGrayColor].CGColor;
     backButton.layer.borderWidth = 1.0;
     [backButton addTarget:self action:@selector(dismissVC) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:backButton];*/
+    [self.view addSubview:backButton];
     
     //Title label
     if (isPad) {
@@ -150,22 +153,23 @@
     
     //Time left label
     //self.timeLeftLabel = [[UILabel alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 70.0, screenBounds.size.height - 50.0, 140.0, 40.0)];
-    self.timeLeftLabel = [[UILabel alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 90.0, screenBounds.size.height - 120.0, 180.0, 30.0)];
+    self.timeLeftLabel = [[UILabel alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 45.0, self.titleLabel.frame.origin.y + self.titleLabel.frame.size.height, 90.0, 40.0)];
     self.timeLeftLabel.textAlignment = NSTextAlignmentCenter;
-    self.timeLeftLabel.textColor = [UIColor darkGrayColor];
-    self.timeLeftLabel.font = [UIFont fontWithName:FONT_ULTRALIGHT size:28.0];
+    self.timeLeftLabel.textColor = [UIColor colorWithWhite:0.5 alpha:1.0];
+    self.timeLeftLabel.transform = CGAffineTransformMakeScale(1.5, 1.5);
+    self.timeLeftLabel.font = [UIFont fontWithName:FONT_LIGHT size:28.0];
     [self.view addSubview:self.timeLeftLabel];
     
     //Restart button
-    UIButton *restartButton = [[UIButton alloc] initWithFrame:CGRectMake(screenBounds.size.width - 80.0, screenBounds.size.height - 50.0, 70.0, 40.0)];
-    [restartButton setTitle:@"Reset" forState:UIControlStateNormal];
-    [restartButton setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
-    restartButton.titleLabel.font = [UIFont fontWithName:FONT_LIGHT size:15.0];
-    restartButton.layer.cornerRadius = 10.0;
-    restartButton.layer.borderColor = [UIColor darkGrayColor].CGColor;
-    restartButton.layer.borderWidth = 1.0;
-    [restartButton addTarget:self action:@selector(restartGame) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:restartButton];
+    self.restartButton = [[UIButton alloc] initWithFrame:CGRectMake(screenBounds.size.width - 80.0, screenBounds.size.height - 50.0, 70.0, 40.0)];
+    [self.restartButton setTitle:@"Reset" forState:UIControlStateNormal];
+    [self.restartButton setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
+    self.restartButton.titleLabel.font = [UIFont fontWithName:FONT_LIGHT size:15.0];
+    self.restartButton.layer.cornerRadius = 10.0;
+    self.restartButton.layer.borderColor = [UIColor darkGrayColor].CGColor;
+    self.restartButton.layer.borderWidth = 1.0;
+    [self.restartButton addTarget:self action:@selector(restartGame) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:self.restartButton];
     
     //Games button
     UIButton *gamesButton = [[UIButton alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 35.0, screenBounds.size.height - 50.0, 70.0, 40.0)];
@@ -179,13 +183,15 @@
     [self.view addSubview:gamesButton];
     
     //Heart image view
-    UIImageView *heartImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"heart.png"]];
-    heartImageView.frame = CGRectMake(10.0, screenBounds.size.height - 60, 50.0, 50.0);
-    [self.view addSubview:heartImageView];
+    UIImage *heartImage = [UIImage imageNamed:@"heart.png"];
+    heartImage = [heartImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    
+    self.heartImageView = [[UIImageView alloc] initWithImage:heartImage];
+    self.heartImageView.frame = CGRectMake(10.0, screenBounds.size.height - 110, 50.0, 50.0);
+    [self.view addSubview:self.heartImageView];
     
     //HEart number label
-    self.heartNumberLabel = [[UILabel alloc] initWithFrame:CGRectMake(heartImageView.frame.origin.x + heartImageView.frame.size.width, screenBounds.size.height - 60, 100.0, 50.0)];
-    self.heartNumberLabel.textColor = [[AppInfo sharedInstance] appColorsArray][0];
+    self.heartNumberLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.heartImageView.frame.origin.x + self.heartImageView.frame.size.width, screenBounds.size.height - 110, 100.0, 50.0)];
     if (userBoughtInfiniteMode) {
         self.heartNumberLabel.text = @"x Infinite";
         self.heartNumberLabel.font = [UIFont fontWithName:FONT_LIGHT size:15.0];
@@ -205,6 +211,8 @@
 -(void)initGame {
     [self resetGame];
     self.titleLabel.text = [NSString stringWithFormat:@"Game %u", self.currentGame + 1];
+    self.heartNumberLabel.textColor = [[AppInfo sharedInstance] appColorsArray][randomColorIndex];
+    self.heartImageView.tintColor = [[AppInfo sharedInstance] appColorsArray][randomColorIndex];
     
     self.pointsArray = self.chaptersDataArray[self.currentGame][@"puntos"];
     NSLog(@"numero de puntos: %d", [self.pointsArray count]);
@@ -220,7 +228,8 @@
 
 -(void)startTimer {
     timeLeft = maxTime;
-    self.timeLeftLabel.text = [NSString stringWithFormat:@"Time left: %lus", (unsigned long)timeLeft];
+    //self.timeLeftLabel.text = [NSString stringWithFormat:@"Time left: %lus", (unsigned long)timeLeft];
+    self.timeLeftLabel.text = [NSString stringWithFormat:@"%lu", (unsigned long)timeLeft];
     
     [self.gameTimer invalidate];
     self.gameTimer = nil;
@@ -304,7 +313,7 @@
 }
 
 -(void)createSquareMatrixOf:(NSUInteger)size {
-    NSUInteger randomColorIndex = arc4random()%3;
+    randomColorIndex = arc4random()%3;
     
     NSUInteger buttonDistance;
     NSUInteger cornerRadius;
@@ -488,6 +497,12 @@
 
 #pragma mark - Actions 
 
+-(void)exitGame {
+    [[AudioPlayer sharedInstance] playRestartSound];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"PlayMusicNotification" object:nil];
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
 -(void)restartGame {
     [[AudioPlayer sharedInstance] playRestartSound];
     [self initGame];
@@ -504,6 +519,7 @@
     } else {
          fastGamesView = [[FastGamesView alloc] initWithFrame:CGRectMake(20.0, 20.0, self.view.bounds.size.width - 40.0, self.view.bounds.size.height - 40.0)];
     }
+    fastGamesView.viewColor = [[AppInfo sharedInstance] appColorsArray][randomColorIndex];
     fastGamesView.delegate = self;
     [fastGamesView showInView:self.view];
 }
@@ -606,10 +622,53 @@
 
 -(void)substractTime {
     timeLeft--;
-    self.timeLeftLabel.text = [NSString stringWithFormat:@"Time left: %lus", (unsigned long)timeLeft];
+    self.timeLeftLabel.text = [NSString stringWithFormat:@"%lu", (unsigned long)timeLeft];
     if (timeLeft == 0) {
         //User loss
         [self userLost];
+    }
+}
+
+#pragma mark - Animation 
+
+-(void)startTimeLabelAnimation {
+    if (timeLeft > 10.0) {
+        self.timeLeftLabel.textColor = [UIColor colorWithWhite:0.8 alpha:1.0];
+        timeAnimationDuration = 0.5;
+    
+    }else if (timeLeft <= 10.0 && timeLeft > 5.0) {
+        timeAnimationDuration = 0.25;
+        self.timeLeftLabel.textColor = [UIColor colorWithWhite:0.5 alpha:1.0];
+    
+    } else if (timeLeft <= 5.0) {
+        timeAnimationDuration = 0.125;
+        self.timeLeftLabel.textColor = [[AppInfo sharedInstance] appColorsArray][randomColorIndex];
+    }
+    
+    if (timeLabelAnimationActive) {
+        [UIView animateWithDuration:timeAnimationDuration
+                              delay:0.0
+                            options:UIViewAnimationOptionCurveLinear
+                         animations:^(){
+                             self.timeLeftLabel.transform = CGAffineTransformMakeScale(0.8, 0.8);
+                         } completion:^(BOOL finished){
+                             if (finished) {
+                                 [self secondTimeLabelAnimation];
+                             }
+                         }];
+    }
+}
+
+-(void)secondTimeLabelAnimation {
+    if (timeLabelAnimationActive) {
+        [UIView animateWithDuration:timeAnimationDuration
+                              delay:0.0
+                            options:UIViewAnimationOptionCurveLinear
+                         animations:^{
+                             self.timeLeftLabel.transform = CGAffineTransformMakeScale(1.5, 1.5);
+                         } completion:^(BOOL finished) {
+                             [self startTimeLabelAnimation];
+                         }];
     }
 }
 
@@ -656,6 +715,8 @@
 }
 
 -(void)userWon {
+    timeLabelAnimationActive = NO;
+    
     if (self.currentGame == totalGames - 1) {
         NSLog(@"Ganaste el ultim juego");
         [self showAllGamesWonAlert];
@@ -670,8 +731,10 @@
 }
 
 -(void)userLost {
+    timeLabelAnimationActive = NO;
     [self.gameTimer invalidate];
     self.gameTimer = nil;
+    
     
     if (!userBoughtInfiniteMode) {
         [self reduceLivesInUserDefaults];
@@ -681,7 +744,7 @@
             [self showBuyMoreLivesAlert];
             [self disableButtons];
             userCanPlay = NO;
-            [self saveCurrentDateInUserDefaults];
+            //[self saveCurrentDateInUserDefaults];
         } else {
             [self showLossAlert];
         }
@@ -697,25 +760,44 @@
     [self disableButtons];
     [self.gameTimer invalidate];
     self.gameTimer = nil;
+    timeLabelAnimationActive = NO;
 }
 
 -(void)enableButtons {
     for (UIButton *button in self.buttonsContainerView.subviews) {
-        button.userInteractionEnabled = YES;
-        button.alpha = 1.0;
+        //button.userInteractionEnabled = YES;
+        [button removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+        if ([self.gameType isEqualToString:@"number"]) {
+            [button addTarget:self action:@selector(numberButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+        } else {
+            [button addTarget:self action:@selector(colorButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+        }        button.alpha = 1.0;
     }
+    self.restartButton.userInteractionEnabled = YES;
+    self.restartButton.alpha = 1.0;
 }
 
 -(void)disableButtons {
     for (UIButton *button in self.buttonsContainerView.subviews) {
-        button.userInteractionEnabled = NO;
+        //button.userInteractionEnabled = NO;
+        [button removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+        [button addTarget:self action:@selector(showBuyMoreLivesAlert) forControlEvents:UIControlEventTouchUpInside];
         button.alpha = 0.5;
     }
+    self.restartButton.userInteractionEnabled = NO;
+    self.restartButton.alpha = 0.5;
 }
 
 -(void)enableTimer {
-    timeLeft = 10.0;
-    self.timeLeftLabel.text = [NSString stringWithFormat:@"Time left: %lus", (unsigned long)timeLeft];
+    if (self.currentGame < 100) {
+        timeLeft = 15.0;
+    } else if (self.currentGame < 200) {
+        timeLeft = 25.0;
+    } else  {
+        timeLeft = 30.0;
+    }
+    
+    self.timeLeftLabel.text = [NSString stringWithFormat:@"%lu", (unsigned long)timeLeft];
     self.gameTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(substractTime) userInfo:nil repeats:YES];
 }
 
@@ -739,49 +821,120 @@
     }
 }
 
--(void)saveCurrentDateInUserDefaults {
-    NSLog(@"Fecha actual: %@", [NSDate date]);
-    [[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:@"NoLivesDate"];
-    [[NSUserDefaults standardUserDefaults] synchronize];
-}
-
 -(void)reduceLivesInUserDefaults {
     NSUInteger currentLives = [[[NSUserDefaults standardUserDefaults] objectForKey:@"lives"] intValue];
+    //Checkear si hay menos de cinco vidas y guardar como fcha una hora mas tarde para
+    //devolverle las vidas
+    if (currentLives <= 5.0 && !userBoughtInfiniteMode) {
+        //Guardar una hora despues de la ultima hora guardada. Si no hay ninguna hora guardada, guardar
+        //una hora despues de la actual
+        if ([self getLastSaveDateInUserDefaults]) {
+            NSLog(@"SI EXISTIA UNA HORA GUARDADA");
+            NSDate *lastSavedDate = [self getLastSaveDateInUserDefaults];
+            NSDate *oneHourLaterDate = [lastSavedDate dateByAddingTimeInterval:TIME_FOR_NEW_LIVES];
+            [self saveDateInUserDefaults:oneHourLaterDate];
+            
+            //Save a notification to show the user that the new lives are available
+            [self removeLivesLocalNotifications];
+            [self saveLocalNotificationWithFireDate:oneHourLaterDate];
+            
+        } else {
+            NSLog(@"NO EXISTIA UNA HORA GUARDADA");
+            NSDate *date = [NSDate dateWithTimeIntervalSinceNow:TIME_FOR_NEW_LIVES];
+            [self saveDateInUserDefaults:date];
+            [self removeLivesLocalNotifications];
+            [self saveLocalNotificationWithFireDate:date];
+        }
+    }
+    
     currentLives--;
     [[NSUserDefaults standardUserDefaults] setObject:@(currentLives) forKey:@"lives"];
     [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+-(void)saveDateInUserDefaults:(NSDate *)date {
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"GiveLivesDatesArray"]) {
+        NSLog(@"YA EXISTIA EL ARREGLO DE FECHAS");
+        NSArray *savedDatesArray = [[NSUserDefaults standardUserDefaults] objectForKey:@"GiveLivesDatesArray"];
+        NSMutableArray *giveTouchesDatesArray = [[NSMutableArray alloc] initWithArray:savedDatesArray];
+        if (giveTouchesDatesArray) {
+            NSLog(@"EL ARREGLO DE FECHAS ESTÁ BIEN, Y TIENE %lu FECHAS GUARDADAS", (unsigned long)[giveTouchesDatesArray count]);
+        } else {
+            NSLog(@"EL ARREGLO DE FECHAS ESTA EN NIL");
+        }
+        [giveTouchesDatesArray addObject:date];
+        NSLog(@"PUDE AGREGAR LA NUEVA FECHA AL ARREGLO");
+        [[NSUserDefaults standardUserDefaults] setObject:giveTouchesDatesArray forKey:@"GiveLivesDatesArray"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        
+        for (NSDate *date in giveTouchesDatesArray) {
+            NSLog(@"FECHA GUARDADA: %@", date);
+        }
+        
+    } else {
+        NSLog(@"NO EXISTIA EL ARREGLO DE FECHAS");
+        NSMutableArray *giveTouchesDatesArray = [[NSMutableArray alloc] init];
+        [giveTouchesDatesArray addObject:date];
+        [[NSUserDefaults standardUserDefaults] setObject:giveTouchesDatesArray forKey:@"GiveLivesDatesArray"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        
+        for (NSDate *date in giveTouchesDatesArray) {
+            NSLog(@"FECHA GUARDADA: %@", date);
+        }
+    }
+}
+
+-(NSDate *)getLastSaveDateInUserDefaults {
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"GiveLivesDatesArray"]) {
+        NSMutableArray *giveTouchesDatesArray = [[NSUserDefaults standardUserDefaults] objectForKey:@"GiveLivesDatesArray"];
+        NSDate *lastSavedDate = [giveTouchesDatesArray lastObject];
+        return lastSavedDate;
+    } else {
+        return nil;
+    }
 }
 
 -(NSUInteger)getLivesFromUserDefaults {
     return [[[NSUserDefaults standardUserDefaults] objectForKey:@"lives"] intValue];
 }
 
--(void)removeSavedDateInUserDefaults {
-    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"NoLivesDate"];
-    [[NSUserDefaults standardUserDefaults] synchronize];
-}
-
 #pragma mark - Actions 
 
-/*-(void)showStartAlert {
-    OneButtonAlert *startAlert = [[OneButtonAlert alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 140.0, screenBounds.size.height/2.0 - 85.0, 280.0, 170.0)];
-    startAlert.alertText = @"Welcome to Fast Mode! You have just few seconds (10s - 20s) to complete each level! Be fast!";
-    startAlert.buttonTitle = @"Start!";
-    startAlert.delegate = self;
-    startAlert.button.backgroundColor = [[AppInfo sharedInstance] appColorsArray][0];
-    startAlert.messageLabel.frame = CGRectMake(20.0, 20.0, startAlert.bounds.size.width - 40.0, 100.0);
-    startAlert.messageLabel.font = [UIFont fontWithName:FONT_LIGHT size:15.0];
-    [startAlert showInView:self.view];
-}*/
+-(void)showExitWarningAlert {
+    TwoButtonsAlert *warningAlert = [[TwoButtonsAlert alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 140.0, screenBounds.size.height/2.0 - 85.0, 280.0, 170.0)];
+    warningAlert.alertText = @"Warning! If you exit while the game is in course, you will loss one life.";
+    warningAlert.leftButtonTitle = @"Exit";
+    warningAlert.rightButtonTitle = @"Cancel";
+    warningAlert.tag = 2;
+    warningAlert.delegate = self;
+    warningAlert.messageLabel.font = [UIFont fontWithName:FONT_LIGHT size:15.0];
+    warningAlert.rightButton.backgroundColor = [UIColor colorWithWhite:0.7 alpha:1.0];
+    warningAlert.leftButton.backgroundColor = [[AppInfo sharedInstance] appColorsArray][randomColorIndex];
+    [warningAlert showInView:self.view];
+}
+
+-(void)showLivesWarningAlert {
+    TwoButtonsAlert *warningAlert = [[TwoButtonsAlert alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 140.0, screenBounds.size.height/2.0 - 85.0, 280.0, 170.0)];
+    warningAlert.alertText = @"Warning! if you exit the last unlocked game while the game is in course, you will loss one live.";
+    warningAlert.leftButtonTitle = @"Exit";
+    warningAlert.rightButtonTitle = @"Cancel";
+    warningAlert.tag = 3;
+    warningAlert.delegate = self;
+    warningAlert.rightButton.backgroundColor = [UIColor colorWithWhite:0.7 alpha:1.0];
+    warningAlert.leftButton.backgroundColor = [[AppInfo sharedInstance] appColorsArray][randomColorIndex];
+    warningAlert.messageLabel.frame = CGRectMake(20.0, 40.0, warningAlert.bounds.size.width - 40.0, 60.0);
+    warningAlert.messageLabel.font = [UIFont fontWithName:FONT_LIGHT size:15.0];
+    [warningAlert showInView:self.view];}
 
 -(void)showStartAlert {
     TwoButtonsAlert *startAlert = [[TwoButtonsAlert alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 140.0, screenBounds.size.height/2.0 - 85.0, 280.0, 170.0)];
     startAlert.alertText = @"Welcome to Fast Mode! You have just few seconds (10s - 30s) to complete each level! Be fast!";
     startAlert.leftButtonTitle = @"Start!";
     startAlert.rightButtonTitle = @"Exit";
+    startAlert.tag = 1;
     startAlert.delegate = self;
-    startAlert.leftButton.backgroundColor = [[AppInfo sharedInstance] appColorsArray][1];
-    startAlert.rightButton.backgroundColor = [[AppInfo sharedInstance] appColorsArray][0];
+    startAlert.leftButton.backgroundColor = [[AppInfo sharedInstance] appColorsArray][randomColorIndex];
+    startAlert.rightButton.backgroundColor = [UIColor colorWithWhite:0.8 alpha:1.0];
     startAlert.messageLabel.font = [UIFont fontWithName:FONT_LIGHT size:15.0];
     startAlert.messageLabel.frame = CGRectMake(20.0, 20.0, startAlert.bounds.size.width - 40.0, 100.0);
     [startAlert showInView:self.view];
@@ -800,7 +953,7 @@
 -(void)showBuyMoreLivesAlert {
     NoTouchesAlertView *noLivesAlert = [[NoTouchesAlertView alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 140.0, self.view.bounds.size.height/2.0 - 100.0, 280.0, 200.0)];
     noLivesAlert.message.text = @"You have no more lives left! You can buy more right now or wait one hour.";
-    [noLivesAlert.acceptButton setTitle:@"Buy Lifes" forState:UIControlStateNormal];
+    [noLivesAlert.acceptButton setTitle:@"Buy Lives" forState:UIControlStateNormal];
     noLivesAlert.delegate = self;
     [noLivesAlert showInView:self.view];
 }
@@ -809,6 +962,8 @@
     FastGameWinAlert *fastGameWinAlert = [[FastGameWinAlert alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 140.0, self.view.bounds.size.height/2.0 - 140.0, 280.0, 280.0)];
     fastGameWinAlert.delegate = self;
     fastGameWinAlert.tag = 1;
+    fastGameWinAlert.buyLivesButton.backgroundColor = [[AppInfo sharedInstance] appColorsArray][randomColorIndex];
+    fastGameWinAlert.continueButton.backgroundColor = [[AppInfo sharedInstance] appColorsArray][randomColorIndex];
     fastGameWinAlert.alertLabel.text = [NSString stringWithFormat:@"You have won game %lu, keep going!", (unsigned long)self.currentGame + 1];
     [fastGameWinAlert showInView:self.view];
 }
@@ -817,6 +972,8 @@
     FastGameWinAlert *lossAlert = [[FastGameWinAlert alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 140.0, self.view.bounds.size.height/2.0 - 140.0, 280.0, 280.0)];
     lossAlert.delegate = self;
     lossAlert.tag = 2;
+    lossAlert.buyLivesButton.backgroundColor = [[AppInfo sharedInstance] appColorsArray][randomColorIndex];
+    lossAlert.continueButton.backgroundColor = [[AppInfo sharedInstance] appColorsArray][randomColorIndex];
     [lossAlert.continueButton setTitle:@"Try again" forState:UIControlStateNormal];
     lossAlert.alertLabel.text = [NSString stringWithFormat:@"You have lost one life. Try to be faster next time!"];
     [lossAlert showInView:self.view];
@@ -832,9 +989,22 @@
 }
 
 -(void)dismissVC {
-    [[AudioPlayer sharedInstance] playBackSound];
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"PlayMusicNotification" object:nil];
-    [self dismissViewControllerAnimated:YES completion:nil];
+    NSLog(@"ENTRE AL DISMISSSSSS");
+    //Check if the user is trying to exit the last game
+    if (self.currentGame == [self getLastUnlockedLevelInUserDefaults] - 1 && [self getLivesFromUserDefaults] > 0 && !userBoughtInfiniteMode) {
+        NSLog(@"Trying to exit the last game");
+        [self showExitWarningAlert];
+        [self disableTimer];
+    } else {
+        [[AudioPlayer sharedInstance] playBackSound];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"PlayMusicNotification" object:nil];
+        [self dismissViewControllerAnimated:YES completion:nil];
+    }
+}
+
+-(void)disableTimer {
+    [self.gameTimer invalidate];
+    self.gameTimer = nil;
 }
 
 #pragma mark - Buying stuff
@@ -884,7 +1054,8 @@
 #pragma mark - FastGameWinAlertDelegate
 
 -(void)exitButtonPressedInAlert:(FastGameWinAlert *)fastGameWinAlert {
-    [self dismissVC];
+    //[self dismissVC];
+    [self exitGame];
 }
 
 -(void)continueButtonPressedInAlert:(FastGameWinAlert *)fastGameWinAlert {
@@ -893,9 +1064,14 @@
         self.currentGame++;
         [self initGame];
         [self startTimer];
+        timeLabelAnimationActive = YES;
+        [self startTimeLabelAnimation];
+        
     } else if (fastGameWinAlert.tag == 2){
         [self initGame];
         [self startTimer];
+        timeLabelAnimationActive = YES;
+        [self startTimeLabelAnimation];
     }
 }
 
@@ -906,9 +1082,10 @@
 #pragma mark - BuyLivesViewDelegate
 
 -(void)moreLivesBought:(NSUInteger)livesAvailable inView:(BuyLivesView *)buyLivesView {
-    self.heartNumberLabel.text = [NSString stringWithFormat:@"x %lu", (unsigned long)livesAvailable];
+    if (!userBoughtInfiniteMode) {
+        self.heartNumberLabel.text = [NSString stringWithFormat:@"x %lu", (unsigned long)livesAvailable];
+    }
     [self enableButtons];
-    [self removeSavedDateInUserDefaults];
 }
 
 -(void)infiniteModeBoughtInView:(BuyLivesView *)buyLivesView {
@@ -916,7 +1093,6 @@
     self.heartNumberLabel.text = @"x Infinite";
     self.heartNumberLabel.font = [UIFont fontWithName:FONT_LIGHT size:15.0];
     [self enableButtons];
-    [self removeSavedDateInUserDefaults];
 }
 
 -(void)buyLivesViewDidDisappear:(BuyLivesView *)buyLivesView {
@@ -946,6 +1122,8 @@
 
 -(void)acceptButtonPressedInWinAlert:(MultiplayerWinAlert *)winAlert {
     [self enableTimer];
+    timeLabelAnimationActive = YES;
+    [self startTimeLabelAnimation];
 }
 
 -(void)multiplayerWinAlertDidDissapear:(MultiplayerWinAlert *)winAlert {
@@ -965,11 +1143,17 @@
 #pragma mark - FastGamesViewDelegate
 
 -(void)gameSelected:(NSUInteger)game inFastGamesView:(FastGamesView *)fastGamesView {
+    selectedGameInFastView = game;
+    
     NSLog(@"Seleccioné el juego %lu", (unsigned long)game);
     if (self.currentGame == game) {
         NSLog(@"Escogí el mismo juego, que siga corriendo el timer");
         self.gameTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(substractTime) userInfo:nil repeats:YES];
 
+    } else if (self.currentGame == [self getLastUnlockedLevelInUserDefaults] - 1) {
+        NSLog(@"Intentado hacer trampaaaaaaa");
+        [self showLivesWarningAlert];
+    
     } else {
         [[AudioPlayer sharedInstance] playRestartSound];
         self.currentGame = game;
@@ -1000,23 +1184,83 @@
 #pragma mark - TwoButtonsAlert 
 
 -(void)leftButtonPressedInAlert:(TwoButtonsAlert *)twoButtonsAlert {
-    [self startTimer];
+    if (twoButtonsAlert.tag == 1) {
+        timeLabelAnimationActive = YES;
+        [self startTimer];
+        [self startTimeLabelAnimation];
+        
+    } else if (twoButtonsAlert.tag == 2) {
+        //The user exit the game in course. Dismiss VC and reduce one life
+        [self reduceLivesInUserDefaults];
+        [self exitGame];
+        
+    } else if (twoButtonsAlert.tag == 3) {
+        [self reduceLivesInUserDefaults];
+        if (!userBoughtInfiniteMode) {
+            self.heartNumberLabel.text = [NSString stringWithFormat:@"x %lu", (unsigned long)[self getLivesFromUserDefaults]];
+        }
+        self.currentGame = selectedGameInFastView;
+        if ([self getLivesFromUserDefaults] == 0) {
+            userCanPlay = NO;
+            [self initGame];
+            [self disableGame];
+            [self performSelector:@selector(showBuyMoreLivesAlert) withObject:nil afterDelay:1.0];
+        } else {
+            [self startTimer];
+            [self initGame];
+        }
+    }
 }
 
 -(void)rightButtonPressedInAlert:(TwoButtonsAlert *)twoButtonsAlert {
-    [self dismissVC];
+    if (twoButtonsAlert.tag == 1) {
+        [self exitGame];
+    } else if (twoButtonsAlert.tag == 2 || twoButtonsAlert.tag == 3) {
+        self.gameTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(substractTime) userInfo:nil repeats:YES];
+    }
 }
 
 -(void)twoButtonsAlertDidDisappear:(TwoButtonsAlert *)twoButtonsAlert {
-    [self startTimer];
+    if (twoButtonsAlert.tag == 1) {
+        [self startTimer];
+        timeLabelAnimationActive = YES;
+        [self startTimeLabelAnimation];
+        
+    } else if (twoButtonsAlert.tag == 2 || twoButtonsAlert.tag == 3) {
+        self.gameTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(substractTime) userInfo:nil repeats:YES];
+    }
 }
 
 #pragma mark - Notification Handlers 
 
 -(void)newLivesNotificationReceived:(NSNotification *)notification {
-    self.heartNumberLabel.text = [NSString stringWithFormat:@"x %lu", (unsigned long)[self getLivesFromUserDefaults]];
+    if (!userBoughtInfiniteMode) {
+        self.heartNumberLabel.text = [NSString stringWithFormat:@"x %lu", (unsigned long)[self getLivesFromUserDefaults]];
+    }
     [self enableButtons];
-    [self showStartGameAlert];
+    //[self showStartGameAlert];
+}
+
+#pragma mark - Local Notification Stuff
+
+-(void)saveLocalNotificationWithFireDate:(NSDate *)date {
+    UILocalNotification *localNotification = [[UILocalNotification alloc] init];
+    localNotification.alertAction = @"New Lives!";
+    localNotification.alertBody = @"All your lives have been restored!";
+    localNotification.fireDate = date;
+    localNotification.userInfo = @{@"notificationID" : @"livesNotification"};
+    [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
+}
+
+-(void)removeLivesLocalNotifications {
+    NSArray *notificationsArray = [[UIApplication sharedApplication] scheduledLocalNotifications];
+    for (int i = 0; i < [notificationsArray count]; i++) {
+        UILocalNotification *notification = notificationsArray[i];
+        NSDictionary *notificationDic = notification.userInfo;
+        if ([[notificationDic objectForKey:@"notificationID"] isEqualToString:@"livesNotification"]) {
+            [[UIApplication sharedApplication] cancelLocalNotification:notification];
+        }
+    }
 }
 
 @end

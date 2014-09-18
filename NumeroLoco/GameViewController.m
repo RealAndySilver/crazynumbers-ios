@@ -55,7 +55,8 @@
 @end
 
 #define FONT_NAME @"HelveticaNeue-Light"
-#define DOCUMENT_NAME @"MyDocument";
+#define DOCUMENT_NAME @"MyDocument"
+#define TIME_FOR_NEW_TOUCHES 3600
 
 @implementation GameViewController {
     CGRect screenBounds;
@@ -176,9 +177,10 @@
     
     //Check number of touches available
     if ([TouchesObject sharedInstance].totalTouches == 0 && !userBoughtInfiniteMode) {
-        NoTouchesAlertView *noTouchesAlert = [[NoTouchesAlertView alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 140.0, screenBounds.size.height/2.0 - 100.0, 280.0, 200.0)];
+        [self showNoTouchesAlert];
+        /*NoTouchesAlertView *noTouchesAlert = [[NoTouchesAlertView alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 140.0, screenBounds.size.height/2.0 - 100.0, 280.0, 200.0)];
         noTouchesAlert.delegate = self;
-        [noTouchesAlert showInView:self.view];
+        [noTouchesAlert showInView:self.view];*/
     }
     
     //Check if this is the first time the user launch the app
@@ -591,6 +593,32 @@
         [self.columnsButtonsArray[column + 1][row] setTitle:buttonTitle forState:UIControlStateNormal];
     }
     
+    
+    //Checkear si el numero de taps es multiplo de 5, para guardar el date
+    //y poder devolverle 5 toques al usuario una hroa despues
+    if ([TouchesObject sharedInstance].totalTouches % 5 == 0 && [TouchesObject sharedInstance].totalTouches <= 120.0 && !userBoughtInfiniteMode) {
+        NSLog(@"SI ERA MULTIPLO DE 5");
+        //Guardar una hora despues de la ultima hora guardada. Si no hay ninguna hora guardada, guardar
+        //una hora despues de la actual
+        if ([self getLastSaveDateInUserDefaults]) {
+            NSLog(@"SI EXISTIA UNA HORA GUARDADA");
+            NSDate *lastSavedDate = [self getLastSaveDateInUserDefaults];
+            NSDate *oneHourLaterDate = [lastSavedDate dateByAddingTimeInterval:TIME_FOR_NEW_TOUCHES];
+            [self saveDateInUserDefaults:oneHourLaterDate];
+            
+            //Save a local notification to show the user when the touches are available
+            [self removeTouchesLocalNotifications];
+            [self saveLocalNotificationWithFireDate:oneHourLaterDate];
+            
+        } else {
+            NSLog(@"NO EXISTIA UNA HORA GUARDADA");
+            NSDate *date = [NSDate dateWithTimeIntervalSinceNow:TIME_FOR_NEW_TOUCHES];
+            [self removeTouchesLocalNotifications];
+            [self saveLocalNotificationWithFireDate:date];
+            [self saveDateInUserDefaults:date];
+        }
+    }
+    
     numberOfTaps++;
     if (!userBoughtInfiniteMode) {
         [TouchesObject sharedInstance].totalTouches--;
@@ -601,14 +629,16 @@
             [self showNoTouchesAlert];
             
             [self disableButtons];
-            [self saveCurrentDateInUserDefaults];
+            //[self saveCurrentDateInUserDefaults];
         }
     }
+    
     [self checkIfUserWon];
 }
 
 -(void)showNoTouchesAlert {
     NoTouchesAlertView *noTouchesAlert = [[NoTouchesAlertView alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 140.0, screenBounds.size.height/2.0 - 100.0, 280.0, 200.0)];
+    noTouchesAlert.acceptButton.backgroundColor = [[AppInfo sharedInstance] appColorsArray][self.selectedChapter];
     noTouchesAlert.delegate = self;
     [noTouchesAlert showInView:self.view];
 }
@@ -853,15 +883,46 @@
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
--(void)saveCurrentDateInUserDefaults {
-    NSLog(@"Fecha actual: %@", [NSDate date]);
-    [[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:@"NoTouchesDate"];
-    [[NSUserDefaults standardUserDefaults] synchronize];
+-(void)saveDateInUserDefaults:(NSDate *)date {
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"GiveTouchesDatesArray"]) {
+        NSLog(@"YA EXISTIA EL ARREGLO DE FECHAS");
+        NSArray *savedDatesArray = [[NSUserDefaults standardUserDefaults] objectForKey:@"GiveTouchesDatesArray"];
+        NSMutableArray *giveTouchesDatesArray = [[NSMutableArray alloc] initWithArray:savedDatesArray];
+        if (giveTouchesDatesArray) {
+            NSLog(@"EL ARREGLO DE FECHAS ESTÁ BIEN, Y TIENE %lu FECHAS GUARDADAS", (unsigned long)[giveTouchesDatesArray count]);
+        } else {
+            NSLog(@"EL ARREGLO DE FECHAS ESTA EN NIL");
+        }
+        [giveTouchesDatesArray addObject:date];
+        NSLog(@"PUDE AGREGAR LA NUEVA FECHA AL ARREGLO");
+        [[NSUserDefaults standardUserDefaults] setObject:giveTouchesDatesArray forKey:@"GiveTouchesDatesArray"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        
+        for (NSDate *date in giveTouchesDatesArray) {
+            NSLog(@"FECHA GUARDADA: %@", date);
+        }
+        
+    } else {
+        NSLog(@"NO EXISTIA EL ARREGLO DE FECHAS");
+        NSMutableArray *giveTouchesDatesArray = [[NSMutableArray alloc] init];
+        [giveTouchesDatesArray addObject:date];
+        [[NSUserDefaults standardUserDefaults] setObject:giveTouchesDatesArray forKey:@"GiveTouchesDatesArray"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        
+        for (NSDate *date in giveTouchesDatesArray) {
+            NSLog(@"FECHA GUARDADA: %@", date);
+        }
+    }
 }
 
--(void)removeSavedDateInUserDefaults {
-    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"NoTouchesDate"];
-    [[NSUserDefaults standardUserDefaults] synchronize];
+-(NSDate *)getLastSaveDateInUserDefaults {
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"GiveTouchesDatesArray"]) {
+        NSMutableArray *giveTouchesDatesArray = [[NSUserDefaults standardUserDefaults] objectForKey:@"GiveTouchesDatesArray"];
+        NSDate *lastSavedDate = [giveTouchesDatesArray lastObject];
+        return lastSavedDate;
+    } else {
+        return nil;
+    }
 }
 
 -(void)dismissVC {
@@ -1149,9 +1210,6 @@ interstitial {
     return YES;
 }
 
-/*
- *  Resume app state when the interstitial is dismissed.
- */
 - (void)spaceDidDismiss:(NSString *)adSpace interstitial:(BOOL)interstitial {
     NSLog(@"Entré al spaceDidDismiss");
     if (interstitial) {
@@ -1190,7 +1248,6 @@ interstitial {
 
 -(void)buyTouchesButtonPressedInAlert:(NoTouchesAlertView *)multiplayerAlert {
     [self getPricesForPurchases];
-    //[self showBuyTouchesView];
 }
 
 #pragma mark - BuyTouchesViewDelegate
@@ -1205,26 +1262,16 @@ interstitial {
 
 -(void)moreTouchesBought:(NSUInteger)totalTouchesAvailable inView:(BuyTouchesView *)buyTouchesView {
     [TouchesObject sharedInstance].totalTouches = totalTouchesAvailable;
-    self.touchesAvailableLabel.text = [NSString stringWithFormat:@"Touches left: %lu", (unsigned long)[TouchesObject sharedInstance].totalTouches];
+    if (!userBoughtInfiniteMode) {
+        self.touchesAvailableLabel.text = [NSString stringWithFormat:@"Touches left: %lu", (unsigned long)[TouchesObject sharedInstance].totalTouches];
+    }
     [self enableButtons];
-    
-    //Remove the date when there was no touches left
-    [self removeSavedDateInUserDefaults];
 }
 
 -(void)infiniteTouchesBoughtInView:(BuyTouchesView *)buyTouchesView {
     userBoughtInfiniteMode = YES;
     self.touchesAvailableLabel.text = @"Infinite Touches";
     [self enableButtons];
-    
-    [self removeSavedDateInUserDefaults];
-}
-
-#pragma mark - Notification Handlers 
-
--(void)newTouchesNotificationReceived:(NSNotification *)notification {
-    [self enableButtons];
-    self.touchesAvailableLabel.text = [NSString stringWithFormat:@"Touches left: %lu", (unsigned long)[TouchesObject sharedInstance].totalTouches];
 }
 
 #pragma mark - TwoBUttonAlertDelegate
@@ -1239,6 +1286,39 @@ interstitial {
 
 -(void)rightButtonPressedInAlert:(TwoButtonsAlert *)twoButtonsAlert {
     [self challengeGameCenterFriends];
+}
+
+#pragma mark - Notification Handlers 
+
+-(void)newTouchesNotificationReceived:(NSNotification *)notification {
+    [self enableButtons];
+    if (!userBoughtInfiniteMode) {
+        self.touchesAvailableLabel.text = [NSString stringWithFormat:@"Touches left: %lu", (unsigned long)[TouchesObject sharedInstance].totalTouches];
+    }
+}
+
+#pragma mark - Local Notification Stuff 
+
+-(void)saveLocalNotificationWithFireDate:(NSDate *)date {
+    UILocalNotification *localNotification = [[UILocalNotification alloc] init];
+    //localNotification.alertAction = nil;
+    //localNotification.alertBody = nil;
+    localNotification.alertAction = @"New Touches!";
+    localNotification.alertBody = @"All your touches have been restored!";
+    localNotification.fireDate = date;
+    localNotification.userInfo = @{@"notificationID" : @"touchesNotification"};
+    [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
+}
+
+-(void)removeTouchesLocalNotifications {
+    NSArray *notificationsArray = [[UIApplication sharedApplication] scheduledLocalNotifications];
+    for (int i = 0; i < [notificationsArray count]; i++) {
+        UILocalNotification *notification = notificationsArray[i];
+        NSDictionary *notificationDic = notification.userInfo;
+        if ([[notificationDic objectForKey:@"notificationID"] isEqualToString:@"touchesNotification"]) {
+            [[UIApplication sharedApplication] cancelLocalNotification:notification];
+        }
+    }
 }
 
 @end

@@ -19,5 +19,6 @@
 @property (strong, nonatomic) id <FastGameAlertDelegate> delegate;
 @property (strong, nonatomic) UIButton *continueButton;
 @property (strong, nonatomic) UILabel *alertLabel;
+@property (strong, nonatomic) UIButton *buyLivesButton;
 -(void)showInView:(UIView *)view;
 @end

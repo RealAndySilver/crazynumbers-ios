@@ -48,7 +48,7 @@
         //Title label
         UILabel *fastGamesTitle = [[UILabel alloc] initWithFrame:CGRectMake(20.0, 40.0, frame.size.width - 40.0, 50.0)];
         fastGamesTitle.text = @"Fast Games";
-        fastGamesTitle.textColor = [[AppInfo sharedInstance] appColorsArray][0];
+        fastGamesTitle.textColor = [UIColor darkGrayColor];
         fastGamesTitle.font = [UIFont fontWithName:@"HelveticaNeue-UltraLight" size:35.0];
         fastGamesTitle.textAlignment = NSTextAlignmentCenter;
         [self addSubview:fastGamesTitle];
@@ -79,8 +79,8 @@
     GameCell *cell = (GameCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"identifier" forIndexPath:indexPath];
     cell.gameNumberLabel.text = [NSString stringWithFormat:@"%d", indexPath.row + 1];
     if (self.gamesCompleted >= indexPath.row + 1) {
-        cell.gameNumberLabel.layer.borderColor = ((UIColor *)[[AppInfo sharedInstance] appColorsArray][0]).CGColor;
-        cell.gameNumberLabel.backgroundColor = [[AppInfo sharedInstance] appColorsArray][0];
+        cell.gameNumberLabel.layer.borderColor = self.viewColor.CGColor;
+        cell.gameNumberLabel.backgroundColor = self.viewColor;
         cell.gameNumberLabel.textColor = [UIColor whiteColor];
         cell.userInteractionEnabled = YES;
     } else {

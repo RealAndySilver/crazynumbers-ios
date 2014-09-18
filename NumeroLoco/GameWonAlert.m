@@ -176,7 +176,7 @@
      
         //Twitter button
         UIButton *twitterButton = [[UIButton alloc] initWithFrame:CGRectMake(facebookButton.frame.origin.x + facebookButton.frame.size.width + 10.0, frame.size.height - (socialButtonsWidth + 10.0), socialButtonsWidth, socialButtonsWidth)];
-        [twitterButton setBackgroundImage:[UIImage imageNamed:@"TwitterLogo.gif"] forState:UIControlStateNormal];
+        [twitterButton setBackgroundImage:[UIImage imageNamed:@"TwitterLogo.png"] forState:UIControlStateNormal];
         [twitterButton addTarget:self action:@selector(twitterButtonPressed) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:twitterButton];
         

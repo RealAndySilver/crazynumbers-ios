@@ -122,7 +122,7 @@
     [self.view addSubview:self.pageControl];
     
     //Back button
-    UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(20.0, screenBounds.size.height - 60.0, 70.0, 40.0)];
+    UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(10.0, screenBounds.size.height - 57.0, 70.0, 40.0)];
     [backButton setTitle:@"Back" forState:UIControlStateNormal];
     backButton.layer.cornerRadius = 10.0;
     backButton.layer.borderColor = [UIColor darkGrayColor].CGColor;
@@ -338,6 +338,7 @@
     } else {
         MultiplayerWinAlert *alert = [[MultiplayerWinAlert alloc] initWithFrame:CGRectMake(self.view.bounds.size.width/2.0 - 125.0, self.view.bounds.size.height/2.0 - 75.0, 250.0, 150.0)];
         alert.alertMessage = @"Oops! You haven't unlocked this game yet!";
+        alert.acceptButton.backgroundColor = [[AppInfo sharedInstance] appColorsArray][self.pageControl.currentPage];
         alert.messageTextSize = 15.0;
         alert.delegate = self;
         [alert showAlertInView:self.view];

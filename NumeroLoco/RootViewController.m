@@ -19,7 +19,6 @@
 #import "IAPProduct.h"
 #import "MBProgressHUD.h"
 #import "MultiplayerGameViewController.h"
-#import "GameKitHelper.h"
 #import "TutorialContainerViewController.h"
 #import "FastGameModeViewController.h"
 #import <ParseFacebookUtils/PFFacebookUtils.h>
@@ -27,6 +26,7 @@
 #import "FacebookRankingList.h"
 #import "OneButtonAlert.h"
 #import "StoreView.h"
+#import "SoundsView.h"
 @import AVFoundation;
 
 @interface RootViewController () <GKGameCenterControllerDelegate, TwoButtonsAlertDelegate>
@@ -56,6 +56,7 @@
 @property (strong, nonatomic) UIButton *enterButton;
 @property (strong, nonatomic) UIButton *facebookButton;
 @property (strong, nonatomic) UIButton *logoutButton;
+@property (strong, nonatomic) UIButton *soundsButton;
 @property (strong, nonatomic) AVAudioPlayer *player;
 @property (strong, nonatomic) AVAudioPlayer *playerButtonPressed;
 @property (strong, nonatomic) AVAudioPlayer *playerBackSound;
@@ -125,6 +126,7 @@
 
 -(void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
+    
     /*[[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(transactionFailedNotificationReceived:)
                                                  name:@"TransactionFailedNotification"
@@ -205,7 +207,7 @@
         fontName = @"HelveticaNeue-Light";
     } else {
         borderWidth = 1.0;
-        backButtonFrame = CGRectMake(0.0, 0.0, 80.0, 35.0);
+        backButtonFrame = CGRectMake(0.0, 0.0, 70.0, 40.0);
         buttonFrames = CGRectMake(0.0, 0.0, 100.0, 50.0);
         gamesButtonsFrames = CGRectMake(0.0, 0.0, 100.0, screenBounds.size.height/11.36);
         fontSize = 20.0;
@@ -301,7 +303,8 @@
     //Display it only if the user has not removed the ads
     self.removeAdsButton = [UIButton buttonWithType:UIButtonTypeSystem];
     self.removeAdsButton.frame = gamesButtonsFrames;
-    self.removeAdsButton.center = CGPointMake(self.view.frame.size.width + self.removeAdsButton.frame.size.width/2.0, self.optionsButton.center.y + self.optionsButton.frame.size.height + 10.0);
+    //self.removeAdsButton.center = CGPointMake(self.view.frame.size.width + self.removeAdsButton.frame.size.width/2.0, self.optionsButton.center.y + self.optionsButton.frame.size.height + 10.0);
+    self.removeAdsButton.center = CGPointMake(self.view.frame.size.width + self.removeAdsButton.frame.size.width/2.0, self.optionsButton.center.y);
     [self.removeAdsButton setTitle:@"Store" forState:UIControlStateNormal];
     [self.removeAdsButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     self.removeAdsButton.titleLabel.font = [UIFont fontWithName:fontName size:fontSize];
@@ -393,18 +396,31 @@
     [self.gameCenterButton addTarget:self action:@selector(showRankingsAlert) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.gameCenterButton];
     
+    //SOunds button
+    self.soundsButton = [[UIButton alloc] initWithFrame:gamesButtonsFrames];
+    self.soundsButton.center = CGPointMake(self.view.frame.size.width + self.soundsButton.frame.size.width/2.0, self.gameCenterButton.center.y);
+    [self.soundsButton setTitle:@"Sound" forState:UIControlStateNormal];
+    [self.soundsButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    self.soundsButton.layer.cornerRadius = cornerRadius;
+    self.soundsButton.layer.borderColor = [UIColor whiteColor].CGColor;
+    self.soundsButton.layer.borderWidth = 1.0;
+    self.soundsButton.titleLabel.font = [UIFont fontWithName:fontName size:fontSize];
+    [self.soundsButton addTarget:self action:@selector(showSoundsAlert) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:self.soundsButton];
+    
     //BackButton
     self.backButton = [UIButton buttonWithType:UIButtonTypeSystem];
     self.backButton.frame = backButtonFrame;
     self.backButton.center = CGPointMake(self.backButton.frame.size.width/2.0 + 10.0, self.view.frame.size.height + self.backButton.frame.size.height/2.0);
     [self.backButton setTitle:@"Back" forState:UIControlStateNormal];
-    [self.backButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    self.backButton.titleLabel.font = [UIFont fontWithName:fontName size:fontSize];
+    self.backButton.backgroundColor = [UIColor whiteColor];
+    [self.backButton setTitleColor:[[AppInfo sharedInstance] appColorsArray][0] forState:UIControlStateNormal];
+    self.backButton.titleLabel.font = [UIFont fontWithName:fontName size:fontSize - 5.0];
     [self.backButton addTarget:self action:@selector(showInitialMenuButtons) forControlEvents:UIControlEventTouchUpInside];
     
     self.backButton.layer.cornerRadius = 7.0;
-    self.backButton.layer.borderWidth = borderWidth;
-    self.backButton.layer.borderColor = [UIColor whiteColor].CGColor;
+    //self.backButton.layer.borderWidth = borderWidth;
+    //self.backButton.layer.borderColor = [UIColor whiteColor].CGColor;
     [self.view addSubview:self.backButton];
 }
 
@@ -554,7 +570,7 @@
                          self.logoutButton.center = CGPointMake(self.view.frame.size.width/2.0, self.logoutButton.center.y);
                          
                          if (!userIsLoggedIn) {
-                             self.backButton.center = CGPointMake(self.backButton.center.x, self.view.bounds.size.height - self.backButton.frame.size.height/2.0 - 10.0);
+                             self.backButton.center = CGPointMake(self.backButton.center.x, self.view.bounds.size.height - self.backButton.frame.size.height/2.0 - 17.0);
                          }
                      } completion:nil];
 }
@@ -574,11 +590,13 @@
                          self.gamesMenuButton.center = CGPointMake(-self.gamesMenuButton.frame.size.width + self.gamesMenuButton.frame.size.width/2.0, self.gamesMenuButton.center.y);
                          self.optionsMenuButton.center = CGPointMake(-self.optionsMenuButton.frame.size.width + self.gamesMenuButton.frame.size.width/2.0, self.optionsMenuButton.center.y);
                          self.logoutButton.center = CGPointMake(-self.logoutButton.frame.size.width + self.logoutButton.frame.size.width/2.0, self.logoutButton.center.y);
+                        
+                         self.backButton.center = CGPointMake(self.backButton.center.x, self.view.bounds.size.height - self.backButton.frame.size.height/2.0 - 17.0);
                          
-                         self.backButton.center = CGPointMake(self.backButton.center.x, self.view.bounds.size.height - self.backButton.frame.size.height/2.0 - 10.0);
-                         self.optionsButton.center = CGPointMake(self.view.bounds.size.width/2.0, self.optionsButton.center.y);
-                         self.gameCenterButton.center = CGPointMake(self.view.bounds.size.width/2.0, self.gameCenterButton.center.y);
-                         self.removeAdsButton.center = CGPointMake(self.view.bounds.size.width/2.0, self.removeAdsButton.center.y);
+                         self.optionsButton.center = CGPointMake(self.view.bounds.size.width/2.0 - self.optionsButton.frame.size.width/2.0 - 5.0, self.optionsButton.center.y);
+                         self.gameCenterButton.center = CGPointMake(self.view.bounds.size.width/2.0 - self.gameCenterButton.frame.size.width/2.0 - 5.0, self.gameCenterButton.center.y);
+                         self.removeAdsButton.center = CGPointMake(self.optionsButton.frame.origin.x + self.optionsButton.frame.size.width + 10.0 + self.removeAdsButton.frame.size.width/2.0, self.removeAdsButton.center.y);
+                         self.soundsButton.center = CGPointMake(self.gameCenterButton.frame.origin.x + self.gameCenterButton.frame.size.width + 10.0 + self.soundsButton.frame.size.width/2.0, self.soundsButton.center.y);
                      } completion:^(BOOL finished){}];
 }
 
@@ -616,6 +634,7 @@
                              self.removeAdsButton.center = CGPointMake(self.view.bounds.size.width + self.removeAdsButton.frame.size.width/2.0, self.removeAdsButton.center.y);
                              self.gameCenterButton.center = CGPointMake(self.view.bounds.size.width + self.gameCenterButton.frame.size.width/2.0, self.gameCenterButton.center.y);
                              self.optionsButton.center = CGPointMake(self.view.bounds.size.width + self.optionsButton.frame.size.width/2.0, self.optionsButton.center.y);
+                             self.soundsButton.center = CGPointMake(self.view.bounds.size.width + self.soundsButton.frame.size.width/2.0, self.soundsButton.center.y);
                              
                              self.gamesMenuButton.center = CGPointMake(self.view.bounds.size.width/2.0, self.gamesMenuButton.center.y);
                              self.optionsMenuButton.center = CGPointMake(self.view.bounds.size.width/2.0, self.optionsMenuButton.center.y);
@@ -660,7 +679,7 @@
                          self.optionsMenuButton.center = CGPointMake(-self.optionsMenuButton.frame.size.width + self.gamesMenuButton.frame.size.width/2.0, self.optionsMenuButton.center.y);
                          self.logoutButton.center = CGPointMake(-self.logoutButton.frame.size.width + self.logoutButton.frame.size.width/2.0, self.logoutButton.center.y);
                          
-                         self.backButton.center = CGPointMake(self.backButton.center.x, self.view.bounds.size.height - self.backButton.frame.size.height/2.0 - 10.0);
+                         self.backButton.center = CGPointMake(self.backButton.center.x, self.view.bounds.size.height - self.backButton.frame.size.height/2.0 - 17.0);
                          self.numbersButton.center = CGPointMake(self.view.bounds.size.width/2.0, self.numbersButton.center.y);
                          self.colorsButton.center = CGPointMake(self.view.bounds.size.width/2.0, self.colorsButton.center.y);
                          self.fastModeButton.center = CGPointMake(self.view.bounds.size.width/2.0, self.fastModeButton.center.y);
@@ -676,6 +695,12 @@
     self.logoutButton.hidden = YES;
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     [self performSelector:@selector(showLogoutAlert) withObject:nil afterDelay:0.5];
+}
+
+-(void)showSoundsAlert {
+    [self playButtonSound];
+    SoundsView *soundsView = [[SoundsView alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 140.0, screenBounds.size.height/2.0 - 125.0, 280.0, 250.0)];
+    [soundsView showInView:self.view];
 }
 
 -(void)showLogoutAlert {
@@ -706,6 +731,7 @@
 }
 
 -(void)showPurchases {
+    [self playButtonSound];
     NSMutableDictionary *purchasesDic = [[NSMutableDictionary alloc] init];
     
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
@@ -772,6 +798,7 @@
 }*/
 
 -(void)showRankingsAlert {
+    [self playButtonSound];
     TwoButtonsAlert *twoButtonsAlert = [[TwoButtonsAlert alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 140.0, screenBounds.size.height/2.0 - 85.0, 280.0, 170.0)];
     twoButtonsAlert.alertText = @"Which rankings would you like to see?";
     twoButtonsAlert.leftButtonTitle = @"Facebook";
@@ -804,7 +831,9 @@
 }
 
 -(void)goToColorsChaptersVC {
-    [self stopMusic];
+    if (![self getMusicSelectionInUserDefaults]) {
+        [self stopMusic];
+    }
     [self playButtonSound];
     
     [Flurry logEvent:@"OpenColorsChapters"];
@@ -814,7 +843,9 @@
 }
 
 -(void)goToChaptersVC {
-    [self stopMusic];
+    if (![self getMusicSelectionInUserDefaults]) {
+        [self stopMusic];
+    }
     [self playButtonSound];
     
     [Flurry logEvent:@"OpenNumbersChapters"];
@@ -847,11 +878,11 @@
     [self presentViewController:tutContainerVC animated:YES completion:nil];
 }
 
--(void)goToWordsChaptersVC {
+/*-(void)goToWordsChaptersVC {
     WordsChaptersViewController *wordsChapterVC = [self.storyboard instantiateViewControllerWithIdentifier:@"WordsChapters"];
     wordsChapterVC.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
     [self presentViewController:wordsChapterVC animated:YES completion:nil];
-}
+}*/
 
 #pragma mark - Facebook Stuff
 
@@ -970,6 +1001,16 @@
     }
 }
 
+#pragma mark - NSUSerDefaults 
+
+-(BOOL)getMusicSelectionInUserDefaults {
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"musicActive"]) {
+        return [[[NSUserDefaults standardUserDefaults] objectForKey:@"musicActive"] boolValue];
+    } else {
+        return YES;
+    }
+}
+
 #pragma mark - GameCenterDelegate
 
 -(void)gameCenterViewControllerDidFinish:(GKGameCenterViewController *)gameCenterViewController {
@@ -1033,10 +1074,5 @@
 -(void)twoButtonsAlertDidDisappear:(TwoButtonsAlert *)twoButtonsAlert {
     
 }
-
-/*-(void)firsTimeTutorialNotificationReceived:(NSNotification *)notification {
-    NSLog(@"Me llegó la notificacion*****");
-    viewAppearFromFirstTimeTutorial = YES;
-}*/
 
 @end

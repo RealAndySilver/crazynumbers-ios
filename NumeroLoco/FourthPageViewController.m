@@ -20,6 +20,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *button7;
 @property (weak, nonatomic) IBOutlet UIButton *button8;
 @property (weak, nonatomic) IBOutlet UIButton *button9;
+@property (strong, nonatomic) UILabel *touchLabel;
 @property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *buttons;
 @property (weak, nonatomic) IBOutlet UIView *butonsContainer;
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
@@ -96,9 +97,9 @@
     if (isPad) {
         self.textView = [[UITextView alloc] initWithFrame:CGRectMake(30.0, 50.0, self.view.bounds.size.width - 60.0, 160.0)];
     } else {
-        self.textView = [[UITextView alloc] initWithFrame:CGRectMake(30.0, 50.0, self.view.bounds.size.width - 60.0, 140.0)];
+        self.textView = [[UITextView alloc] initWithFrame:CGRectMake(30.0, 50.0, self.view.bounds.size.width - 60.0, 110.0)];
     }
-    self.textView.text = @"Colors Game\nObjective: Set all buttons to white color. Everytime you touch a button, it's color will become whiter.\nTouch the center button to begin the practice!";
+    self.textView.text = @"Colors Game\nObjective: Set all buttons to white color. Everytime you touch a button, it's color will become whiter.";
     self.textView.textColor = [UIColor darkGrayColor];
     self.textView.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:fontSize];
     self.textView.userInteractionEnabled = NO;
@@ -107,6 +108,15 @@
     [self.view addSubview:self.textView];
     
     self.butonsContainer.layer.cornerRadius = 10.0;
+    
+    //Touch label
+    self.touchLabel = [[UILabel alloc] initWithFrame:CGRectMake(40.0, self.textView.frame.origin.y + self.textView.frame.size.height, self.view.bounds.size.width - 80.0, 30.0)];
+    self.touchLabel.text = @"Touch the center button!";
+    self.touchLabel.textAlignment = NSTextAlignmentCenter;
+    self.touchLabel.textColor = [UIColor darkGrayColor];
+    self.touchLabel.numberOfLines = 0;
+    self.touchLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:20.0];
+    [self.view addSubview:self.touchLabel];
 }
 
 #pragma mark - Actions 
@@ -133,11 +143,14 @@
 #pragma mark - TutorialAlertDelegate
 
 -(void)acceptButtonPressedInAlert:(TutorialAlertView *)tutorialAlertView {
+    self.touchLabel.hidden = YES;
+    
     for (UIButton *button in self.buttons) {
         button.backgroundColor = self.bluePaletteArray[0];
     }
     
     if (tutorialAlertView.tag == 1) {
+        self.textView.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:20.0];
         self.textView.text = @"Now, touch the bottom center button to win!";
         
         self.button5.backgroundColor = self.bluePaletteArray[1];

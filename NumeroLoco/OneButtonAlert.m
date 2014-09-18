@@ -67,6 +67,23 @@
     return self;
 }
 
+-(void)showOnWindow:(UIWindow *)window {
+    self.opacityView = [[UIView alloc] initWithFrame:window.bounds];
+    self.opacityView.backgroundColor = [UIColor blackColor];
+    self.opacityView.alpha = 0.0;
+    [window addSubview:self.opacityView];
+    [window addSubview:self];
+    
+    [UIView animateWithDuration:ANIMATION_DURATION
+                          delay:0.0
+                        options:UIViewAnimationOptionCurveEaseOut
+                     animations:^(){
+                         self.alpha = 1.0;
+                         self.opacityView.alpha = 0.8;
+                         self.transform = CGAffineTransformMakeScale(1.0, 1.0);
+                     } completion:^(BOOL finished){}];
+}
+
 -(void)showInView:(UIView *)view {
     self.opacityView = [[UIView alloc] initWithFrame:view.frame];
     self.opacityView.backgroundColor = [UIColor blackColor];

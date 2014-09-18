@@ -31,14 +31,14 @@
         self.alertLabel.font = [UIFont fontWithName:FONT_NAME size:20.0];
         [self addSubview:self.alertLabel];
         
-        UIButton *buyLivesButton = [[UIButton alloc] initWithFrame:CGRectMake(40.0, 100.0, frame.size.width - 80.0, 40.0)];
-        [buyLivesButton setTitle:@"Buy Lifes" forState:UIControlStateNormal];
-        [buyLivesButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        buyLivesButton.titleLabel.font = [UIFont fontWithName:FONT_NAME size:15.0];
-        buyLivesButton.backgroundColor = [[AppInfo sharedInstance] appColorsArray][1];
-        buyLivesButton.layer.cornerRadius = 10.0;
-        [buyLivesButton addTarget:self action:@selector(buyLivesButtonPressed) forControlEvents:UIControlEventTouchUpInside];
-        [self addSubview:buyLivesButton];
+        self.buyLivesButton = [[UIButton alloc] initWithFrame:CGRectMake(40.0, 100.0, frame.size.width - 80.0, 40.0)];
+        [self.buyLivesButton setTitle:@"Buy Lives" forState:UIControlStateNormal];
+        [self.buyLivesButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        self.buyLivesButton.titleLabel.font = [UIFont fontWithName:FONT_NAME size:15.0];
+        self.buyLivesButton.backgroundColor = [[AppInfo sharedInstance] appColorsArray][1];
+        self.buyLivesButton.layer.cornerRadius = 10.0;
+        [self.buyLivesButton addTarget:self action:@selector(buyLivesButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+        [self addSubview:self.buyLivesButton];
         
         self.continueButton = [[UIButton alloc] initWithFrame:CGRectMake(40.0, 150.0, frame.size.width - 80.0, 40.0)];
         [self.continueButton setTitle:@"Continue" forState:UIControlStateNormal];
@@ -53,7 +53,7 @@
         [exitButton setTitle:@"Exit Fast Mode" forState:UIControlStateNormal];
         [exitButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         exitButton.titleLabel.font = [UIFont fontWithName:FONT_NAME size:15.0];
-        exitButton.backgroundColor = [[AppInfo sharedInstance] appColorsArray][0];
+        exitButton.backgroundColor = [UIColor colorWithWhite:0.7 alpha:1.0];
         exitButton.layer.cornerRadius = 10.0;
         [exitButton addTarget:self action:@selector(exitButtonPressed) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:exitButton];

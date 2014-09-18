@@ -86,7 +86,7 @@
     [self.button5 addTarget:self action:@selector(centerButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     
     //Textview setup
-    self.textView = [[UITextView alloc] initWithFrame:CGRectMake(40.0, 45.0, self.view.bounds.size.width - 80.0, 115.0)];
+    self.textView = [[UITextView alloc] initWithFrame:CGRectMake(40.0, 45.0, self.view.bounds.size.width - 80.0, 120.0)];
     self.textView.text = @"Let's practice! remember, when you touch a button, it's value will decrease by one, as well as the value of the upper, left, bottom and right button.";
     self.textView.textColor = [UIColor darkGrayColor];
     self.textView.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:fontSize];
@@ -96,7 +96,7 @@
     [self.view addSubview:self.textView];
     
     //Touch label
-    self.touchLabel = [[UILabel alloc] initWithFrame:CGRectMake(40.0, self.textView.frame.origin.y + self.textView.frame.size.height, self.view.bounds.size.width - 80.0, 50.0)];
+    self.touchLabel = [[UILabel alloc] initWithFrame:CGRectMake(40.0, self.textView.frame.origin.y + self.textView.frame.size.height - 10.0, self.view.bounds.size.width - 80.0, 50.0)];
     self.touchLabel.text = @"Touch the center button";
     self.touchLabel.textAlignment = NSTextAlignmentCenter;
     self.touchLabel.textColor = [UIColor darkGrayColor];

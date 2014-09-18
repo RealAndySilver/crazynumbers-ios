@@ -71,7 +71,7 @@
         
         //300 touches button
         NSString *itemPrice = pricesDic[@"threehundredprice"];
-        NSString *buttonTitle = [NSString stringWithFormat:@"Buy - %@", itemPrice];
+        NSString *buttonTitle = [NSString stringWithFormat:@"%@", itemPrice];
         UIButton *threeTouchesButton = [[UIButton alloc] initWithFrame:CGRectMake(frame.size.width - 130.0, threeTouchesImageView.frame.origin.y + 10.0, 110.0, threeTouchesImageView.frame.size.height - 20.0)];
         [threeTouchesButton setTitle:buttonTitle forState:UIControlStateNormal];
         [threeTouchesButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
@@ -99,7 +99,7 @@
         
         //700 touches button
         itemPrice = pricesDic[@"sevenhundredprice"];
-        buttonTitle = [NSString stringWithFormat:@"Buy - %@", itemPrice];
+        buttonTitle = [NSString stringWithFormat:@"%@", itemPrice];
         UIButton *sevenTouchesButton = [[UIButton alloc] initWithFrame:CGRectOffset(threeTouchesButton.frame, 0.0, threeTouchesButton.frame.size.height + ITEMS_DISTANCE*2)];
         [sevenTouchesButton setTitle:buttonTitle forState:UIControlStateNormal];
         [sevenTouchesButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
@@ -127,7 +127,7 @@
         
         //2000 touches button
         itemPrice = pricesDic[@"twothousandprice"];
-        buttonTitle = [NSString stringWithFormat:@"Buy - %@", itemPrice];
+        buttonTitle = [NSString stringWithFormat:@"%@", itemPrice];
         UIButton *twoThousandButton = [[UIButton alloc] initWithFrame:CGRectOffset(sevenTouchesButton.frame, 0.0, sevenTouchesButton.frame.size.height + ITEMS_DISTANCE*2)];
         [twoThousandButton setTitle:buttonTitle forState:UIControlStateNormal];
         [twoThousandButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
@@ -147,14 +147,14 @@
         //Infinite label
         UILabel *infiniteLabel = [[UILabel alloc] initWithFrame:CGRectMake(infiniteTouchesView.frame.origin.x + infiniteTouchesView.frame.size.width + 10.0, infiniteTouchesView.frame.origin.y, 150.0, 60.0)];
         infiniteLabel.numberOfLines = 0;
-        infiniteLabel.text = @"Infinite touches\nInfinite lifes\nNo Ads";
+        infiniteLabel.text = @"Infinite touches\nInfinite lives\nNo Ads";
         infiniteLabel.textColor = [UIColor lightGrayColor];
         infiniteLabel.font = [UIFont fontWithName:FONT_NAME size:15.0];
         [self addSubview:infiniteLabel];
         
         //Infinite button
         itemPrice = pricesDic[@"infinitemode"];
-        buttonTitle = [NSString stringWithFormat:@"Buy - %@", itemPrice];
+        buttonTitle = [NSString stringWithFormat:@"%@", itemPrice];
         UIButton *infiniteButton = [[UIButton alloc] initWithFrame:CGRectMake(infiniteLabel.frame.origin.x, infiniteLabel.frame.origin.y + infiniteLabel.frame.size.height, 110.0, 40.0)];
         [infiniteButton setTitle:buttonTitle forState:UIControlStateNormal];
         [infiniteButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];

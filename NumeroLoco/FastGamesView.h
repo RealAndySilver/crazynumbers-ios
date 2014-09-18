@@ -15,6 +15,7 @@
 @end
 
 @interface FastGamesView : UIView
+@property (strong, nonatomic) UIColor *viewColor;
 @property (strong, nonatomic) id <FastGamesViewDelegate> delegate;
 -(void)showInView:(UIView *)view;
 @end

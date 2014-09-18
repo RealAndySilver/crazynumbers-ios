@@ -247,15 +247,15 @@
     NSLog(@"Producto comprado: %@", productBought.productIdentifier);
     
     if ([productBought.productIdentifier isEqualToString:@"com.iamstudio.cross.fivelives"]) {
-        [self saveLivesLeftInUserDefaults:[self getLivesAvailable] + 5];
+        [self saveLivesLeftInUserDefaults:[self getLivesAvailable] + 15];
         [self removeLivesSavedDateInUserDefaults];
         
     } else if ([productBought.productIdentifier isEqualToString:@"com.iamstudio.cross.twentylives"]) {
-        [self saveLivesLeftInUserDefaults:[self getLivesAvailable] + 20];
+        [self saveLivesLeftInUserDefaults:[self getLivesAvailable] + 30];
         [self removeLivesSavedDateInUserDefaults];
         
     } else if ([productBought.productIdentifier isEqualToString:@"com.iamstudio.cross.sixtylives"]) {
-        [self saveLivesLeftInUserDefaults:[self getLivesAvailable] + 60];
+        [self saveLivesLeftInUserDefaults:[self getLivesAvailable] + 80];
         [self removeLivesSavedDateInUserDefaults];
         
     } else if ([productBought.productIdentifier isEqualToString:@"com.iamstudio.cross.infinitemode"]) {

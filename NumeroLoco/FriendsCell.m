@@ -36,6 +36,12 @@
         self.friendScore.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:15.0];
         [self.contentView addSubview:self.friendScore];
         
+        //Rank label
+        /*self.rankLabel = [[UILabel alloc] init];
+        self.rankLabel.textColor = [UIColor blackColor];
+        self.rankLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:15.0];
+        [self.contentView addSubview:self.rankLabel];*/
+        
         //Checkmark
         /*self.checkmark = [[UIImageView alloc] init];
         self.checkmark.contentMode = UIViewContentModeScaleAspectFit;

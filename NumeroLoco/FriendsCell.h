@@ -13,4 +13,5 @@
 @property (strong, nonatomic) UILabel *friendName;
 @property (strong, nonatomic) UILabel *friendScore;
 @property (strong, nonatomic) UIImageView *checkmark;
+//@property (strong, nonatomic) UILabel *rankLabel;
 @end

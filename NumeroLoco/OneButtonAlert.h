@@ -12,7 +12,6 @@
 @protocol OneButtonAlertDelegate <NSObject>
 -(void)buttonClickedInAlert:(OneButtonAlert *)oneButtonAlert;
 -(void)oneButtonAlertDidDisappear:(OneButtonAlert *)oneButtonAlert;
-
 @end
 
 @interface OneButtonAlert : UIView
@@ -22,4 +21,5 @@
 @property (strong, nonatomic) UILabel *messageLabel;
 @property (strong, nonatomic) UIButton *button;
 -(void)showInView:(UIView *)view;
+-(void)showOnWindow:(UIWindow *)window;
 @end

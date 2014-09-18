@@ -37,7 +37,7 @@
         //Accept button
         self.acceptButton = [UIButton buttonWithType:UIButtonTypeSystem];
         self.acceptButton.frame = CGRectMake(20.0, frame.size.height - 70.0, frame.size.width/2.0 - 40.0, 50.0);
-        [self.acceptButton setTitle:@"Buy Touches" forState:UIControlStateNormal];
+        [self.acceptButton setTitle:@"Buy" forState:UIControlStateNormal];
         [self.acceptButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         self.acceptButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:17.0];
         self.acceptButton.backgroundColor = [[AppInfo sharedInstance] appColorsArray][0];

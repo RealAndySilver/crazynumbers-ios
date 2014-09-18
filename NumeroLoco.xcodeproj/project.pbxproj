@@ -36,6 +36,10 @@
 		8B6FB8FC19508B0800EB2C4E /* ChaptersCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B6FB8FB19508B0800EB2C4E /* ChaptersCell.m */; };
 		8B6FB8FF19508CA200EB2C4E /* ChapterNames.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8B6FB8FE19508CA200EB2C4E /* ChapterNames.plist */; };
 		8B6FB9071950A18600EB2C4E /* GameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B6FB9061950A18600EB2C4E /* GameViewController.m */; };
+		8B811F7A19C8A074002033EB /* FacebookLogo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B811F7919C8A074002033EB /* FacebookLogo@2x.png */; };
+		8B811F7D19C8A289002033EB /* TwitterLogo.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B811F7B19C8A288002033EB /* TwitterLogo.png */; };
+		8B811F7E19C8A289002033EB /* TwitterLogo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B811F7C19C8A289002033EB /* TwitterLogo@2x.png */; };
+		8B811F8019C8A498002033EB /* ChallengeIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B811F7F19C8A498002033EB /* ChallengeIcon@2x.png */; };
 		8B90453F196359FC000F2E51 /* TutorialPhoneR4_1.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B90453E196359FC000F2E51 /* TutorialPhoneR4_1.png */; };
 		8B90454119635EEF000F2E51 /* TutorialPhoneR4_2.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B90454019635EEF000F2E51 /* TutorialPhoneR4_2.png */; };
 		8B90454319636244000F2E51 /* TutorialPhoneR4_3.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B90454219636244000F2E51 /* TutorialPhoneR4_3.png */; };
@@ -71,11 +75,8 @@
 		8BB862A5199BC07500718843 /* Flecha.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BB862A3199BC07500718843 /* Flecha.png */; };
 		8BB862A6199BC07500718843 /* Flecha@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BB862A4199BC07500718843 /* Flecha@2x.png */; };
 		8BB8A9C019A3BDD10076E4A7 /* crossbg.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 8BB8A9BD19A3BDD10076E4A7 /* crossbg.mp3 */; };
-		8BB8A9C119A3BDD10076E4A7 /* press.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 8BB8A9BE19A3BDD10076E4A7 /* press.m4a */; };
-		8BB8A9C219A3BDD10076E4A7 /* win.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 8BB8A9BF19A3BDD10076E4A7 /* win.m4a */; };
 		8BB8A9C419A3C2530076E4A7 /* win.wav in Resources */ = {isa = PBXBuildFile; fileRef = 8BB8A9C319A3C2530076E4A7 /* win.wav */; };
 		8BB8A9C619A3C6220076E4A7 /* press.wav in Resources */ = {isa = PBXBuildFile; fileRef = 8BB8A9C519A3C6220076E4A7 /* press.wav */; };
-		8BB8A9C819A3D99A0076E4A7 /* restart.wav in Resources */ = {isa = PBXBuildFile; fileRef = 8BB8A9C719A3D99A0076E4A7 /* restart.wav */; };
 		8BB8A9CC19A3FA8F0076E4A7 /* restartnuevo.wav in Resources */ = {isa = PBXBuildFile; fileRef = 8BB8A9CB19A3FA8F0076E4A7 /* restartnuevo.wav */; };
 		8BB9EC9319632542007B8C8E /* TutorialViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BB9EC9219632542007B8C8E /* TutorialViewController.m */; };
 		8BB9EC96196345E9007B8C8E /* TutorialCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BB9EC95196345E9007B8C8E /* TutorialCell.m */; };
@@ -90,6 +91,7 @@
 		8BE1D6021986D2FE00CAAFCF /* FacebookLogo.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BE1D5FF1986D2FE00CAAFCF /* FacebookLogo.png */; };
 		8BE1D6031986D2FE00CAAFCF /* TwitterLogo.gif in Resources */ = {isa = PBXBuildFile; fileRef = 8BE1D6001986D2FE00CAAFCF /* TwitterLogo.gif */; };
 		8BE1D6051986F8D200CAAFCF /* ColorGamesDatabase2.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8BE1D6041986F8D200CAAFCF /* ColorGamesDatabase2.plist */; };
+		8BF545BF19CB1D50002FD56A /* SoundsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BF545BE19CB1D50002FD56A /* SoundsView.m */; };
 		A02E3DEE19BE2926009FDC1C /* BackgroundiPadPortrait.png in Resources */ = {isa = PBXBuildFile; fileRef = A02E3DEA19BE2926009FDC1C /* BackgroundiPadPortrait.png */; };
 		A02E3DEF19BE2926009FDC1C /* BackgroundiPadPortrait@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A02E3DEB19BE2926009FDC1C /* BackgroundiPadPortrait@2x.png */; };
 		A02E3DF019BE2926009FDC1C /* BackgroundiPhonePortrait.png in Resources */ = {isa = PBXBuildFile; fileRef = A02E3DEC19BE2926009FDC1C /* BackgroundiPhonePortrait.png */; };
@@ -215,6 +217,10 @@
 		8B6FB8FE19508CA200EB2C4E /* ChapterNames.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = ChapterNames.plist; sourceTree = "<group>"; };
 		8B6FB9051950A18600EB2C4E /* GameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameViewController.h; sourceTree = "<group>"; };
 		8B6FB9061950A18600EB2C4E /* GameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameViewController.m; sourceTree = "<group>"; };
+		8B811F7919C8A074002033EB /* FacebookLogo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "FacebookLogo@2x.png"; sourceTree = "<group>"; };
+		8B811F7B19C8A288002033EB /* TwitterLogo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TwitterLogo.png; sourceTree = "<group>"; };
+		8B811F7C19C8A289002033EB /* TwitterLogo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "TwitterLogo@2x.png"; sourceTree = "<group>"; };
+		8B811F7F19C8A498002033EB /* ChallengeIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ChallengeIcon@2x.png"; sourceTree = "<group>"; };
 		8B90453E196359FC000F2E51 /* TutorialPhoneR4_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TutorialPhoneR4_1.png; sourceTree = "<group>"; };
 		8B90454019635EEF000F2E51 /* TutorialPhoneR4_2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TutorialPhoneR4_2.png; sourceTree = "<group>"; };
 		8B90454219636244000F2E51 /* TutorialPhoneR4_3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TutorialPhoneR4_3.png; sourceTree = "<group>"; };
@@ -263,11 +269,8 @@
 		8BB862A3199BC07500718843 /* Flecha.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Flecha.png; sourceTree = "<group>"; };
 		8BB862A4199BC07500718843 /* Flecha@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Flecha@2x.png"; sourceTree = "<group>"; };
 		8BB8A9BD19A3BDD10076E4A7 /* crossbg.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = crossbg.mp3; sourceTree = "<group>"; };
-		8BB8A9BE19A3BDD10076E4A7 /* press.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = press.m4a; sourceTree = "<group>"; };
-		8BB8A9BF19A3BDD10076E4A7 /* win.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = win.m4a; sourceTree = "<group>"; };
 		8BB8A9C319A3C2530076E4A7 /* win.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = win.wav; sourceTree = "<group>"; };
 		8BB8A9C519A3C6220076E4A7 /* press.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = press.wav; sourceTree = "<group>"; };
-		8BB8A9C719A3D99A0076E4A7 /* restart.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = restart.wav; sourceTree = "<group>"; };
 		8BB8A9C919A3F3270076E4A7 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		8BB8A9CB19A3FA8F0076E4A7 /* restartnuevo.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = restartnuevo.wav; sourceTree = "<group>"; };
 		8BB9EC9119632542007B8C8E /* TutorialViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TutorialViewController.h; sourceTree = "<group>"; };
@@ -288,6 +291,8 @@
 		8BE1D5FF1986D2FE00CAAFCF /* FacebookLogo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = FacebookLogo.png; sourceTree = "<group>"; };
 		8BE1D6001986D2FE00CAAFCF /* TwitterLogo.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = TwitterLogo.gif; sourceTree = "<group>"; };
 		8BE1D6041986F8D200CAAFCF /* ColorGamesDatabase2.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = ColorGamesDatabase2.plist; sourceTree = "<group>"; };
+		8BF545BD19CB1D50002FD56A /* SoundsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SoundsView.h; sourceTree = "<group>"; };
+		8BF545BE19CB1D50002FD56A /* SoundsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SoundsView.m; sourceTree = "<group>"; };
 		A02E3DEA19BE2926009FDC1C /* BackgroundiPadPortrait.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = BackgroundiPadPortrait.png; sourceTree = "<group>"; };
 		A02E3DEB19BE2926009FDC1C /* BackgroundiPadPortrait@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "BackgroundiPadPortrait@2x.png"; sourceTree = "<group>"; };
 		A02E3DEC19BE2926009FDC1C /* BackgroundiPhonePortrait.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = BackgroundiPhonePortrait.png; sourceTree = "<group>"; };
@@ -507,6 +512,8 @@
 				A02E3DF619BE4BD4009FDC1C /* FacebookRankingList.m */,
 				8BA82DE319C1E1BD0008642A /* StoreView.h */,
 				8BA82DE419C1E1BD0008642A /* StoreView.m */,
+				8BF545BD19CB1D50002FD56A /* SoundsView.h */,
+				8BF545BE19CB1D50002FD56A /* SoundsView.m */,
 			);
 			name = "Custom Views";
 			sourceTree = "<group>";
@@ -688,6 +695,8 @@
 				8BAD7B5B1992A00B005DB0C2 /* hand.png */,
 				8BA82DED19C219210008642A /* NoAds.png */,
 				8BA82DEE19C219210008642A /* NoAds@2x.png */,
+				8B811F7B19C8A288002033EB /* TwitterLogo.png */,
+				8B811F7C19C8A289002033EB /* TwitterLogo@2x.png */,
 				8BA82DE919C216220008642A /* infinite.png */,
 				8BA82DEA19C216220008642A /* infinite@2x.png */,
 				A0536F9019BFB0E9009DE6D1 /* ProfilePic.png */,
@@ -698,7 +707,9 @@
 				A043669C19A6C58F00D071DC /* Close@2x.png */,
 				A043669619A6AB8D00D071DC /* Touch2.png */,
 				8BE1D5FE1986D2FE00CAAFCF /* ChallengeIcon.png */,
+				8B811F7F19C8A498002033EB /* ChallengeIcon@2x.png */,
 				8BE1D5FF1986D2FE00CAAFCF /* FacebookLogo.png */,
+				8B811F7919C8A074002033EB /* FacebookLogo@2x.png */,
 				8BE1D6001986D2FE00CAAFCF /* TwitterLogo.gif */,
 				8BE1D5FC1986BF4800CAAFCF /* checkmark.png */,
 				A0BDEAED19773C31008BFF4D /* BackgroundPad.png */,
@@ -784,12 +795,9 @@
 				8B105CFA19A4E12700100FB1 /* back.wav */,
 				8B105CFB19A4E12700100FB1 /* buttonpress.wav */,
 				8BB8A9CB19A3FA8F0076E4A7 /* restartnuevo.wav */,
-				8BB8A9C719A3D99A0076E4A7 /* restart.wav */,
 				8BB8A9C519A3C6220076E4A7 /* press.wav */,
 				8BB8A9C319A3C2530076E4A7 /* win.wav */,
 				8BB8A9BD19A3BDD10076E4A7 /* crossbg.mp3 */,
-				8BB8A9BE19A3BDD10076E4A7 /* press.m4a */,
-				8BB8A9BF19A3BDD10076E4A7 /* win.m4a */,
 			);
 			path = Sounds;
 			sourceTree = "<group>";
@@ -964,7 +972,7 @@
 				8BA82DEC19C216220008642A /* infinite@2x.png in Resources */,
 				8BB8629B199BA60900718843 /* ColorsButton.png in Resources */,
 				8BB8A9C419A3C2530076E4A7 /* win.wav in Resources */,
-				8BB8A9C819A3D99A0076E4A7 /* restart.wav in Resources */,
+				8B811F7E19C8A289002033EB /* TwitterLogo@2x.png in Resources */,
 				8BA82DF019C219210008642A /* NoAds@2x.png in Resources */,
 				A08EAD1E19AB83F400F36E23 /* FastGamesDatabase.plist in Resources */,
 				8BB86293199BA01200718843 /* GamesButton.png in Resources */,
@@ -977,7 +985,6 @@
 				8BB862A1199BBB2700718843 /* TwoPlayersButton.png in Resources */,
 				A0BDEAD71976C0EC008BFF4D /* Background.png in Resources */,
 				8B18CF8F19644AD000F3FB0F /* TutorialPhoneR4_4.png in Resources */,
-				8BB8A9C119A3BDD10076E4A7 /* press.m4a in Resources */,
 				8BE1D6011986D2FE00CAAFCF /* ChallengeIcon.png in Resources */,
 				8BB86296199BA01200718843 /* OptionsButton@2x.png in Resources */,
 				A043669D19A6C58F00D071DC /* Close.png in Resources */,
@@ -988,11 +995,11 @@
 				8B96EAD919795E1C00E60698 /* WordsGamesDatabase2.plist in Resources */,
 				8BE1D6021986D2FE00CAAFCF /* FacebookLogo.png in Resources */,
 				8BE1D6051986F8D200CAAFCF /* ColorGamesDatabase2.plist in Resources */,
-				8BB8A9C219A3BDD10076E4A7 /* win.m4a in Resources */,
 				8BA82DEB19C216220008642A /* infinite.png in Resources */,
 				8BAD7B5C1992A00B005DB0C2 /* hand.png in Resources */,
 				8B90454119635EEF000F2E51 /* TutorialPhoneR4_2.png in Resources */,
 				8B6FB8CA19507C6B00EB2C4E /* InfoPlist.strings in Resources */,
+				8B811F8019C8A498002033EB /* ChallengeIcon@2x.png in Resources */,
 				8B105CFD19A4E12700100FB1 /* buttonpress.wav in Resources */,
 				A043669E19A6C58F00D071DC /* Close@2x.png in Resources */,
 				8B18CF9119644BBB00F3FB0F /* TutorialPhoneR4_5.png in Resources */,
@@ -1008,6 +1015,8 @@
 				A02E3DEE19BE2926009FDC1C /* BackgroundiPadPortrait.png in Resources */,
 				8BA82DEF19C219210008642A /* NoAds.png in Resources */,
 				8BB8A9C619A3C6220076E4A7 /* press.wav in Resources */,
+				8B811F7A19C8A074002033EB /* FacebookLogo@2x.png in Resources */,
+				8B811F7D19C8A289002033EB /* TwitterLogo.png in Resources */,
 				8B90454319636244000F2E51 /* TutorialPhoneR4_3.png in Resources */,
 				8BB86295199BA01200718843 /* OptionsButton.png in Resources */,
 				8B6FB8D219507C6B00EB2C4E /* Images.xcassets in Resources */,
@@ -1097,6 +1106,7 @@
 				8B6FB8F419507D7600EB2C4E /* RootViewController.m in Sources */,
 				A043669A19A6ABEF00D071DC /* BuyTouchesView.m in Sources */,
 				A0CB3E6619BF5EA30039BA11 /* SDImageCache.m in Sources */,
+				8BF545BF19CB1D50002FD56A /* SoundsView.m in Sources */,
 				8BA17EE21987D4AC00DFB839 /* IAPProduct.m in Sources */,
 				A0CB3E7319BF5EA30039BA11 /* UIView+WebCacheOperation.m in Sources */,
 				A0FC85C3196B20AB005A0A7D /* LoginViewController.m in Sources */,
@@ -1218,7 +1228,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Diego Fernando Vidal Illera (9JA65WT89C)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					/Users/diegovidal/Documents/FacebookSDK,
@@ -1246,7 +1256,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: iAm Studio S.A.S. (4U39LJL48R)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					/Users/diegovidal/Documents/FacebookSDK,

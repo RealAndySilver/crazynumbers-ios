@@ -50,7 +50,7 @@
         
         //Title
         UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 20.0, frame.size.width, 50.0)];
-        title.text = @"Buy Lifes";
+        title.text = @"Buy Lives";
         title.textColor = [[AppInfo sharedInstance] appColorsArray][0];
         title.font = [UIFont fontWithName:FONT_NAME size:25.0];
         title.textAlignment = NSTextAlignmentCenter;
@@ -64,14 +64,14 @@
         
         //300 touches label
         UILabel *threeHundredLabel = [[UILabel alloc] initWithFrame:CGRectMake(threeTouchesImageView.frame.origin.x + threeTouchesImageView.frame.size.width, threeTouchesImageView.frame.origin.y, 100.0, threeTouchesImageView.frame.size.height)];
-        threeHundredLabel.text = @"x 5";
+        threeHundredLabel.text = @"x 15";
         threeHundredLabel.font = [UIFont fontWithName:FONT_NAME size:20.0];
-        threeHundredLabel.textColor = [UIColor lightGrayColor];
+        threeHundredLabel.textColor = [UIColor darkGrayColor];
         [self addSubview:threeHundredLabel];
         
         //300 touches button
         NSString *itemPrice = pricesDic[@"priceForFive"];
-        NSString *buttonTitle = [NSString stringWithFormat:@"Buy - %@", itemPrice];
+        NSString *buttonTitle = [NSString stringWithFormat:@"%@", itemPrice];
         UIButton *threeTouchesButton = [[UIButton alloc] initWithFrame:CGRectMake(frame.size.width - 130.0, threeTouchesImageView.frame.origin.y + 10.0, 110.0, threeTouchesImageView.frame.size.height - 20.0)];
         [threeTouchesButton setTitle:buttonTitle forState:UIControlStateNormal];
         [threeTouchesButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
@@ -92,14 +92,14 @@
         
         //700 touches label
         UILabel *sevenHundredLabel = [[UILabel alloc] initWithFrame:CGRectOffset(threeHundredLabel.frame, 0.0, threeHundredLabel.frame.size.height + ITEMS_DISTANCE)];
-        sevenHundredLabel.text = @"x 20";
+        sevenHundredLabel.text = @"x 30";
         sevenHundredLabel.font = [UIFont fontWithName:FONT_NAME size:20.0];
-        sevenHundredLabel.textColor = [UIColor lightGrayColor];
+        sevenHundredLabel.textColor = [UIColor darkGrayColor];
         [self addSubview:sevenHundredLabel];
         
         //700 touches button
         itemPrice = pricesDic[@"priceForTwenty"];
-        buttonTitle = [NSString stringWithFormat:@"Buy - %@", itemPrice];
+        buttonTitle = [NSString stringWithFormat:@"%@", itemPrice];
         UIButton *sevenTouchesButton = [[UIButton alloc] initWithFrame:CGRectOffset(threeTouchesButton.frame, 0.0, threeTouchesButton.frame.size.height + ITEMS_DISTANCE*2)];
         [sevenTouchesButton setTitle:buttonTitle forState:UIControlStateNormal];
         [sevenTouchesButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
@@ -120,14 +120,14 @@
         
         //2000 touches label
         UILabel *twoThousandLabel = [[UILabel alloc] initWithFrame:CGRectOffset(sevenHundredLabel.frame, 0.0, sevenHundredLabel.frame.size.height + ITEMS_DISTANCE)];
-        twoThousandLabel.text = @"x 60";
-        twoThousandLabel.textColor = [UIColor lightGrayColor];
+        twoThousandLabel.text = @"x 80";
+        twoThousandLabel.textColor = [UIColor darkGrayColor];
         twoThousandLabel.font = [UIFont fontWithName:FONT_NAME size:20.0];
         [self addSubview:twoThousandLabel];
         
         //2000 touches button
         itemPrice = pricesDic[@"priceForSixty"];
-        buttonTitle = [NSString stringWithFormat:@"Buy - %@", itemPrice];
+        buttonTitle = [NSString stringWithFormat:@"%@", itemPrice];
         UIButton *twoThousandButton = [[UIButton alloc] initWithFrame:CGRectOffset(sevenTouchesButton.frame, 0.0, sevenTouchesButton.frame.size.height + ITEMS_DISTANCE*2)];
         [twoThousandButton setTitle:buttonTitle forState:UIControlStateNormal];
         [twoThousandButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
@@ -147,14 +147,14 @@
         //Infinite label
         UILabel *infiniteLabel = [[UILabel alloc] initWithFrame:CGRectMake(infiniteTouchesView.frame.origin.x + infiniteTouchesView.frame.size.width + 10.0, infiniteTouchesView.frame.origin.y, 150.0, 60.0)];
         infiniteLabel.numberOfLines = 0;
-        infiniteLabel.text = @"Infinite touches\nInfinite lifes\nNo Ads";
-        infiniteLabel.textColor = [UIColor lightGrayColor];
+        infiniteLabel.text = @"Infinite touches\nInfinite lives\nNo Ads";
+        infiniteLabel.textColor = [UIColor darkGrayColor];
         infiniteLabel.font = [UIFont fontWithName:FONT_NAME size:15.0];
         [self addSubview:infiniteLabel];
         
         //Infinite button
         itemPrice = pricesDic[@"infinitemode"];
-        buttonTitle = [NSString stringWithFormat:@"Buy - %@", itemPrice];
+        buttonTitle = [NSString stringWithFormat:@"%@", itemPrice];
         UIButton *infiniteButton = [[UIButton alloc] initWithFrame:CGRectMake(infiniteLabel.frame.origin.x, infiniteLabel.frame.origin.y + infiniteLabel.frame.size.height, 110.0, 40.0)];
         [infiniteButton setTitle:buttonTitle forState:UIControlStateNormal];
         [infiniteButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
@@ -267,15 +267,15 @@
     NSLog(@"Producto comprado: %@", productBought.productIdentifier);
     
     if ([productBought.productIdentifier isEqualToString:@"com.iamstudio.cross.fivelives"]) {
-        [self saveLivesLeftInUserDefaults:[self getLivesAvailable] + 5];
+        [self saveLivesLeftInUserDefaults:[self getLivesAvailable] + 15];
         [self.delegate moreLivesBought:[self getLivesAvailable] inView:self];
         
     } else if ([productBought.productIdentifier isEqualToString:@"com.iamstudio.cross.twentylives"]) {
-        [self saveLivesLeftInUserDefaults:[self getLivesAvailable] + 20];
+        [self saveLivesLeftInUserDefaults:[self getLivesAvailable] + 30];
         [self.delegate moreLivesBought:[self getLivesAvailable] inView:self];
         
     } else if ([productBought.productIdentifier isEqualToString:@"com.iamstudio.cross.sixtylives"]) {
-        [self saveLivesLeftInUserDefaults:[self getLivesAvailable] + 60];
+        [self saveLivesLeftInUserDefaults:[self getLivesAvailable] + 80];
         [self.delegate moreLivesBought:[self getLivesAvailable] inView:self];
         
     } else if ([productBought.productIdentifier isEqualToString:@"com.iamstudio.cross.infinitemode"]) {

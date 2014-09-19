@@ -16,6 +16,8 @@
 		8B316B10199151510062FD77 /* MultiplayerWinAlert.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B316B0F199151510062FD77 /* MultiplayerWinAlert.m */; };
 		8B316B14199181670062FD77 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 8B316B12199181670062FD77 /* Model.xcdatamodeld */; };
 		8B316B1D1991824B0062FD77 /* Score+AddOns.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B316B1C1991824B0062FD77 /* Score+AddOns.m */; };
+		8B5D30F819CC6DA000B5C42D /* Alarm.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 8B5D30F619CC6DA000B5C42D /* Alarm.mp3 */; };
+		8B5D30F919CC6DA000B5C42D /* Shaker.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 8B5D30F719CC6DA000B5C42D /* Shaker.mp3 */; };
 		8B5F497B19A4F19900C0C7E2 /* AudioPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B5F497A19A4F19900C0C7E2 /* AudioPlayer.m */; };
 		8B61F8FB195C87CC0036BB90 /* GameWonAlert.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B61F8FA195C87CC0036BB90 /* GameWonAlert.m */; };
 		8B6FB8C019507C6B00EB2C4E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B6FB8BF19507C6B00EB2C4E /* Foundation.framework */; };
@@ -187,6 +189,8 @@
 		8B316B13199181670062FD77 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		8B316B1B1991824B0062FD77 /* Score+AddOns.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Score+AddOns.h"; sourceTree = "<group>"; };
 		8B316B1C1991824B0062FD77 /* Score+AddOns.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Score+AddOns.m"; sourceTree = "<group>"; };
+		8B5D30F619CC6DA000B5C42D /* Alarm.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = Alarm.mp3; sourceTree = "<group>"; };
+		8B5D30F719CC6DA000B5C42D /* Shaker.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = Shaker.mp3; sourceTree = "<group>"; };
 		8B5F497919A4F19900C0C7E2 /* AudioPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioPlayer.h; sourceTree = "<group>"; };
 		8B5F497A19A4F19900C0C7E2 /* AudioPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioPlayer.m; sourceTree = "<group>"; };
 		8B61F8F9195C87CC0036BB90 /* GameWonAlert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameWonAlert.h; sourceTree = "<group>"; };
@@ -792,6 +796,8 @@
 		8BB8A9BC19A3BDD10076E4A7 /* Sounds */ = {
 			isa = PBXGroup;
 			children = (
+				8B5D30F619CC6DA000B5C42D /* Alarm.mp3 */,
+				8B5D30F719CC6DA000B5C42D /* Shaker.mp3 */,
 				8B105CFA19A4E12700100FB1 /* back.wav */,
 				8B105CFB19A4E12700100FB1 /* buttonpress.wav */,
 				8BB8A9CB19A3FA8F0076E4A7 /* restartnuevo.wav */,
@@ -967,6 +973,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8B5D30F919CC6DA000B5C42D /* Shaker.mp3 in Resources */,
 				8BB862A5199BC07500718843 /* Flecha.png in Resources */,
 				8BD2CED31951E6B4002EF327 /* GamesDatabase2.plist in Resources */,
 				8BA82DEC19C216220008642A /* infinite@2x.png in Resources */,
@@ -1003,6 +1010,7 @@
 				8B105CFD19A4E12700100FB1 /* buttonpress.wav in Resources */,
 				A043669E19A6C58F00D071DC /* Close@2x.png in Resources */,
 				8B18CF9119644BBB00F3FB0F /* TutorialPhoneR4_5.png in Resources */,
+				8B5D30F819CC6DA000B5C42D /* Alarm.mp3 in Resources */,
 				A06520711959B7D100399778 /* PadStoryboard.storyboard in Resources */,
 				8BB8629D199BA60900718843 /* NumbersButton.png in Resources */,
 				8B90453F196359FC000F2E51 /* TutorialPhoneR4_1.png in Resources */,
@@ -1228,7 +1236,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Diego Fernando Vidal Illera (9JA65WT89C)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					/Users/diegovidal/Documents/FacebookSDK,
@@ -1245,7 +1253,7 @@
 					"$(PROJECT_DIR)/NumeroLoco/FlurryAds",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "357EC344-88B5-45FA-B4C6-4B87E50AA57E";
+				PROVISIONING_PROFILE = "5c4209ba-19c2-4466-8b61-4a57bb6bd61c";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
@@ -1256,7 +1264,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: iAm Studio S.A.S. (4U39LJL48R)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					/Users/diegovidal/Documents/FacebookSDK,
@@ -1273,7 +1281,7 @@
 					"$(PROJECT_DIR)/NumeroLoco/FlurryAds",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "7ba80f39-1032-4dc2-8ac4-f457dc191f91";
+				PROVISIONING_PROFILE = "6109f633-95c0-4aa7-b8d4-168cbf513376";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};

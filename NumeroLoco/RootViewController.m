@@ -697,9 +697,19 @@
     [self performSelector:@selector(showLogoutAlert) withObject:nil afterDelay:0.5];
 }
 
+-(void)showErrorAlert {
+    OneButtonAlert *errorAlert = [[OneButtonAlert alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 140.0, screenBounds.size.height/2.0 - 85.0, 280.0, 170.0)];
+    errorAlert.alertText = @"Oops! There was a network error. Please check that you're connected to the internet.";
+    errorAlert.button.backgroundColor = [[AppInfo sharedInstance] appColorsArray][0];
+    errorAlert.buttonTitle = @"Ok";
+    errorAlert.messageLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:15.0];
+    errorAlert.messageLabel.center = CGPointMake(errorAlert.messageLabel.center.x, 70.0);
+    [errorAlert showInView:self.view];
+}
+
 -(void)showSoundsAlert {
     [self playButtonSound];
-    SoundsView *soundsView = [[SoundsView alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 140.0, screenBounds.size.height/2.0 - 125.0, 280.0, 250.0)];
+    SoundsView *soundsView = [[SoundsView alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 140.0, screenBounds.size.height/2.0 - 140.0, 280.0, 280.0)];
     [soundsView showInView:self.view];
 }
 
@@ -762,12 +772,22 @@
             }
             NSLog(@"Purchases dic: %@", purchasesDic);
             [self showStoreViewWithProductsDic:purchasesDic];
+        } else {
+            NSLog(@"NO ME PUDE CONECTAR PARA VER LOS PRODUCTOS");
+            [self showErrorAlert];
         }
     }];
 }
 
 -(void)showStoreViewWithProductsDic:(NSMutableDictionary *)purchasesDic {
-    StoreView *storeView = [[StoreView alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 140.0, screenBounds.size.height/2.0 - 264.0, 280.0, 528.0)];
+    StoreView *storeView;
+    if (isPad) {
+        storeView = [[StoreView alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 280.0/2.0, screenBounds.size.height/2.0 - 528.0/2.0, 280.0, 528.0)];
+        
+    } else {
+        storeView = [[StoreView alloc]
+                        initWithFrame:CGRectMake(20.0, 20.0, screenBounds.size.width - 40.0, screenBounds.size.height - 40.0)];
+    }
     storeView.purchasesDic = purchasesDic;
     [storeView showInView:self.view];
 }
@@ -878,17 +898,11 @@
     [self presentViewController:tutContainerVC animated:YES completion:nil];
 }
 
-/*-(void)goToWordsChaptersVC {
-    WordsChaptersViewController *wordsChapterVC = [self.storyboard instantiateViewControllerWithIdentifier:@"WordsChapters"];
-    wordsChapterVC.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-    [self presentViewController:wordsChapterVC animated:YES completion:nil];
-}*/
-
 #pragma mark - Facebook Stuff
 
 -(void)showNoFacebookLoginAlert {
     OneButtonAlert *noFacebookAlert = [[OneButtonAlert alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 140.0, screenBounds.size.height/2.0 - 85.0, 280.0, 170.0)];
-    noFacebookAlert.alertText = @"You must log in with Facebook to access the rankings. You can log in from the main screen.";
+    noFacebookAlert.alertText = @"You must log in with Facebook to access the rankings. You can login from the main options.";
     noFacebookAlert.buttonTitle = @"Ok";
     noFacebookAlert.messageLabel.frame = CGRectMake(20.0, 10.0, noFacebookAlert.bounds.size.width - 40.0, 120.0);
     noFacebookAlert.messageLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:15.0];

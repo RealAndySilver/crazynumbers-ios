@@ -35,7 +35,7 @@
         [productIdentifiers addObject:product.productIdentifier];
     }
     
-    NSLog(@"numero de identificadores: %d", [productIdentifiers count]);
+    NSLog(@"numero de identificadores: %lu", (unsigned long)[productIdentifiers count]);
     self.productsRequest = [[SKProductsRequest alloc] initWithProductIdentifiers:productIdentifiers];
     self.productsRequest.delegate = self;
     [self.productsRequest start];
@@ -64,7 +64,7 @@
     NSLog(@"Loaded list of products...");
     self.productsRequest = nil;
     NSArray *skProducts = response.products;
-    NSLog(@"cantidad de productos recibidos: %d", [skProducts count]);
+    NSLog(@"cantidad de productos recibidos: %lu", (unsigned long)[skProducts count]);
     for (SKProduct *skProduct in skProducts) {
         IAPProduct *product = self.products[skProduct.productIdentifier];
         product.skProduct = skProduct;

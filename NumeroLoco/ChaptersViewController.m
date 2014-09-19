@@ -199,13 +199,13 @@
 }
 
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    NSLog(@"Index path %d", indexPath.item);
+    NSLog(@"Index path %ld", (long)indexPath.item);
     ChaptersCell *cell = (ChaptersCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"CellIdentifier" forIndexPath:indexPath];
     cell.backgroundColor = [[AppInfo sharedInstance] appColorsArray][indexPath.item];
     cell.chapterNameLabel.text = self.chaptersNamesArray[indexPath.item];
     cell.chapterNameLabel.textColor = [UIColor whiteColor];
     cell.delegate = self;
-    NSLog(@"juegos ganados en este capítulo: %d", [self.chaptersGamesFinishedArray[indexPath.item] count]);
+    NSLog(@"juegos ganados en este capítulo: %lu", (unsigned long)[self.chaptersGamesFinishedArray[indexPath.item] count]);
     NSArray *gamesFinishedArray = self.chaptersGamesFinishedArray[indexPath.item];
     
     if ([gamesFinishedArray containsObject:@1]) {
@@ -510,7 +510,7 @@
     [self playButtonPressedSound];
     
     BOOL userCanPlayGame = [self checkIfUserCanPlayGame:game + 1 inChapter:self.pageControl.currentPage];
-    NSLog(@"Se seleccionó el juego %d", game);
+    NSLog(@"Se seleccionó el juego %lu", (unsigned long)game);
     if (userCanPlayGame) {
         selectedGame = game;
         [self goToGameVCWithSelectedGame:game inChapter:self.pageControl.currentPage];

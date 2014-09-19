@@ -28,6 +28,7 @@
 #import "TwoButtonsAlert.h"
 #import <ParseFacebookUtils/PFFacebookUtils.h>
 #import "TutorialContainerViewController.h"
+#import "OneButtonAlert.h"
 @import AVFoundation;
 
 @interface GameViewController () <UIAlertViewDelegate, GameWonAlertDelegate, AllGamesFinishedViewDelegate, NoTouchesAlertDelegate, BuyTouchesViewDelegate, TwoButtonsAlertDelegate>
@@ -271,7 +272,7 @@
         labelsFontSize = 18.0;
     }
     
-    self.titleLabel.text = [NSString stringWithFormat:@"Chapter %u - Game %u", self.selectedChapter + 1, self.selectedGame + 1];
+    self.titleLabel.text = [NSString stringWithFormat:@"Chapter %lu - Game %lu", self.selectedChapter + 1, self.selectedGame + 1];
     self.titleLabel.textColor = [UIColor whiteColor];
     self.titleLabel.textAlignment = NSTextAlignmentCenter;
     [self.view addSubview:self.titleLabel];
@@ -437,7 +438,7 @@
 
 -(void)initGame {
     [self resetGame];
-    self.titleLabel.text = [NSString stringWithFormat:@"Chapter %u - Game %u", self.selectedChapter + 1, self.selectedGame + 1];
+    self.titleLabel.text = [NSString stringWithFormat:@"Chapter %lu - Game %lu", self.selectedChapter + 1, self.selectedGame + 1];
     
     NSString *gamesDatabasePath = [[NSBundle mainBundle] pathForResource:@"GamesDatabase2" ofType:@"plist"];
     NSArray *chaptersDataArray = [NSArray arrayWithContentsOfFile:gamesDatabasePath];
@@ -727,7 +728,7 @@
     //Unlock the next game saving the game number with FileSaver
     FileSaver *fileSaver = [[FileSaver alloc] init];
     NSMutableArray *chaptersArray = [fileSaver getDictionary:@"NumberChaptersDic"][@"NumberChaptersArray"];
-    NSLog(@"Agregando el número %u a filesaver porque gané", self.selectedGame + 2);
+    NSLog(@"Agregando el número %lu a filesaver porque gané", self.selectedGame + 2);
     
     //Check if the user won the last game of the chapter
     if (self.selectedGame == 8 && self.selectedChapter != numberOfChapters - 1) {
@@ -1155,8 +1156,20 @@
                 }
             }
             [self showBuyTouchesViewUsingPricesDic:pricesDic];
+        } else {
+            [self showErrorAlert];
         }
     }];
+}
+
+-(void)showErrorAlert {
+    OneButtonAlert *errorAlert = [[OneButtonAlert alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 140.0, screenBounds.size.height/2.0 - 85.0, 280.0, 170.0)];
+    errorAlert.alertText = @"Oops! There was a network error. Please check that you're connected to the internet.";
+    errorAlert.button.backgroundColor = [[AppInfo sharedInstance] appColorsArray][self.selectedChapter];
+    errorAlert.buttonTitle = @"Ok";
+    errorAlert.messageLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:15.0];
+    errorAlert.messageLabel.center = CGPointMake(errorAlert.messageLabel.center.x, 70.0);
+    [errorAlert showInView:self.view];
 }
 
 -(void)showBuyTouchesViewUsingPricesDic:(NSDictionary *)pricesDic {

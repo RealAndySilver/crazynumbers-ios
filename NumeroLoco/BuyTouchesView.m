@@ -298,7 +298,7 @@
 }
 
 -(void)saveTouchesLeftInUserDefaults:(NSUInteger)touchesLeft {
-    NSLog(@"***************** guardaré %d toques ******************", touchesLeft);
+    NSLog(@"***************** guardaré %lu toques ******************", (unsigned long)touchesLeft);
     [[NSUserDefaults standardUserDefaults] setObject:@(touchesLeft) forKey:@"Touches"];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }

@@ -7,13 +7,13 @@
 //
 
 #import "AudioPlayer.h"
-@import AVFoundation;
 
 @interface AudioPlayer()
 @property (strong, nonatomic) AVAudioPlayer *backSoundPlayer;
 @property (strong, nonatomic) AVAudioPlayer *buttonPressSound;
 @property (strong, nonatomic) AVAudioPlayer *winSound;
 @property (strong, nonatomic) AVAudioPlayer *restartSound;
+@property (strong, nonatomic) AVAudioPlayer *alarmSound;
 @end
 
 @implementation AudioPlayer
@@ -58,6 +58,27 @@
     return _winSound;
 }
 
+-(AVAudioPlayer *)shakerPlayer {
+    if (!_shakerPlayer) {
+        NSString *soundFilePath = [[NSBundle mainBundle] pathForResource:@"Shaker" ofType:@"mp3"];
+        NSURL *soundFileURL = [NSURL URLWithString:soundFilePath];
+        _shakerPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:soundFileURL error:nil];
+        _shakerPlayer.enableRate = YES;
+        [_shakerPlayer prepareToPlay];
+    }
+    return _shakerPlayer;
+}
+
+-(AVAudioPlayer *)alarmSound {
+    if (!_alarmSound) {
+        NSString *soundFilePath = [[NSBundle mainBundle] pathForResource:@"Alarm" ofType:@"mp3"];
+        NSURL *soundFileURL = [NSURL URLWithString:soundFilePath];
+        _alarmSound = [[AVAudioPlayer alloc] initWithContentsOfURL:soundFileURL error:nil];
+        [_alarmSound prepareToPlay];
+    }
+    return _alarmSound;
+}
+
 +(AudioPlayer *)sharedInstance {
     static AudioPlayer *shared = nil;
     if (!shared) {
@@ -67,6 +88,32 @@
         });
     }
     return shared;
+}
+
+-(void)playAlarmSound {
+    [self.alarmSound play];
+}
+
+-(void)playShakeSound {
+    self.shakerPlayer.volume = [self getVolumeSavedInUserDefaults];
+    [self.shakerPlayer play];
+}
+
+-(float)getVolumeSavedInUserDefaults {
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"volume"]) {
+        return [[[NSUserDefaults standardUserDefaults] objectForKey:@"volume"] floatValue];
+    } else {
+        return 1.0;
+    }
+}
+
+-(void)pauseShakeSound {
+    [self.shakerPlayer pause];
+}
+
+-(void)stopShakeSound {
+    [self.shakerPlayer stop];
+    self.shakerPlayer.currentTime = 0;
 }
 
 -(void)playRestartSound {

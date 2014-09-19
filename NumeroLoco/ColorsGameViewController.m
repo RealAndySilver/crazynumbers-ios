@@ -29,6 +29,7 @@
 #import "TwoButtonsAlert.h"
 #import <ParseFacebookUtils/PFFacebookUtils.h>
 #import "TutorialContainerViewController.h"
+#import "OneButtonAlert.h"
 @import AVFoundation;
 
 @interface ColorsGameViewController () <ColorPatternViewDelegate, GameWonAlertDelegate, AllGamesFinishedViewDelegate, NoTouchesAlertDelegate, BuyTouchesViewDelegate, TwoButtonsAlertDelegate>
@@ -506,7 +507,7 @@
         //NSUInteger buttonTag = [self tagForButtonAtRow:row column:column];
         //[self addOneToButtonWithTag:buttonTag];
     }
-    self.maxTapsLabel.text = [NSString stringWithFormat:@"Taps for perfect score: %d", [self.pointsArray count]];
+    self.maxTapsLabel.text = [NSString stringWithFormat:@"Taps for perfect score: %lu", (unsigned long)[self.pointsArray count]];
     self.numberOfTapsLabel.text = @"Number of taps: 0";
     numberOfTaps = 0;
     NSLog(@"Terminé el init game");
@@ -607,7 +608,7 @@
     if (newbuttonValue < 0) {
         newbuttonValue = maxNumber;
     }
-    return [NSString stringWithFormat:@"%i", newbuttonValue];
+    return [NSString stringWithFormat:@"%li", (long)newbuttonValue];
 }
 
 -(void)createSquareMatrixOf:(NSUInteger)size {
@@ -621,7 +622,7 @@
         cornerRadius = 10.0;
     }
     NSUInteger buttonSize = (self.buttonsContainerView.frame.size.width - ((matrixSize + 1)*buttonDistance)) / matrixSize;
-    NSLog(@"Tamaño del boton: %d", buttonSize);
+    NSLog(@"Tamaño del boton: %lu", (unsigned long)buttonSize);
     
     int h = 1000;
     for (int i = 0; i < size; i++) {
@@ -674,7 +675,7 @@
     //Play sound
     [self playButtonPressedSound];
     
-    NSLog(@"Oprimí el boton con tag %d", numberButton.tag);
+    NSLog(@"Oprimí el boton con tag %ld", (long)numberButton.tag);
     NSUInteger index = numberButton.tag - 1000;
     NSInteger column = index / matrixSize;
     NSInteger row = index % matrixSize;
@@ -750,7 +751,7 @@
     numberOfTaps += 1;
     if (!userBoughtInfiniteMode) {
         [TouchesObject sharedInstance].totalTouches--;
-        self.touchesAvailableLabel.text = [NSString stringWithFormat:@"Touches left: %d", [TouchesObject sharedInstance].totalTouches];
+        self.touchesAvailableLabel.text = [NSString stringWithFormat:@"Touches left: %lu", (unsigned long)[TouchesObject sharedInstance].totalTouches];
         
         if ([TouchesObject sharedInstance].totalTouches == 0) {
             //Show alert
@@ -834,7 +835,7 @@
 }*/
 
 -(void)updateUI {
-    self.maxScoreLabel.text = [NSString stringWithFormat:@"Best Score: %d/%d", [self getScoredStoredInCoreData], (int)maxScore];
+    self.maxScoreLabel.text = [NSString stringWithFormat:@"Best Score: %lu/%d", (unsigned long)[self getScoredStoredInCoreData], (int)maxScore];
 }
 
 -(void)substractTime {
@@ -927,7 +928,7 @@
     if (scoreWasImproved) {
         NSLog(@"EL score se mejoróoooo *************************");
         NSUInteger totalScore = [self getTotalScoreInCoreData];
-        NSLog(@"Score Totaaaaaaaalllllll: %d", totalScore);
+        NSLog(@"Score Totaaaaaaaalllllll: %lu", (unsigned long)totalScore);
         [[GameKitHelper sharedGameKitHelper] submitScore:totalScore category:@"Points_Leaderboard"];
         [self postScoreToFacebook:totalScore];
         
@@ -938,7 +939,7 @@
     //Unlock the next game saving the game number with FileSaver
     FileSaver *fileSaver = [[FileSaver alloc] init];
     NSMutableArray *chaptersArray = [fileSaver getDictionary:@"ColorChaptersDic"][@"ColorChaptersArray"];
-    NSLog(@"Agregando el número %d a filesaver porque gané", self.selectedGame + 2);
+    NSLog(@"Agregando el número %lu a filesaver porque gané", self.selectedGame + 2);
     
     //Check if the user won the last game of the chapter
     if (self.selectedGame == 8 && self.selectedChapter != numberOfChapters - 1) {
@@ -1124,7 +1125,7 @@
         serviceType = SLServiceTypeTwitter;
     }
     SLComposeViewController *socialViewController = [SLComposeViewController composeViewControllerForServiceType:serviceType];
-    [socialViewController setInitialText:[NSString stringWithFormat:@"I scored %d points playing Cross: Numbers & Colors", [self pointsWonForTime:timeElapsed]]];
+    [socialViewController setInitialText:[NSString stringWithFormat:@"I scored %lu points playing Cross: Numbers & Colors", (unsigned long)[self pointsWonForTime:timeElapsed]]];
     [self presentViewController:socialViewController animated:YES completion:nil];
 }
 
@@ -1186,12 +1187,12 @@
                 //The score was improved
                 NSLog(@"***************** SCORE MEJORADO *************************");
                 NSLog(@"**************** SCORE GUARDADO EN COREDATA: %d", [score.value intValue]);
-                NSLog(@"**************** SCORE LOGRADO: %d", newScore);
+                NSLog(@"**************** SCORE LOGRADO: %lu", (unsigned long)newScore);
                 return YES;
             } else {
                 NSLog(@"**************** SCORE NO MEJORADO ************************");
                 NSLog(@"**************** SCORE GUARDADO EN COREDATA: %d", [score.value intValue]);
-                NSLog(@"**************** SCORE LOGRADO: %d", newScore);
+                NSLog(@"**************** SCORE LOGRADO: %lu", (unsigned long)newScore);
                 return NO;
             }
         } else {
@@ -1282,8 +1283,20 @@
                 }
             }
             [self showBuyTouchesViewUsingPricesDic:pricesDic];
+        } else {
+            [self showErrorAlert];
         }
     }];
+}
+
+-(void)showErrorAlert {
+    OneButtonAlert *errorAlert = [[OneButtonAlert alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 140.0, screenBounds.size.height/2.0 - 85.0, 280.0, 170.0)];
+    errorAlert.alertText = @"Oops! There was a network error. Please check that you're connected to the internet.";
+    errorAlert.button.backgroundColor = [[AppInfo sharedInstance] appColorsArray][self.selectedChapter];
+    errorAlert.buttonTitle = @"Ok";
+    errorAlert.messageLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:15.0];
+    errorAlert.messageLabel.center = CGPointMake(errorAlert.messageLabel.center.x, 70.0);
+    [errorAlert showInView:self.view];
 }
 
 -(void)showBuyTouchesViewUsingPricesDic:(NSDictionary *)pricesDic {
@@ -1387,7 +1400,7 @@ interstitial {
 -(void)moreTouchesBought:(NSUInteger)totalTouchesAvailable inView:(BuyTouchesView *)buyTouchesView {
     [TouchesObject sharedInstance].totalTouches = totalTouchesAvailable;
     if (!userBoughtInfiniteMode) {
-        self.touchesAvailableLabel.text = [NSString stringWithFormat:@"Touches left: %d", [TouchesObject sharedInstance].totalTouches];
+        self.touchesAvailableLabel.text = [NSString stringWithFormat:@"Touches left: %lu", (unsigned long)[TouchesObject sharedInstance].totalTouches];
     }
     [self enableButtons];
     
@@ -1421,7 +1434,7 @@ interstitial {
 -(void)newTouchesNotificationReceived:(NSNotification *)notification {
     [self enableButtons];
     if (!userBoughtInfiniteMode) {
-        self.touchesAvailableLabel.text = [NSString stringWithFormat:@"Touches left: %d", [TouchesObject sharedInstance].totalTouches];
+        self.touchesAvailableLabel.text = [NSString stringWithFormat:@"Touches left: %lu", (unsigned long)[TouchesObject sharedInstance].totalTouches];
     }
 }
 

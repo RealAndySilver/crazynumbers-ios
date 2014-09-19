@@ -11,11 +11,12 @@
 
 @interface SoundsView()
 @property (strong, nonatomic) UIView *opacityView;
+@property (strong, nonatomic) UISlider *volumeSlider;
 @end
 
 @implementation SoundsView
 
-#define FONT_NAME @"HelveticaNeue-UltraLight"
+#define FONT_NAME @"HelveticaNeue-Light"
 #define ANIMATION_DURATION 0.5
 
 -(instancetype)initWithFrame:(CGRect)frame {
@@ -44,10 +45,10 @@
         [self addSubview:closeButton];
         
         //In-Game music label
-        UILabel *musicLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0, titleLabel.frame.origin.y + titleLabel.frame.size.height + 30.0, 170.0, 40.0)];
+        UILabel *musicLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0, frame.size.height - 60.0, 170.0, 40.0)];
         musicLabel.text = @"In-Game Music";
         musicLabel.textColor = [UIColor darkGrayColor];
-        musicLabel.font = [UIFont fontWithName:FONT_NAME size:25.0];
+        musicLabel.font = [UIFont fontWithName:FONT_NAME size:22.0];
         [self addSubview:musicLabel];
         
         //music switch
@@ -59,10 +60,10 @@
         [self addSubview:musicSwitch];
         
         //Tic-Toc label
-        UILabel *tictocLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0, titleLabel.frame.origin.y + titleLabel.frame.size.height + 100.0, 170.0, 40.0)];
-        tictocLabel.text = @"Tic-Toc Sound";
+        UILabel *tictocLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0, titleLabel.frame.origin.y + titleLabel.frame.size.height + 30.0, 170.0, 40.0)];
+        tictocLabel.text = @"Fast Game Timer";
         tictocLabel.textColor = [UIColor darkGrayColor];
-        tictocLabel.font = [UIFont fontWithName:FONT_NAME size:25.0];
+        tictocLabel.font = [UIFont fontWithName:FONT_NAME size:22.0];
         [self addSubview:tictocLabel];
         
         //Tic Toc Switch
@@ -72,7 +73,28 @@
         tictocSwitch.onTintColor = [[AppInfo sharedInstance] appColorsArray][0];
         [tictocSwitch addTarget:self action:@selector(tictocSwitchPressed:) forControlEvents:UIControlEventValueChanged];
         [self addSubview:tictocSwitch];
-
+        
+        //Tic toc volume label
+        UILabel *volumenLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0, tictocLabel.frame.origin.y + tictocLabel.frame.size.height, 100.0, 20.0)];
+        volumenLabel.text = @"Timer Volume";
+        volumenLabel.textColor = [UIColor darkGrayColor];
+        volumenLabel.font = [UIFont fontWithName:FONT_NAME size:15.0];
+        [self addSubview:volumenLabel];
+        
+        //tic toc volume slider
+        self.volumeSlider = [[UISlider alloc] initWithFrame:CGRectMake(20.0, volumenLabel.frame.origin.y + volumenLabel.frame.size.height + 5.0, frame.size.width - 40.0, 20.0)];
+        self.volumeSlider.minimumValue = 0.0;
+        self.volumeSlider.maximumValue = 2.0;
+        self.volumeSlider.value = [self getVolumeSavedInUserDefaults];
+        self.volumeSlider.continuous = YES;
+        self.volumeSlider.enabled = tictocSwitch.isOn;
+        self.volumeSlider.minimumTrackTintColor = [[AppInfo sharedInstance] appColorsArray][0];
+        [self.volumeSlider addTarget:self action:@selector(saveVolumeSelectionInUserDefaults:) forControlEvents:UIControlEventValueChanged];
+        [self addSubview:self.volumeSlider];
+        
+        UIView *grayLine = [[UIView alloc] initWithFrame:CGRectMake(20.0, self.volumeSlider.frame.origin.y + self.volumeSlider.frame.size.height + 20.0, frame.size.width - 40.0, 1.0)];
+        grayLine.backgroundColor = [UIColor colorWithWhite:0.8 alpha:1.0];
+        [self addSubview:grayLine];
     }
     return self;
 }
@@ -80,6 +102,8 @@
 #pragma mark - Actions 
 
 -(void)tictocSwitchPressed:(UISwitch *)theSwitch {
+    self.volumeSlider.enabled = !self.volumeSlider.enabled;
+    
     //Save bool value in UserDefaults
     [self saveTictocSelectionInUserDefaults:[theSwitch isOn]];
 }
@@ -126,6 +150,20 @@
 }
 
 #pragma mark - UserDefaults 
+
+-(void)saveVolumeSelectionInUserDefaults:(UISlider *)volumeSlider {
+    NSLog(@"Dejé de tocar elslideeeerrrr");
+    [[NSUserDefaults standardUserDefaults] setObject:@(volumeSlider.value) forKey:@"volume"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+-(float)getVolumeSavedInUserDefaults {
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"volume"]) {
+        return [[[NSUserDefaults standardUserDefaults] objectForKey:@"volume"] floatValue];
+    } else {
+        return 1.0;
+    }
+}
 
 -(BOOL)getTictocSelectionInUserDefaults {
     if ([[NSUserDefaults standardUserDefaults] objectForKey:@"tictocActive"]) {

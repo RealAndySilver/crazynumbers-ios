@@ -18,10 +18,10 @@
 #import "AllGamesFinishedView.h"
 #import "FastGamesView.h"
 #import "AudioPlayer.h"
-#import "OneButtonAlert.h"
 #import "TwoButtonsAlert.h"
+#import "OneButtonAlert.h"
 
-@interface FastGameModeViewController () <FastGameAlertDelegate, BuyLivesViewDelegate, NoTouchesAlertDelegate, MultiplayerWinAlertDelegate, AllGamesFinishedViewDelegate, FastGamesViewDelegate, OneButtonAlertDelegate, TwoButtonsAlertDelegate>
+@interface FastGameModeViewController () <FastGameAlertDelegate, BuyLivesViewDelegate, NoTouchesAlertDelegate, MultiplayerWinAlertDelegate, AllGamesFinishedViewDelegate, FastGamesViewDelegate, TwoButtonsAlertDelegate>
 @property (strong, nonatomic) NSArray *pointsArray;
 @property (strong, nonatomic) NSTimer *gameTimer;
 @property (strong, nonatomic) UILabel *titleLabel;
@@ -36,6 +36,7 @@
 @property (assign, nonatomic) NSUInteger currentGame;
 @property (strong, nonatomic) NSArray *chaptersDataArray;
 @property (strong, nonatomic) NSString *gamesDatabasePath;
+@property (strong, nonatomic) UIButton *gamesButton;
 @property (strong, nonatomic) UIImageView *heartImageView;
 @end
 
@@ -58,6 +59,7 @@
     BOOL isPad;
     BOOL userCanPlay;
     BOOL userBoughtInfiniteMode;
+    BOOL ticTocSoundActivated;
 }
 
 -(NSNumberFormatter *)purchasesPriceFormatter {
@@ -78,8 +80,8 @@
 
 -(void)viewDidLoad {
     [super viewDidLoad];
+    ticTocSoundActivated = [self getTicTocSelectionInUserDefaults];
     timeAnimationDuration = 0.5;
-    
     self.gamesDatabasePath = [[NSBundle mainBundle] pathForResource:@"FastGamesDatabase" ofType:@"plist"];
     self.chaptersDataArray = [NSArray arrayWithContentsOfFile:self.gamesDatabasePath];
     totalGames = [self.chaptersDataArray count];
@@ -144,7 +146,7 @@
         self.titleLabel.font = [UIFont fontWithName:FONT_ULTRALIGHT size:80.0];
     } else {
         NSLog(@"NO IPAAAAAD");
-        self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 50.0, screenBounds.size.width, 50.0)];
+        self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0, screenBounds.size.height/11.36 - 10.0, screenBounds.size.width, 50.0)];
         self.titleLabel.font = [UIFont fontWithName:FONT_ULTRALIGHT size:40.0];
     }
     self.titleLabel.textAlignment = NSTextAlignmentCenter;
@@ -172,15 +174,15 @@
     [self.view addSubview:self.restartButton];
     
     //Games button
-    UIButton *gamesButton = [[UIButton alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 35.0, screenBounds.size.height - 50.0, 70.0, 40.0)];
-    [gamesButton setTitle:@"Games" forState:UIControlStateNormal];
-    [gamesButton setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
-    gamesButton.titleLabel.font = [UIFont fontWithName:FONT_LIGHT size:15.0];
-    gamesButton.layer.cornerRadius = 10.0;
-    gamesButton.layer.borderColor = [UIColor darkGrayColor].CGColor;
-    gamesButton.layer.borderWidth = 1.0;
-    [gamesButton addTarget:self action:@selector(showGamesView) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:gamesButton];
+    self.gamesButton = [[UIButton alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 35.0, screenBounds.size.height - 50.0, 70.0, 40.0)];
+    [self.gamesButton setTitle:@"Games" forState:UIControlStateNormal];
+    [self.gamesButton setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
+    self.gamesButton.titleLabel.font = [UIFont fontWithName:FONT_LIGHT size:15.0];
+    self.gamesButton.layer.cornerRadius = 10.0;
+    self.gamesButton.layer.borderColor = [UIColor darkGrayColor].CGColor;
+    self.gamesButton.layer.borderWidth = 1.0;
+    [self.gamesButton addTarget:self action:@selector(showGamesView) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:self.gamesButton];
     
     //Heart image view
     UIImage *heartImage = [UIImage imageNamed:@"heart.png"];
@@ -210,12 +212,12 @@
 
 -(void)initGame {
     [self resetGame];
-    self.titleLabel.text = [NSString stringWithFormat:@"Game %u", self.currentGame + 1];
+    self.titleLabel.text = [NSString stringWithFormat:@"Game %lu", self.currentGame + 1];
     self.heartNumberLabel.textColor = [[AppInfo sharedInstance] appColorsArray][randomColorIndex];
     self.heartImageView.tintColor = [[AppInfo sharedInstance] appColorsArray][randomColorIndex];
     
     self.pointsArray = self.chaptersDataArray[self.currentGame][@"puntos"];
-    NSLog(@"numero de puntos: %d", [self.pointsArray count]);
+    NSLog(@"numero de puntos: %lu", (unsigned long)[self.pointsArray count]);
     for (int i = 0; i < [self.pointsArray count]; i++) {
         NSUInteger row = [self.pointsArray[i][@"fila"] intValue] - 1;
         NSUInteger column = [self.pointsArray[i][@"columna"] intValue] - 1;
@@ -495,10 +497,19 @@
     return [NSString stringWithFormat:@"%li", (long)newbuttonValue];
 }
 
+#pragma mark - Sounds 
+
+-(void)playShakerSound {
+    if (ticTocSoundActivated) {
+        [[AudioPlayer sharedInstance] playShakeSound];
+    }
+}
+
 #pragma mark - Actions 
 
 -(void)exitGame {
     [[AudioPlayer sharedInstance] playRestartSound];
+    [[AudioPlayer sharedInstance] stopShakeSound];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"PlayMusicNotification" object:nil];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
@@ -512,6 +523,7 @@
     //Invaldiate timer
     [self.gameTimer invalidate];
     self.gameTimer = nil;
+    [[AudioPlayer sharedInstance] pauseShakeSound];
     
     FastGamesView *fastGamesView;
     if (isPad) {
@@ -527,7 +539,7 @@
 -(void)colorButtonPressed:(UIButton *)numberButton {
     [[AudioPlayer sharedInstance] playButtonPressSound];
     
-    NSLog(@"Oprimí el boton con tag %d", numberButton.tag);
+    NSLog(@"Oprimí el boton con tag %ld", (long)numberButton.tag);
     NSUInteger index = numberButton.tag - 1000;
     NSInteger column = index / matrixSize;
     NSInteger row = index % matrixSize;
@@ -623,6 +635,35 @@
 -(void)substractTime {
     timeLeft--;
     self.timeLeftLabel.text = [NSString stringWithFormat:@"%lu", (unsigned long)timeLeft];
+    
+    if (maxTime == 15.0) {
+        if (timeLeft >= 10.0) {
+            [AudioPlayer sharedInstance].shakerPlayer.rate = 1.0;
+        } else if (timeLeft < 10.0 && timeLeft >= 5.0) {
+            [AudioPlayer sharedInstance].shakerPlayer.rate = 1.4;
+        } else if (timeLeft < 5.0) {
+            [AudioPlayer sharedInstance].shakerPlayer.rate = 1.8;
+        }
+        
+    } else if (maxTime == 25.0) {
+        if (timeLeft >= 15.0) {
+            [AudioPlayer sharedInstance].shakerPlayer.rate = 1.0;
+        } else if (timeLeft < 15.0 && timeLeft >= 5.0) {
+            [AudioPlayer sharedInstance].shakerPlayer.rate = 1.4;
+        } else if (timeLeft < 5.0) {
+            [AudioPlayer sharedInstance].shakerPlayer.rate = 1.8;
+        }
+    
+    } else if (maxTime == 30.0) {
+        if (timeLeft >= 20.0) {
+            [AudioPlayer sharedInstance].shakerPlayer.rate = 1.0;
+        } else if (timeLeft < 20.0 && timeLeft >= 10.0) {
+            [AudioPlayer sharedInstance].shakerPlayer.rate = 1.4;
+        } else if (timeLeft < 10.0) {
+            [AudioPlayer sharedInstance].shakerPlayer.rate = 1.8;
+        }
+    }
+    
     if (timeLeft == 0) {
         //User loss
         [self userLost];
@@ -632,17 +673,47 @@
 #pragma mark - Animation 
 
 -(void)startTimeLabelAnimation {
-    if (timeLeft > 10.0) {
-        self.timeLeftLabel.textColor = [UIColor colorWithWhite:0.8 alpha:1.0];
-        timeAnimationDuration = 0.5;
+    if (maxTime == 15.0) {
+        if (timeLeft > 10.0) {
+            self.timeLeftLabel.textColor = [UIColor colorWithWhite:0.8 alpha:1.0];
+            timeAnimationDuration = 0.5;
+            
+        }else if (timeLeft <= 10.0 && timeLeft > 5.0) {
+            timeAnimationDuration = 0.25;
+            self.timeLeftLabel.textColor = [UIColor colorWithWhite:0.5 alpha:1.0];
+            
+        } else if (timeLeft <= 5.0) {
+            timeAnimationDuration = 0.125;
+            self.timeLeftLabel.textColor = [[AppInfo sharedInstance] appColorsArray][randomColorIndex];
+        }
     
-    }else if (timeLeft <= 10.0 && timeLeft > 5.0) {
-        timeAnimationDuration = 0.25;
-        self.timeLeftLabel.textColor = [UIColor colorWithWhite:0.5 alpha:1.0];
+    } else  if (maxTime == 25.0) {
+        if (timeLeft > 15.0) {
+            self.timeLeftLabel.textColor = [UIColor colorWithWhite:0.8 alpha:1.0];
+            timeAnimationDuration = 0.5;
+            
+        }else if (timeLeft <= 15.0 && timeLeft > 5.0) {
+            timeAnimationDuration = 0.25;
+            self.timeLeftLabel.textColor = [UIColor colorWithWhite:0.5 alpha:1.0];
+            
+        } else if (timeLeft <= 5.0) {
+            timeAnimationDuration = 0.125;
+            self.timeLeftLabel.textColor = [[AppInfo sharedInstance] appColorsArray][randomColorIndex];
+        }
     
-    } else if (timeLeft <= 5.0) {
-        timeAnimationDuration = 0.125;
-        self.timeLeftLabel.textColor = [[AppInfo sharedInstance] appColorsArray][randomColorIndex];
+    }  if (maxTime == 30.0) {
+        if (timeLeft > 20.0) {
+            self.timeLeftLabel.textColor = [UIColor colorWithWhite:0.8 alpha:1.0];
+            timeAnimationDuration = 0.5;
+            
+        }else if (timeLeft <= 20.0 && timeLeft > 10.0) {
+            timeAnimationDuration = 0.25;
+            self.timeLeftLabel.textColor = [UIColor colorWithWhite:0.5 alpha:1.0];
+            
+        } else if (timeLeft <= 10.0) {
+            timeAnimationDuration = 0.125;
+            self.timeLeftLabel.textColor = [[AppInfo sharedInstance] appColorsArray][randomColorIndex];
+        }
     }
     
     if (timeLabelAnimationActive) {
@@ -716,6 +787,8 @@
 
 -(void)userWon {
     timeLabelAnimationActive = NO;
+    [[AudioPlayer sharedInstance] stopShakeSound];
+    [AudioPlayer sharedInstance].shakerPlayer.rate = 1.0;
     
     if (self.currentGame == totalGames - 1) {
         NSLog(@"Ganaste el ultim juego");
@@ -732,6 +805,10 @@
 
 -(void)userLost {
     timeLabelAnimationActive = NO;
+    [[AudioPlayer sharedInstance] stopShakeSound];
+    [AudioPlayer sharedInstance].shakerPlayer.rate = 1.0;
+    [[AudioPlayer sharedInstance] playAlarmSound];
+    
     [self.gameTimer invalidate];
     self.gameTimer = nil;
     
@@ -764,6 +841,9 @@
 }
 
 -(void)enableButtons {
+    self.gamesButton.userInteractionEnabled = YES;
+    self.gamesButton.alpha = 1.0;
+    
     for (UIButton *button in self.buttonsContainerView.subviews) {
         //button.userInteractionEnabled = YES;
         [button removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
@@ -778,6 +858,9 @@
 }
 
 -(void)disableButtons {
+    self.gamesButton.alpha = 0.5;
+    self.gamesButton.userInteractionEnabled = NO;
+    
     for (UIButton *button in self.buttonsContainerView.subviews) {
         //button.userInteractionEnabled = NO;
         [button removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
@@ -802,6 +885,14 @@
 }
 
 #pragma mark - NSUserDefaults
+
+-(BOOL)getTicTocSelectionInUserDefaults {
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"tictocActive"]) {
+        return [[[NSUserDefaults standardUserDefaults] objectForKey:@"tictocActive"] boolValue];
+    } else {
+        return YES;
+    }
+}
 
 -(NSUInteger)getLastUnlockedLevelInUserDefaults {
     return [[[NSUserDefaults standardUserDefaults] objectForKey:@"unlockedFastGames"] intValue];
@@ -954,6 +1045,7 @@
     NoTouchesAlertView *noLivesAlert = [[NoTouchesAlertView alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 140.0, self.view.bounds.size.height/2.0 - 100.0, 280.0, 200.0)];
     noLivesAlert.message.text = @"You have no more lives left! You can buy more right now or wait one hour.";
     [noLivesAlert.acceptButton setTitle:@"Buy Lives" forState:UIControlStateNormal];
+    noLivesAlert.acceptButton.backgroundColor = [[AppInfo sharedInstance] appColorsArray][randomColorIndex];
     noLivesAlert.delegate = self;
     [noLivesAlert showInView:self.view];
 }
@@ -989,6 +1081,8 @@
 }
 
 -(void)dismissVC {
+    [[AudioPlayer sharedInstance] pauseShakeSound];
+    
     NSLog(@"ENTRE AL DISMISSSSSS");
     //Check if the user is trying to exit the last game
     if (self.currentGame == [self getLastUnlockedLevelInUserDefaults] - 1 && [self getLivesFromUserDefaults] > 0 && !userBoughtInfiniteMode) {
@@ -996,6 +1090,7 @@
         [self showExitWarningAlert];
         [self disableTimer];
     } else {
+        [[AudioPlayer sharedInstance] stopShakeSound];
         [[AudioPlayer sharedInstance] playBackSound];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"PlayMusicNotification" object:nil];
         [self dismissViewControllerAnimated:YES completion:nil];
@@ -1036,8 +1131,20 @@
                 }
             }
             [self showBuyLivesViewUsingPricesDic:pricesDic];
+        } else {
+            [self showErrorAlert];
         }
     }];
+}
+
+-(void)showErrorAlert {
+    OneButtonAlert *errorAlert = [[OneButtonAlert alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 140.0, screenBounds.size.height/2.0 - 85.0, 280.0, 170.0)];
+    errorAlert.alertText = @"Oops! There was a network error. Please check that you're connected to the internet.";
+    errorAlert.button.backgroundColor = [[AppInfo sharedInstance] appColorsArray][randomColorIndex];
+    errorAlert.buttonTitle = @"Ok";
+    errorAlert.messageLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:15.0];
+    errorAlert.messageLabel.center = CGPointMake(errorAlert.messageLabel.center.x, 70.0);
+    [errorAlert showInView:self.view];
 }
 
 -(void)showBuyLivesViewUsingPricesDic:(NSDictionary *)pricesDic {
@@ -1054,7 +1161,6 @@
 #pragma mark - FastGameWinAlertDelegate
 
 -(void)exitButtonPressedInAlert:(FastGameWinAlert *)fastGameWinAlert {
-    //[self dismissVC];
     [self exitGame];
 }
 
@@ -1064,12 +1170,14 @@
         self.currentGame++;
         [self initGame];
         [self startTimer];
+        [self playShakerSound];
         timeLabelAnimationActive = YES;
         [self startTimeLabelAnimation];
         
     } else if (fastGameWinAlert.tag == 2){
         [self initGame];
         [self startTimer];
+        [self playShakerSound];
         timeLabelAnimationActive = YES;
         [self startTimeLabelAnimation];
     }
@@ -1149,6 +1257,7 @@
     if (self.currentGame == game) {
         NSLog(@"Escogí el mismo juego, que siga corriendo el timer");
         self.gameTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(substractTime) userInfo:nil repeats:YES];
+        [self playShakerSound];
 
     } else if (self.currentGame == [self getLastUnlockedLevelInUserDefaults] - 1) {
         NSLog(@"Intentado hacer trampaaaaaaa");
@@ -1156,6 +1265,8 @@
     
     } else {
         [[AudioPlayer sharedInstance] playRestartSound];
+        [[AudioPlayer sharedInstance] stopShakeSound];
+        [self playShakerSound];
         self.currentGame = game;
         [self initGame];
         [self startTimer];
@@ -1168,6 +1279,7 @@
 -(void)closeButtonPressedInFastGameView:(FastGamesView *)fastGamesView {
     if (userCanPlay) {
         self.gameTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(substractTime) userInfo:nil repeats:YES];
+        [self playShakerSound];
     }
 }
 
@@ -1186,6 +1298,7 @@
 -(void)leftButtonPressedInAlert:(TwoButtonsAlert *)twoButtonsAlert {
     if (twoButtonsAlert.tag == 1) {
         timeLabelAnimationActive = YES;
+        [self playShakerSound];
         [self startTimer];
         [self startTimeLabelAnimation];
         
@@ -1208,6 +1321,9 @@
         } else {
             [self startTimer];
             [self initGame];
+            [[AudioPlayer sharedInstance] stopShakeSound];
+            [AudioPlayer sharedInstance].shakerPlayer.rate = 1.0;
+            [self playShakerSound];
         }
     }
 }
@@ -1217,6 +1333,7 @@
         [self exitGame];
     } else if (twoButtonsAlert.tag == 2 || twoButtonsAlert.tag == 3) {
         self.gameTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(substractTime) userInfo:nil repeats:YES];
+        [self playShakerSound];
     }
 }
 
@@ -1228,6 +1345,7 @@
         
     } else if (twoButtonsAlert.tag == 2 || twoButtonsAlert.tag == 3) {
         self.gameTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(substractTime) userInfo:nil repeats:YES];
+        [self playShakerSound];
     }
 }
 

@@ -321,7 +321,7 @@
 #pragma mark - Actions
 
 -(void)gameButtonPressed:(UIButton *)button {
-    NSLog(@"Oprimí el botón con tag %d", button.tag);
+    NSLog(@"Oprimí el botón con tag %ld", (long)button.tag);
     [self.delegate chaptersCellDidSelectGame:button.tag - 1];
 }
 

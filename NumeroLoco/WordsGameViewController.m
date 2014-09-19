@@ -69,9 +69,9 @@
     
     self.view.backgroundColor = [[AppInfo sharedInstance] appColorsArray][self.selectedChapter];
     screenBounds = [UIScreen mainScreen].bounds;
-    NSLog(@"Seleccioné el juego %d en el capítulo %d", self.selectedGame, self.selectedChapter);
+    NSLog(@"Seleccioné el juego %lu en el capítulo %lu", (unsigned long)self.selectedGame, (unsigned long)self.selectedChapter);
     [self setupUI];
-    NSLog(@"Tamaño de la matriz: %d", matrixSize);
+    NSLog(@"Tamaño de la matriz: %lu", (unsigned long)matrixSize);
     //[self createSquareMatrixOf:matrixSize];
     [self initGame];
 }
@@ -117,7 +117,7 @@
         labelsFontSize = 18.0;
     }
     
-    self.titleLabel.text = [NSString stringWithFormat:@"Chapter %i - Game %i", self.selectedChapter + 1, self.selectedGame + 1];
+    self.titleLabel.text = [NSString stringWithFormat:@"Chapter %lu - Game %lu", self.selectedChapter + 1, self.selectedGame + 1];
     self.titleLabel.textColor = [UIColor whiteColor];
     
     self.titleLabel.textAlignment = NSTextAlignmentCenter;
@@ -242,7 +242,7 @@
 
 -(void)initGame {
     [self resetGame];
-    self.titleLabel.text = [NSString stringWithFormat:@"Chapter %i - Game %i", self.selectedChapter + 1, self.selectedGame + 1];
+    self.titleLabel.text = [NSString stringWithFormat:@"Chapter %lu - Game %lu", self.selectedChapter + 1, self.selectedGame + 1];
     
     NSString *gamesDatabasePath = [[NSBundle mainBundle] pathForResource:@"WordsGamesDatabase2" ofType:@"plist"];
     NSArray *chaptersDataArray = [NSArray arrayWithContentsOfFile:gamesDatabasePath];
@@ -254,7 +254,7 @@
         //NSUInteger buttonTag = [self tagForButtonAtRow:row column:column];
         //[self addOneToButtonWithTag:buttonTag];
     }
-    self.maxTapsLabel.text = [NSString stringWithFormat:@"Taps for perfect score: %d", [self.pointsArray count]];
+    self.maxTapsLabel.text = [NSString stringWithFormat:@"Taps for perfect score: %lu", (unsigned long)[self.pointsArray count]];
     self.numberOfTapsLabel.text = @"Number of taps: 0";
     numberOfTaps = 0;
 }
@@ -343,7 +343,7 @@
     }
     
     NSUInteger buttonSize = (self.buttonsContainerView.frame.size.width - ((matrixSize + 1)*buttonDistance)) / matrixSize;
-    NSLog(@"Tamaño del boton: %d", buttonSize);
+    NSLog(@"Tamaño del boton: %lu", (unsigned long)buttonSize);
     
     int h = 1000;
     for (int i = 0; i < size; i++) {
@@ -375,7 +375,7 @@
 #pragma mark - Actions
 
 -(void)numberButtonPressed:(UIButton *)numberButton {
-    NSLog(@"Oprimí el boton con tag %d", numberButton.tag);
+    NSLog(@"Oprimí el boton con tag %ld", (long)numberButton.tag);
     NSUInteger index = numberButton.tag - 1000;
     NSInteger column = index / matrixSize;
     NSInteger row = index % matrixSize;
@@ -412,7 +412,7 @@
 }
 
 -(void)updateUI {
-    self.numberOfTapsLabel.text = [NSString stringWithFormat:@"Number of taps: %i", numberOfTaps];
+    self.numberOfTapsLabel.text = [NSString stringWithFormat:@"Number of taps: %lu", (unsigned long)numberOfTaps];
 }
 
 -(void)checkIfUserWon {
@@ -434,7 +434,7 @@
     //Unlock the next game saving the game number with FileSaver
     FileSaver *fileSaver = [[FileSaver alloc] init];
     NSMutableArray *chaptersArray = [fileSaver getDictionary:@"WordChaptersDic"][@"WordChaptersArray"];
-    NSLog(@"Agregando el número %d a filesaver porque gané", self.selectedGame + 2);
+    NSLog(@"Agregando el número %lu a filesaver porque gané", self.selectedGame + 2);
     
     //Check if the user won the last game of the chapter
     if (self.selectedGame == 8) {

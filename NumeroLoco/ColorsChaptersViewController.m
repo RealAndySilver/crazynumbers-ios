@@ -332,7 +332,7 @@
     [self playButtonPressedSound];
     
     BOOL userCanPlayGame = [self checkIfUserCanPlayGame:game + 1 inChapter:self.pageControl.currentPage];
-    NSLog(@"Se seleccionó el juego %d", game);
+    NSLog(@"Se seleccionó el juego %lu", (unsigned long)game);
     if (userCanPlayGame) {
         [self goToGameVCWithSelectedGame:game inChapter:self.pageControl.currentPage];
     } else {
@@ -343,7 +343,7 @@
         alert.delegate = self;
         [alert showAlertInView:self.view];
     }
-    NSLog(@"Se seleccionó el juego %d", game);
+    NSLog(@"Se seleccionó el juego %lu", (unsigned long)game);
 }
 
 #pragma mark - Notification Handlers

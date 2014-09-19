@@ -33,6 +33,7 @@
 @implementation FourthPageViewController {
     BOOL isPad;
     NSUInteger fontSize;
+    CGRect screenBounds;
 }
 
 -(NSArray *)bluePaletteArray {
@@ -44,6 +45,7 @@
 
 -(void)viewDidLoad {
     [super viewDidLoad];
+    screenBounds = [UIScreen mainScreen].bounds;
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
         isPad = YES;
         fontSize = 30.0;
@@ -63,6 +65,15 @@
     [self.view addSubview:closeButton];
     
     //Back button
+    //Back button
+    if (screenBounds.size.height < 500.0) {
+        //Small iphone
+        self.backButton.center = CGPointMake(self.backButton.center.x, screenBounds.size.height - 40.0);
+        self.continueButton.center = CGPointMake(self.continueButton.center.x, screenBounds.size.height - 40.0);
+    } else {
+        self.backButton.center = CGPointMake(self.backButton.center.x, screenBounds.size.height - 70.0);
+        self.continueButton.center = CGPointMake(self.continueButton.center.x, screenBounds.size.height - 70.0);
+    }
     [self.backButton setTitleColor:[[AppInfo sharedInstance] appColorsArray][0] forState:UIControlStateNormal];
     self.backButton.layer.cornerRadius = 10.0;
     self.backButton.layer.borderWidth = 1.0;

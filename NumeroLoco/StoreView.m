@@ -204,7 +204,7 @@
 }
 
 -(void)saveTouchesLeftInUserDefaults:(NSUInteger)touchesLeft {
-    NSLog(@"***************** guardaré %d toques ******************", touchesLeft);
+    NSLog(@"***************** guardaré %lu toques ******************", (unsigned long)touchesLeft);
     [[NSUserDefaults standardUserDefaults] setObject:@(touchesLeft) forKey:@"Touches"];
     [[NSUserDefaults standardUserDefaults] synchronize];
     [TouchesObject sharedInstance].totalTouches = touchesLeft;
@@ -224,7 +224,7 @@
 
 -(void)buyButtonPressedInCell:(StoreProductsCell *)storeProductsCell {
     NSIndexPath *indexPath = [self.tableView indexPathForCell:storeProductsCell];
-    NSLog(@"Compre el producto en la posicion %d", indexPath.row);
+    NSLog(@"Compre el producto en la posicion %ld", (long)indexPath.row);
     IAPProduct *product = self.purchasesDic[self.purchasesIDsArray[indexPath.row]];
     [self buyProduct:product];
 }

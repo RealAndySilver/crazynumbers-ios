@@ -59,6 +59,9 @@
         //Small iphone
         self.backButton.center = CGPointMake(self.backButton.center.x, screenBounds.size.height - 40.0);
         self.continueButton.center = CGPointMake(self.continueButton.center.x, screenBounds.size.height - 40.0);
+    } else {
+        self.backButton.center = CGPointMake(self.backButton.center.x, screenBounds.size.height - 70.0);
+        self.continueButton.center = CGPointMake(self.continueButton.center.x, screenBounds.size.height - 70.0);
     }
     [self.backButton setTitleColor:[[AppInfo sharedInstance] appColorsArray][0] forState:UIControlStateNormal];
     self.backButton.layer.cornerRadius = 10.0;

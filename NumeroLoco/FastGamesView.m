@@ -33,7 +33,7 @@
         
         //Get the games completed
         self.gamesCompleted = [[[NSUserDefaults standardUserDefaults] objectForKey:@"unlockedFastGames"] intValue];
-        NSLog(@"unlcoked games: %d", self.gamesCompleted);
+        NSLog(@"unlcoked games: %lu", (unsigned long)self.gamesCompleted);
         
         //Close button
         UIButton *closeButton = [[UIButton alloc] initWithFrame:CGRectMake(5.0, 5.0, 30.0, 30.0)];
@@ -77,7 +77,7 @@
 
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     GameCell *cell = (GameCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"identifier" forIndexPath:indexPath];
-    cell.gameNumberLabel.text = [NSString stringWithFormat:@"%d", indexPath.row + 1];
+    cell.gameNumberLabel.text = [NSString stringWithFormat:@"%ld", indexPath.row + 1];
     if (self.gamesCompleted >= indexPath.row + 1) {
         cell.gameNumberLabel.layer.borderColor = self.viewColor.CGColor;
         cell.gameNumberLabel.backgroundColor = self.viewColor;

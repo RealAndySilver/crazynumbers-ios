@@ -250,13 +250,13 @@
 
 -(void)chaptersCellDidSelectGame:(NSUInteger)game {
     BOOL userCanPlayGame = [self checkIfUserCanPlayGame:game + 1 inChapter:self.pageControl.currentPage];
-    NSLog(@"Se seleccionó el juego %d", game);
+    NSLog(@"Se seleccionó el juego %lu", (unsigned long)game);
     if (userCanPlayGame) {
         [self goToGameVCWithSelectedGame:game inChapter:self.pageControl.currentPage];
     } else {
         [[[UIAlertView alloc] initWithTitle:@"Oops!" message:@"You haven't unlock this game yet!" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil] show];
     }
-    NSLog(@"Se seleccionó el juego %d", game);
+    NSLog(@"Se seleccionó el juego %lu", (unsigned long)game);
 }
 
 #pragma mark - Notification Handlers

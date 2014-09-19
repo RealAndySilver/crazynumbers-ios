@@ -92,7 +92,7 @@
     
     //Set initial lives for fast game mode
     if ([[NSUserDefaults standardUserDefaults] objectForKey:@"lives"] == nil) {
-        [[NSUserDefaults standardUserDefaults] setObject:@1 forKey:@"lives"];
+        [[NSUserDefaults standardUserDefaults] setObject:@5 forKey:@"lives"];
         [[NSUserDefaults standardUserDefaults] synchronize];
     }
     
@@ -101,7 +101,7 @@
     }*/
     [[GameKitHelper sharedGameKitHelper] authenticateLocalPlayer];
     
-    [self checkForNewTouchesAndLives];
+    [self performSelector:@selector(checkForNewTouchesAndLives) withObject:nil afterDelay:1.0];
   
     return YES;
 }

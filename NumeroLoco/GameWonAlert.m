@@ -19,6 +19,7 @@
 @property (strong, nonatomic) UILabel *idealTimeLabel;
 @property (strong, nonatomic) UILabel *bonusScoreLabel;
 @property (strong, nonatomic) UILabel *bigScoreLabel;
+@property (assign, nonatomic) CGRect screenBounds;
 @end
 
 #define FONT_NAME @"HelveticaNeue-Light"
@@ -44,12 +45,12 @@
 
 -(void)setTouchesScore:(NSUInteger)touchesScore {
     _touchesScore = touchesScore;
-    self.scoreLabel.text = [NSString stringWithFormat:@"Score: %lu/%d", (unsigned long)touchesScore, self.maxTouchesScore];
+    self.scoreLabel.text = [NSString stringWithFormat:@"Score: %lu/%lu", (unsigned long)touchesScore, (unsigned long)self.maxTouchesScore];
 }
 
 -(void)setMaxTouchesScore:(NSUInteger)maxTouchesScore {
     _maxTouchesScore = maxTouchesScore;
-    self.scoreLabel.text = [NSString stringWithFormat:@"Score: %d/%lu", self.touchesScore, (unsigned long)maxTouchesScore];
+    self.scoreLabel.text = [NSString stringWithFormat:@"Score: %lu/%lu", (unsigned long)self.touchesScore, (unsigned long)maxTouchesScore];
 }
 
 -(void)setTimeUsed:(float)timeUsed {
@@ -64,12 +65,12 @@
 
 -(void)setBonusScore:(NSUInteger)bonusScore {
     _bonusScore = bonusScore;
-    self.bonusScoreLabel.text = [NSString stringWithFormat:@"Time Bonus Score: %lu/%d", (unsigned long)bonusScore, self.maxBonusScore];
+    self.bonusScoreLabel.text = [NSString stringWithFormat:@"Time Bonus Score: %lu/%lu", (unsigned long)bonusScore, (unsigned long)self.maxBonusScore];
 }
 
 -(void)setMaxBonusScore:(NSUInteger)maxBonusScore {
     _maxBonusScore = maxBonusScore;
-    self.bonusScoreLabel.text = [NSString stringWithFormat:@"Time Bonus Score: %d/%lu", self.bonusScore, (unsigned long)maxBonusScore];
+    self.bonusScoreLabel.text = [NSString stringWithFormat:@"Time Bonus Score: %lu/%lu", (unsigned long)self.bonusScore, (unsigned long)maxBonusScore];
     [self setTotalScoreLabel];
 }
 
@@ -84,6 +85,8 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
+        self.screenBounds = [UIScreen mainScreen].bounds;
+        
         NSUInteger socialButtonsWidth = frame.size.height/8.8;
 
         // Initialization code
@@ -93,7 +96,7 @@
         self.transform = CGAffineTransformMakeScale(0.5, 0.5);
         
         //Title Label
-        UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 20.0, frame.size.width, 40.0)];
+        UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0, 20.0, frame.size.width, 40.0)];
         titleLabel.text = @"Game Won!";
         titleLabel.textColor = [UIColor blackColor];
         titleLabel.textAlignment = NSTextAlignmentCenter;
@@ -153,7 +156,12 @@
         [self addSubview:self.bonusScoreLabel];
         
         //Total Score label
-        UILabel *totalScoreLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0, frame.size.height - frame.size.height/2.93, frame.size.width - 40.0, 20.0)];
+        UILabel *totalScoreLabel = [[UILabel alloc] init];
+        if (self.screenBounds.size.height < 500) {
+             totalScoreLabel.frame = CGRectMake(20.0, frame.size.height - frame.size.height/2.93, frame.size.width - 40.0, 20.0);
+        } else {
+            totalScoreLabel.frame = CGRectMake(20.0, frame.size.height/2.0 + 40.0, frame.size.width - 40.0, 20.0);
+        }
         totalScoreLabel.text = @"Total Score";
         totalScoreLabel.textColor = [UIColor darkGrayColor];
         totalScoreLabel.font = [UIFont fontWithName:FONT_NAME size:20.0];
@@ -165,7 +173,7 @@
         self.bigScoreLabel.text = @"0/0";
         self.bigScoreLabel.textAlignment = NSTextAlignmentCenter;
         self.bigScoreLabel.textColor = [[AppInfo sharedInstance] appColorsArray][2];
-        self.bigScoreLabel.font = [UIFont fontWithName:FONT_NAME size:40.0];
+        self.bigScoreLabel.font = [UIFont fontWithName:FONT_NAME size:30.0];
         [self addSubview:self.bigScoreLabel];
         
         //Faebook button
@@ -203,14 +211,29 @@
         [self addSubview:challengeLabel];
         
         //Continue Button
-        UIButton *closeButton = [[UIButton alloc] initWithFrame:CGRectMake(5.0, 5.0, 30.0, 30.0)];
-        [closeButton setTitle:@"✕" forState:UIControlStateNormal];
-        [closeButton setTitleColor:[UIColor colorWithWhite:0.7 alpha:1.0] forState:UIControlStateNormal];
-        closeButton.layer.borderColor = [UIColor colorWithWhite:0.7 alpha:1.0].CGColor;
-        closeButton.layer.borderWidth = 1.0;
-        closeButton.layer.cornerRadius = 10.0;
-        [closeButton addTarget:self action:@selector(closeAlertInView:) forControlEvents:UIControlEventTouchUpInside];
-        [self addSubview:closeButton];
+        if (self.screenBounds.size.height > 500) {
+            //Big screen
+            UIButton *closeButton = [[UIButton alloc] initWithFrame:CGRectMake(frame.size.width/2.0 - 60.0, frame.size.height - 150.0, 120.0, 35.0)];
+            [closeButton setTitle:@"Continue" forState:UIControlStateNormal];
+            [closeButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+            closeButton.titleLabel.font = [UIFont fontWithName:FONT_NAME size:15.0];
+            closeButton.backgroundColor = [[AppInfo sharedInstance] appColorsArray][2];
+            closeButton.layer.cornerRadius = 10.0;
+            [closeButton addTarget:self action:@selector(closeAlertInView:) forControlEvents:UIControlEventTouchUpInside];
+            [self addSubview:closeButton];
+        
+        } else {
+            //iPhone 4s
+            UIButton *closeButton = [[UIButton alloc] initWithFrame:CGRectMake(5.0, 5.0, 30.0, 30.0)];
+            [closeButton setTitle:@"✕" forState:UIControlStateNormal];
+            [closeButton setTitleColor:[UIColor colorWithWhite:0.7 alpha:1.0] forState:UIControlStateNormal];
+            closeButton.titleLabel.font = [UIFont fontWithName:FONT_NAME size:15.0];
+            closeButton.layer.cornerRadius = 10.0;
+            closeButton.layer.borderColor = [UIColor colorWithWhite:0.7 alpha:1.0].CGColor;
+            closeButton.layer.borderWidth = 1.0;
+            [closeButton addTarget:self action:@selector(closeAlertInView:) forControlEvents:UIControlEventTouchUpInside];
+            [self addSubview:closeButton];
+        }
     }
     return self;
 }

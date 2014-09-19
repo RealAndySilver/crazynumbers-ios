@@ -411,7 +411,7 @@
     else if (matrixSize == 6) fontSize = 30.0;
     
     NSUInteger buttonSize = (self.buttonsContainerView.frame.size.width - ((matrixSize + 1)*buttonDistance)) / matrixSize;
-    NSLog(@"Tamaño del boton: %d", buttonSize);
+    NSLog(@"Tamaño del boton: %lu", (unsigned long)buttonSize);
     
     int h = 1000;
     for (int i = 0; i < size; i++) {
@@ -538,7 +538,7 @@
     self.counterLabel.transform = CGAffineTransformMakeRotation(M_PI * count);
     
     startGameCount--;
-    NSLog(@"Start game count: %d", startGameCount);
+    NSLog(@"Start game count: %lu", (unsigned long)startGameCount);
     
     if (startGameCount <= 0) {
         NSLog(@"Game begins!!!");
@@ -552,7 +552,7 @@
         gameInProgress = YES;
         
     } else {
-        self.counterLabel.text = [NSString stringWithFormat:@"%d", startGameCount];
+        self.counterLabel.text = [NSString stringWithFormat:@"%lu", (unsigned long)startGameCount];
     }
     
     count++;
@@ -567,7 +567,7 @@
 -(void)topNumberButtonPressed:(UIButton *)numberButton {
     [self playButtonPressedSound];
     
-    NSLog(@"Oprimí el boton con tag %d", numberButton.tag);
+    NSLog(@"Oprimí el boton con tag %ld", (long)numberButton.tag);
     NSUInteger index = numberButton.tag - 1000;
     NSInteger column = index / matrixSize;
     NSInteger row = index % matrixSize;
@@ -604,7 +604,7 @@
 -(void)bottomNumberButtonPressed:(UIButton *)numberButton {
     [self playButtonPressedSound];
     
-    NSLog(@"Oprimí el boton con tag %d", numberButton.tag);
+    NSLog(@"Oprimí el boton con tag %ld", (long)numberButton.tag);
     NSUInteger index = numberButton.tag - 2000;
     NSInteger column = index / matrixSize;
     NSInteger row = index % matrixSize;
@@ -643,7 +643,7 @@
     if (newbuttonValue < 0) {
         newbuttonValue = maxNumber;
     }
-    return [NSString stringWithFormat:@"%i", newbuttonValue];
+    return [NSString stringWithFormat:@"%li", (long)newbuttonValue];
 }
 
 -(void)checkIfBottomUserWon {
@@ -692,10 +692,10 @@
 -(void)updateUI {
     if (topUserWon) {
         gamesWonTopUser++;
-        self.gamesWonTopLabel.text = [NSString stringWithFormat:@"Games Won: %d", gamesWonTopUser];
+        self.gamesWonTopLabel.text = [NSString stringWithFormat:@"Games Won: %lu", (unsigned long)gamesWonTopUser];
     } else {
         gamesWonBottomUser++;
-        self.gamesWonBottomLabel.text = [NSString stringWithFormat:@"Games Won: %d", gamesWonBottomUser];
+        self.gamesWonBottomLabel.text = [NSString stringWithFormat:@"Games Won: %lu", (unsigned long)gamesWonBottomUser];
     }
 }
 
@@ -930,7 +930,7 @@
     else if (matrixSize == 6) fontSize = 30.0;
     
     NSUInteger buttonSize = (self.buttonsContainerView.frame.size.width - ((matrixSize + 1)*buttonDistance)) / matrixSize;
-    NSLog(@"Tamaño del boton: %d", buttonSize);
+    NSLog(@"Tamaño del boton: %lu", (unsigned long)buttonSize);
     
     ///////////////////////////////////////////////////////////
     int h = 1000;
@@ -968,7 +968,7 @@
     else if (matrixSize == 6) fontSize = 30.0;
     
     NSUInteger buttonSize = (self.buttonsContainerView2.frame.size.width - ((matrixSize + 1)*buttonDistance)) / matrixSize;
-    NSLog(@"Tamaño del boton: %d", buttonSize);
+    NSLog(@"Tamaño del boton: %lu", (unsigned long)buttonSize);
     
     ///////////////////////////////////////////////////////////
     int h = 2000;

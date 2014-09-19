@@ -20,6 +20,11 @@
 #import "AudioPlayer.h"
 #import "TwoButtonsAlert.h"
 #import "OneButtonAlert.h"
+#import "FileSaver.h"
+#import "TutorialContainerViewController.h"
+#import "Flurry.h"
+#import "FlurryAds.h"
+#import "FlurryAdDelegate.h"
 
 @interface FastGameModeViewController () <FastGameAlertDelegate, BuyLivesViewDelegate, NoTouchesAlertDelegate, MultiplayerWinAlertDelegate, AllGamesFinishedViewDelegate, FastGamesViewDelegate, TwoButtonsAlertDelegate>
 @property (strong, nonatomic) NSArray *pointsArray;
@@ -53,6 +58,7 @@
     NSUInteger totalGames;
     NSUInteger selectedGameInFastView;
     NSUInteger randomColorIndex;
+    NSUInteger fastGameWinAlertActiveTag;
     float timeAnimationDuration;
     BOOL timeLabelAnimationActive;
     
@@ -80,6 +86,7 @@
 
 -(void)viewDidLoad {
     [super viewDidLoad];
+    
     ticTocSoundActivated = [self getTicTocSelectionInUserDefaults];
     timeAnimationDuration = 0.5;
     self.gamesDatabasePath = [[NSBundle mainBundle] pathForResource:@"FastGamesDatabase" ofType:@"plist"];
@@ -99,6 +106,31 @@
     if (!userCanPlay && !userBoughtInfiniteMode) {
         [self disableGame];
     }
+    
+    [self performSelector:@selector(checkLives) withObject:nil afterDelay:0.5];
+    
+    //Flurry
+    if (!userBoughtInfiniteMode) {
+        //Add adds from Flurry
+        [FlurryAds setAdDelegate:self];
+        if ([FlurryAds adReadyForSpace:@"FullScreenAd"]) {
+            NSLog(@"Mostraré el ad");
+            //[FlurryAds displayAdForSpace:@"FullScreenAd" onView:self.view];
+        } else {
+            NSLog(@"No mostraré el ad sino que lo cargaré");
+            [FlurryAds fetchAdForSpace:@"FullScreenAd" frame:self.view.frame size:FULLSCREEN];
+        }
+    }
+}
+
+-(void)checkLives {
+    if (!userCanPlay && !userBoughtInfiniteMode) {
+        [self showBuyMoreLivesAlert];
+    } else  {
+        [self.gameTimer invalidate];
+        self.gameTimer = nil;
+        [self showStartAlert];
+    }
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -111,12 +143,17 @@
 
 -(void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    if (!userCanPlay && !userBoughtInfiniteMode) {
-        [self showBuyMoreLivesAlert];
-    } else  {
-        [self.gameTimer invalidate];
-        self.gameTimer = nil;
-        [self showStartAlert];
+    
+    //Check if this is the first time the user launch the app
+    FileSaver *fileSaver = [[FileSaver alloc] init];
+    if (![[fileSaver getDictionary:@"FirstAppLaunchDic"][@"FirstAppLaunchKey"] boolValue]) {
+        //This is the first time the user launches the app
+        //so present the tutorial view controller
+        [fileSaver setDictionary:@{@"FirstAppLaunchKey" : @YES} withName:@"FirstAppLaunchDic"];
+        NSLog(@"Iré al tutorial");
+        [self goToTutorialVC];
+    } else {
+        NSLog(@"No iré al tutorial");
     }
 }
 
@@ -507,6 +544,11 @@
 
 #pragma mark - Actions 
 
+-(void)goToTutorialVC {
+    TutorialContainerViewController *tutContainerVC = [self.storyboard instantiateViewControllerWithIdentifier:@"TutorialContainer"];
+    [self presentViewController:tutContainerVC animated:YES completion:nil];
+}
+
 -(void)exitGame {
     [[AudioPlayer sharedInstance] playRestartSound];
     [[AudioPlayer sharedInstance] stopShakeSound];
@@ -745,6 +787,26 @@
 
 #pragma mark - Winning & Lossing
 
+-(void)prepareNextGame {
+    [[AudioPlayer sharedInstance] playRestartSound];
+    
+    if (fastGameWinAlertActiveTag == 1) {
+        self.currentGame++;
+        [self initGame];
+        [self startTimer];
+        [self playShakerSound];
+        timeLabelAnimationActive = YES;
+        [self startTimeLabelAnimation];
+        
+    } else if (fastGameWinAlertActiveTag == 2){
+        [self initGame];
+        [self startTimer];
+        [self playShakerSound];
+        timeLabelAnimationActive = YES;
+        [self startTimeLabelAnimation];
+    }
+}
+
 -(void)checkIfUserWonAtColorsGame {
     for (int i = 0; i < matrixSize; i++) {
         for (int j = 0; j < matrixSize; j++) {
@@ -828,6 +890,17 @@
     } else {
         //Show loss alert
         [self showLossAlert];
+    }
+    
+    //Fade out thr alarm sound
+    [self performSelector:@selector(fadeOutAlarm) withObject:nil afterDelay:2.0];
+}
+
+-(void)fadeOutAlarm {
+    if ([AudioPlayer sharedInstance].alarmSound.volume > 0.0) {
+        NSLog(@"entre acaaaa");
+        [AudioPlayer sharedInstance].alarmSound.volume -= 0.02;
+        [self performSelector:@selector(fadeOutAlarm) withObject:nil afterDelay:0.01];
     }
 }
 
@@ -1054,6 +1127,7 @@
     FastGameWinAlert *fastGameWinAlert = [[FastGameWinAlert alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 140.0, self.view.bounds.size.height/2.0 - 140.0, 280.0, 280.0)];
     fastGameWinAlert.delegate = self;
     fastGameWinAlert.tag = 1;
+    fastGameWinAlertActiveTag = 1;
     fastGameWinAlert.buyLivesButton.backgroundColor = [[AppInfo sharedInstance] appColorsArray][randomColorIndex];
     fastGameWinAlert.continueButton.backgroundColor = [[AppInfo sharedInstance] appColorsArray][randomColorIndex];
     fastGameWinAlert.alertLabel.text = [NSString stringWithFormat:@"You have won game %lu, keep going!", (unsigned long)self.currentGame + 1];
@@ -1064,6 +1138,7 @@
     FastGameWinAlert *lossAlert = [[FastGameWinAlert alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 140.0, self.view.bounds.size.height/2.0 - 140.0, 280.0, 280.0)];
     lossAlert.delegate = self;
     lossAlert.tag = 2;
+    fastGameWinAlertActiveTag = 2;
     lossAlert.buyLivesButton.backgroundColor = [[AppInfo sharedInstance] appColorsArray][randomColorIndex];
     lossAlert.continueButton.backgroundColor = [[AppInfo sharedInstance] appColorsArray][randomColorIndex];
     [lossAlert.continueButton setTitle:@"Try again" forState:UIControlStateNormal];
@@ -1165,7 +1240,9 @@
 }
 
 -(void)continueButtonPressedInAlert:(FastGameWinAlert *)fastGameWinAlert {
-    [[AudioPlayer sharedInstance] playRestartSound];
+    [self showFlurryAds];
+    
+    /*[[AudioPlayer sharedInstance] playRestartSound];
     if (fastGameWinAlert.tag == 1) {
         self.currentGame++;
         [self initGame];
@@ -1180,7 +1257,7 @@
         [self playShakerSound];
         timeLabelAnimationActive = YES;
         [self startTimeLabelAnimation];
-    }
+    }*/
 }
 
 -(void)buyLivesButtonPressedInAlert:(FastGameWinAlert *)fastGameWinAlert {
@@ -1378,6 +1455,43 @@
         if ([[notificationDic objectForKey:@"notificationID"] isEqualToString:@"livesNotification"]) {
             [[UIApplication sharedApplication] cancelLocalNotification:notification];
         }
+    }
+}
+
+#pragma mark - Flurry Ads
+
+-(void)showFlurryAds {
+    //Check if the user removed the ads
+    FileSaver *fileSaver = [[FileSaver alloc] init];
+    BOOL userHasRemoveAds = [[fileSaver getDictionary:@"UserRemovedAdsDic"][@"UserRemovedAdsKey"] boolValue];
+    
+    if (userHasRemoveAds || userBoughtInfiniteMode) {
+        //The user removed the ads
+        
+        //Check if this is the last game
+        [self prepareNextGame];
+        
+    } else {
+        //The user has not removed the ads, so display them.
+        if ([FlurryAds adReadyForSpace:@"FullScreenAd"]) {
+            NSLog(@"Mostraré el ad");
+            [FlurryAds displayAdForSpace:@"FullScreenAd" onView:self.view];
+        } else {
+            NSLog(@"No mostraré el ad sino que lo cargaré");
+            [FlurryAds fetchAdForSpace:@"FullScreenAd" frame:self.view.frame size:FULLSCREEN];
+            
+            //Go to the next game
+            [self prepareNextGame];
+        }
+    }
+}
+
+- (void)spaceDidDismiss:(NSString *)adSpace interstitial:(BOOL)interstitial {
+    NSLog(@"Entré al spaceDidDismiss");
+    if (interstitial) {
+        // Resume app state here
+        NSLog(@"**************Entraré al prepare next game ***************");
+        [self prepareNextGame];
     }
 }
 

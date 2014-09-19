@@ -13,7 +13,6 @@
 @property (strong, nonatomic) AVAudioPlayer *buttonPressSound;
 @property (strong, nonatomic) AVAudioPlayer *winSound;
 @property (strong, nonatomic) AVAudioPlayer *restartSound;
-@property (strong, nonatomic) AVAudioPlayer *alarmSound;
 @end
 
 @implementation AudioPlayer

@@ -11,6 +11,8 @@
 
 @interface AudioPlayer : NSObject
 @property (strong, nonatomic) AVAudioPlayer *shakerPlayer;
+@property (strong, nonatomic) AVAudioPlayer *alarmSound;
+
 +(AudioPlayer *)sharedInstance;
 -(void)playBackSound;
 -(void)playButtonPressSound;

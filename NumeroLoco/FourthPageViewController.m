@@ -110,7 +110,7 @@
     } else {
         self.textView = [[UITextView alloc] initWithFrame:CGRectMake(30.0, 50.0, self.view.bounds.size.width - 60.0, 110.0)];
     }
-    self.textView.text = @"Colors Game\nObjective: Set all buttons to white color. Everytime you touch a button, it's color will become whiter.";
+    self.textView.text = @"Colors Game\nObjective: Set all buttons to white.\n Every time you touch a button, its color will become lighter.";
     self.textView.textColor = [UIColor darkGrayColor];
     self.textView.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:fontSize];
     self.textView.userInteractionEnabled = NO;
@@ -145,7 +145,7 @@
 
 -(void)showFirstAlert {
     TutorialAlertView *tutorialAlert = [[TutorialAlertView alloc] initWithFrame:CGRectMake(self.view.bounds.size.width/2.0 - 140.0, 20.0, 280.0, 200.0)];
-    tutorialAlert.textView.text = @"You won! As well as in the numbers game, when you touch a button, you also affect the upper,left, bottom and right buttons. Let's practice again!";
+    tutorialAlert.textView.text = @"You won! Just like in the numbers game, when you touch a button, you also affect the upper, left, bottom and right buttons. Let's practice again!";
     tutorialAlert.tag = 1;
     tutorialAlert.delegate = self;
     [tutorialAlert showInView:self.view];
@@ -202,7 +202,7 @@
 
 -(void)showSecondAlert {
     TutorialAlertView *tutorialAlert = [[TutorialAlertView alloc] initWithFrame:CGRectMake(self.view.bounds.size.width/2.0 - 140.0, 20.0, 280.0, 200.0)];
-    tutorialAlert.textView.text = @"Excellent! You're becoming a Cross master!. \n\nLet's practice one last time!";
+    tutorialAlert.textView.text = @"Excellent! You're becoming a Cross master! \n\nLet's practice one last time!";
     tutorialAlert.tag = 2;
     tutorialAlert.delegate = self;
     [tutorialAlert showInView:self.view];
@@ -233,7 +233,7 @@
 
 -(void)showFinalAlert {
     TutorialAlertView *tutorialAlert = [[TutorialAlertView alloc] initWithFrame:CGRectMake(self.view.bounds.size.width/2.0 - 140.0, 20.0, 280.0, 260.0)];
-    tutorialAlert.textView.text = @"Congratulations! You have completed the tutorial! Start playing!\n\n *General Tip: If you affect a button that is already white (or has a value of zero, in the case of the numbers game), it will get colorized again";
+    tutorialAlert.textView.text = @"Congratulations! You have completed the tutorial! Start playing!\n\n *General Tip: If you affect a button that is already white (or has a value of zero, in the case of the numbers game), it will turn back to its original color";
     tutorialAlert.tag = 3;
     tutorialAlert.delegate = self;
     [tutorialAlert showInView:self.view];

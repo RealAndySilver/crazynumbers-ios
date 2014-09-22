@@ -27,6 +27,24 @@
     tutorialImageView.contentMode = UIViewContentModeScaleAspectFit;
     [self.view addSubview:tutorialImageView];
     
+    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.view.bounds.size.width/2.0 - 120.0, 50.0, 240.0, 100.0)];
+    titleLabel.text = @"Numbers Game\nObjective: Set all the buttons to zero";
+    titleLabel.textAlignment = NSTextAlignmentCenter;
+    titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:15.0];
+    titleLabel.numberOfLines = 0;
+    titleLabel.textColor = [UIColor darkGrayColor];
+    [self.view addSubview:titleLabel];
+    
+    //other label
+    UILabel *descriptionLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.view.bounds.size.width/2.0 - 130.0, self.view.bounds.size.height - 190.0, 260.0, 100.0)];
+    descriptionLabel.text = @"By touching a button, its value will decrease by one, as well as the value of the upper, left, bottom and right buttons";
+    descriptionLabel.textAlignment = NSTextAlignmentCenter;
+    descriptionLabel.numberOfLines = 0;
+    descriptionLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:15.0];
+    descriptionLabel.textColor = [UIColor darkGrayColor];
+    [self.view addSubview:descriptionLabel];
+
+    
     //Close button
     UIButton *closeButton = [[UIButton alloc] initWithFrame:CGRectMake(10.0, 10.0, 30.0, 30.0)];
     [closeButton setTitle:@"✕" forState:UIControlStateNormal];

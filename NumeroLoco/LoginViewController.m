@@ -59,7 +59,7 @@
     UIButton *enterButton = [UIButton buttonWithType:UIButtonTypeSystem];
     enterButton.frame = CGRectMake(self.view.bounds.size.width/2.0 - 90, screenBounds.size.height - 60.0, 180.0, 50.0);
     [enterButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [enterButton setTitle:@"Don't Login" forState:UIControlStateNormal];
+    [enterButton setTitle:NSLocalizedString(@"Don't Login", @"Button to enter without login") forState:UIControlStateNormal];
     enterButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:15.0];
     enterButton.layer.cornerRadius = 10.0;
     enterButton.layer.borderColor = [UIColor whiteColor].CGColor;
@@ -69,7 +69,7 @@
     
     //Facebook button
     UIButton *facebookButton = [[UIButton alloc]initWithFrame:CGRectOffset(enterButton.frame, 0.0, -(enterButton.frame.size.height + 10.0))];
-    [facebookButton setTitle:@"Login With Facebook" forState:UIControlStateNormal];
+    [facebookButton setTitle:NSLocalizedString(@"Login With Facebook", @"Button to enter with facebook") forState:UIControlStateNormal];
     [facebookButton addTarget:self action:@selector(startLoginProcess) forControlEvents:UIControlEventTouchUpInside];
     facebookButton.layer.cornerRadius = 10.0;
     facebookButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:15.0];

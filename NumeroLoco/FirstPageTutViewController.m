@@ -27,6 +27,23 @@
     tutorialImageView.contentMode = UIViewContentModeScaleAspectFit;
     [self.view addSubview:tutorialImageView];
     
+    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.view.bounds.size.width/2.0 - 120.0, 50.0, 240.0, 100.0)];
+    titleLabel.text = @"Welcome to Cross, a simple, yet addictive game!";
+    titleLabel.textAlignment = NSTextAlignmentCenter;
+    titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:15.0];
+    titleLabel.numberOfLines = 0;
+    titleLabel.textColor = [UIColor darkGrayColor];
+    [self.view addSubview:titleLabel];
+    
+    //other label
+    UILabel *descriptionLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.view.bounds.size.width/2.0 - 120.0, self.view.bounds.size.height - 180.0, 240.0, 100.0)];
+    descriptionLabel.text = @"There are two types of games: Numbers and Colors";
+    descriptionLabel.textAlignment = NSTextAlignmentCenter;
+    descriptionLabel.numberOfLines = 0;
+    descriptionLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:15.0];
+    descriptionLabel.textColor = [UIColor darkGrayColor];
+    [self.view addSubview:descriptionLabel];
+    
     //Close button
     UIButton *closeButton = [[UIButton alloc] initWithFrame:CGRectMake(10.0, 10.0, 30.0, 30.0)];
     [closeButton setTitle:@"✕" forState:UIControlStateNormal];

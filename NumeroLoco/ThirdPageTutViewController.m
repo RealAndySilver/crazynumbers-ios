@@ -90,7 +90,7 @@
     
     //Textview setup
     self.textView = [[UITextView alloc] initWithFrame:CGRectMake(40.0, 45.0, self.view.bounds.size.width - 80.0, 120.0)];
-    self.textView.text = @"Let's practice! remember, when you touch a button, it's value will decrease by one, as well as the value of the upper, left, bottom and right button.";
+    self.textView.text = @"Let's practice! Remember, when you touch a button, its value will decrease by one, as well as the value of the upper, left, bottom and right button.";
     self.textView.textColor = [UIColor darkGrayColor];
     self.textView.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:fontSize];
     self.textView.textAlignment = NSTextAlignmentCenter;
@@ -197,7 +197,7 @@
     TutorialAlertView *tutorialAlert = [[TutorialAlertView alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 140.0, 20.0, 280.0, 200.0)];
     tutorialAlert.tag = 2;
     tutorialAlert.delegate = self;
-    tutorialAlert.textView.text = @"Excellent!\nBecause in this case there weren't upper and left buttons, the buttons that you affected were the right and bottom ones. Let's practice one last time!";
+    tutorialAlert.textView.text = @"Excellent!\nBecause in this case there weren't upper and left buttons, the buttons that you changed were the right and bottom ones. Let's practice one last time!";
     [tutorialAlert showInView:self.view];
 }
 

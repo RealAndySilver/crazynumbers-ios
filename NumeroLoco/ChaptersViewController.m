@@ -35,6 +35,7 @@
     CGRect screenBounds;
     NSUInteger numberOfChapters;
     NSUInteger selectedGame;
+    NSUInteger lastChapterUnlocked;
     BOOL isPad;
 }
 
@@ -87,6 +88,11 @@
     if (!_chaptersGamesFinishedArray) {
         FileSaver *fileSaver = [[FileSaver alloc] init];
         _chaptersGamesFinishedArray = [fileSaver getDictionary:@"NumberChaptersDic"][@"NumberChaptersArray"];
+    }
+    for (int i = 0; i < [_chaptersGamesFinishedArray count]; i++) {
+        if ([_chaptersGamesFinishedArray[i] count] > 0) {
+            lastChapterUnlocked = i + 1;
+        }
     }
     return _chaptersGamesFinishedArray;
 }
@@ -199,14 +205,16 @@
 }
 
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    NSLog(@"Index path %ld", (long)indexPath.item);
+    //NSLog(@"Index path %ld", (long)indexPath.item);
     ChaptersCell *cell = (ChaptersCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"CellIdentifier" forIndexPath:indexPath];
     cell.backgroundColor = [[AppInfo sharedInstance] appColorsArray][indexPath.item];
     cell.chapterNameLabel.text = self.chaptersNamesArray[indexPath.item];
     cell.chapterNameLabel.textColor = [UIColor whiteColor];
     cell.delegate = self;
-    NSLog(@"juegos ganados en este capítulo: %lu", (unsigned long)[self.chaptersGamesFinishedArray[indexPath.item] count]);
+    //NSLog(@"juegos ganados en este capítulo: %lu", (unsigned long)[self.chaptersGamesFinishedArray[indexPath.item] count]);
     NSArray *gamesFinishedArray = self.chaptersGamesFinishedArray[indexPath.item];
+    NSUInteger lastGameWon = [[gamesFinishedArray lastObject] intValue];
+    NSLog(@"Last game won: %lu", (unsigned long)lastGameWon);
     
     if ([gamesFinishedArray containsObject:@1]) {
         //NSString *labelString = [NSString stringWithFormat:@"Score: %d/%d", [self.coreDataScores[indexPath.item][0] intValue],[self.gamesDataArray[indexPath.item][0][@"maxScore"] intValue]];
@@ -215,6 +223,17 @@
         cell.button1.layer.borderColor = ((UIColor *)[[AppInfo sharedInstance] appColorsArray][indexPath.item]).CGColor;
         cell.button1.backgroundColor = [UIColor whiteColor];
         [cell.button1 setTitleColor:[[AppInfo sharedInstance] appColorsArray][indexPath.item] forState:UIControlStateNormal];
+        if (lastGameWon == 1 && lastChapterUnlocked == indexPath.item + 1) {
+            cell.button1.layer.borderWidth = 2.0;
+            cell.button1.layer.borderColor = [UIColor yellowColor].CGColor;
+            cell.button1.backgroundColor = [UIColor clearColor];
+            [cell.button1 setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        } else {
+            //cell.button1.layer.borderWidth = 1.0;
+            cell.button1.layer.borderColor = ((UIColor *)[[AppInfo sharedInstance] appColorsArray][indexPath.item]).CGColor;
+            cell.button1.backgroundColor = [UIColor whiteColor];
+            [cell.button1 setTitleColor:[[AppInfo sharedInstance] appColorsArray][indexPath.item] forState:UIControlStateNormal];
+        }
 
     } else {
         //NSString *labelString = [NSString stringWithFormat:@"Score: 0/%d", [self.gamesDataArray[indexPath.item][0][@"maxScore"] intValue]];
@@ -232,6 +251,18 @@
         cell.button2.layer.borderColor = ((UIColor *)[[AppInfo sharedInstance] appColorsArray][indexPath.item]).CGColor;
         cell.button2.backgroundColor = [UIColor whiteColor];
         [cell.button2 setTitleColor:[[AppInfo sharedInstance] appColorsArray][indexPath.item] forState:UIControlStateNormal];
+        if (lastGameWon == 2 && lastChapterUnlocked == indexPath.item + 1) {
+            cell.button2.layer.borderWidth = 2.0;
+            cell.button2.layer.borderColor = [UIColor yellowColor].CGColor;
+            cell.button2.backgroundColor = [UIColor clearColor];
+            [cell.button2 setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        }  else {
+            //cell.button2.layer.borderWidth = 1.0;
+            cell.button2.layer.borderColor = ((UIColor *)[[AppInfo sharedInstance] appColorsArray][indexPath.item]).CGColor;
+            cell.button2.backgroundColor = [UIColor whiteColor];
+            [cell.button2 setTitleColor:[[AppInfo sharedInstance] appColorsArray][indexPath.item] forState:UIControlStateNormal];
+        }
+        
     } else {
         //NSString *labelString = [NSString stringWithFormat:@"Score: 0/%d", [self.gamesDataArray[indexPath.item][1][@"maxScore"] intValue]];
         //cell.label2.text = labelString;
@@ -248,6 +279,18 @@
         cell.button3.layer.borderColor = ((UIColor *)[[AppInfo sharedInstance] appColorsArray][indexPath.item]).CGColor;
         cell.button3.backgroundColor = [UIColor whiteColor];
         [cell.button3 setTitleColor:[[AppInfo sharedInstance] appColorsArray][indexPath.item] forState:UIControlStateNormal];
+        if (lastGameWon == 3 && lastChapterUnlocked == indexPath.item + 1) {
+            cell.button3.layer.borderWidth = 2.0;
+            cell.button3.layer.borderColor = [UIColor yellowColor].CGColor;
+            cell.button3.backgroundColor = [UIColor clearColor];
+            [cell.button3 setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        } else {
+            //cell.button3.layer.borderWidth = 1.0;
+            cell.button3.layer.borderColor = ((UIColor *)[[AppInfo sharedInstance] appColorsArray][indexPath.item]).CGColor;
+            cell.button3.backgroundColor = [UIColor whiteColor];
+            [cell.button3 setTitleColor:[[AppInfo sharedInstance] appColorsArray][indexPath.item] forState:UIControlStateNormal];
+        }
+        
     } else {
         //NSString *labelString = [NSString stringWithFormat:@"Score: 0/%d", [self.gamesDataArray[indexPath.item][2][@"maxScore"] intValue]];
         //cell.label3.text = labelString;
@@ -264,6 +307,18 @@
         cell.button4.layer.borderColor = ((UIColor *)[[AppInfo sharedInstance] appColorsArray][indexPath.item]).CGColor;
         cell.button4.backgroundColor = [UIColor whiteColor];
         [cell.button4 setTitleColor:[[AppInfo sharedInstance] appColorsArray][indexPath.item] forState:UIControlStateNormal];
+        if (lastGameWon == 4 && lastChapterUnlocked == indexPath.item + 1) {
+            cell.button4.layer.borderWidth = 2.0;
+            cell.button4.layer.borderColor = [UIColor yellowColor].CGColor;
+            cell.button4.backgroundColor = [UIColor clearColor];
+            [cell.button4 setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        }  else {
+            //cell.button4.layer.borderWidth = 1.0;
+            cell.button4.layer.borderColor = ((UIColor *)[[AppInfo sharedInstance] appColorsArray][indexPath.item]).CGColor;
+            cell.button4.backgroundColor = [UIColor whiteColor];
+            [cell.button4 setTitleColor:[[AppInfo sharedInstance] appColorsArray][indexPath.item] forState:UIControlStateNormal];
+        }
+        
     } else {
         //NSString *labelString = [NSString stringWithFormat:@"Score: 0/%d", [self.gamesDataArray[indexPath.item][3][@"maxScore"] intValue]];
         //cell.label4.text = labelString;
@@ -280,6 +335,18 @@
         cell.button5.layer.borderColor = ((UIColor *)[[AppInfo sharedInstance] appColorsArray][indexPath.item]).CGColor;
         cell.button5.backgroundColor = [UIColor whiteColor];
         [cell.button5 setTitleColor:[[AppInfo sharedInstance] appColorsArray][indexPath.item] forState:UIControlStateNormal];
+        if (lastGameWon == 5 && lastChapterUnlocked == indexPath.item + 1) {
+            cell.button5.layer.borderWidth = 2.0;
+            cell.button5.layer.borderColor = [UIColor yellowColor].CGColor;
+            cell.button5.backgroundColor = [UIColor clearColor];
+            [cell.button5 setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        }  else {
+            //cell.button5.layer.borderWidth = 1.0;
+            cell.button5.layer.borderColor = ((UIColor *)[[AppInfo sharedInstance] appColorsArray][indexPath.item]).CGColor;
+            cell.button5.backgroundColor = [UIColor whiteColor];
+            [cell.button5 setTitleColor:[[AppInfo sharedInstance] appColorsArray][indexPath.item] forState:UIControlStateNormal];
+        }
+        
     } else {
         //NSString *labelString = [NSString stringWithFormat:@"Score: 0/%d", [self.gamesDataArray[indexPath.item][4][@"maxScore"] intValue]];
         //cell.label5.text = labelString;
@@ -287,7 +354,7 @@
         cell.button5.backgroundColor = [UIColor clearColor];
         cell.button5.layer.borderColor = [UIColor whiteColor].CGColor;
         [cell.button5 setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    }
+    } 
     
     if ([gamesFinishedArray containsObject:@6]) {
         //NSString *labelString = [NSString stringWithFormat:@"Score: %d/%d", [self.coreDataScores[indexPath.item][5] intValue],[self.gamesDataArray[indexPath.item][5][@"maxScore"] intValue]];
@@ -296,6 +363,18 @@
         cell.button6.layer.borderColor = ((UIColor *)[[AppInfo sharedInstance] appColorsArray][indexPath.item]).CGColor;
         cell.button6.backgroundColor = [UIColor whiteColor];
         [cell.button6 setTitleColor:[[AppInfo sharedInstance] appColorsArray][indexPath.item] forState:UIControlStateNormal];
+        if (lastGameWon == 6 && lastChapterUnlocked == indexPath.item + 1) {
+            cell.button6.layer.borderWidth = 2.0;
+            cell.button6.layer.borderColor = [UIColor yellowColor].CGColor;
+            cell.button6.backgroundColor = [UIColor clearColor];
+            [cell.button6 setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        }  else {
+            //cell.button6.layer.borderWidth = 1.0;
+            cell.button6.layer.borderColor = ((UIColor *)[[AppInfo sharedInstance] appColorsArray][indexPath.item]).CGColor;
+            cell.button6.backgroundColor = [UIColor whiteColor];
+            [cell.button6 setTitleColor:[[AppInfo sharedInstance] appColorsArray][indexPath.item] forState:UIControlStateNormal];
+        }
+        
     } else {
         //NSString *labelString = [NSString stringWithFormat:@"Score: 0/%d", [self.gamesDataArray[indexPath.item][5][@"maxScore"] intValue]];
         //cell.label6.text = labelString;
@@ -312,6 +391,18 @@
         cell.button7.layer.borderColor = ((UIColor *)[[AppInfo sharedInstance] appColorsArray][indexPath.item]).CGColor;
         cell.button7.backgroundColor = [UIColor whiteColor];
         [cell.button7 setTitleColor:[[AppInfo sharedInstance] appColorsArray][indexPath.item] forState:UIControlStateNormal];
+        if (lastGameWon == 7 && lastChapterUnlocked == indexPath.item + 1) {
+            cell.button7.layer.borderWidth = 2.0;
+            cell.button7.layer.borderColor = [UIColor yellowColor].CGColor;
+            cell.button7.backgroundColor = [UIColor clearColor];
+            [cell.button7 setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        }  else {
+            //cell.button7.layer.borderWidth = 1.0;
+            cell.button7.layer.borderColor = ((UIColor *)[[AppInfo sharedInstance] appColorsArray][indexPath.item]).CGColor;
+            cell.button7.backgroundColor = [UIColor whiteColor];
+            [cell.button7 setTitleColor:[[AppInfo sharedInstance] appColorsArray][indexPath.item] forState:UIControlStateNormal];
+        }
+        
     } else {
         //NSString *labelString = [NSString stringWithFormat:@"Score: 0/%d", [self.gamesDataArray[indexPath.item][6][@"maxScore"] intValue]];
         //cell.label7.text = labelString;
@@ -328,6 +419,18 @@
         cell.button8.layer.borderColor = ((UIColor *)[[AppInfo sharedInstance] appColorsArray][indexPath.item]).CGColor;
         cell.button8.backgroundColor = [UIColor whiteColor];
         [cell.button8 setTitleColor:[[AppInfo sharedInstance] appColorsArray][indexPath.item] forState:UIControlStateNormal];
+        if (lastGameWon == 8 && lastChapterUnlocked == indexPath.item + 1) {
+            cell.button8.layer.borderWidth = 2.0;
+            cell.button8.layer.borderColor = [UIColor yellowColor].CGColor;
+            cell.button8.backgroundColor = [UIColor clearColor];
+            [cell.button8 setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        }  else {
+            //cell.button8.layer.borderWidth = 1.0;
+            cell.button8.layer.borderColor = ((UIColor *)[[AppInfo sharedInstance] appColorsArray][indexPath.item]).CGColor;
+            cell.button8.backgroundColor = [UIColor whiteColor];
+            [cell.button8 setTitleColor:[[AppInfo sharedInstance] appColorsArray][indexPath.item] forState:UIControlStateNormal];
+        }
+        
     } else {
         //NSString *labelString = [NSString stringWithFormat:@"Score: 0/%d", [self.gamesDataArray[indexPath.item][7][@"maxScore"] intValue]];
         //cell.label8.text = labelString;
@@ -344,6 +447,18 @@
         cell.button9.layer.borderColor = ((UIColor *)[[AppInfo sharedInstance] appColorsArray][indexPath.item]).CGColor;
         cell.button9.backgroundColor = [UIColor whiteColor];
         [cell.button9 setTitleColor:[[AppInfo sharedInstance] appColorsArray][indexPath.item] forState:UIControlStateNormal];
+        if (lastGameWon == 9 && lastChapterUnlocked == indexPath.item + 1) {
+            cell.button9.layer.borderWidth = 2.0;
+            cell.button9.layer.borderColor = [UIColor yellowColor].CGColor;
+            cell.button9.backgroundColor = [UIColor clearColor];
+            [cell.button9 setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        } else {
+            //cell.button9.layer.borderWidth = 1.0;
+            cell.button9.layer.borderColor = ((UIColor *)[[AppInfo sharedInstance] appColorsArray][indexPath.item]).CGColor;
+            cell.button9.backgroundColor = [UIColor whiteColor];
+            [cell.button9 setTitleColor:[[AppInfo sharedInstance] appColorsArray][indexPath.item] forState:UIControlStateNormal];
+        }
+        
     } else {
         //NSString *labelString = [NSString stringWithFormat:@"Score: 0/%d", [self.gamesDataArray[indexPath.item][8][@"maxScore"] intValue]];
         //cell.label9.text = labelString;
@@ -354,6 +469,19 @@
     }
     
     return cell;
+}
+
+-(void)createViewInsideButton:(UIButton *)button {
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, 10.0, 10.0)];
+    view.layer.cornerRadius = view.frame.size.width/2.0;
+    view.backgroundColor = [UIColor whiteColor];
+    view.tag = 100;
+    [button addSubview:view];
+}
+
+-(void)deleteViewInsideButton:(UIButton *)button {
+    UIView *view = [button viewWithTag:100];
+    [view removeFromSuperview];
 }
 
 #pragma mark - Sounds 

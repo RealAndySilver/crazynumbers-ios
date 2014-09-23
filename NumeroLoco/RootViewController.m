@@ -258,6 +258,7 @@
     
     //GameMenu & OptionsMenu Buttons
     self.gamesMenuButton.frame = buttonFrames;
+    [self.gamesMenuButton setTitle:NSLocalizedString(@"Games", @"Games") forState:UIControlStateNormal];
     [self.gamesMenuButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     self.gamesMenuButton.center = CGPointMake(self.view.bounds.size.width + self.gamesMenuButton.frame.size.width/2.0, self.view.center.y + (self.view.bounds.size.height/4.0) - self.gamesMenuButton.bounds.size.height/2.0 + 10.0);
     self.gamesMenuButton.titleLabel.font = [UIFont fontWithName:fontName size:fontSize];
@@ -267,6 +268,7 @@
     self.gamesMenuButton.layer.borderColor = [UIColor whiteColor].CGColor;
     
     self.optionsMenuButton.frame = buttonFrames;
+    [self.optionsMenuButton setTitle:NSLocalizedString(@"Settings", @"Settings") forState:UIControlStateNormal];
     [self.optionsMenuButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     self.optionsMenuButton.center = CGPointMake(self.view.bounds.size.width + self.optionsMenuButton.frame.size.width/2.0, self.gamesMenuButton.center.y + self.gamesMenuButton.frame.size.height + 10.0);
     self.optionsMenuButton.titleLabel.font = [UIFont fontWithName:fontName size:fontSize];

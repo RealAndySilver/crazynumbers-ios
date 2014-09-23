@@ -28,7 +28,7 @@
     [self.view addSubview:tutorialImageView];
     
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.view.bounds.size.width/2.0 - 120.0, 50.0, 240.0, 100.0)];
-    titleLabel.text = @"Numbers Game\nObjective: Set all the buttons to zero";
+    titleLabel.text = NSLocalizedString(@"Numbers Game\nObjective: Set all the buttons to zero", @"Explanation of numbers game");
     titleLabel.textAlignment = NSTextAlignmentCenter;
     titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:15.0];
     titleLabel.numberOfLines = 0;
@@ -37,7 +37,7 @@
     
     //other label
     UILabel *descriptionLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.view.bounds.size.width/2.0 - 130.0, self.view.bounds.size.height - 190.0, 260.0, 100.0)];
-    descriptionLabel.text = @"By touching a button, its value will decrease by one, as well as the value of the upper, left, bottom and right buttons";
+    descriptionLabel.text = NSLocalizedString(@"By touching a button, its value will decrease by one, as well as the value of the upper, left, bottom and right buttons", @"a description of numbers game");
     descriptionLabel.textAlignment = NSTextAlignmentCenter;
     descriptionLabel.numberOfLines = 0;
     descriptionLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:15.0];
@@ -56,7 +56,7 @@
     [self.view addSubview:closeButton];
     
     UIButton *continueButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.bounds.size.width - 120.0, self.view.bounds.size.height - 90.0, 70.0, 40.0)];
-    [continueButton setTitle:@"Continue" forState:UIControlStateNormal];
+    [continueButton setTitle:NSLocalizedString(@"Continue", @"Continue") forState:UIControlStateNormal];
     [continueButton setTitleColor:[[AppInfo sharedInstance] appColorsArray][0] forState:UIControlStateNormal];
     continueButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:15.0];
     continueButton.layer.cornerRadius = 10.0;
@@ -66,7 +66,7 @@
     [self.view addSubview:continueButton];
     
     UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(50.0, self.view.bounds.size.height - 90.0, 70.0, 40.0)];
-    [backButton setTitle:@"Back" forState:UIControlStateNormal];
+    [backButton setTitle:NSLocalizedString(@"Back", @"Back button") forState:UIControlStateNormal];
     [backButton setTitleColor:[[AppInfo sharedInstance] appColorsArray][0] forState:UIControlStateNormal];
     backButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:15.0];
     backButton.layer.cornerRadius = 10.0;

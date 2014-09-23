@@ -50,7 +50,8 @@
  
     //Flurry Setup
     [Flurry setCrashReportingEnabled:YES];
-    [Flurry startSession:@"F3B2NR3G33WX6BTWXFFQ"];
+    [Flurry startSession:@"44HR5YX7Z6FKZ2B22PFR"];
+    //[Flurry startSession:@"F3B2NR3G33WX6BTWXFFQ"];
     [FlurryAds initialize:self.window.rootViewController];
     
     FileSaver *fileSaver = [[FileSaver alloc] init];

@@ -90,7 +90,7 @@
     
     //Textview setup
     self.textView = [[UITextView alloc] initWithFrame:CGRectMake(40.0, 45.0, self.view.bounds.size.width - 80.0, 120.0)];
-    self.textView.text = @"Let's practice! Remember, when you touch a button, its value will decrease by one, as well as the value of the upper, left, bottom and right button.";
+    self.textView.text = NSLocalizedString(@"Let's practice! Remember, when you touch a button, its value will decrease by one, as well as the value of the upper, left, bottom and right button.", nil);
     self.textView.textColor = [UIColor darkGrayColor];
     self.textView.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:fontSize];
     self.textView.textAlignment = NSTextAlignmentCenter;
@@ -100,9 +100,9 @@
     
     //Touch label
     self.touchLabel = [[UILabel alloc] initWithFrame:CGRectMake(40.0, self.textView.frame.origin.y + self.textView.frame.size.height - 10.0, self.view.bounds.size.width - 80.0, 50.0)];
-    self.touchLabel.text = @"Touch the center button";
+    self.touchLabel.text = NSLocalizedString(@"Touch the center button", nil);
     self.touchLabel.textAlignment = NSTextAlignmentCenter;
-    self.touchLabel.textColor = [UIColor darkGrayColor];
+    self.touchLabel.textColor = [[AppInfo sharedInstance] appColorsArray][0];
     self.touchLabel.numberOfLines = 0;
     self.touchLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:20.0];
     [self.view addSubview:self.touchLabel];
@@ -128,13 +128,13 @@
 
 -(void)showFirstAlert {
     TutorialAlertView *tutorialAlert = [[TutorialAlertView alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 140.0, 20.0, 280.0, 200.0)];
-    tutorialAlert.textView.text = @"Excellent!\nYou set all the buttons to zero! The light gray buttons were the ones affected by your touch. Let's practice again!";
+    tutorialAlert.textView.text = NSLocalizedString(@"Excellent!\nYou set all the buttons to zero! The light gray buttons were the ones affected by your touch. Let's practice again!", nil);
     tutorialAlert.tag = 1;
     tutorialAlert.delegate = self;
     [tutorialAlert showInView:self.view];
     
     self.touchLabel.transform = CGAffineTransformMakeTranslation(0.0, -70.0);
-    self.touchLabel.text = @"Now, touch the upper left button to win";
+    self.touchLabel.text = NSLocalizedString(@"Now, touch the upper left button to win", nil);
     
     self.textView.text = nil;
     /*self.textView.text = @"Now, touch the upper left button!";
@@ -172,6 +172,7 @@
         [self.button5 addTarget:self action:@selector(lastCenterButtonPress) forControlEvents:UIControlEventTouchUpInside];
     
     } else if (tutorialAlertView.tag == 3) {
+        [self continueButtonPressed];
         self.continueButton.hidden = NO;
     }
 }
@@ -191,19 +192,26 @@
 
 -(void)showSecondAlert {
     self.touchLabel.hidden = YES;
-    
     self.textView.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:18.0];
-    self.textView.text = @"Now, you will have to make two touches to win. Touch the center button and then the upper left button";
+    self.textView.text = NSLocalizedString(@"Now, you will have to make two touches to win.", nil);
     TutorialAlertView *tutorialAlert = [[TutorialAlertView alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 140.0, 20.0, 280.0, 200.0)];
     tutorialAlert.tag = 2;
     tutorialAlert.delegate = self;
-    tutorialAlert.textView.text = @"Excellent!\nBecause in this case there weren't upper and left buttons, the buttons that you changed were the right and bottom ones. Let's practice one last time!";
+    tutorialAlert.textView.text = NSLocalizedString(@"Excellent!\nBecause in this case there weren't upper and left buttons, the buttons that you changed were the right and bottom ones. Let's practice one last time!", nil);
     [tutorialAlert showInView:self.view];
+    
+    self.touchLabel.hidden = NO;
+    self.touchLabel.text = @"Touch the center button and then the upper left button";
+    self.touchLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:17.0];
+    self.touchLabel.center = CGPointMake(self.touchLabel.center.x, self.touchLabel.center.y + 30.0);
 }
 
 -(void)lastCenterButtonPress {
+    self.touchLabel.hidden = YES;
+    
     [self.button5 removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
-    self.textView.text = @"Nice! Now touch the upper left button to win!";
+    self.textView.textColor = [[AppInfo sharedInstance] appColorsArray][0];
+    self.textView.text = NSLocalizedString(@"Nice! Now touch the upper left button to win!", nil);
     
     [self.button2 setTitle:@"1" forState:UIControlStateNormal];
     [self.button4 setTitle:@"1" forState:UIControlStateNormal];
@@ -222,10 +230,11 @@
 }
 
 -(void)showLastAlert {
-    self.textView.text = @"Congratulations!\nNow you can play the numbers game. Let's continue and see how the colors game works!";
+    self.textView.textColor = [UIColor darkGrayColor];
+    self.textView.text = NSLocalizedString(@"Congratulations!\nNow you can play the numbers game. Let's continue and see how the colors game works!", nil);
     
     TutorialAlertView *tutorialAlert = [[TutorialAlertView alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 140.0, 20.0, 280.0, 200.0)];
-    tutorialAlert.textView.text = @"Congratulations!\nNow you can play the numbers game. Let's continue and see how the colors game works!";
+    tutorialAlert.textView.text = NSLocalizedString(@"Congratulations!\nNow you can play the numbers game. Let's continue and see how the colors game works!", nil);
     tutorialAlert.delegate = self;
     tutorialAlert.tag = 3;
     [tutorialAlert showInView:self.view];

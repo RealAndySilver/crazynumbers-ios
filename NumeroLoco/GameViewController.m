@@ -167,12 +167,12 @@
     if (!userBoughtInfiniteMode) {
         //Add adds from Flurry
         [FlurryAds setAdDelegate:self];
-        if ([FlurryAds adReadyForSpace:@"FullScreenAd"]) {
+        if ([FlurryAds adReadyForSpace:@"FullScreenAd2"]) {
             NSLog(@"Mostraré el ad");
             //[FlurryAds displayAdForSpace:@"FullScreenAd" onView:self.view];
         } else {
             NSLog(@"No mostraré el ad sino que lo cargaré");
-            [FlurryAds fetchAdForSpace:@"FullScreenAd" frame:self.view.frame size:FULLSCREEN];
+            [FlurryAds fetchAdForSpace:@"FullScreenAd2" frame:self.view.frame size:FULLSCREEN];
         }
     }
     
@@ -206,7 +206,7 @@
     self.gameTimer = nil;
     
     //Remove ads from Flurry
-    [FlurryAds removeAdFromSpace:@"FullScreenAd"];
+    [FlurryAds removeAdFromSpace:@"FullScreenAd2"];
     [FlurryAds setAdDelegate:nil];
 }
 
@@ -488,7 +488,7 @@
 }
 
 -(NSString *)getNewValueForButton:(UIButton *)button {
-    NSLog(@"titulo actual: %@", button.currentTitle);
+    //NSLog(@"titulo actual: %@", button.currentTitle);
     NSString *newTitle = [NSString stringWithFormat:@"%i", [button.currentTitle intValue] + 1];
     return newTitle;
 }
@@ -708,6 +708,7 @@
 }
 
 -(void)userWon {
+    static BOOL userWonGameForTheFirstTime = NO;
     BOOL scoreWasImproved = [self checkIfScoredWasImprovedInCoreDataWithNewScore:pointsWon];
     
     //Send data to Flurry
@@ -751,8 +752,15 @@
             
             //Post a notification to update the color of the buttons in ChaptersViewController
             [[NSNotificationCenter defaultCenter] postNotificationName:@"GameWonNotification" object:nil];
+            
+            //Give 10 touches to the user
+            [TouchesObject sharedInstance].totalTouches += 10;
+            [self saveTouchesLeftInUserDefaults:[TouchesObject sharedInstance].totalTouches];
+            [self updateTouchesLabel];
+            userWonGameForTheFirstTime = YES;
         
         } else {
+            userWonGameForTheFirstTime = NO;
             NSLog(@"No guardé la info porque el usuario ya había ganado este juego");
         }
         
@@ -771,8 +779,15 @@
             
             //Post a notification to update the color of the buttons in ChaptersViewController
             [[NSNotificationCenter defaultCenter] postNotificationName:@"GameWonNotification" object:nil];
+            
+            //Give 10 touches to the user
+            [TouchesObject sharedInstance].totalTouches += 10;
+            [self saveTouchesLeftInUserDefaults:[TouchesObject sharedInstance].totalTouches];
+            [self updateTouchesLabel];
+            userWonGameForTheFirstTime = YES;
         
         } else {
+            userWonGameForTheFirstTime = NO;
             NSLog(@"No guardé la info del juego ganado porque el usuario ya lo había ganado");
         }
     }
@@ -791,6 +806,7 @@
                                 initWithFrame:CGRectMake(20.0, 20.0, screenBounds.size.width - 40.0, screenBounds.size.height - 40.0)];
     }
     gameWonAlert.delegate = self;
+    gameWonAlert.showTenTouchesWonAlert = userWonGameForTheFirstTime;
     gameWonAlert.touchesMade = numberOfTaps;
     gameWonAlert.touchesForBestScore = bestTapCount;
     gameWonAlert.touchesScore = [self pointsWonForTaps:numberOfTaps];
@@ -859,12 +875,12 @@
     
     } else {
         //The user has not removed the ads, so display them.
-        if ([FlurryAds adReadyForSpace:@"FullScreenAd"]) {
+        if ([FlurryAds adReadyForSpace:@"FullScreenAd2"]) {
             NSLog(@"Mostraré el ad");
-            [FlurryAds displayAdForSpace:@"FullScreenAd" onView:self.view];
+            [FlurryAds displayAdForSpace:@"FullScreenAd2" onView:self.view];
         } else {
             NSLog(@"No mostraré el ad sino que lo cargaré");
-            [FlurryAds fetchAdForSpace:@"FullScreenAd" frame:self.view.frame size:FULLSCREEN];
+            [FlurryAds fetchAdForSpace:@"FullScreenAd2" frame:self.view.frame size:FULLSCREEN];
             
             //Go to the next game
             [self prepareNextGame];

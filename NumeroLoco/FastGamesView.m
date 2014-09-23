@@ -36,14 +36,14 @@
         NSLog(@"unlcoked games: %lu", (unsigned long)self.gamesCompleted);
         
         //Close button
-        UIButton *closeButton = [[UIButton alloc] initWithFrame:CGRectMake(5.0, 5.0, 30.0, 30.0)];
-        [closeButton setTitle:@"✕" forState:UIControlStateNormal];
-        closeButton.layer.cornerRadius = 10.0;
-        closeButton.layer.borderWidth = 1.0;
-        [closeButton setTitleColor:[UIColor colorWithWhite:0.7 alpha:1.0] forState:UIControlStateNormal];
-        closeButton.layer.borderColor = [UIColor colorWithWhite:0.7 alpha:1.0].CGColor;
-        [closeButton addTarget:self action:@selector(closeButtonPressed) forControlEvents:UIControlEventTouchUpInside];
-        [self addSubview:closeButton];
+        self.closeButton = [[UIButton alloc] initWithFrame:CGRectMake(5.0, 5.0, 30.0, 30.0)];
+        [self.closeButton setTitle:@"✕" forState:UIControlStateNormal];
+        self.closeButton.layer.cornerRadius = 10.0;
+        self.closeButton.layer.borderWidth = 1.0;
+        [self.closeButton setTitleColor:[UIColor colorWithWhite:0.7 alpha:1.0] forState:UIControlStateNormal];
+        self.closeButton.layer.borderColor = [UIColor colorWithWhite:0.7 alpha:1.0].CGColor;
+        [self.closeButton addTarget:self action:@selector(closeButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+        [self addSubview:self.closeButton];
         
         //Title label
         UILabel *fastGamesTitle = [[UILabel alloc] initWithFrame:CGRectMake(20.0, 40.0, frame.size.width - 40.0, 50.0)];

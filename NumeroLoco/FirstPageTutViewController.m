@@ -28,7 +28,7 @@
     [self.view addSubview:tutorialImageView];
     
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.view.bounds.size.width/2.0 - 120.0, 50.0, 240.0, 100.0)];
-    titleLabel.text = @"Welcome to Cross, a simple, yet addictive game!";
+    titleLabel.text = NSLocalizedString(@"Welcome to Cross, a simple, yet addictive game!", @"A welcome message");
     titleLabel.textAlignment = NSTextAlignmentCenter;
     titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:15.0];
     titleLabel.numberOfLines = 0;
@@ -37,7 +37,7 @@
     
     //other label
     UILabel *descriptionLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.view.bounds.size.width/2.0 - 120.0, self.view.bounds.size.height - 180.0, 240.0, 100.0)];
-    descriptionLabel.text = @"There are two types of games: Numbers and Colors";
+    descriptionLabel.text = NSLocalizedString(@"There are two types of games: Numbers and Colors", @"Explanation of the game");
     descriptionLabel.textAlignment = NSTextAlignmentCenter;
     descriptionLabel.numberOfLines = 0;
     descriptionLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:15.0];
@@ -55,7 +55,7 @@
     [self.view addSubview:closeButton];
     
     UIButton *continueButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.bounds.size.width/2.0 - 35.0, self.view.bounds.size.height - 90.0, 70.0, 40.0)];
-    [continueButton setTitle:@"Continue" forState:UIControlStateNormal];
+    [continueButton setTitle:NSLocalizedString(@"Continue", @"Continue button") forState:UIControlStateNormal];
     [continueButton setTitleColor:[[AppInfo sharedInstance] appColorsArray][0] forState:UIControlStateNormal];
     continueButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:15.0];
     continueButton.layer.cornerRadius = 10.0;

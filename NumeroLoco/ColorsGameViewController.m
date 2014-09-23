@@ -181,12 +181,12 @@
 -(void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     [FlurryAds setAdDelegate:self];
-    if ([FlurryAds adReadyForSpace:@"FullScreenAd"]) {
+    if ([FlurryAds adReadyForSpace:@"FullScreenAd2"]) {
         NSLog(@"Mostraré el ad");
         //[FlurryAds displayAdForSpace:@"FullScreenAd" onView:self.view];
     } else {
         NSLog(@"No mostraré el ad sino que lo cargaré");
-        [FlurryAds fetchAdForSpace:@"FullScreenAd" frame:self.view.frame size:FULLSCREEN];
+        [FlurryAds fetchAdForSpace:@"FullScreenAd2" frame:self.view.frame size:FULLSCREEN];
     }
     
     //Check number of touches available
@@ -907,12 +907,12 @@
         
     } else {
         //The user has not removed the ads, so display them.
-        if ([FlurryAds adReadyForSpace:@"FullScreenAd"]) {
+        if ([FlurryAds adReadyForSpace:@"FullScreenAd2"]) {
             NSLog(@"Mostraré el ad");
-            [FlurryAds displayAdForSpace:@"FullScreenAd" onView:self.view];
+            [FlurryAds displayAdForSpace:@"FullScreenAd2" onView:self.view];
         } else {
             NSLog(@"No mostraré el ad sino que lo cargaré");
-            [FlurryAds fetchAdForSpace:@"FullScreenAd" frame:self.view.frame size:FULLSCREEN];
+            [FlurryAds fetchAdForSpace:@"FullScreenAd2" frame:self.view.frame size:FULLSCREEN];
             
             //Go to the next game
             [self prepareNextGame];
@@ -921,6 +921,7 @@
 }
 
 -(void)userWon {
+    static BOOL userWonGameForTheFirstTime = NO;
     BOOL scoreWasImproved = [self checkIfScoredWasImprovedInCoreDataWithNewScore:pointsWon];
     
     //Send data to Flurry
@@ -961,7 +962,14 @@
             //Post a notification to update the color of the buttons in ChaptersViewController
             [[NSNotificationCenter defaultCenter] postNotificationName:@"ColorGameWonNotification" object:nil];
             
+            //Give 10 touches to the user
+            [TouchesObject sharedInstance].totalTouches += 10;
+            [self saveTouchesLeftInUserDefaults:[TouchesObject sharedInstance].totalTouches];
+            [self updateTouchesLabel];
+            userWonGameForTheFirstTime = YES;
+            
         } else {
+            userWonGameForTheFirstTime = NO;
             NSLog(@"No guardé la info porque el usuario ya había ganado este juego");
         }
         
@@ -981,21 +989,14 @@
             //Post a notification to update the color of the buttons in ChaptersViewController
             [[NSNotificationCenter defaultCenter] postNotificationName:@"ColorGameWonNotification" object:nil];
             
-            //Save points to fileSaver
-           /* NSUInteger points = 0;
-            if ([fileSaver getDictionary:@"UserPointsDic"][@"UserPoints"]) {
-                points = [[fileSaver getDictionary:@"UserPointsDic"][@"UserPoints"] intValue];
-                points += [self pointsWonForTime:timeElapsed];
-                [fileSaver setDictionary:@{@"UserPoints" : @(points)} withName:@"UserPointsDic"];
-            } else {
-                points = [self pointsWonForTime:timeElapsed];
-                [fileSaver setDictionary:@{@"UserPoints" : @(points)} withName:@"UserPointsDic"];
-            }
-            
-            NSLog(@"Sending %d points to game center ****************", points);
-            [[GameKitHelper sharedGameKitHelper] submitScore:points category:@"Points_Leaderboard"];*/
+            //Give 10 touches to the user
+            [TouchesObject sharedInstance].totalTouches += 10;
+            [self saveTouchesLeftInUserDefaults:[TouchesObject sharedInstance].totalTouches];
+            [self updateTouchesLabel];
+            userWonGameForTheFirstTime = YES;
             
         } else {
+            userWonGameForTheFirstTime = NO;
             NSLog(@"No guardé la info del juego ganado orque el usuario ya lo había ganado");
         }
     }
@@ -1015,6 +1016,7 @@
     }
 
     gameWonAlert.delegate = self;
+    gameWonAlert.showTenTouchesWonAlert = userWonGameForTheFirstTime;
     gameWonAlert.touchesMade = numberOfTaps;
     gameWonAlert.touchesForBestScore = bestTapCount;
     gameWonAlert.touchesScore = [self pointsWonForTaps:numberOfTaps];

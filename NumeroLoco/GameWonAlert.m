@@ -7,6 +7,7 @@
 //
 
 #import "GameWonAlert.h"
+#import "OneButtonAlert.h"
 #import "AppInfo.h"
 
 @interface GameWonAlert()
@@ -288,7 +289,20 @@
                          self.transform = CGAffineTransformMakeScale(1.0, 1.0);
                      } completion:^(BOOL finished){
                          [self.delegate gameWonAlertDidApper:self];
+                         if (self.showTenTouchesWonAlert) {
+                             [self showTouchesWonAlert];
+                         }
                      }];
+}
+
+-(void)showTouchesWonAlert {
+    OneButtonAlert *tenTouchesWonAlert = [[OneButtonAlert alloc] initWithFrame:CGRectMake(self.screenBounds.size.width/2.0 - 120.0, self.screenBounds.size.height/2.0 - 90.0, 240.0, 180.0)];
+    tenTouchesWonAlert.button.backgroundColor = [[AppInfo sharedInstance] appColorsArray][2];
+    tenTouchesWonAlert.alertText = NSLocalizedString(@"You have won ten touches for completing this game for the first time!", nil);
+    tenTouchesWonAlert.buttonTitle = NSLocalizedString(@"Ok", nil);
+    tenTouchesWonAlert.messageLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:15.0];
+    tenTouchesWonAlert.messageLabel.frame = CGRectMake(20.0, 40.0, tenTouchesWonAlert.bounds.size.width - 40.0, 60.0);
+    [tenTouchesWonAlert showInView:self.superview];
 }
 
 @end

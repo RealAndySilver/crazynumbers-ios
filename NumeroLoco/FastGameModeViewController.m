@@ -66,6 +66,7 @@
     BOOL userCanPlay;
     BOOL userBoughtInfiniteMode;
     BOOL ticTocSoundActivated;
+    BOOL initialFastGamesViewLaunch;
 }
 
 -(NSNumberFormatter *)purchasesPriceFormatter {
@@ -86,16 +87,21 @@
 
 -(void)viewDidLoad {
     [super viewDidLoad];
-    
+    initialFastGamesViewLaunch = YES;
     ticTocSoundActivated = [self getTicTocSelectionInUserDefaults];
     timeAnimationDuration = 0.5;
     self.gamesDatabasePath = [[NSBundle mainBundle] pathForResource:@"FastGamesDatabase" ofType:@"plist"];
     self.chaptersDataArray = [NSArray arrayWithContentsOfFile:self.gamesDatabasePath];
     totalGames = [self.chaptersDataArray count];
-    self.currentGame = [self getLastUnlockedLevelInUserDefaults] - 1;
-    if ([self userBoughtInfiniteMode]) userBoughtInfiniteMode = YES;
-    else userBoughtInfiniteMode = NO;
-    screenBounds = [UIScreen mainScreen].bounds;
+    //self.currentGame = [self getLastUnlockedLevelInUserDefaults] - 1;
+    if ([self userBoughtInfiniteMode]) {
+        userBoughtInfiniteMode = YES;
+        NSLog(@"Tengo modo infinito");
+    } else {
+        NSLog(@"No tengo modo infinito");
+        userBoughtInfiniteMode = NO;
+
+    } screenBounds = [UIScreen mainScreen].bounds;
     if ([self getLivesFromUserDefaults] == 0) userCanPlay = NO;
     else userCanPlay = YES;
     
@@ -113,12 +119,12 @@
     if (!userBoughtInfiniteMode) {
         //Add adds from Flurry
         [FlurryAds setAdDelegate:self];
-        if ([FlurryAds adReadyForSpace:@"FullScreenAd"]) {
+        if ([FlurryAds adReadyForSpace:@"FullScreenAd2"]) {
             NSLog(@"Mostraré el ad");
             //[FlurryAds displayAdForSpace:@"FullScreenAd" onView:self.view];
         } else {
             NSLog(@"No mostraré el ad sino que lo cargaré");
-            [FlurryAds fetchAdForSpace:@"FullScreenAd" frame:self.view.frame size:FULLSCREEN];
+            [FlurryAds fetchAdForSpace:@"FullScreenAd2" frame:self.view.frame size:FULLSCREEN];
         }
     }
 }
@@ -129,7 +135,12 @@
     } else  {
         [self.gameTimer invalidate];
         self.gameTimer = nil;
-        [self showStartAlert];
+        if ([self userOpenFastModeForFirstTime]) {
+            [self showStartAlert];
+            [self saveUserOpenFastModeFirstTimeKey];
+        } else {
+            [self showGamesView];
+        }
     }
 }
 
@@ -267,6 +278,7 @@
 
 -(void)startTimer {
     timeLeft = maxTime;
+    NSLog(@"*************TIME LEFT: %d", timeLeft);
     //self.timeLeftLabel.text = [NSString stringWithFormat:@"Time left: %lus", (unsigned long)timeLeft];
     self.timeLeftLabel.text = [NSString stringWithFormat:@"%lu", (unsigned long)timeLeft];
     
@@ -575,6 +587,11 @@
     }
     fastGamesView.viewColor = [[AppInfo sharedInstance] appColorsArray][randomColorIndex];
     fastGamesView.delegate = self;
+    if (initialFastGamesViewLaunch) {
+        fastGamesView.closeButton.hidden = YES;
+    } else {
+        fastGamesView.closeButton.hidden = NO;
+    }
     [fastGamesView showInView:self.view];
 }
 
@@ -870,6 +887,7 @@
     [[AudioPlayer sharedInstance] stopShakeSound];
     [AudioPlayer sharedInstance].shakerPlayer.rate = 1.0;
     [[AudioPlayer sharedInstance] playAlarmSound];
+    [AudioPlayer sharedInstance].alarmSound.volume = 1.0;
     
     [self.gameTimer invalidate];
     self.gameTimer = nil;
@@ -907,6 +925,8 @@
 #pragma mark - Enabling and disabling buttons 
 
 -(void)disableGame {
+    NSLog(@"ENTRE AL DISABLE GAMEEEEEEEEEEE");
+    
     [self disableButtons];
     [self.gameTimer invalidate];
     self.gameTimer = nil;
@@ -1060,6 +1080,19 @@
 
 -(NSUInteger)getLivesFromUserDefaults {
     return [[[NSUserDefaults standardUserDefaults] objectForKey:@"lives"] intValue];
+}
+
+-(void)saveUserOpenFastModeFirstTimeKey {
+    [[NSUserDefaults standardUserDefaults] setObject:@NO forKey:@"userOpenFastMode"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+-(BOOL)userOpenFastModeForFirstTime {
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"userOpenFastMode"]) {
+        return [[[NSUserDefaults standardUserDefaults] objectForKey:@"userOpenFastMode"] boolValue];
+    } else {
+        return YES;
+    }
 }
 
 #pragma mark - Actions 
@@ -1241,23 +1274,6 @@
 
 -(void)continueButtonPressedInAlert:(FastGameWinAlert *)fastGameWinAlert {
     [self showFlurryAds];
-    
-    /*[[AudioPlayer sharedInstance] playRestartSound];
-    if (fastGameWinAlert.tag == 1) {
-        self.currentGame++;
-        [self initGame];
-        [self startTimer];
-        [self playShakerSound];
-        timeLabelAnimationActive = YES;
-        [self startTimeLabelAnimation];
-        
-    } else if (fastGameWinAlert.tag == 2){
-        [self initGame];
-        [self startTimer];
-        [self playShakerSound];
-        timeLabelAnimationActive = YES;
-        [self startTimeLabelAnimation];
-    }*/
 }
 
 -(void)buyLivesButtonPressedInAlert:(FastGameWinAlert *)fastGameWinAlert {
@@ -1332,23 +1348,46 @@
     
     NSLog(@"Seleccioné el juego %lu", (unsigned long)game);
     if (self.currentGame == game) {
-        NSLog(@"Escogí el mismo juego, que siga corriendo el timer");
-        self.gameTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(substractTime) userInfo:nil repeats:YES];
-        [self playShakerSound];
+        if (initialFastGamesViewLaunch) {
+            timeLabelAnimationActive = YES;
+            [self startTimer];
+            [self startTimeLabelAnimation];
+            initialFastGamesViewLaunch = NO;
+            [self playShakerSound];
+        } else {
+            NSLog(@"Escogí el mismo juego, que siga corriendo el timer");
+            self.gameTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(substractTime) userInfo:nil repeats:YES];
+            [self playShakerSound];
+        }
 
     } else if (self.currentGame == [self getLastUnlockedLevelInUserDefaults] - 1) {
         NSLog(@"Intentado hacer trampaaaaaaa");
         [self showLivesWarningAlert];
     
     } else {
-        [[AudioPlayer sharedInstance] playRestartSound];
-        [[AudioPlayer sharedInstance] stopShakeSound];
-        [self playShakerSound];
-        self.currentGame = game;
-        [self initGame];
-        [self startTimer];
+        if (initialFastGamesViewLaunch) {
+            NSLog(@"SSSSSSSSSSSSSSSSSSS");
+            [[AudioPlayer sharedInstance] playRestartSound];
+            [[AudioPlayer sharedInstance] stopShakeSound];
+            [self playShakerSound];
+            self.currentGame = game;
+            timeLabelAnimationActive = YES;
+            [self initGame];
+            [self startTimer];
+            [self startTimeLabelAnimation];
+            initialFastGamesViewLaunch = NO;
+            
+        } else {
+            [[AudioPlayer sharedInstance] playRestartSound];
+            [[AudioPlayer sharedInstance] stopShakeSound];
+            [self playShakerSound];
+            self.currentGame = game;
+            [self initGame];
+            [self startTimer];
+        }
     }
-    if (!userCanPlay) {
+    if (!userCanPlay && !userBoughtInfiniteMode) {
+        NSLog(@"ENTRE A ESTE !USERCANPLAY");
         [self disableGame];
     }
 }
@@ -1473,12 +1512,12 @@
         
     } else {
         //The user has not removed the ads, so display them.
-        if ([FlurryAds adReadyForSpace:@"FullScreenAd"]) {
+        if ([FlurryAds adReadyForSpace:@"FullScreenAd2"]) {
             NSLog(@"Mostraré el ad");
-            [FlurryAds displayAdForSpace:@"FullScreenAd" onView:self.view];
+            [FlurryAds displayAdForSpace:@"FullScreenAd2" onView:self.view];
         } else {
             NSLog(@"No mostraré el ad sino que lo cargaré");
-            [FlurryAds fetchAdForSpace:@"FullScreenAd" frame:self.view.frame size:FULLSCREEN];
+            [FlurryAds fetchAdForSpace:@"FullScreenAd2" frame:self.view.frame size:FULLSCREEN];
             
             //Go to the next game
             [self prepareNextGame];

@@ -28,6 +28,7 @@
 @property (assign, nonatomic) float timeForBestScore;
 @property (assign, nonatomic) NSUInteger bonusScore;
 @property (assign, nonatomic) NSUInteger maxBonusScore;
+@property (assign, nonatomic) BOOL showTenTouchesWonAlert;
 @property (strong, nonatomic) id <GameWonAlertDelegate> delegate;
 -(void)showAlertInView:(UIView *)view;
 @end

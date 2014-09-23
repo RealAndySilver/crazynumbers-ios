@@ -27,7 +27,7 @@
         
         //Message
         self.message = [[UILabel alloc] initWithFrame:CGRectMake(20.0, 30.0, frame.size.width - 40.0, 80.0)];
-        self.message.text = @"You have no more touches left! you can wait one hour to have more or buy some!";
+        self.message.text = NSLocalizedString(@"You have no more touches left! Every hour you'll get 5 more. You can wait or buy more!", @"A message that indicates the user that there are no touches left");
         self.message.textColor = [UIColor darkGrayColor];
         self.message.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:17.0];
         self.message.textAlignment = NSTextAlignmentCenter;
@@ -37,7 +37,7 @@
         //Accept button
         self.acceptButton = [UIButton buttonWithType:UIButtonTypeSystem];
         self.acceptButton.frame = CGRectMake(20.0, frame.size.height - 70.0, frame.size.width/2.0 - 40.0, 50.0);
-        [self.acceptButton setTitle:@"Buy" forState:UIControlStateNormal];
+        [self.acceptButton setTitle:NSLocalizedString(@"Buy", @"A button to buy more touches") forState:UIControlStateNormal];
         [self.acceptButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         self.acceptButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:17.0];
         self.acceptButton.backgroundColor = [[AppInfo sharedInstance] appColorsArray][0];
@@ -48,7 +48,7 @@
         //Cancel button
         UIButton *cancelButton = [UIButton buttonWithType:UIButtonTypeSystem];
         cancelButton.frame = CGRectMake(frame.size.width/2.0 + 20.0, frame.size.height - 70.0, frame.size.width/2.0 - 40.0, 50.0);
-        [cancelButton setTitle:@"Wait" forState:UIControlStateNormal];
+        [cancelButton setTitle:NSLocalizedString(@"Wait", @"A button to wait one hour for more touches") forState:UIControlStateNormal];
         [cancelButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         cancelButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:17.0];
         cancelButton.backgroundColor = [UIColor lightGrayColor];

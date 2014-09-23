@@ -27,7 +27,7 @@
         //Close Button
         self.closeButton = [UIButton buttonWithType:UIButtonTypeSystem];
         self.closeButton.frame = CGRectMake(frame.size.width/2.0 - 75.0, frame.size.height - 130.0, 150.0, 60.0);
-        [self.closeButton setTitle:@"Accept" forState:UIControlStateNormal];
+        [self.closeButton setTitle:NSLocalizedString(@"Accept", @"Button to close a screen") forState:UIControlStateNormal];
         [self.closeButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         self.closeButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:20.0];
         self.closeButton.layer.cornerRadius = 10.0;
@@ -37,7 +37,7 @@
         
         //Congratulations label
         self.congratsLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0, 50.0, frame.size.width - 40.0, 30.0)];
-        self.congratsLabel.text = @"Congratulations!";
+        self.congratsLabel.text = NSLocalizedString(@"Congratulations!", @"Congratulations message");
         self.congratsLabel.textColor = [UIColor whiteColor];
         self.congratsLabel.textAlignment = NSTextAlignmentCenter;
         self.congratsLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:25.0];
@@ -45,7 +45,7 @@
         
         //Message label
         self.messageLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0, 120.0, frame.size.width - 40.0, 100.0)];
-        self.messageLabel.text = @"You have completed all games! Wait for more games soon!";
+        self.messageLabel.text = NSLocalizedString(@"You have completed all games! Wait for more games soon!", @"Message that appears when the user completes all games");
         self.messageLabel.textColor = [UIColor whiteColor];
         self.messageLabel.textAlignment = NSTextAlignmentCenter;
         self.messageLabel.numberOfLines = 0;

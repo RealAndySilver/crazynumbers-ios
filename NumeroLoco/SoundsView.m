@@ -28,7 +28,7 @@
         
         //Title
         UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 30.0, frame.size.width, 40.0)];
-        titleLabel.text = @"Sounds";
+        titleLabel.text = NSLocalizedString(@"Sounds", @"Sounds screen title");
         titleLabel.font = [UIFont fontWithName:FONT_NAME size:30.0];
         titleLabel.textColor = [[AppInfo sharedInstance] appColorsArray][0];
         titleLabel.textAlignment = NSTextAlignmentCenter;
@@ -46,7 +46,7 @@
         
         //In-Game music label
         UILabel *musicLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0, frame.size.height - 60.0, 170.0, 40.0)];
-        musicLabel.text = @"In-Game Music";
+        musicLabel.text = NSLocalizedString(@"In-Game Music", @"Title for the option that turns on/off the music inside the games");
         musicLabel.textColor = [UIColor darkGrayColor];
         musicLabel.font = [UIFont fontWithName:FONT_NAME size:22.0];
         [self addSubview:musicLabel];
@@ -61,7 +61,7 @@
         
         //Tic-Toc label
         UILabel *tictocLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0, titleLabel.frame.origin.y + titleLabel.frame.size.height + 30.0, 170.0, 40.0)];
-        tictocLabel.text = @"Fast Game Timer";
+        tictocLabel.text = NSLocalizedString(@"Fast Game Timer", @"Title for the option that turns on/off the timer inside the fast game mode");
         tictocLabel.textColor = [UIColor darkGrayColor];
         tictocLabel.font = [UIFont fontWithName:FONT_NAME size:22.0];
         [self addSubview:tictocLabel];
@@ -76,7 +76,7 @@
         
         //Tic toc volume label
         UILabel *volumenLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0, tictocLabel.frame.origin.y + tictocLabel.frame.size.height, 100.0, 20.0)];
-        volumenLabel.text = @"Timer Volume";
+        volumenLabel.text = NSLocalizedString(@"Timer Volume", @"The volume of the timer");
         volumenLabel.textColor = [UIColor darkGrayColor];
         volumenLabel.font = [UIFont fontWithName:FONT_NAME size:15.0];
         [self addSubview:volumenLabel];

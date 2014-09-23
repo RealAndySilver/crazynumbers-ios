@@ -163,11 +163,11 @@
     NSString *notificationID = notification.userInfo[@"notificationID"];
     if ([notificationID isEqualToString:@"touchesNotification"]) {
         [self restoreTouches];
-        [self showNewTouchesAlertWithMessage:@"All your touches have been restored!"];
+        [self showNewTouchesAlertWithMessage:NSLocalizedString(@"All your touches have been restored!", @"Text to inform the user that all the touches are available again")];
         
     } else if ([notificationID isEqualToString:@"livesNotification"]) {
         [self restoreLives];
-        [self showNewLivesAlertWithMessage:@"All your lives have been restored!"];
+        [self showNewLivesAlertWithMessage:NSLocalizedString(@"All your lives have been restored!", @"Text to inform the user that all the lives are available again")];
     }
 }
 
@@ -177,7 +177,7 @@
     CGRect screenBounds = [UIScreen mainScreen].bounds;
     OneButtonAlert *newTouchesAlert = [[OneButtonAlert alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 110.0, screenBounds.size.height/2.0 - 75.0, 220, 150.0)];
     newTouchesAlert.alertText = message;
-    newTouchesAlert.buttonTitle = @"Ok";
+    newTouchesAlert.buttonTitle = NSLocalizedString(@"Ok", @"Button to accept");
     newTouchesAlert.messageLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:14.0];
     newTouchesAlert.messageLabel.frame = CGRectMake(20.0, 30.0, newTouchesAlert.bounds.size.width - 40.0, 50.0);
     newTouchesAlert.button.backgroundColor = [[AppInfo sharedInstance] appColorsArray][1];
@@ -188,7 +188,7 @@
     CGRect screenBounds = [UIScreen mainScreen].bounds;
     OneButtonAlert *newLivesAlert = [[OneButtonAlert alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 110.0, screenBounds.size.height/2.0 - 75.0, 220, 150.0)];
     newLivesAlert.alertText = message;
-    newLivesAlert.buttonTitle = @"Ok";
+    newLivesAlert.buttonTitle = NSLocalizedString(@"Ok", @"Button to accept");
     newLivesAlert.messageLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:14.0];
     newLivesAlert.messageLabel.frame = CGRectMake(20.0, 30.0, newLivesAlert.bounds.size.width - 40.0, 50.0);
     newLivesAlert.button.backgroundColor = [[AppInfo sharedInstance] appColorsArray][1];
@@ -354,7 +354,7 @@
         
         if (newTouchesAvailable) {
             [self saveTouchesLeftInUserDefaults:[TouchesObject sharedInstance].totalTouches];
-            [self showNewTouchesAlertWithMessage:@"You have new touches available!"];
+            [self showNewTouchesAlertWithMessage:NSLocalizedString(@"You have new touches available!", @"Text that appears when the user has new touches available")];
             newTouchesAvailable = NO;
             
             //Post a notification in case the user in on the game screen,
@@ -391,7 +391,7 @@
         [self saveLivesDatesArrayInUserDefaults:tempLivesArray];
         
         if (newLivesAvailable) {
-            [self showNewLivesAlertWithMessage:@"You have new lives available!"];
+            [self showNewLivesAlertWithMessage:NSLocalizedString(@"You have new lives available!", @"Text that appears when the user has new lives available")];
             newLivesAvailable = NO;
             
             //Post a notification in case the user in on the game screen,

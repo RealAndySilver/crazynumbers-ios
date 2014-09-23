@@ -80,7 +80,7 @@
         
         //Title
         UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 20.0, frame.size.width, 50.0)];
-        title.text = @"Store";
+        title.text = NSLocalizedString(@"Store", @"Title for the store screen");
         title.textColor = [[AppInfo sharedInstance] appColorsArray][0];
         title.font = [UIFont fontWithName:FONT_NAME size:25.0];
         title.textAlignment = NSTextAlignmentCenter;
@@ -118,7 +118,7 @@
     IAPProduct *product = self.purchasesDic[self.purchasesIDsArray[indexPath.row]];
     NSString *productName = product.skProduct.localizedTitle;
     if ([product.productIdentifier isEqualToString:@"com.iamstudio.cross.infinitemode"]) {
-        productName = @"Infinite Touches\nInfinite Lives\nNo Ads";
+        productName = NSLocalizedString(@"Infinite Touches\nInfinite Lives\nNo Ads", @"Name of the purchase that gives the user infinite touches, infinite lives and no ads");
     }
     self.purchasesPriceFormatter.locale = product.skProduct.priceLocale;
     [cell.buyButton setTitle:[self.purchasesPriceFormatter stringFromNumber:product.skProduct.price] forState:UIControlStateNormal];

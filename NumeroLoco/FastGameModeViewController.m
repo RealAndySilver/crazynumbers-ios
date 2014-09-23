@@ -167,7 +167,7 @@
 -(void)setupUI {
     //Back button
     UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(10.0, screenBounds.size.height - 50.0, 70.0, 40.0)];
-    [backButton setTitle:@"Back" forState:UIControlStateNormal];
+    [backButton setTitle:NSLocalizedString(@"Back", @"Title for a button that returns the user to the previous screen") forState:UIControlStateNormal];
     [backButton setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
     backButton.titleLabel.font = [UIFont fontWithName:FONT_LIGHT size:15.0];
     backButton.layer.cornerRadius = 10.0;
@@ -201,7 +201,7 @@
     
     //Restart button
     self.restartButton = [[UIButton alloc] initWithFrame:CGRectMake(screenBounds.size.width - 80.0, screenBounds.size.height - 50.0, 70.0, 40.0)];
-    [self.restartButton setTitle:@"Reset" forState:UIControlStateNormal];
+    [self.restartButton setTitle:NSLocalizedString(@"Reset", @"Title for a button that reset the game") forState:UIControlStateNormal];
     [self.restartButton setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
     self.restartButton.titleLabel.font = [UIFont fontWithName:FONT_LIGHT size:15.0];
     self.restartButton.layer.cornerRadius = 10.0;
@@ -212,7 +212,7 @@
     
     //Games button
     self.gamesButton = [[UIButton alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 35.0, screenBounds.size.height - 50.0, 70.0, 40.0)];
-    [self.gamesButton setTitle:@"Games" forState:UIControlStateNormal];
+    [self.gamesButton setTitle:NSLocalizedString(@"Games", @"Title for a button that opens the list of games") forState:UIControlStateNormal];
     [self.gamesButton setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
     self.gamesButton.titleLabel.font = [UIFont fontWithName:FONT_LIGHT size:15.0];
     self.gamesButton.layer.cornerRadius = 10.0;
@@ -232,7 +232,7 @@
     //HEart number label
     self.heartNumberLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.heartImageView.frame.origin.x + self.heartImageView.frame.size.width, screenBounds.size.height - 110, 100.0, 50.0)];
     if (userBoughtInfiniteMode) {
-        self.heartNumberLabel.text = @"x Infinite";
+        self.heartNumberLabel.text = [NSString stringWithFormat:@"x %@", NSLocalizedString(@"Infinite", @"Infinite")];
         self.heartNumberLabel.font = [UIFont fontWithName:FONT_LIGHT size:15.0];
     }
     else {
@@ -249,7 +249,7 @@
 
 -(void)initGame {
     [self resetGame];
-    self.titleLabel.text = [NSString stringWithFormat:@"Game %lu", self.currentGame + 1];
+    self.titleLabel.text = [NSString stringWithFormat:NSLocalizedString(@"Game %lu", @"The current game"), self.currentGame + 1];
     self.heartNumberLabel.textColor = [[AppInfo sharedInstance] appColorsArray][randomColorIndex];
     self.heartImageView.tintColor = [[AppInfo sharedInstance] appColorsArray][randomColorIndex];
     
@@ -1066,9 +1066,9 @@
 
 -(void)showExitWarningAlert {
     TwoButtonsAlert *warningAlert = [[TwoButtonsAlert alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 140.0, screenBounds.size.height/2.0 - 85.0, 280.0, 170.0)];
-    warningAlert.alertText = @"Warning! If you exit while the game is in course, you will loss one life.";
-    warningAlert.leftButtonTitle = @"Exit";
-    warningAlert.rightButtonTitle = @"Cancel";
+    warningAlert.alertText = NSLocalizedString(@"Warning! If you exit while the game is in course, you will loss one life.", @"Message to inform the user that he will lose one life");
+    warningAlert.leftButtonTitle = NSLocalizedString(@"Exit", @"Title for the exit button");
+    warningAlert.rightButtonTitle = NSLocalizedString(@"Cancel", @"Title for the cancel button");
     warningAlert.tag = 2;
     warningAlert.delegate = self;
     warningAlert.messageLabel.font = [UIFont fontWithName:FONT_LIGHT size:15.0];
@@ -1079,9 +1079,9 @@
 
 -(void)showLivesWarningAlert {
     TwoButtonsAlert *warningAlert = [[TwoButtonsAlert alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 140.0, screenBounds.size.height/2.0 - 85.0, 280.0, 170.0)];
-    warningAlert.alertText = @"Warning! if you exit the last unlocked game while the game is in course, you will loss one live.";
-    warningAlert.leftButtonTitle = @"Exit";
-    warningAlert.rightButtonTitle = @"Cancel";
+    warningAlert.alertText = NSLocalizedString(@"Warning! if you exit the last unlocked game while the game is in course, you will loss one live.", @"Warning message that appears if the user tries to exit while the last unlocked game is in course");
+    warningAlert.leftButtonTitle = NSLocalizedString(@"Exit", @"Title for the exit button");
+    warningAlert.rightButtonTitle = NSLocalizedString(@"Cancel", @"Title for the cancel button");
     warningAlert.tag = 3;
     warningAlert.delegate = self;
     warningAlert.rightButton.backgroundColor = [UIColor colorWithWhite:0.7 alpha:1.0];
@@ -1092,9 +1092,9 @@
 
 -(void)showStartAlert {
     TwoButtonsAlert *startAlert = [[TwoButtonsAlert alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 140.0, screenBounds.size.height/2.0 - 85.0, 280.0, 170.0)];
-    startAlert.alertText = @"Welcome to Fast Mode! You have just few seconds (10s - 30s) to complete each level! Be fast!";
-    startAlert.leftButtonTitle = @"Start!";
-    startAlert.rightButtonTitle = @"Exit";
+    startAlert.alertText = NSLocalizedString(@"Welcome to Fast Mode! You have just few seconds (10s - 30s) to complete each level! Be fast!", @"Welcome message");
+    startAlert.leftButtonTitle = NSLocalizedString(@"Start!", @"Title for the start fast game button");
+    startAlert.rightButtonTitle = NSLocalizedString(@"Exit", @"Title for the exit fast game button");
     startAlert.tag = 1;
     startAlert.delegate = self;
     startAlert.leftButton.backgroundColor = [[AppInfo sharedInstance] appColorsArray][randomColorIndex];
@@ -1106,7 +1106,7 @@
 
 -(void)showAllGamesWonAlert {
     AllGamesFinishedView *allGamesWonAlert = [[AllGamesFinishedView alloc] initWithFrame:self.view.bounds];
-    allGamesWonAlert.messageLabel.text = @"You have completed all fast mode games! Wait for more games soon!";
+    allGamesWonAlert.messageLabel.text = NSLocalizedString(@"You have completed all fast mode games! Wait for more games soon!", @"Message that appears when the user completes all games");
     allGamesWonAlert.messageLabel.transform = CGAffineTransformMakeTranslation(0.0, 100.0);
     allGamesWonAlert.closeButton.transform = CGAffineTransformMakeTranslation(0.0, -100.0);
     allGamesWonAlert.congratsLabel.transform = CGAffineTransformMakeTranslation(0.0, 60.0);
@@ -1116,8 +1116,8 @@
 
 -(void)showBuyMoreLivesAlert {
     NoTouchesAlertView *noLivesAlert = [[NoTouchesAlertView alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 140.0, self.view.bounds.size.height/2.0 - 100.0, 280.0, 200.0)];
-    noLivesAlert.message.text = @"You have no more lives left! You can buy more right now or wait one hour.";
-    [noLivesAlert.acceptButton setTitle:@"Buy Lives" forState:UIControlStateNormal];
+    noLivesAlert.message.text = NSLocalizedString(@"You have no more lives left! You can buy more right now or wait one hour.", @"Message that appears when the user has no more lives left");
+    [noLivesAlert.acceptButton setTitle:NSLocalizedString(@"Buy Lives", @"Title for the buy lives button") forState:UIControlStateNormal];
     noLivesAlert.acceptButton.backgroundColor = [[AppInfo sharedInstance] appColorsArray][randomColorIndex];
     noLivesAlert.delegate = self;
     [noLivesAlert showInView:self.view];
@@ -1130,7 +1130,7 @@
     fastGameWinAlertActiveTag = 1;
     fastGameWinAlert.buyLivesButton.backgroundColor = [[AppInfo sharedInstance] appColorsArray][randomColorIndex];
     fastGameWinAlert.continueButton.backgroundColor = [[AppInfo sharedInstance] appColorsArray][randomColorIndex];
-    fastGameWinAlert.alertLabel.text = [NSString stringWithFormat:@"You have won game %lu, keep going!", (unsigned long)self.currentGame + 1];
+    fastGameWinAlert.alertLabel.text = [NSString stringWithFormat:NSLocalizedString(@"You have won game %lu, keep going!", @"Message that appears when the user wins a game"), (unsigned long)self.currentGame + 1];
     [fastGameWinAlert showInView:self.view];
 }
 
@@ -1141,16 +1141,16 @@
     fastGameWinAlertActiveTag = 2;
     lossAlert.buyLivesButton.backgroundColor = [[AppInfo sharedInstance] appColorsArray][randomColorIndex];
     lossAlert.continueButton.backgroundColor = [[AppInfo sharedInstance] appColorsArray][randomColorIndex];
-    [lossAlert.continueButton setTitle:@"Try again" forState:UIControlStateNormal];
-    lossAlert.alertLabel.text = [NSString stringWithFormat:@"You have lost one life. Try to be faster next time!"];
+    [lossAlert.continueButton setTitle:NSLocalizedString(@"Try Again", @"Title for the try again button") forState:UIControlStateNormal];
+    lossAlert.alertLabel.text = [NSString stringWithFormat:NSLocalizedString(@"You have lost one life. Try to be faster next time!", @"Message that appears when the user lost the game")];
     [lossAlert showInView:self.view];
 }
 
 -(void)showStartGameAlert {
     MultiplayerWinAlert *startGameAlert = [[MultiplayerWinAlert alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 140.0, self.view.bounds.size.height/2.0 - 85.0, 280.0, 170.)];
     startGameAlert.delegate = self;
-    startGameAlert.alertMessage = @"Congratulations! You have more lives available, start playing!";
-    [startGameAlert.acceptButton setTitle:@"Start Game" forState:UIControlStateNormal];
+    startGameAlert.alertMessage = NSLocalizedString(@"Congratulations! You have more lives available, start playing!", @"Message that appears when the user buy lives");
+    [startGameAlert.acceptButton setTitle:NSLocalizedString(@"Start Game", @"Title for the start game button") forState:UIControlStateNormal];
     startGameAlert.messageLabel.font = [UIFont fontWithName:FONT_LIGHT size:17.0];
     [startGameAlert showAlertInView:self.view];
 }
@@ -1214,9 +1214,9 @@
 
 -(void)showErrorAlert {
     OneButtonAlert *errorAlert = [[OneButtonAlert alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 140.0, screenBounds.size.height/2.0 - 85.0, 280.0, 170.0)];
-    errorAlert.alertText = @"Oops! There was a network error. Please check that you're connected to the internet.";
+    errorAlert.alertText = NSLocalizedString(@"Oops! There was a network error. Please check that you're connected to the internet.", @"A message that appears when there's a network error");
     errorAlert.button.backgroundColor = [[AppInfo sharedInstance] appColorsArray][randomColorIndex];
-    errorAlert.buttonTitle = @"Ok";
+    errorAlert.buttonTitle = NSLocalizedString(@"Ok", @"Title for the accept button");
     errorAlert.messageLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:15.0];
     errorAlert.messageLabel.center = CGPointMake(errorAlert.messageLabel.center.x, 70.0);
     [errorAlert showInView:self.view];
@@ -1275,7 +1275,7 @@
 
 -(void)infiniteModeBoughtInView:(BuyLivesView *)buyLivesView {
     userBoughtInfiniteMode = YES;
-    self.heartNumberLabel.text = @"x Infinite";
+    self.heartNumberLabel.text = [NSString stringWithFormat:@"x %@", NSLocalizedString(@"Infinite", @"Infinite")];
     self.heartNumberLabel.font = [UIFont fontWithName:FONT_LIGHT size:15.0];
     [self enableButtons];
 }
@@ -1440,8 +1440,8 @@
 
 -(void)saveLocalNotificationWithFireDate:(NSDate *)date {
     UILocalNotification *localNotification = [[UILocalNotification alloc] init];
-    localNotification.alertAction = @"New Lives!";
-    localNotification.alertBody = @"All your lives have been restored!";
+    localNotification.alertAction = NSLocalizedString(@"New Lives!", @"New lives message");
+    localNotification.alertBody = NSLocalizedString(@"All your lives have been restored!", @"Message that informs the user that the lives have been restored");
     localNotification.fireDate = date;
     localNotification.userInfo = @{@"notificationID" : @"livesNotification"};
     [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];

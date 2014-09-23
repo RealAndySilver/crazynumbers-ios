@@ -63,7 +63,7 @@
         closeButton.layer.borderColor = [UIColor darkGrayColor].CGColor;
         closeButton.layer.borderWidth = 1.0;
         closeButton.backgroundColor = [UIColor clearColor];
-        [closeButton setTitle:@"Close" forState:UIControlStateNormal];
+        [closeButton setTitle:NSLocalizedString(@"Close", @"Button to close the color pattern screen") forState:UIControlStateNormal];
         [closeButton setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
         closeButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:15.0];
         [closeButton addTarget:self action:@selector(closeColorView) forControlEvents:UIControlEventTouchUpInside];

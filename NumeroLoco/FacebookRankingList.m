@@ -42,7 +42,7 @@
 
         //Title
         UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 30.0, frame.size.width, 40.0)];
-        title.text = @"Rankings";
+        title.text = NSLocalizedString(@"Rankings", @"Rankings title");
         title.textColor = [UIColor colorWithRed:56.0/255.0 green:78.0/255.0 blue:140.0/255.0 alpha:1.0];
         title.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:20.0];
         title.textAlignment = NSTextAlignmentCenter;
@@ -50,7 +50,7 @@
         
         //Invite friends button
         UIButton *inviteButton = [[UIButton alloc] initWithFrame:CGRectMake(frame.size.width - 80.0, 34.0, 70.0, 35.0)];
-        [inviteButton setTitle:@"Invite" forState:UIControlStateNormal];
+        [inviteButton setTitle:NSLocalizedString(@"Invite", @"Title for a button that displays the user friends available to invite") forState:UIControlStateNormal];
         [inviteButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         inviteButton.backgroundColor = [UIColor colorWithRed:56.0/255.0 green:78.0/255.0 blue:140.0/255.0 alpha:1.0];
         inviteButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:15.0];

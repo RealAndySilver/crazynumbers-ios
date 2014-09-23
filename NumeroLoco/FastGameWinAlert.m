@@ -32,7 +32,7 @@
         [self addSubview:self.alertLabel];
         
         self.buyLivesButton = [[UIButton alloc] initWithFrame:CGRectMake(40.0, 100.0, frame.size.width - 80.0, 40.0)];
-        [self.buyLivesButton setTitle:@"Buy Lives" forState:UIControlStateNormal];
+        [self.buyLivesButton setTitle:NSLocalizedString(@"Buy Lives", @"buy lives message") forState:UIControlStateNormal];
         [self.buyLivesButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         self.buyLivesButton.titleLabel.font = [UIFont fontWithName:FONT_NAME size:15.0];
         self.buyLivesButton.backgroundColor = [[AppInfo sharedInstance] appColorsArray][1];
@@ -41,7 +41,7 @@
         [self addSubview:self.buyLivesButton];
         
         self.continueButton = [[UIButton alloc] initWithFrame:CGRectMake(40.0, 150.0, frame.size.width - 80.0, 40.0)];
-        [self.continueButton setTitle:@"Continue" forState:UIControlStateNormal];
+        [self.continueButton setTitle:NSLocalizedString(@"Continue", @"continue to the next game message") forState:UIControlStateNormal];
         [self.continueButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         self.continueButton.titleLabel.font = [UIFont fontWithName:FONT_NAME size:15.0];
         self.continueButton.layer.cornerRadius = 10.0;
@@ -50,7 +50,7 @@
         [self addSubview:self.continueButton];
         
         UIButton *exitButton = [[UIButton alloc] initWithFrame:CGRectMake(40.0, 200.0, frame.size.width - 80.0, 40.0)];
-        [exitButton setTitle:@"Exit Fast Mode" forState:UIControlStateNormal];
+        [exitButton setTitle:NSLocalizedString(@"Exit Fast Mode", @"Exit fast mode message") forState:UIControlStateNormal];
         [exitButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         exitButton.titleLabel.font = [UIFont fontWithName:FONT_NAME size:15.0];
         exitButton.backgroundColor = [UIColor colorWithWhite:0.7 alpha:1.0];

@@ -27,7 +27,7 @@
         
         //Message
         UILabel *message = [[UILabel alloc] initWithFrame:CGRectMake(20.0, 30.0, frame.size.width - 40.0, 60.0)];
-        message.text = @"Are you sure you want to restart both games?";
+        message.text = NSLocalizedString(@"Are you sure you want to restart both games?", @"Message to restart both games");
         message.textColor = [UIColor darkGrayColor];
         message.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:17.0];
         message.textAlignment = NSTextAlignmentCenter;
@@ -37,7 +37,7 @@
         //Accept button
         UIButton *acceptButton = [UIButton buttonWithType:UIButtonTypeSystem];
         acceptButton.frame = CGRectMake(20.0, frame.size.height - 70.0, frame.size.width/2.0 - 40.0, 50.0);
-        [acceptButton setTitle:@"Restart" forState:UIControlStateNormal];
+        [acceptButton setTitle:NSLocalizedString(@"Restart", @"Restart title") forState:UIControlStateNormal];
         [acceptButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         acceptButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:17.0];
         acceptButton.backgroundColor = [[AppInfo sharedInstance] appColorsArray][2];
@@ -48,7 +48,7 @@
         //Cancel button
         UIButton *cancelButton = [UIButton buttonWithType:UIButtonTypeSystem];
         cancelButton.frame = CGRectMake(frame.size.width/2.0 + 20.0, frame.size.height - 70.0, frame.size.width/2.0 - 40.0, 50.0);
-        [cancelButton setTitle:@"Cancel" forState:UIControlStateNormal];
+        [cancelButton setTitle:NSLocalizedString(@"Cancel", @"Cancel title") forState:UIControlStateNormal];
         [cancelButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         cancelButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:17.0];
         cancelButton.backgroundColor = [[AppInfo sharedInstance] appColorsArray][0];

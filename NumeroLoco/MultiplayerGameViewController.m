@@ -134,7 +134,7 @@
     self.startButtonBottom = [UIButton buttonWithType:UIButtonTypeSystem];
     self.startButtonBottom.tag = 2;
     self.startButtonBottom.frame = CGRectMake(screenBounds.size.width - 150.0, screenBounds.size.height - 140.0, 120.0, 50.0);
-    [self.startButtonBottom setTitle:@"Start" forState:UIControlStateNormal];
+    [self.startButtonBottom setTitle:NSLocalizedString(@"Start", @"Title for the start game button") forState:UIControlStateNormal];
     [self.startButtonBottom setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     self.startButtonBottom.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:30.0];
     [self.startButtonBottom addTarget:self action:@selector(startButtonPressed:) forControlEvents:UIControlEventTouchDown];
@@ -156,7 +156,7 @@
     self.startButtonTop.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:30.0];
     self.startButtonTop.transform = CGAffineTransformMakeRotation(M_PI);
     self.startButtonTop.frame = CGRectMake(30.0, 20.0, 90.0, 50.0);
-    [self.startButtonTop setTitle:@"Start" forState:UIControlStateNormal];
+    [self.startButtonTop setTitle:NSLocalizedString(@"Start", @"Title for the start game button") forState:UIControlStateNormal];
     [self.startButtonTop addTarget:self action:@selector(startButtonPressed:) forControlEvents:UIControlEventTouchDown];
     [self.startButtonTop addTarget:self action:@selector(startButtonUnpressed:) forControlEvents:UIControlEventTouchUpInside];
     [self.startButtonTop addTarget:self action:@selector(startButtonUnpressed:) forControlEvents:(UIControlEventTouchUpOutside | UIControlEventTouchDragOutside)];
@@ -165,7 +165,7 @@
     //Another Game BUtton
     UIButton *anotherGameButton = [UIButton buttonWithType:UIButtonTypeSystem];
     anotherGameButton.frame = CGRectMake(30.0, screenBounds.size.height/2.0 + 30, 150.0, 50.0);
-    [anotherGameButton setTitle:@"New Game" forState:UIControlStateNormal];
+    [anotherGameButton setTitle:NSLocalizedString(@"New Game", @"Title for the new game button") forState:UIControlStateNormal];
     [anotherGameButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     anotherGameButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:25.0];
     anotherGameButton.layer.borderColor = [UIColor whiteColor].CGColor;
@@ -177,7 +177,7 @@
     //RestartBottom button
     UIButton *restartButton = [UIButton buttonWithType:UIButtonTypeSystem];
     restartButton.frame = CGRectMake(30.0, screenBounds.size.height/2.0 + 100.0, 150.0, 50.0);
-    [restartButton setTitle:@"Restart" forState:UIControlStateNormal];
+    [restartButton setTitle:NSLocalizedString(@"Restart", @"Title for the restart game button") forState:UIControlStateNormal];
     [restartButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     restartButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:25.0];
     restartButton.layer.borderColor = [UIColor whiteColor].CGColor;
@@ -190,7 +190,7 @@
     UIButton *restartTopButton = [UIButton buttonWithType:UIButtonTypeSystem];
     restartTopButton.frame = CGRectMake(self.view.bounds.size.width - 180.0, 20.0, 150.0, 50.0);
     restartTopButton.transform = CGAffineTransformMakeRotation(M_PI);
-    [restartTopButton setTitle:@"Restart" forState:UIControlStateNormal];
+    [restartTopButton setTitle:NSLocalizedString(@"Restart", @"Title for the restart game button") forState:UIControlStateNormal];
     [restartTopButton setTitleColor:[[AppInfo sharedInstance] appColorsArray][rand1] forState:UIControlStateNormal];
     restartTopButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:25.0];
     restartTopButton.layer.borderColor = ((UIColor *)[[AppInfo sharedInstance] appColorsArray][rand1]).CGColor;
@@ -202,7 +202,7 @@
     //Restart all button
     UIButton *restartAll = [UIButton buttonWithType:UIButtonTypeSystem];
     restartAll.frame = CGRectMake(screenBounds.size.width - 150.0, screenBounds.size.height - 70.0, 120.0, 50.0);
-    [restartAll setTitle:@"Restart Both" forState:UIControlStateNormal];
+    [restartAll setTitle:NSLocalizedString(@"Restart Both", @"Title for a button that restart all games") forState:UIControlStateNormal];
     [restartAll setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     restartAll.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:17.0];
     restartAll.layer.cornerRadius = 10.0;
@@ -217,7 +217,7 @@
     self.backButton.layer.cornerRadius = 10.0;
     self.backButton.layer.borderWidth = 1.0;
     self.backButton.layer.borderColor = [UIColor whiteColor].CGColor;
-    [self.backButton setTitle:@"Back" forState:UIControlStateNormal];
+    [self.backButton setTitle:NSLocalizedString(@"Back", @"Title for a button that returns the user to the previous screen") forState:UIControlStateNormal];
     [self.backButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     self.backButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:30.0];
     [self.backButton addTarget:self action:@selector(dismissVC) forControlEvents:UIControlEventTouchUpInside];
@@ -542,7 +542,7 @@
     
     if (startGameCount <= 0) {
         NSLog(@"Game begins!!!");
-        self.counterLabel.text = @"Start!";
+        self.counterLabel.text = NSLocalizedString(@"Start!", @"Message that appears when the users can start playing the game");
         self.buttonsContainerView2.alpha = 1.0;
         self.buttonsContainerView2.userInteractionEnabled = YES;
         self.buttonsContainerView.alpha = 1.0;
@@ -692,10 +692,10 @@
 -(void)updateUI {
     if (topUserWon) {
         gamesWonTopUser++;
-        self.gamesWonTopLabel.text = [NSString stringWithFormat:@"Games Won: %lu", (unsigned long)gamesWonTopUser];
+        self.gamesWonTopLabel.text = [NSString stringWithFormat:NSLocalizedString(@"Games Won: %lu", @"Message that display the games won by the user"), (unsigned long)gamesWonTopUser];
     } else {
         gamesWonBottomUser++;
-        self.gamesWonBottomLabel.text = [NSString stringWithFormat:@"Games Won: %lu", (unsigned long)gamesWonBottomUser];
+        self.gamesWonBottomLabel.text = [NSString stringWithFormat:NSLocalizedString(@"Games Won: %lu", @"Message that display the games won by the user"), (unsigned long)gamesWonBottomUser];
     }
 }
 

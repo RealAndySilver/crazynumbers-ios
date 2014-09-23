@@ -234,7 +234,7 @@
     self.enterButton = [UIButton buttonWithType:UIButtonTypeSystem];
     self.enterButton.frame = CGRectMake(self.view.bounds.size.width/2.0 - 90, screenBounds.size.height - 60.0, 180.0, 50.0);
     [self.enterButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [self.enterButton setTitle:@"Don't Login" forState:UIControlStateNormal];
+    [self.enterButton setTitle:NSLocalizedString(@"Don't Login", @"Button to enter without login") forState:UIControlStateNormal];
     self.enterButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:15.0];
     self.enterButton.layer.cornerRadius = 10.0;
     self.enterButton.layer.borderColor = [UIColor whiteColor].CGColor;
@@ -244,7 +244,7 @@
     
     //Facebook button
     self.facebookButton = [[UIButton alloc]initWithFrame:CGRectOffset(self.enterButton.frame, 0.0, -(self.enterButton.frame.size.height + 10.0))];
-    [self.facebookButton setTitle:@"Login With Facebook" forState:UIControlStateNormal];
+    [self.facebookButton setTitle:NSLocalizedString(@"Login With Facebook", @"Button to enter with facebook") forState:UIControlStateNormal];
     [self.facebookButton addTarget:self action:@selector(startLoginProcess) forControlEvents:UIControlEventTouchUpInside];
     self.facebookButton.layer.cornerRadius = 10.0;
     self.facebookButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:15.0];
@@ -277,7 +277,7 @@
     
     self.logoutButton = [[UIButton alloc] initWithFrame:CGRectOffset(self.optionsMenuButton.frame, 0.0, self.optionsMenuButton.frame.size.height + 10.0)];
     [self.logoutButton addTarget:self action:@selector(facebookLogout) forControlEvents:UIControlEventTouchUpInside];
-    [self.logoutButton setTitle:@"Logout" forState:UIControlStateNormal];
+    [self.logoutButton setTitle:NSLocalizedString(@"Logout", @"Button to close session with facebook") forState:UIControlStateNormal];
     [self.logoutButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     self.logoutButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:fontSize];
     self.logoutButton.layer.cornerRadius = 10.0;
@@ -289,7 +289,7 @@
     self.optionsButton = [UIButton buttonWithType:UIButtonTypeSystem];
     self.optionsButton.frame = gamesButtonsFrames;
     self.optionsButton.center = CGPointMake(self.view.bounds.size.width + self.optionsButton.frame.size.width/2.0, screenBounds.size.height - screenBounds.size.height/4.0 + 40.0);
-    [self.optionsButton setTitle:@"Tutorial" forState:UIControlStateNormal];
+    [self.optionsButton setTitle:NSLocalizedString(@"Tutorial", @"Button to open the tutorial of the game") forState:UIControlStateNormal];
     [self.optionsButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     self.optionsButton.layer.cornerRadius = cornerRadius;
     self.optionsButton.layer.borderWidth = borderWidth;
@@ -305,7 +305,7 @@
     self.removeAdsButton.frame = gamesButtonsFrames;
     //self.removeAdsButton.center = CGPointMake(self.view.frame.size.width + self.removeAdsButton.frame.size.width/2.0, self.optionsButton.center.y + self.optionsButton.frame.size.height + 10.0);
     self.removeAdsButton.center = CGPointMake(self.view.frame.size.width + self.removeAdsButton.frame.size.width/2.0, self.optionsButton.center.y);
-    [self.removeAdsButton setTitle:@"Store" forState:UIControlStateNormal];
+    [self.removeAdsButton setTitle:NSLocalizedString(@"Store", @"Button to open the store") forState:UIControlStateNormal];
     [self.removeAdsButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     self.removeAdsButton.titleLabel.font = [UIFont fontWithName:fontName size:fontSize];
     self.removeAdsButton.layer.cornerRadius = cornerRadius;
@@ -320,7 +320,7 @@
     self.colorsButton.frame = gamesButtonsFrames;
     //self.colorsButton.center = CGPointMake(self.view.bounds.size.width + self.colorsButton.frame.size.width/2.0, self.view.center.y + self.view.frame.size.height/4.0);
     self.colorsButton.center = CGPointMake(self.view.bounds.size.width + self.colorsButton.frame.size.width/2.0, screenBounds.size.height - screenBounds.size.height/4.0 + 40.0);
-    [self.colorsButton setTitle:@"Colors" forState:UIControlStateNormal];
+    [self.colorsButton setTitle:NSLocalizedString(@"Colors", @"Button to open the colors games") forState:UIControlStateNormal];
     [self.colorsButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     self.colorsButton.titleLabel.font = [UIFont fontWithName:fontName size:fontSize];
     [self.colorsButton addTarget:self action:@selector(goToColorsChaptersVC) forControlEvents:UIControlEventTouchUpInside];
@@ -333,7 +333,7 @@
     self.numbersButton = [UIButton buttonWithType:UIButtonTypeSystem];
     self.numbersButton.frame = gamesButtonsFrames;
     self.numbersButton.center = CGPointMake(self.view.frame.size.width + self.numbersButton.frame.size.width/2.0, self.colorsButton.center.y - self.colorsButton.bounds.size.height - 10.0);
-    [self.numbersButton setTitle:@"Numbers" forState:UIControlStateNormal];
+    [self.numbersButton setTitle:NSLocalizedString(@"Numbers", @"Button to open the numbers games") forState:UIControlStateNormal];
     [self.numbersButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     self.numbersButton.titleLabel.font = [UIFont fontWithName:fontName size:fontSize];
     [self.numbersButton addTarget:self action:@selector(goToChaptersVC) forControlEvents:UIControlEventTouchUpInside];
@@ -345,7 +345,7 @@
     //Fast mode button
     self.fastModeButton = [[UIButton alloc] initWithFrame:gamesButtonsFrames];
     self.fastModeButton.center = CGPointMake(self.view.frame.size.width + self.fastModeButton.frame.size.width/2.0, self.colorsButton.center.y + self.colorsButton.frame.size.height + 10.0);
-    [self.fastModeButton setTitle:@"Fast Mode" forState:UIControlStateNormal];
+    [self.fastModeButton setTitle:NSLocalizedString(@"Fast Mode", @"Button to open the fast mode") forState:UIControlStateNormal];
     [self.fastModeButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     self.fastModeButton.titleLabel.font = [UIFont fontWithName:fontName size:fontSize];
     self.fastModeButton.layer.cornerRadius = 10.0;
@@ -360,7 +360,7 @@
         self.twoPlayerButton.frame = gamesButtonsFrames;
         self.twoPlayerButton.center = CGPointMake(self.view.frame.size.width + self.twoPlayerButton.frame.size.width/2.0, self.colorsButton.center.y + self.colorsButton.frame.size.height + 80.0);
         self.twoPlayerButton.titleLabel.font = [UIFont fontWithName:fontName size:fontSize];
-        [self.twoPlayerButton setTitle:@"2-Players Vs" forState:UIControlStateNormal];
+        [self.twoPlayerButton setTitle:NSLocalizedString(@"2-Players Vs", @"Button to open the multiplayer game") forState:UIControlStateNormal];
         [self.twoPlayerButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [self.twoPlayerButton addTarget:self action:@selector(goToMultiplayerVC) forControlEvents:UIControlEventTouchUpInside];
         self.twoPlayerButton.layer.cornerRadius = 10.0;
@@ -387,7 +387,7 @@
     self.gameCenterButton = [UIButton buttonWithType:UIButtonTypeSystem];
     self.gameCenterButton.frame = gamesButtonsFrames;
     self.gameCenterButton.center = CGPointMake(self.view.frame.size.width + self.gameCenterButton.frame.size.width/2.0, self.optionsButton.center.y - self.optionsButton.bounds.size.height - 10.0);
-    [self.gameCenterButton setTitle:@"Rankings" forState:UIControlStateNormal];
+    [self.gameCenterButton setTitle:NSLocalizedString(@"Rankings", @"Button to open the rankings") forState:UIControlStateNormal];
     [self.gameCenterButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     self.gameCenterButton.layer.cornerRadius = cornerRadius;
     self.gameCenterButton.layer.borderWidth = borderWidth;
@@ -399,7 +399,7 @@
     //SOunds button
     self.soundsButton = [[UIButton alloc] initWithFrame:gamesButtonsFrames];
     self.soundsButton.center = CGPointMake(self.view.frame.size.width + self.soundsButton.frame.size.width/2.0, self.gameCenterButton.center.y);
-    [self.soundsButton setTitle:@"Sound" forState:UIControlStateNormal];
+    [self.soundsButton setTitle:NSLocalizedString(@"Sound", @"Button to open the sound configuration") forState:UIControlStateNormal];
     [self.soundsButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     self.soundsButton.layer.cornerRadius = cornerRadius;
     self.soundsButton.layer.borderColor = [UIColor whiteColor].CGColor;
@@ -412,7 +412,7 @@
     self.backButton = [UIButton buttonWithType:UIButtonTypeSystem];
     self.backButton.frame = backButtonFrame;
     self.backButton.center = CGPointMake(self.backButton.frame.size.width/2.0 + 10.0, self.view.frame.size.height + self.backButton.frame.size.height/2.0);
-    [self.backButton setTitle:@"Back" forState:UIControlStateNormal];
+    [self.backButton setTitle:NSLocalizedString(@"Back", @"Button to go back to the previous options") forState:UIControlStateNormal];
     self.backButton.backgroundColor = [UIColor whiteColor];
     [self.backButton setTitleColor:[[AppInfo sharedInstance] appColorsArray][0] forState:UIControlStateNormal];
     self.backButton.titleLabel.font = [UIFont fontWithName:fontName size:fontSize - 5.0];

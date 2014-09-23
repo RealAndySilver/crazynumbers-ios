@@ -50,7 +50,7 @@
         
         //Title
         UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 20.0, frame.size.width, 50.0)];
-        title.text = @"Buy Touches";
+        title.text = NSLocalizedString(@"Buy Touches", @"the title of the Store screen");
         title.textColor = [[AppInfo sharedInstance] appColorsArray][2];
         title.font = [UIFont fontWithName:FONT_NAME size:25.0];
         title.textAlignment = NSTextAlignmentCenter;
@@ -147,6 +147,7 @@
         //Infinite label
         UILabel *infiniteLabel = [[UILabel alloc] initWithFrame:CGRectMake(infiniteTouchesView.frame.origin.x + infiniteTouchesView.frame.size.width + 10.0, infiniteTouchesView.frame.origin.y, 150.0, 60.0)];
         infiniteLabel.numberOfLines = 0;
+        infiniteLabel.text = NSLocalizedString(@"Infinite Touches\nInfinite Lives\nNo Ads", @"A message indicating that if the user buy this item, the user will get inifinite lives, touches and no Ads");
         infiniteLabel.text = @"Infinite touches\nInfinite lives\nNo Ads";
         infiniteLabel.textColor = [UIColor lightGrayColor];
         infiniteLabel.font = [UIFont fontWithName:FONT_NAME size:15.0];

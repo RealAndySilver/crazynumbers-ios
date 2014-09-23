@@ -275,7 +275,7 @@
         }
         labelsFontSize = 18.0;
     }
-    self.titleLabel.text = [NSString stringWithFormat:@"Chapter %lu - Game %lu", self.selectedChapter + 1, self.selectedGame + 1];
+    self.titleLabel.text = [NSString stringWithFormat:NSLocalizedString(@"Chapter %lu - Game %lu", @"The current chapter and game"), self.selectedChapter + 1, self.selectedGame + 1];
     self.titleLabel.textColor = [UIColor darkGrayColor];
     self.titleLabel.textAlignment = NSTextAlignmentCenter;
     [self.view addSubview:self.titleLabel];
@@ -286,7 +286,7 @@
     backButton.layer.cornerRadius = 10.0;
     backButton.layer.borderWidth = 1.0;
     backButton.layer.borderColor = [UIColor darkGrayColor].CGColor;
-    [backButton setTitle:@"Back" forState:UIControlStateNormal];
+    [backButton setTitle:NSLocalizedString(@"Back", @"Button to go back to the previous options") forState:UIControlStateNormal];
     [backButton setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
     backButton.titleLabel.font = [UIFont fontWithName:FONT_NAME size:15.0];
     [backButton addTarget:self action:@selector(dismissVC) forControlEvents:UIControlEventTouchUpInside];
@@ -298,7 +298,7 @@
     self.resetButton.layer.cornerRadius = 10.0;
     self.resetButton.layer.borderColor = [UIColor darkGrayColor].CGColor;
     self.resetButton.layer.borderWidth = 1.0;
-    [self.resetButton setTitle:@"Restart" forState:UIControlStateNormal];
+    [self.resetButton setTitle:NSLocalizedString(@"Restart", @"Button to restart the game") forState:UIControlStateNormal];
     [self.resetButton setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
     self.resetButton.titleLabel.font = [UIFont fontWithName:FONT_NAME size:15.0];
     [self.resetButton addTarget:self action:@selector(restartGame) forControlEvents:UIControlEventTouchUpInside];
@@ -310,7 +310,7 @@
     colorPattern.layer.cornerRadius = 10.0;
     colorPattern.layer.borderColor = [UIColor darkGrayColor].CGColor;
     colorPattern.layer.borderWidth = 1.0;
-    [colorPattern setTitle:@"Pattern" forState:UIControlStateNormal];
+    [colorPattern setTitle:NSLocalizedString(@"Pattern", @"Button to open the colors pattern of the game") forState:UIControlStateNormal];
     [colorPattern setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
     [colorPattern addTarget:self action:@selector(showColorPatternView) forControlEvents:UIControlEventTouchUpInside];
     colorPattern.titleLabel.font = [UIFont fontWithName:FONT_NAME size:15.0];
@@ -340,9 +340,9 @@
     //Touches available label
     self.touchesAvailableLabel = [[UILabel alloc] initWithFrame:CGRectOffset(self.maxScoreLabel.frame, 0.0, -(self.maxScoreLabel.frame.size.height + 10.0))];
     if (userBoughtInfiniteMode)
-        self.touchesAvailableLabel.text = @"Infinite Touches";
-    else
-        self.touchesAvailableLabel.text = [NSString stringWithFormat:@"Touches left: %lu", (unsigned long)[TouchesObject sharedInstance].totalTouches];
+        self.touchesAvailableLabel.text = NSLocalizedString(@"Infinite Touches", @"The user has infinite touches");
+    else self.touchesAvailableLabel.text = [NSString stringWithFormat:@"%@: %lu", NSLocalizedString(@"Touches Left", @"The available touches for the user"),(unsigned long)[TouchesObject sharedInstance].totalTouches];
+    
     self.touchesAvailableLabel.font = [UIFont fontWithName:FONT_NAME size:15.0];
     self.touchesAvailableLabel.textColor = [UIColor darkGrayColor];
     self.touchesAvailableLabel.layer.cornerRadius = 10.0;
@@ -353,7 +353,7 @@
     
     //Buy button
     UIButton *buyButton = [[UIButton alloc] initWithFrame:CGRectOffset(backButton.frame, 0.0, -(backButton.frame.size.height + 10.0))];
-    [buyButton setTitle:@"Buy" forState:UIControlStateNormal];
+    [buyButton setTitle:NSLocalizedString(@"Buy", @"Button to buy touches") forState:UIControlStateNormal];
     [buyButton setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
     buyButton.titleLabel.font = [UIFont fontWithName:FONT_NAME size:15.0];
     buyButton.layer.cornerRadius = 10.0;
@@ -428,7 +428,7 @@
     maxScore = bestTapsScore + bestTimeScore;
     NSLog(@"******* %lu ----- %lu *********", (unsigned long)bestTapsScore, (unsigned long)bestTimeScore);
     timeElapsed = 0;
-    self.maxScoreLabel.text = [NSString stringWithFormat:@"Best Score: %lu/%d", (unsigned long)[self getScoredStoredInCoreData], (int)maxScore];
+    self.maxScoreLabel.text = [NSString stringWithFormat:@"%@: %lu/%d", NSLocalizedString(@"Best Score", @"The best score of the current game"),(unsigned long)[self getScoredStoredInCoreData], (int)maxScore];
     
     bestTime = [chaptersDataArray[self.selectedChapter][self.selectedGame][@"bestTime"] intValue];
     float pointsAtBestTime = [self pointsWonForTime:(float)bestTime];
@@ -494,7 +494,7 @@
 
 -(void)initGame {
     [self resetGame];
-    self.titleLabel.text = [NSString stringWithFormat:@"%@ - Game %lu", self.chapterNamesArray[self.selectedChapter], self.selectedGame + 1];
+    self.titleLabel.text = [NSString stringWithFormat:NSLocalizedString(@"Chapter %lu - Game %lu", @"The current chapter and game"), self.selectedChapter + 1, self.selectedGame + 1];
     //self.titleLabel.text = [NSString stringWithFormat:@"Chapter %lu - Game %lu", self.selectedChapter + 1, self.selectedGame + 1];
     
     NSString *gamesDatabasePath = [[NSBundle mainBundle] pathForResource:@"ColorGamesDatabase2" ofType:@"plist"];
@@ -751,7 +751,8 @@
     numberOfTaps += 1;
     if (!userBoughtInfiniteMode) {
         [TouchesObject sharedInstance].totalTouches--;
-        self.touchesAvailableLabel.text = [NSString stringWithFormat:@"Touches left: %lu", (unsigned long)[TouchesObject sharedInstance].totalTouches];
+        [self updateTouchesLabel];
+        //self.touchesAvailableLabel.text = [NSString stringWithFormat:@"Touches left: %lu", (unsigned long)[TouchesObject sharedInstance].totalTouches];
         
         if ([TouchesObject sharedInstance].totalTouches == 0) {
             //Show alert
@@ -835,7 +836,7 @@
 }*/
 
 -(void)updateUI {
-    self.maxScoreLabel.text = [NSString stringWithFormat:@"Best Score: %lu/%d", (unsigned long)[self getScoredStoredInCoreData], (int)maxScore];
+    self.maxScoreLabel.text = [NSString stringWithFormat:NSLocalizedString(@"Best Score: %lu/%d", @"The best score of the user"), (unsigned long)[self getScoredStoredInCoreData], (int)maxScore];
 }
 
 -(void)substractTime {
@@ -1099,7 +1100,7 @@
 
 -(void)showChallengeAlert {
     TwoButtonsAlert *challengeAlert = [[TwoButtonsAlert alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 140.0, screenBounds.size.height/2.0 - 85.0, 280.0, 170.0)];
-    challengeAlert.alertText = @"Which friends do you want to challenge?";
+    challengeAlert.alertText = NSLocalizedString(@"Which friends do you want to challente?", @"A message to indicate which friends the user wants to challenge");
     challengeAlert.leftButtonTitle = @"Facebook";
     challengeAlert.rightButtonTitle = @"GameCenter";
     challengeAlert.delegate = self;
@@ -1107,7 +1108,7 @@
 }
 
 -(void)challengeFacebookFriends {
-    [FBWebDialogs presentRequestsDialogModallyWithSession:[PFFacebookUtils session] message:@"Hey! I'm playing Cross for iOS, try to beat my score!"
+    [FBWebDialogs presentRequestsDialogModallyWithSession:[PFFacebookUtils session] message:NSLocalizedString(@"Hey! I'm playing Cross: Numbers & Colors. Come on and try to beat my score!", @"A message to invite friends to play the game")
                                                     title:nil parameters:nil handler:^(FBWebDialogResult result, NSURL *resultURL, NSError *error) {
                                                         
                                                     }];
@@ -1125,7 +1126,7 @@
         serviceType = SLServiceTypeTwitter;
     }
     SLComposeViewController *socialViewController = [SLComposeViewController composeViewControllerForServiceType:serviceType];
-    [socialViewController setInitialText:[NSString stringWithFormat:@"I scored %lu points playing Cross: Numbers & Colors", (unsigned long)[self pointsWonForTime:timeElapsed]]];
+    [socialViewController setInitialText:[NSString stringWithFormat:NSLocalizedString(@"I scored %lu points playing #Cross : Numbers & Colors", @"A message to share the user points"), (unsigned long)pointsWon]];
     [self presentViewController:socialViewController animated:YES completion:nil];
 }
 
@@ -1291,7 +1292,7 @@
 
 -(void)showErrorAlert {
     OneButtonAlert *errorAlert = [[OneButtonAlert alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 140.0, screenBounds.size.height/2.0 - 85.0, 280.0, 170.0)];
-    errorAlert.alertText = @"Oops! There was a network error. Please check that you're connected to the internet.";
+    errorAlert.alertText = NSLocalizedString(@"Oops! There was a network error. Please check that you're connected to the internet", @"Text to inform the user that there was a network error");
     errorAlert.button.backgroundColor = [[AppInfo sharedInstance] appColorsArray][self.selectedChapter];
     errorAlert.buttonTitle = @"Ok";
     errorAlert.messageLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:15.0];
@@ -1400,7 +1401,8 @@ interstitial {
 -(void)moreTouchesBought:(NSUInteger)totalTouchesAvailable inView:(BuyTouchesView *)buyTouchesView {
     [TouchesObject sharedInstance].totalTouches = totalTouchesAvailable;
     if (!userBoughtInfiniteMode) {
-        self.touchesAvailableLabel.text = [NSString stringWithFormat:@"Touches left: %lu", (unsigned long)[TouchesObject sharedInstance].totalTouches];
+        [self updateTouchesLabel];
+        //self.touchesAvailableLabel.text = [NSString stringWithFormat:@"Touches left: %lu", (unsigned long)[TouchesObject sharedInstance].totalTouches];
     }
     [self enableButtons];
     
@@ -1410,7 +1412,7 @@ interstitial {
 
 -(void)infiniteTouchesBoughtInView:(BuyTouchesView *)buyTouchesView {
     userBoughtInfiniteMode = YES;
-    self.touchesAvailableLabel.text = @"Infinite Touches";
+    self.touchesAvailableLabel.text = NSLocalizedString(@"Infinite Touches", @"Infinite Touches");
     [self enableButtons];
     
 }
@@ -1434,8 +1436,12 @@ interstitial {
 -(void)newTouchesNotificationReceived:(NSNotification *)notification {
     [self enableButtons];
     if (!userBoughtInfiniteMode) {
-        self.touchesAvailableLabel.text = [NSString stringWithFormat:@"Touches left: %lu", (unsigned long)[TouchesObject sharedInstance].totalTouches];
+        [self updateTouchesLabel];
     }
+}
+
+-(void)updateTouchesLabel {
+    self.touchesAvailableLabel.text = [NSString stringWithFormat:@"%@: %lu", NSLocalizedString(@"Touches Left", @"Touches left"),(unsigned long)[TouchesObject sharedInstance].totalTouches];
 }
 
 #pragma mark - Local Notification Stuff

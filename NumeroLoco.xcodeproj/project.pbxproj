@@ -36,7 +36,6 @@
 		8B6FB8F419507D7600EB2C4E /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B6FB8F319507D7600EB2C4E /* RootViewController.m */; };
 		8B6FB8F9195084CE00EB2C4E /* ChaptersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B6FB8F8195084CE00EB2C4E /* ChaptersViewController.m */; };
 		8B6FB8FC19508B0800EB2C4E /* ChaptersCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B6FB8FB19508B0800EB2C4E /* ChaptersCell.m */; };
-		8B6FB8FF19508CA200EB2C4E /* ChapterNames.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8B6FB8FE19508CA200EB2C4E /* ChapterNames.plist */; };
 		8B6FB9071950A18600EB2C4E /* GameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B6FB9061950A18600EB2C4E /* GameViewController.m */; };
 		8B811F7A19C8A074002033EB /* FacebookLogo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B811F7919C8A074002033EB /* FacebookLogo@2x.png */; };
 		8B811F7D19C8A289002033EB /* TwitterLogo.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B811F7B19C8A288002033EB /* TwitterLogo.png */; };
@@ -45,6 +44,7 @@
 		8B90453F196359FC000F2E51 /* TutorialPhoneR4_1.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B90453E196359FC000F2E51 /* TutorialPhoneR4_1.png */; };
 		8B90454119635EEF000F2E51 /* TutorialPhoneR4_2.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B90454019635EEF000F2E51 /* TutorialPhoneR4_2.png */; };
 		8B90454319636244000F2E51 /* TutorialPhoneR4_3.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B90454219636244000F2E51 /* TutorialPhoneR4_3.png */; };
+		8B9692BA19D0C94C00BED68C /* ChapterNames.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8B9692BC19D0C94C00BED68C /* ChapterNames.plist */; };
 		8B96EAD919795E1C00E60698 /* WordsGamesDatabase2.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8B96EAD819795E1C00E60698 /* WordsGamesDatabase2.plist */; };
 		8B96EADC1979666300E60698 /* WordsChaptersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B96EADB1979666300E60698 /* WordsChaptersViewController.m */; };
 		8B96EADF197969A200E60698 /* WordsGameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B96EADE197969A200E60698 /* WordsGameViewController.m */; };
@@ -218,7 +218,6 @@
 		8B6FB8F8195084CE00EB2C4E /* ChaptersViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChaptersViewController.m; sourceTree = "<group>"; };
 		8B6FB8FA19508B0800EB2C4E /* ChaptersCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChaptersCell.h; sourceTree = "<group>"; };
 		8B6FB8FB19508B0800EB2C4E /* ChaptersCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChaptersCell.m; sourceTree = "<group>"; };
-		8B6FB8FE19508CA200EB2C4E /* ChapterNames.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = ChapterNames.plist; sourceTree = "<group>"; };
 		8B6FB9051950A18600EB2C4E /* GameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameViewController.h; sourceTree = "<group>"; };
 		8B6FB9061950A18600EB2C4E /* GameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameViewController.m; sourceTree = "<group>"; };
 		8B811F7919C8A074002033EB /* FacebookLogo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "FacebookLogo@2x.png"; sourceTree = "<group>"; };
@@ -228,6 +227,7 @@
 		8B90453E196359FC000F2E51 /* TutorialPhoneR4_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TutorialPhoneR4_1.png; sourceTree = "<group>"; };
 		8B90454019635EEF000F2E51 /* TutorialPhoneR4_2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TutorialPhoneR4_2.png; sourceTree = "<group>"; };
 		8B90454219636244000F2E51 /* TutorialPhoneR4_3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TutorialPhoneR4_3.png; sourceTree = "<group>"; };
+		8B9692BB19D0C94C00BED68C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = en; path = en.lproj/ChapterNames.plist; sourceTree = "<group>"; };
 		8B96EAD819795E1C00E60698 /* WordsGamesDatabase2.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = WordsGamesDatabase2.plist; sourceTree = "<group>"; };
 		8B96EADA1979666300E60698 /* WordsChaptersViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WordsChaptersViewController.h; sourceTree = "<group>"; };
 		8B96EADB1979666300E60698 /* WordsChaptersViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WordsChaptersViewController.m; sourceTree = "<group>"; };
@@ -590,7 +590,7 @@
 				8B61F8F8195C87A90036BB90 /* Custom Views */,
 				8B6FB8D119507C6B00EB2C4E /* Images.xcassets */,
 				8B6FB8C619507C6B00EB2C4E /* Supporting Files */,
-				8B6FB8FE19508CA200EB2C4E /* ChapterNames.plist */,
+				8B9692BC19D0C94C00BED68C /* ChapterNames.plist */,
 				A0BCCCB9195476D1001CD7F1 /* ColorsChaptersNames.plist */,
 				8BD2CED21951E6B4002EF327 /* GamesDatabase2.plist */,
 				8B96EAD819795E1C00E60698 /* WordsGamesDatabase2.plist */,
@@ -1030,7 +1030,7 @@
 				8B6FB8D219507C6B00EB2C4E /* Images.xcassets in Resources */,
 				A02E3DF119BE2926009FDC1C /* BackgroundiPhonePortraitR4.png in Resources */,
 				A0536F9219BFB0E9009DE6D1 /* ProfilePic.png in Resources */,
-				8B6FB8FF19508CA200EB2C4E /* ChapterNames.plist in Resources */,
+				8B9692BA19D0C94C00BED68C /* ChapterNames.plist in Resources */,
 				A08EAD2519AD1E0E00F36E23 /* heart@2x.png in Resources */,
 				8BB8A9CC19A3FA8F0076E4A7 /* restartnuevo.wav in Resources */,
 				8BB86294199BA01200718843 /* GamesButton@2x.png in Resources */,
@@ -1156,6 +1156,14 @@
 				8B6FB8E219507C6B00EB2C4E /* en */,
 			);
 			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		8B9692BC19D0C94C00BED68C /* ChapterNames.plist */ = {
+			isa = PBXVariantGroup;
+			children = (
+				8B9692BB19D0C94C00BED68C /* en */,
+			);
+			name = ChapterNames.plist;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

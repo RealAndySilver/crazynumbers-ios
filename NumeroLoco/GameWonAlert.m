@@ -35,42 +35,42 @@
 
 -(void)setTouchesMade:(NSUInteger)touchesMade {
     _touchesMade = touchesMade;
-    self.touchesMadeLabel.text = [NSString stringWithFormat:@"Touches made: %lu", (unsigned long)touchesMade];
+    self.touchesMadeLabel.text = [NSString stringWithFormat:@"%@: %lu", NSLocalizedString(@"Touches Made", @"The touches used for winning the game"),(unsigned long)touchesMade];
 }
 
 -(void)setTouchesForBestScore:(NSUInteger)touchesForBestScore {
     _touchesForBestScore = touchesForBestScore;
-    self.touchesBestScoreLabel.text = [NSString stringWithFormat:@"Ideal touches: %lu", (unsigned long)touchesForBestScore];
+    self.touchesBestScoreLabel.text = [NSString stringWithFormat:@"%@: %lu", NSLocalizedString(@"Ideal Touches", @"The number of touches to obtain the best score"),(unsigned long)touchesForBestScore];
 }
 
 -(void)setTouchesScore:(NSUInteger)touchesScore {
     _touchesScore = touchesScore;
-    self.scoreLabel.text = [NSString stringWithFormat:@"Score: %lu/%lu", (unsigned long)touchesScore, (unsigned long)self.maxTouchesScore];
+    self.scoreLabel.text = [NSString stringWithFormat:@"%@: %lu/%lu", NSLocalizedString(@"Score", @"The player's score"),(unsigned long)touchesScore, (unsigned long)self.maxTouchesScore];
 }
 
 -(void)setMaxTouchesScore:(NSUInteger)maxTouchesScore {
     _maxTouchesScore = maxTouchesScore;
-    self.scoreLabel.text = [NSString stringWithFormat:@"Score: %lu/%lu", (unsigned long)self.touchesScore, (unsigned long)maxTouchesScore];
+    self.scoreLabel.text = [NSString stringWithFormat:@"%@: %lu/%lu", NSLocalizedString(@"Score", @"The player's score"),(unsigned long)self.touchesScore, (unsigned long)maxTouchesScore];
 }
 
 -(void)setTimeUsed:(float)timeUsed {
     _timeUsed = timeUsed;
-    self.timeSpentLabel.text = [NSString stringWithFormat:@"Time Spent: %.1fs", timeUsed];
+    self.timeSpentLabel.text = [NSString stringWithFormat:@"%@: %.1fs", NSLocalizedString(@"Time Spent", @"The time used for winning the game"),timeUsed];
 }
 
 -(void)setTimeForBestScore:(float)timeForBestScore {
     _timeForBestScore = timeForBestScore;
-    self.idealTimeLabel.text = [NSString stringWithFormat:@"Ideal time: %.1fs", timeForBestScore];
+    self.idealTimeLabel.text = [NSString stringWithFormat:@"%@: %.1fs", NSLocalizedString(@"Ideal Time", @"The time for obtaining the best score"),timeForBestScore];
 }
 
 -(void)setBonusScore:(NSUInteger)bonusScore {
     _bonusScore = bonusScore;
-    self.bonusScoreLabel.text = [NSString stringWithFormat:@"Time Bonus Score: %lu/%lu", (unsigned long)bonusScore, (unsigned long)self.maxBonusScore];
+    self.bonusScoreLabel.text = [NSString stringWithFormat:@"%@: %lu/%lu", NSLocalizedString(@"Time Bonus Score", @"A bonus score"),(unsigned long)bonusScore, (unsigned long)self.maxBonusScore];
 }
 
 -(void)setMaxBonusScore:(NSUInteger)maxBonusScore {
     _maxBonusScore = maxBonusScore;
-    self.bonusScoreLabel.text = [NSString stringWithFormat:@"Time Bonus Score: %lu/%lu", (unsigned long)self.bonusScore, (unsigned long)maxBonusScore];
+    self.bonusScoreLabel.text = [NSString stringWithFormat:@"%@: %lu/%lu", NSLocalizedString(@"Time Bonus Score", @"A bonus score"),(unsigned long)self.bonusScore, (unsigned long)maxBonusScore];
     [self setTotalScoreLabel];
 }
 
@@ -96,8 +96,8 @@
         self.transform = CGAffineTransformMakeScale(0.5, 0.5);
         
         //Title Label
-        UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0, 20.0, frame.size.width, 40.0)];
-        titleLabel.text = @"Game Won!";
+        UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0, 20.0, frame.size.width - 40.0, 40.0)];
+        titleLabel.text = NSLocalizedString(@"Game Won!", @"The user won the game");
         titleLabel.textColor = [UIColor blackColor];
         titleLabel.textAlignment = NSTextAlignmentCenter;
         titleLabel.font = [UIFont fontWithName:FONT_NAME size:25.0];
@@ -196,7 +196,7 @@
         
         //Share label
         UILabel *shareLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0, facebookButton.frame.origin.y - 30.0, 125.0, 30.0)];
-        shareLabel.text = @"Share";
+        shareLabel.text = NSLocalizedString(@"Share", @"A button to share the score on social networks");
         shareLabel.textColor = [UIColor darkGrayColor];
         shareLabel.textAlignment = NSTextAlignmentCenter;
         shareLabel.font = [UIFont fontWithName:FONT_NAME size:20.0];
@@ -204,7 +204,7 @@
         
         //Challenge label
         UILabel *challengeLabel = [[UILabel alloc] initWithFrame:CGRectMake(frame.size.width/2.0, challengeButton.frame.origin.y - 30.0, frame.size.width/2.0, 30.0)];
-        challengeLabel.text = @"Challenge";
+        challengeLabel.text = NSLocalizedString(@"Challenge", @"A button to challenge friends");
         challengeLabel.textColor = [UIColor darkGrayColor];
         challengeLabel.font = [UIFont fontWithName:FONT_NAME size:20.0];
         challengeLabel.textAlignment = NSTextAlignmentCenter;
@@ -214,7 +214,7 @@
         if (self.screenBounds.size.height > 500) {
             //Big screen
             UIButton *closeButton = [[UIButton alloc] initWithFrame:CGRectMake(frame.size.width/2.0 - 60.0, frame.size.height - 150.0, 120.0, 35.0)];
-            [closeButton setTitle:@"Continue" forState:UIControlStateNormal];
+            [closeButton setTitle:NSLocalizedString(@"Continue", @"A button to continue playing") forState:UIControlStateNormal];
             [closeButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
             closeButton.titleLabel.font = [UIFont fontWithName:FONT_NAME size:15.0];
             closeButton.backgroundColor = [[AppInfo sharedInstance] appColorsArray][2];

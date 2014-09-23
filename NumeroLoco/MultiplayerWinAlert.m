@@ -38,7 +38,7 @@
         
         //Winning Label
         self.messageLabel = [[UILabel alloc] initWithFrame:CGRectMake(10.0, 30.0, frame.size.width - 20.0, 50.0)];
-        self.messageLabel.text = @"You Won!";
+        self.messageLabel.text = NSLocalizedString(@"You Won!", @"You won message");
         self.messageLabel.textColor = [UIColor darkGrayColor];
         self.messageLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:25.0];
         self.messageLabel.textAlignment = NSTextAlignmentCenter;
@@ -48,7 +48,7 @@
         //Accept Button
         self.acceptButton = [UIButton buttonWithType:UIButtonTypeSystem];
         self.acceptButton.frame = CGRectMake(frame.size.width/2.0 - 60.0, frame.size.height - 60.0, 120.0, 50.0);
-        [self.acceptButton setTitle:@"Ok" forState:UIControlStateNormal];
+        [self.acceptButton setTitle:NSLocalizedString(@"Ok", @"Accept button") forState:UIControlStateNormal];
         [self.acceptButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         self.acceptButton.backgroundColor = [[AppInfo sharedInstance] appColorsArray][0];
         self.acceptButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:20.0];

@@ -47,7 +47,7 @@
         
         //Title label
         UILabel *fastGamesTitle = [[UILabel alloc] initWithFrame:CGRectMake(20.0, 40.0, frame.size.width - 40.0, 50.0)];
-        fastGamesTitle.text = @"Fast Games";
+        fastGamesTitle.text = NSLocalizedString(@"Fast Games", @"Fast games title");
         fastGamesTitle.textColor = [UIColor darkGrayColor];
         fastGamesTitle.font = [UIFont fontWithName:@"HelveticaNeue-UltraLight" size:35.0];
         fastGamesTitle.textAlignment = NSTextAlignmentCenter;

@@ -174,7 +174,7 @@
     
     //Back button
     UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(10.0, screenBounds.size.height - 57.0, 70.0, 40.0)];
-    [backButton setTitle:@"Back" forState:UIControlStateNormal];
+    [backButton setTitle:NSLocalizedString(@"Back", "Button to return to the previous screen") forState:UIControlStateNormal];
     backButton.layer.cornerRadius = 10.0;
     backButton.layer.borderColor = [UIColor whiteColor].CGColor;
     backButton.layer.borderWidth = 1.0;
@@ -645,7 +645,7 @@
 
     } else {
         MultiplayerWinAlert *alert = [[MultiplayerWinAlert alloc] initWithFrame:CGRectMake(self.view.bounds.size.width/2.0 - 125.0, self.view.bounds.size.height/2.0 - 75.0, 250.0, 150.0)];
-        alert.alertMessage = @"Oops! You haven't unlocked this game yet!";
+        alert.alertMessage = NSLocalizedString(@"Oops! You haven't unlocked this game yet!", @"Message to inform the user that the game has not been unlocked");
         alert.messageTextSize = 15.0;
         alert.acceptButton.backgroundColor = [[AppInfo sharedInstance] appColorsArray][self.pageControl.currentPage];
         alert.delegate = self;

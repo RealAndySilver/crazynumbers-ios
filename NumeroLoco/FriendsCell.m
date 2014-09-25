@@ -33,6 +33,7 @@
         //Points label
         self.friendScore = [[UILabel alloc] init];
         self.friendScore.textColor = [UIColor blackColor];
+        self.friendScore.adjustsFontSizeToFitWidth = YES;
         self.friendScore.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:15.0];
         [self.contentView addSubview:self.friendScore];
         
@@ -59,7 +60,7 @@
     self.friendImageView.frame = CGRectMake(20.0, 15.0, bounds.size.height - 30.0, bounds.size.height - 30.0);
     self.friendImageView.layer.cornerRadius = self.friendImageView.frame.size.width/2.0;
     self.friendName.frame = CGRectMake(self.friendImageView.frame.origin.x + self.friendImageView.frame.size.width + 10.0, bounds.size.height/2.0 - 20.0, bounds.size.width - (self.friendImageView.frame.origin.x + self.friendImageView.frame.size.width + 20.0) - 60, 40.0);
-    self.friendScore.frame = CGRectMake(self.friendName.frame.origin.x + self.friendName.frame.size.width + 10.0, bounds.size.height/2.0 - 20.0, 120.0, 40.0);
+    self.friendScore.frame = CGRectMake(self.friendName.frame.origin.x + self.friendName.frame.size.width + 5.0, bounds.size.height/2.0 - 20.0, 120.0, 40.0);
 }
 
 @end

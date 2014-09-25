@@ -281,7 +281,7 @@
         buttonDistance = 20.0;
         initialHeight = 280.0;
         chapterNameY = 120.0;
-        chapterNameHeight = 70.0;
+        chapterNameHeight = 90.0;
     } else {
         buttonSize = 70.0;
         buttonDistance = 10.0;

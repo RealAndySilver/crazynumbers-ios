@@ -148,7 +148,6 @@
         UILabel *infiniteLabel = [[UILabel alloc] initWithFrame:CGRectMake(infiniteTouchesView.frame.origin.x + infiniteTouchesView.frame.size.width + 10.0, infiniteTouchesView.frame.origin.y, 150.0, 60.0)];
         infiniteLabel.numberOfLines = 0;
         infiniteLabel.text = NSLocalizedString(@"Infinite Touches\nInfinite Lives\nNo Ads", @"A message indicating that if the user buy this item, the user will get inifinite lives, touches and no Ads");
-        infiniteLabel.text = @"Infinite touches\nInfinite lives\nNo Ads";
         infiniteLabel.textColor = [UIColor lightGrayColor];
         infiniteLabel.font = [UIFont fontWithName:FONT_NAME size:15.0];
         [self addSubview:infiniteLabel];

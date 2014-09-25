@@ -163,7 +163,7 @@
         } else {
             totalScoreLabel.frame = CGRectMake(20.0, frame.size.height/2.0 + 40.0, frame.size.width - 40.0, 20.0);
         }
-        totalScoreLabel.text = @"Total Score";
+        totalScoreLabel.text = NSLocalizedString(@"Total Score", nil);
         totalScoreLabel.textColor = [UIColor darkGrayColor];
         totalScoreLabel.font = [UIFont fontWithName:FONT_NAME size:20.0];
         totalScoreLabel.textAlignment = NSTextAlignmentCenter;
@@ -296,12 +296,23 @@
 }
 
 -(void)showTouchesWonAlert {
-    OneButtonAlert *tenTouchesWonAlert = [[OneButtonAlert alloc] initWithFrame:CGRectMake(self.screenBounds.size.width/2.0 - 120.0, self.screenBounds.size.height/2.0 - 90.0, 240.0, 180.0)];
+    OneButtonAlert *tenTouchesWonAlert = [[OneButtonAlert alloc] initWithFrame:CGRectMake(self.screenBounds.size.width/2.0 - 120.0, self.screenBounds.size.height/2.0 - 135.0, 240.0, 270.0)];
     tenTouchesWonAlert.button.backgroundColor = [[AppInfo sharedInstance] appColorsArray][2];
     tenTouchesWonAlert.alertText = NSLocalizedString(@"You have won ten touches for completing this game for the first time!", nil);
     tenTouchesWonAlert.buttonTitle = NSLocalizedString(@"Ok", nil);
     tenTouchesWonAlert.messageLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:15.0];
     tenTouchesWonAlert.messageLabel.frame = CGRectMake(20.0, 40.0, tenTouchesWonAlert.bounds.size.width - 40.0, 60.0);
+    
+    UIImageView *touchesImageView = [[UIImageView alloc] initWithFrame:CGRectMake(45.0, 120.0, 60.0, 60.0)];
+    touchesImageView.image = [UIImage imageNamed:@"Touch2.png"];
+    [tenTouchesWonAlert addSubview:touchesImageView];
+    
+    UILabel *tenLabel = [[UILabel alloc] initWithFrame:CGRectMake(touchesImageView.frame.origin.x + touchesImageView.frame.size.width, touchesImageView.frame.origin.y, 80.0, 60.0)];
+    tenLabel.text = @"x 10!";
+    tenLabel.textColor = [((UIColor *)[[AppInfo sharedInstance] appColorsArray][0]) colorWithAlphaComponent:0.7];
+    tenLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:35.0];
+    [tenTouchesWonAlert addSubview:tenLabel];
+    
     [tenTouchesWonAlert showInView:self.superview];
 }
 

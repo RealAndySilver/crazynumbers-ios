@@ -9,7 +9,7 @@
 			<key>bestTime</key>
 			<integer>1</integer>
 			<key>maxTime</key>
-			<integer>20</integer>
+			<integer>5</integer>
 			<key>maxNumber</key>
 			<integer>1</integer>
 			<key>matrixSize</key>
@@ -32,7 +32,7 @@
 			<key>maxScore</key>
 			<integer>200</integer>
 			<key>maxTime</key>
-			<integer>20</integer>
+			<integer>5</integer>
 			<key>maxNumber</key>
 			<integer>2</integer>
 			<key>puntos</key>
@@ -59,7 +59,7 @@
 			<key>maxScore</key>
 			<integer>300</integer>
 			<key>maxTime</key>
-			<integer>20</integer>
+			<integer>5</integer>
 			<key>matrixSize</key>
 			<integer>3</integer>
 			<key>puntos</key>
@@ -92,7 +92,7 @@
 			<key>maxScore</key>
 			<integer>400</integer>
 			<key>maxTime</key>
-			<integer>30</integer>
+			<integer>8</integer>
 			<key>matrixSize</key>
 			<integer>3</integer>
 			<key>puntos</key>
@@ -137,7 +137,7 @@
 			<key>maxScore</key>
 			<integer>500</integer>
 			<key>maxTime</key>
-			<integer>30</integer>
+			<integer>10</integer>
 			<key>matrixSize</key>
 			<integer>3</integer>
 			<key>puntos</key>
@@ -194,7 +194,7 @@
 			<key>maxScore</key>
 			<integer>600</integer>
 			<key>maxTime</key>
-			<integer>40</integer>
+			<integer>10</integer>
 			<key>matrixSize</key>
 			<integer>3</integer>
 			<key>puntos</key>
@@ -263,7 +263,7 @@
 			<key>maxScore</key>
 			<integer>700</integer>
 			<key>maxTime</key>
-			<integer>40</integer>
+			<integer>10</integer>
 			<key>matrixSize</key>
 			<integer>3</integer>
 			<key>puntos</key>
@@ -330,7 +330,7 @@
 			<key>bestTime</key>
 			<integer>8</integer>
 			<key>maxTime</key>
-			<integer>50</integer>
+			<integer>15</integer>
 			<key>maxScore</key>
 			<integer>800</integer>
 			<key>matrixSize</key>
@@ -407,7 +407,7 @@
 			<key>maxScore</key>
 			<integer>900</integer>
 			<key>maxTime</key>
-			<integer>60</integer>
+			<integer>20</integer>
 			<key>matrixSize</key>
 			<integer>3</integer>
 			<key>puntos</key>
@@ -496,7 +496,7 @@
 			<key>maxScore</key>
 			<integer>100</integer>
 			<key>maxTime</key>
-			<integer>20</integer>
+			<integer>10</integer>
 			<key>matrixSize</key>
 			<integer>4</integer>
 			<key>puntos</key>
@@ -523,7 +523,7 @@
 			<key>maxScore</key>
 			<integer>200</integer>
 			<key>maxTime</key>
-			<integer>20</integer>
+			<integer>10</integer>
 			<key>matrixSize</key>
 			<integer>4</integer>
 			<key>puntos</key>
@@ -562,7 +562,7 @@
 			<key>maxScore</key>
 			<integer>300</integer>
 			<key>maxTime</key>
-			<integer>30</integer>
+			<integer>15</integer>
 			<key>matrixSize</key>
 			<integer>4</integer>
 			<key>puntos</key>
@@ -611,7 +611,7 @@
 			<key>bestTime</key>
 			<integer>5</integer>
 			<key>maxTime</key>
-			<integer>40</integer>
+			<integer>20</integer>
 			<key>maxScore</key>
 			<integer>400</integer>
 			<key>matrixSize</key>
@@ -674,7 +674,7 @@
 			<key>bestTime</key>
 			<integer>6</integer>
 			<key>maxTime</key>
-			<integer>40</integer>
+			<integer>20</integer>
 			<key>maxScore</key>
 			<integer>500</integer>
 			<key>matrixSize</key>
@@ -749,7 +749,7 @@
 			<key>bestTime</key>
 			<integer>7</integer>
 			<key>maxTime</key>
-			<integer>70</integer>
+			<integer>35</integer>
 			<key>maxScore</key>
 			<integer>600</integer>
 			<key>matrixSize</key>
@@ -844,7 +844,7 @@
 			<key>maxScore</key>
 			<integer>700</integer>
 			<key>maxTime</key>
-			<integer>90</integer>
+			<integer>45</integer>
 			<key>matrixSize</key>
 			<integer>4</integer>
 			<key>puntos</key>
@@ -955,7 +955,7 @@
 			<key>maxScore</key>
 			<integer>800</integer>
 			<key>maxTime</key>
-			<integer>110</integer>
+			<integer>50</integer>
 			<key>matrixSize</key>
 			<integer>4</integer>
 			<key>puntos</key>
@@ -1084,7 +1084,7 @@
 			<key>maxScore</key>
 			<integer>900</integer>
 			<key>maxTime</key>
-			<integer>130</integer>
+			<integer>60</integer>
 			<key>matrixSize</key>
 			<integer>4</integer>
 			<key>puntos</key>
@@ -1233,7 +1233,7 @@
 			<key>maxScore</key>
 			<integer>100</integer>
 			<key>maxTime</key>
-			<integer>30</integer>
+			<integer>15</integer>
 			<key>matrixSize</key>
 			<integer>5</integer>
 			<key>puntos</key>
@@ -1276,7 +1276,7 @@
 			<key>bestTime</key>
 			<integer>4</integer>
 			<key>maxTime</key>
-			<integer>30</integer>
+			<integer>15</integer>
 			<key>maxScore</key>
 			<integer>200</integer>
 			<key>matrixSize</key>
@@ -1337,13 +1337,13 @@
 			<key>maxNumber</key>
 			<integer>4</integer>
 			<key>bestTime</key>
-			<integer>5</integer>
+			<integer>8</integer>
 			<key>matrixSize</key>
 			<integer>5</integer>
 			<key>maxScore</key>
 			<integer>300</integer>
 			<key>maxTime</key>
-			<integer>40</integer>
+			<integer>20</integer>
 			<key>puntos</key>
 			<array>
 				<dict>
@@ -1418,11 +1418,11 @@
 			<key>maxNumber</key>
 			<integer>4</integer>
 			<key>bestTime</key>
-			<integer>6</integer>
+			<integer>10</integer>
 			<key>maxScore</key>
 			<integer>400</integer>
 			<key>maxTime</key>
-			<integer>40</integer>
+			<integer>20</integer>
 			<key>matrixSize</key>
 			<integer>5</integer>
 			<key>puntos</key>
@@ -1505,9 +1505,9 @@
 			<key>maxNumber</key>
 			<integer>4</integer>
 			<key>bestTime</key>
-			<integer>7</integer>
+			<integer>13</integer>
 			<key>maxTime</key>
-			<integer>50</integer>
+			<integer>25</integer>
 			<key>maxScore</key>
 			<integer>500</integer>
 			<key>matrixSize</key>
@@ -1604,9 +1604,9 @@
 			<key>maxNumber</key>
 			<integer>5</integer>
 			<key>bestTime</key>
-			<integer>8</integer>
+			<integer>15</integer>
 			<key>maxTime</key>
-			<integer>60</integer>
+			<integer>30</integer>
 			<key>maxScore</key>
 			<integer>600</integer>
 			<key>matrixSize</key>
@@ -1709,9 +1709,9 @@
 			<key>maxNumber</key>
 			<integer>6</integer>
 			<key>bestTime</key>
-			<integer>9</integer>
+			<integer>17</integer>
 			<key>maxTime</key>
-			<integer>70</integer>
+			<integer>35</integer>
 			<key>maxScore</key>
 			<integer>700</integer>
 			<key>matrixSize</key>
@@ -1832,9 +1832,9 @@
 			<key>maxNumber</key>
 			<integer>10</integer>
 			<key>bestTime</key>
-			<integer>10</integer>
+			<integer>19</integer>
 			<key>maxTime</key>
-			<integer>80</integer>
+			<integer>40</integer>
 			<key>maxScore</key>
 			<integer>800</integer>
 			<key>matrixSize</key>
@@ -1973,9 +1973,9 @@
 			<key>maxNumber</key>
 			<integer>11</integer>
 			<key>bestTime</key>
-			<integer>11</integer>
+			<integer>21</integer>
 			<key>maxTime</key>
-			<integer>90</integer>
+			<integer>45</integer>
 			<key>maxScore</key>
 			<integer>900</integer>
 			<key>matrixSize</key>
@@ -2124,7 +2124,7 @@
 			<key>bestTime</key>
 			<integer>10</integer>
 			<key>maxTime</key>
-			<integer>60</integer>
+			<integer>30</integer>
 			<key>maxScore</key>
 			<integer>100</integer>
 			<key>matrixSize</key>
@@ -2205,7 +2205,7 @@
 			<key>bestTime</key>
 			<integer>12</integer>
 			<key>maxTime</key>
-			<integer>60</integer>
+			<integer>30</integer>
 			<key>maxScore</key>
 			<integer>200</integer>
 			<key>matrixSize</key>
@@ -2310,7 +2310,7 @@
 			<key>bestTime</key>
 			<integer>14</integer>
 			<key>maxTime</key>
-			<integer>80</integer>
+			<integer>40</integer>
 			<key>maxScore</key>
 			<integer>300</integer>
 			<key>matrixSize</key>
@@ -2415,7 +2415,7 @@
 			<key>bestTime</key>
 			<integer>16</integer>
 			<key>maxTime</key>
-			<integer>80</integer>
+			<integer>40</integer>
 			<key>maxScore</key>
 			<integer>400</integer>
 			<key>matrixSize</key>
@@ -2556,7 +2556,7 @@
 			<key>bestTime</key>
 			<integer>18</integer>
 			<key>maxTime</key>
-			<integer>120</integer>
+			<integer>60</integer>
 			<key>maxScore</key>
 			<integer>500</integer>
 			<key>matrixSize</key>
@@ -2721,7 +2721,7 @@
 			<key>bestTime</key>
 			<integer>20</integer>
 			<key>maxTime</key>
-			<integer>120</integer>
+			<integer>60</integer>
 			<key>maxScore</key>
 			<integer>600</integer>
 			<key>matrixSize</key>
@@ -2916,7 +2916,7 @@
 			<key>bestTime</key>
 			<integer>22</integer>
 			<key>maxTime</key>
-			<integer>150</integer>
+			<integer>75</integer>
 			<key>maxScore</key>
 			<integer>700</integer>
 			<key>matrixSize</key>
@@ -3141,7 +3141,7 @@
 			<key>bestTime</key>
 			<integer>24</integer>
 			<key>maxTime</key>
-			<integer>150</integer>
+			<integer>75</integer>
 			<key>maxScore</key>
 			<integer>800</integer>
 			<key>matrixSize</key>
@@ -3408,7 +3408,7 @@
 			<key>bestTime</key>
 			<integer>26</integer>
 			<key>maxTime</key>
-			<integer>180</integer>
+			<integer>80</integer>
 			<key>maxScore</key>
 			<integer>900</integer>
 			<key>matrixSize</key>

@@ -259,13 +259,15 @@
 }
 
 -(void)initGame {
+    randomColorIndex = arc4random()%4;
     [self resetGame];
+    NSLog(@"RANDOM COLOR INDEX EN EL INIT GAME: %lu", (unsigned long)randomColorIndex);
     self.titleLabel.text = [NSString stringWithFormat:NSLocalizedString(@"Game %lu", @"The current game"), self.currentGame + 1];
     self.heartNumberLabel.textColor = [[AppInfo sharedInstance] appColorsArray][randomColorIndex];
     self.heartImageView.tintColor = [[AppInfo sharedInstance] appColorsArray][randomColorIndex];
     
     self.pointsArray = self.chaptersDataArray[self.currentGame][@"puntos"];
-    NSLog(@"numero de puntos: %lu", (unsigned long)[self.pointsArray count]);
+    //NSLog(@"numero de puntos: %lu", (unsigned long)[self.pointsArray count]);
     for (int i = 0; i < [self.pointsArray count]; i++) {
         NSUInteger row = [self.pointsArray[i][@"fila"] intValue] - 1;
         NSUInteger column = [self.pointsArray[i][@"columna"] intValue] - 1;
@@ -274,11 +276,57 @@
         else
             [self addColorToButtonAtRow:row column:column];
     }
+    
+    if ([self.gameType isEqualToString:@"number"]) {
+        maxNumber = [self getMaxNumber];
+    } else {
+        maxNumber = [self getMaxNumberFromColor];
+    }
+}
+
+-(NSUInteger)getMaxNumberFromColor {
+    NSUInteger max = 0;
+    
+    for (int i = 0; i < matrixSize; i++) {
+        for (int j = 0; j < matrixSize; j++) {
+            UIButton *button = self.columnsButtonsArray[i][j];
+            UIColor *currentColor = button.backgroundColor;
+            NSUInteger currentColorIndex;
+            for (int i = 0; i < [self.colorPaletteArray count]; i++) {
+                UIColor *color = self.colorPaletteArray[i];
+                if ([currentColor isEqual:color]) {
+                    currentColorIndex = i;
+                    if (currentColorIndex > max) {
+                        max = currentColorIndex;
+                    }
+                    break;
+                }
+            }
+        }
+    }
+    
+    return max;
+}
+
+-(NSUInteger)getMaxNumber {
+    NSUInteger max = 0;
+    
+    for (int i = 0; i < matrixSize; i++) {
+        for (int j = 0; j < matrixSize; j++) {
+            UIButton *button = self.columnsButtonsArray[i][j];
+            NSUInteger buttonNumber = [button.currentTitle intValue];
+            if (buttonNumber > max) {
+                max = buttonNumber;
+            }
+        }
+    }
+    
+    return max;
 }
 
 -(void)startTimer {
     timeLeft = maxTime;
-    NSLog(@"*************TIME LEFT: %d", timeLeft);
+    //NSLog(@"*************TIME LEFT: %d", timeLeft);
     //self.timeLeftLabel.text = [NSString stringWithFormat:@"Time left: %lus", (unsigned long)timeLeft];
     self.timeLeftLabel.text = [NSString stringWithFormat:@"%lu", (unsigned long)timeLeft];
     
@@ -292,7 +340,7 @@
     [self.columnsButtonsArray removeAllObjects];
     
     matrixSize = [self.chaptersDataArray[self.currentGame][@"matrixSize"] intValue];
-    maxNumber = [self.chaptersDataArray[self.currentGame][@"maxNumber"] intValue];
+    //maxNumber = [self.chaptersDataArray[self.currentGame][@"maxNumber"] intValue];
     //maxTime = [self.chaptersDataArray[self.currentGame][@"maxTime"] intValue];
     if (self.currentGame < 100) {
         maxTime = 15.0;
@@ -302,8 +350,8 @@
         maxTime = 30.0;
     }
     self.gameType = self.chaptersDataArray[self.currentGame][@"type"];
-    NSUInteger randColor = arc4random()%4;
-    self.colorPaletteArray = [[AppInfo sharedInstance] arrayOfChaptersColorsArray][randColor];
+    //NSUInteger randColor = arc4random()%4;
+    self.colorPaletteArray = [[AppInfo sharedInstance] arrayOfChaptersColorsArray][randomColorIndex];
     if ([self.gameType isEqualToString:@"number"]) {
         self.buttonsContainerView.backgroundColor = [UIColor whiteColor];
     } else {
@@ -364,7 +412,7 @@
 }
 
 -(void)createSquareMatrixOf:(NSUInteger)size {
-    randomColorIndex = arc4random()%3;
+    NSLog(@"RANDOM COLOR INDEX EN EL CREATE SQUARE: %lu", (unsigned long)randomColorIndex);
     
     NSUInteger buttonDistance;
     NSUInteger cornerRadius;
@@ -587,6 +635,7 @@
     }
     fastGamesView.viewColor = [[AppInfo sharedInstance] appColorsArray][randomColorIndex];
     fastGamesView.delegate = self;
+    fastGamesView.initialCell = [self getLastUnlockedLevelInUserDefaults] - 1;
     if (initialFastGamesViewLaunch) {
         fastGamesView.closeButton.hidden = YES;
     } else {
@@ -1099,7 +1148,7 @@
 
 -(void)showExitWarningAlert {
     TwoButtonsAlert *warningAlert = [[TwoButtonsAlert alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 140.0, screenBounds.size.height/2.0 - 85.0, 280.0, 170.0)];
-    warningAlert.alertText = NSLocalizedString(@"Warning! If you exit while the game is in course, you will loss one life.", @"Message to inform the user that he will lose one life");
+    warningAlert.alertText = NSLocalizedString(@"Warning! If you exit while the game is in progress, you will lose one life.", @"Message to inform the user that he will lose one life");
     warningAlert.leftButtonTitle = NSLocalizedString(@"Exit", @"Title for the exit button");
     warningAlert.rightButtonTitle = NSLocalizedString(@"Cancel", @"Title for the cancel button");
     warningAlert.tag = 2;
@@ -1112,7 +1161,7 @@
 
 -(void)showLivesWarningAlert {
     TwoButtonsAlert *warningAlert = [[TwoButtonsAlert alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 140.0, screenBounds.size.height/2.0 - 85.0, 280.0, 170.0)];
-    warningAlert.alertText = NSLocalizedString(@"Warning! if you exit the last unlocked game while the game is in course, you will loss one live.", @"Warning message that appears if the user tries to exit while the last unlocked game is in course");
+    warningAlert.alertText = NSLocalizedString(@"Warning! if you exit the last unlocked game while the game is in progress, you will lose one life.", @"Warning message that appears if the user tries to exit while the last unlocked game is in course");
     warningAlert.leftButtonTitle = NSLocalizedString(@"Exit", @"Title for the exit button");
     warningAlert.rightButtonTitle = NSLocalizedString(@"Cancel", @"Title for the cancel button");
     warningAlert.tag = 3;
@@ -1121,7 +1170,8 @@
     warningAlert.leftButton.backgroundColor = [[AppInfo sharedInstance] appColorsArray][randomColorIndex];
     warningAlert.messageLabel.frame = CGRectMake(20.0, 40.0, warningAlert.bounds.size.width - 40.0, 60.0);
     warningAlert.messageLabel.font = [UIFont fontWithName:FONT_LIGHT size:15.0];
-    [warningAlert showInView:self.view];}
+    [warningAlert showInView:self.view];
+}
 
 -(void)showStartAlert {
     TwoButtonsAlert *startAlert = [[TwoButtonsAlert alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 140.0, screenBounds.size.height/2.0 - 85.0, 280.0, 170.0)];
@@ -1149,7 +1199,7 @@
 
 -(void)showBuyMoreLivesAlert {
     NoTouchesAlertView *noLivesAlert = [[NoTouchesAlertView alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 140.0, self.view.bounds.size.height/2.0 - 100.0, 280.0, 200.0)];
-    noLivesAlert.message.text = NSLocalizedString(@"You have no more lives left! You can buy more right now or wait one hour.", @"Message that appears when the user has no more lives left");
+    noLivesAlert.message.text = NSLocalizedString(@"You have no more lives left! Every two hours you'll get one life. You can wait or buy some!", @"Message that appears when the user has no more lives left");
     [noLivesAlert.acceptButton setTitle:NSLocalizedString(@"Buy Lives", @"Title for the buy lives button") forState:UIControlStateNormal];
     noLivesAlert.acceptButton.backgroundColor = [[AppInfo sharedInstance] appColorsArray][randomColorIndex];
     noLivesAlert.delegate = self;
@@ -1193,7 +1243,7 @@
     
     NSLog(@"ENTRE AL DISMISSSSSS");
     //Check if the user is trying to exit the last game
-    if (self.currentGame == [self getLastUnlockedLevelInUserDefaults] - 1 && [self getLivesFromUserDefaults] > 0 && !userBoughtInfiniteMode) {
+    if (self.currentGame == [self getLastUnlockedLevelInUserDefaults] - 1 && [self getLivesFromUserDefaults] > 0 && !userBoughtInfiniteMode && self.currentGame != totalGames - 1) {
         NSLog(@"Trying to exit the last game");
         [self showExitWarningAlert];
         [self disableTimer];

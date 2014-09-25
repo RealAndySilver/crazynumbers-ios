@@ -13,9 +13,20 @@
 @property (strong, nonatomic) AVAudioPlayer *buttonPressSound;
 @property (strong, nonatomic) AVAudioPlayer *winSound;
 @property (strong, nonatomic) AVAudioPlayer *restartSound;
+@property (strong, nonatomic) AVAudioPlayer *pressPlayer;
 @end
 
 @implementation AudioPlayer
+
+-(AVAudioPlayer *)pressPlayer {
+    if (!_pressPlayer) {
+        NSString *soundFilePath = [[NSBundle mainBundle] pathForResource:@"buttonpress" ofType:@"wav"];
+        NSURL *soundFileURL = [NSURL URLWithString:soundFilePath];
+        _pressPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:soundFileURL error:nil];
+        [_pressPlayer prepareToPlay];
+    }
+    return _pressPlayer;
+}
 
 -(AVAudioPlayer *)restartSound {
     if (!_restartSound) {
@@ -87,6 +98,12 @@
         });
     }
     return shared;
+}
+
+-(void)playPressSound {
+    [self.pressPlayer stop];
+    self.pressPlayer.currentTime = 0.0;
+    [self.pressPlayer play];
 }
 
 -(void)playAlarmSound {

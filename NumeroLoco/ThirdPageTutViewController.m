@@ -9,6 +9,7 @@
 #import "ThirdPageTutViewController.h"
 #import "TutorialAlertView.h"
 #import "AppInfo.h"
+#import "AudioPlayer.h"
 
 @interface ThirdPageTutViewController () <TutorialAlertDelegate>
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
@@ -35,13 +36,19 @@
 
 -(void)viewDidLoad {
     [super viewDidLoad];
+    CGRect textviewRect;
+    CGFloat touchLabelFontSize;
     screenBounds = [UIScreen mainScreen].bounds;
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
         isPad = YES;
         fontSize = 30.0;
+        touchLabelFontSize = 35.0;
+        textviewRect = CGRectMake(80.0, 60.0, self.view.bounds.size.width - 160.0, 170.0);
     } else {
         isPad = NO;
         fontSize = 15.0;
+        touchLabelFontSize = 20.0;
+        textviewRect = CGRectMake(40.0, 45.0, self.view.bounds.size.width - 80.0, 120.0);
     }
     
     //Close button
@@ -63,6 +70,8 @@
         self.backButton.center = CGPointMake(self.backButton.center.x, screenBounds.size.height - 70.0);
         self.continueButton.center = CGPointMake(self.continueButton.center.x, screenBounds.size.height - 70.0);
     }
+    
+    [self.backButton setTitle:NSLocalizedString(@"Back", @"Tutorial back button 1") forState:UIControlStateNormal];
     [self.backButton setTitleColor:[[AppInfo sharedInstance] appColorsArray][0] forState:UIControlStateNormal];
     self.backButton.layer.cornerRadius = 10.0;
     self.backButton.layer.borderWidth = 1.0;
@@ -79,6 +88,8 @@
             button.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:40.0];
         }
     }
+    
+    [self.continueButton setTitle:NSLocalizedString(@"Continue", @"Continue") forState:UIControlStateNormal];
     self.continueButton.hidden = YES;
     self.continueButton.layer.cornerRadius = 10.0;
     self.continueButton.layer.borderWidth = 1.0;
@@ -89,8 +100,8 @@
     [self.button5 addTarget:self action:@selector(centerButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     
     //Textview setup
-    self.textView = [[UITextView alloc] initWithFrame:CGRectMake(40.0, 45.0, self.view.bounds.size.width - 80.0, 120.0)];
-    self.textView.text = NSLocalizedString(@"Let's practice! Remember, when you touch a button, its value will decrease by one, as well as the value of the upper, left, bottom and right button.", nil);
+    self.textView = [[UITextView alloc] initWithFrame:textviewRect];
+    self.textView.text = NSLocalizedString(@"Let's practice! Remember, when you touch a button, its value will decrease by one, as well as the value of the upper, left, lower and right button.", nil);
     self.textView.textColor = [UIColor darkGrayColor];
     self.textView.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:fontSize];
     self.textView.textAlignment = NSTextAlignmentCenter;
@@ -104,13 +115,15 @@
     self.touchLabel.textAlignment = NSTextAlignmentCenter;
     self.touchLabel.textColor = [[AppInfo sharedInstance] appColorsArray][0];
     self.touchLabel.numberOfLines = 0;
-    self.touchLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:20.0];
+    self.touchLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:touchLabelFontSize];
     [self.view addSubview:self.touchLabel];
 }
 
 #pragma mark - Actions 
 
 -(void)centerButtonPressed {
+    [[AudioPlayer sharedInstance] playButtonPressSound];
+    
     [self.button5 removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
     
     [self.button5 setTitle:@"0" forState:UIControlStateNormal];
@@ -127,6 +140,8 @@
 }
 
 -(void)showFirstAlert {
+    [[AudioPlayer sharedInstance] playWinSound];
+    
     TutorialAlertView *tutorialAlert = [[TutorialAlertView alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 140.0, 20.0, 280.0, 200.0)];
     tutorialAlert.textView.text = NSLocalizedString(@"Excellent!\nYou set all the buttons to zero! The light gray buttons were the ones affected by your touch. Let's practice again!", nil);
     tutorialAlert.tag = 1;
@@ -144,6 +159,7 @@
 }
 
 -(void)backButtonPressed {
+    [[AudioPlayer sharedInstance] playPressSound];
     [self.delegate thirdPageBackButtonPressed];
 }
 
@@ -178,6 +194,8 @@
 }
 
 -(void)button1Pressed {
+    [[AudioPlayer sharedInstance] playButtonPressSound];
+    
     [self.button1 removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
     
     self.button1.backgroundColor = [UIColor colorWithWhite:0.8 alpha:1.0];
@@ -191,22 +209,34 @@
 }
 
 -(void)showSecondAlert {
+    [[AudioPlayer sharedInstance] playWinSound];
+    
     self.touchLabel.hidden = YES;
-    self.textView.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:18.0];
+    if (isPad) {
+        self.textView.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:fontSize];
+    } else {
+        self.textView.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:18.0];
+    }
     self.textView.text = NSLocalizedString(@"Now, you will have to make two touches to win.", nil);
     TutorialAlertView *tutorialAlert = [[TutorialAlertView alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 140.0, 20.0, 280.0, 200.0)];
     tutorialAlert.tag = 2;
     tutorialAlert.delegate = self;
-    tutorialAlert.textView.text = NSLocalizedString(@"Excellent!\nBecause in this case there weren't upper and left buttons, the buttons that you changed were the right and bottom ones. Let's practice one last time!", nil);
+    tutorialAlert.textView.text = NSLocalizedString(@"Excellent!\nBecause in this case there weren't upper and left buttons, the buttons that you changed were the right and lower ones. Let's practice one last time!", nil);
     [tutorialAlert showInView:self.view];
     
     self.touchLabel.hidden = NO;
-    self.touchLabel.text = @"Touch the center button and then the upper left button";
-    self.touchLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:17.0];
+    if (isPad) {
+        self.touchLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:25.0];
+    } else {
+        self.touchLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:17.0];
+    }
+    self.touchLabel.text = NSLocalizedString(@"Touch the center button and then the upper left button", nil);
     self.touchLabel.center = CGPointMake(self.touchLabel.center.x, self.touchLabel.center.y + 30.0);
 }
 
 -(void)lastCenterButtonPress {
+    [[AudioPlayer sharedInstance] playButtonPressSound];
+    
     self.touchLabel.hidden = YES;
     
     [self.button5 removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
@@ -222,6 +252,8 @@
 }
 
 -(void)lastButton1Press {
+    [[AudioPlayer sharedInstance] playButtonPressSound];
+    
     [self.button1 removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
     [self.button1 setTitle:@"0" forState:UIControlStateNormal];
     [self.button2 setTitle:@"0" forState:UIControlStateNormal];
@@ -230,6 +262,8 @@
 }
 
 -(void)showLastAlert {
+    [[AudioPlayer sharedInstance] playWinSound];
+    
     self.textView.textColor = [UIColor darkGrayColor];
     self.textView.text = NSLocalizedString(@"Congratulations!\nNow you can play the numbers game. Let's continue and see how the colors game works!", nil);
     
@@ -241,10 +275,12 @@
 }
 
 -(void)continueButtonPressed {
+    [[AudioPlayer sharedInstance] playPressSound];
     [self.delegate thirdPageContinueButtonPressed];
 }
 
 -(void)closeButtonPressed {
+    [[AudioPlayer sharedInstance] playBackSound];
     [self.delegate thirdPageCloseButtonPressed];
 }
 

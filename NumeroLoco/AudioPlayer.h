@@ -22,4 +22,5 @@
 -(void)stopShakeSound;
 -(void)playAlarmSound;
 -(void)pauseShakeSound;
+-(void)playPressSound;
 @end

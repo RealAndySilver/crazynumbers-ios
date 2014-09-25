@@ -253,7 +253,7 @@
     if (isPad) {
         self.numberOfTapsLabel = [[UILabel alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 150.0, screenBounds.size.height - 140.0, 300.0, 30.0)];
         
-        self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 70.0, screenBounds.size.width, 70.0)];
+        self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 70.0, screenBounds.size.width, 80.0)];
         self.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-UltraLight" size:70.0];
         labelsFontSize = 25.0;
     } else {
@@ -332,6 +332,7 @@
     self.maxScoreLabel.layer.cornerRadius = 10.0;
     self.maxScoreLabel.layer.borderColor = [UIColor darkGrayColor].CGColor;
     self.maxScoreLabel.layer.borderWidth = 1.0;
+    self.maxScoreLabel.adjustsFontSizeToFitWidth = YES;
     self.maxScoreLabel.textColor = [UIColor darkGrayColor];
     self.maxScoreLabel.textAlignment = NSTextAlignmentCenter;
     self.maxScoreLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:15.0];
@@ -963,10 +964,15 @@
             [[NSNotificationCenter defaultCenter] postNotificationName:@"ColorGameWonNotification" object:nil];
             
             //Give 10 touches to the user
-            [TouchesObject sharedInstance].totalTouches += 10;
-            [self saveTouchesLeftInUserDefaults:[TouchesObject sharedInstance].totalTouches];
-            [self updateTouchesLabel];
-            userWonGameForTheFirstTime = YES;
+            if (self.selectedChapter == 0) {
+                [TouchesObject sharedInstance].totalTouches += 10;
+                [self saveTouchesLeftInUserDefaults:[TouchesObject sharedInstance].totalTouches];
+                [self updateTouchesLabel];
+                userWonGameForTheFirstTime = YES;
+            } else {
+                userWonGameForTheFirstTime = NO;
+            }
+           
             
         } else {
             userWonGameForTheFirstTime = NO;
@@ -990,10 +996,15 @@
             [[NSNotificationCenter defaultCenter] postNotificationName:@"ColorGameWonNotification" object:nil];
             
             //Give 10 touches to the user
-            [TouchesObject sharedInstance].totalTouches += 10;
-            [self saveTouchesLeftInUserDefaults:[TouchesObject sharedInstance].totalTouches];
-            [self updateTouchesLabel];
-            userWonGameForTheFirstTime = YES;
+            if (self.selectedChapter == 0) {
+                [TouchesObject sharedInstance].totalTouches += 10;
+                [self saveTouchesLeftInUserDefaults:[TouchesObject sharedInstance].totalTouches];
+                [self updateTouchesLabel];
+                userWonGameForTheFirstTime = YES;
+            } else {
+                userWonGameForTheFirstTime = NO;
+            }
+         
             
         } else {
             userWonGameForTheFirstTime = NO;
@@ -1102,7 +1113,7 @@
 
 -(void)showChallengeAlert {
     TwoButtonsAlert *challengeAlert = [[TwoButtonsAlert alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 140.0, screenBounds.size.height/2.0 - 85.0, 280.0, 170.0)];
-    challengeAlert.alertText = NSLocalizedString(@"Which friends do you want to challente?", @"A message to indicate which friends the user wants to challenge");
+    challengeAlert.alertText = NSLocalizedString(@"Which friends do you want to challenge?", @"A message to indicate which friends the user wants to challenge");
     challengeAlert.leftButtonTitle = @"Facebook";
     challengeAlert.rightButtonTitle = @"GameCenter";
     challengeAlert.delegate = self;
@@ -1110,14 +1121,14 @@
 }
 
 -(void)challengeFacebookFriends {
-    [FBWebDialogs presentRequestsDialogModallyWithSession:[PFFacebookUtils session] message:NSLocalizedString(@"Hey! I'm playing Cross: Numbers & Colors. Come on and try to beat my score!", @"A message to invite friends to play the game")
+    [FBWebDialogs presentRequestsDialogModallyWithSession:[PFFacebookUtils session] message:NSLocalizedString(@"Hey! I'm playing Cross: Numbers & Colors. Come try to beat my score!", @"A message to invite friends to play the game")
                                                     title:nil parameters:nil handler:^(FBWebDialogResult result, NSURL *resultURL, NSError *error) {
                                                         
                                                     }];
 }
 
 -(void)challengeGameCenterFriends {
-    [[GameKitHelper sharedGameKitHelper] sendScoreChallengeToPlayers:nil withScore:[self pointsWonForTime:timeElapsed] message:nil];
+    [[GameKitHelper sharedGameKitHelper] sendScoreChallengeToPlayers:nil withScore:[self getTotalScoreInCoreData] message:nil];
 }
 
 -(void)shareScoreOnSocialNetwork:(NSString *)socialNetwork {

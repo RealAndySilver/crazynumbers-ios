@@ -13,6 +13,9 @@
 #import "GameWonAlert.h"
 #import "MultiplayerWinAlert.h"
 #import "MultiplayerAlertView.h"
+#import "Flurry.h"
+#import "FlurryAds.h"
+#import "FlurryAdDelegate.h"
 @import AVFoundation;
 
 @interface MultiplayerGameViewController () <GameWonAlertDelegate, UIAlertViewDelegate, MultiplayerWinAlertDelegate, MultiplayerAlertDelegate>
@@ -35,6 +38,7 @@
 @property (weak, nonatomic) IBOutlet UIImageView *topHand;
 @property (strong, nonatomic) UIButton *multiplayerButton;
 @property (strong, nonatomic) UIView *littleOpacityView;
+@property (strong, nonatomic) NSArray *gamesArray;
 
 //Sounds
 @property (strong, nonatomic) AVAudioPlayer *playerButttonPressed;
@@ -56,14 +60,23 @@
     BOOL gameInProgress;
     NSUInteger gamesWonTopUser;
     NSUInteger gamesWonBottomUser;
-    NSUInteger selectedChapter;
     NSUInteger selectedGame;
     NSUInteger rand1;
     BOOL resetBottomGame;
     BOOL resetTopGame;
+    BOOL userBoughtInfiniteMode;
+    BOOL animationActive;
 }
 
 #pragma mark - Lazy Instantiation
+
+-(NSArray *)gamesArray {
+    if (!_gamesArray) {
+        NSString *gamesDatabasePath = [[NSBundle mainBundle] pathForResource:@"FastGamesDatabase" ofType:@"plist"];
+        _gamesArray = [NSArray arrayWithContentsOfFile:gamesDatabasePath];
+    }
+    return _gamesArray;
+}
 
 -(NSMutableArray *)columnsButtonsArray {
     if (!_columnsButtonsArray) {
@@ -83,20 +96,32 @@
 
 -(void)viewDidLoad {
     [super viewDidLoad];
+    animationActive = YES;
+    if ([self userBoughtInfiniteMode]) userBoughtInfiniteMode = YES;
+    else userBoughtInfiniteMode = NO;
     gamesWonBottomUser = 0;
     gamesWonTopUser = 0;
     startGameCount = 3;
-    selectedChapter = arc4random()%4;
-    selectedGame = arc4random()%9;
     screenBounds = [UIScreen mainScreen].bounds;
-    NSString *gamesDatabasePath = [[NSBundle mainBundle] pathForResource:@"GamesDatabase2" ofType:@"plist"];
-    NSArray *chaptersDataArray = [NSArray arrayWithContentsOfFile:gamesDatabasePath];
-    matrixSize = [chaptersDataArray[selectedChapter][selectedGame][@"matrixSize"] intValue];
-    maxNumber = [chaptersDataArray[selectedChapter][selectedGame][@"maxNumber"] intValue];
+    selectedGame = arc4random()%[self.gamesArray count];
+    matrixSize = [self.gamesArray[selectedGame][@"matrixSize"] intValue];
+    maxNumber = [self.gamesArray[selectedGame][@"maxNumber"] intValue];
     
     [self setupUI];
     [self initGame];
     [self configureSounds];
+    
+    if (!userBoughtInfiniteMode) {
+        //Add adds from Flurry
+        [FlurryAds setAdDelegate:self];
+        if ([FlurryAds adReadyForSpace:@"FullScreenAd2"]) {
+            NSLog(@"Mostraré el ad");
+            //[FlurryAds displayAdForSpace:@"FullScreenAd" onView:self.view];
+        } else {
+            NSLog(@"No mostraré el ad sino que lo cargaré");
+            [FlurryAds fetchAdForSpace:@"FullScreenAd2" frame:self.view.frame size:FULLSCREEN];
+        }
+    }
 }
 
 -(void)setupUI {
@@ -116,16 +141,18 @@
     self.gamesWonTopLabel.layer.borderWidth = 1.0;
     self.gamesWonTopLabel.layer.cornerRadius = 10.0;
     self.gamesWonTopLabel.layer.borderColor = ((UIColor *)[[AppInfo sharedInstance] appColorsArray][rand1]).CGColor;
+    self.gamesWonTopLabel.text = [NSString stringWithFormat:NSLocalizedString(@"Games Won: %lu", @"Message that display the games won by the user"), (unsigned long)gamesWonTopUser];
     
     self.gamesWonBottomLabel.layer.borderWidth = 1.0;
     self.gamesWonBottomLabel.layer.cornerRadius = 10.0;
     self.gamesWonBottomLabel.layer.borderColor = [UIColor whiteColor].CGColor;
+    self.gamesWonBottomLabel.text = [NSString stringWithFormat:NSLocalizedString(@"Games Won: %lu", @"Message that display the games won by the user"), (unsigned long)gamesWonBottomUser];
     
     //COunter Label
     self.counterLabel = [[UILabel alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 250.0, screenBounds.size.height/2.0 - 100.0, 500.0, 200.0)];
     self.counterLabel.text = @"3";
     self.counterLabel.textColor = [UIColor whiteColor];
-    self.counterLabel.font = [UIFont fontWithName:@"HelveticaNeue-UltraLight" size:160.0];
+    self.counterLabel.font = [UIFont fontWithName:@"HelveticaNeue-UltraLight" size:100.0];
     self.counterLabel.hidden = YES;
     self.counterLabel.textAlignment = NSTextAlignmentCenter;
     [self.view addSubview:self.counterLabel];
@@ -155,7 +182,7 @@
     [self.startButtonTop setTitleColor:[[AppInfo sharedInstance] appColorsArray][rand1] forState:UIControlStateNormal];
     self.startButtonTop.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:30.0];
     self.startButtonTop.transform = CGAffineTransformMakeRotation(M_PI);
-    self.startButtonTop.frame = CGRectMake(30.0, 20.0, 90.0, 50.0);
+    self.startButtonTop.frame = CGRectMake(30.0, 20.0, 120.0, 50.0);
     [self.startButtonTop setTitle:NSLocalizedString(@"Start", @"Title for the start game button") forState:UIControlStateNormal];
     [self.startButtonTop addTarget:self action:@selector(startButtonPressed:) forControlEvents:UIControlEventTouchDown];
     [self.startButtonTop addTarget:self action:@selector(startButtonUnpressed:) forControlEvents:UIControlEventTouchUpInside];
@@ -265,35 +292,40 @@
 }
 
 -(void)animateHands {
-    [UIView animateWithDuration:1.0
-                          delay:0.0
-                        options:UIViewAnimationOptionCurveEaseInOut
-                     animations:^(){
-                         self.bottomHand.center = CGPointMake(self.bottomHand.center.x, 300.0);
-                         self.topHand.center = CGPointMake(self.topHand.center.x, 150.0);
-                     } completion:^(BOOL success){
-                         [self animateHandsSecondStep];
-                     }];
+    if (animationActive) {
+        [UIView animateWithDuration:1.0
+                              delay:0.0
+                            options:UIViewAnimationOptionCurveEaseInOut
+                         animations:^(){
+                             self.bottomHand.center = CGPointMake(self.bottomHand.center.x, 300.0);
+                             self.topHand.center = CGPointMake(self.topHand.center.x, 150.0);
+                         } completion:^(BOOL success){
+                             [self animateHandsSecondStep];
+                         }];
+    }
 }
 
 -(void)animateHandsSecondStep {
-    [UIView animateWithDuration:1.0
-                          delay:0.0
-                        options:UIViewAnimationOptionCurveEaseInOut
-                     animations:^(){
-                         self.bottomHand.center = CGPointMake(self.bottomHand.center.x, 320.0);
-                         self.topHand.center = CGPointMake(self.topHand.center.x, 130.0);
-                     } completion:^(BOOL success){
-                         [self animateHands];
-                     }];
+    if (animationActive) {
+        [UIView animateWithDuration:1.0
+                              delay:0.0
+                            options:UIViewAnimationOptionCurveEaseInOut
+                         animations:^(){
+                             self.bottomHand.center = CGPointMake(self.bottomHand.center.x, 320.0);
+                             self.topHand.center = CGPointMake(self.topHand.center.x, 130.0);
+                         } completion:^(BOOL success){
+                             [self animateHands];
+                         }];
+    }
 }
 
 -(void)initGame {
     [self resetGame];
     
-    NSString *gamesDatabasePath = [[NSBundle mainBundle] pathForResource:@"GamesDatabase2" ofType:@"plist"];
+    //NSString *gamesDatabasePath = [[NSBundle mainBundle] pathForResource:@"GamesDatabase2" ofType:@"plist"];
+    NSString *gamesDatabasePath = [[NSBundle mainBundle] pathForResource:@"FastGamesDatabase" ofType:@"plist"];
     NSArray *chaptersDataArray = [NSArray arrayWithContentsOfFile:gamesDatabasePath];
-    self.pointsArray = chaptersDataArray[selectedChapter][selectedGame][@"puntos"];
+    self.pointsArray = chaptersDataArray[selectedGame][@"puntos"];
     for (int i = 0; i < [self.pointsArray count]; i++) {
         NSUInteger row = [self.pointsArray[i][@"fila"] intValue] - 1;
         NSUInteger column = [self.pointsArray[i][@"columna"] intValue] - 1;
@@ -351,18 +383,18 @@
     [self.columnsButtonsArray removeAllObjects];
     [self.columnsButtonsArray2 removeAllObjects];
     
-    NSString *gamesDatabasePath = [[NSBundle mainBundle] pathForResource:@"GamesDatabase2" ofType:@"plist"];
+    NSString *gamesDatabasePath = [[NSBundle mainBundle] pathForResource:@"FastGamesDatabase" ofType:@"plist"];
     NSArray *chaptersDataArray = [NSArray arrayWithContentsOfFile:gamesDatabasePath];
-    if (selectedGame >= [chaptersDataArray[selectedChapter] count]) {
+    /*if (selectedGame >= [chaptersDataArray[selectedChapter] count]) {
         selectedChapter += 1;
         self.view.backgroundColor = [[AppInfo sharedInstance] appColorsArray][selectedChapter];
         selectedGame = 0;
-    }
-    matrixSize = [chaptersDataArray[selectedChapter][selectedGame][@"matrixSize"] intValue];
-    maxNumber = [chaptersDataArray[selectedChapter][selectedGame][@"maxNumber"] intValue];
-    maxScore = [chaptersDataArray[selectedChapter][selectedGame][@"maxScore"] floatValue];
-    maxTime = [chaptersDataArray[selectedChapter][selectedGame][@"maxTime"] floatValue];
-    timeElapsed = 0;
+    }*/
+    matrixSize = [chaptersDataArray[selectedGame][@"matrixSize"] intValue];
+    maxNumber = [chaptersDataArray[selectedGame][@"maxNumber"] intValue];
+    //maxScore = [chaptersDataArray[selectedGame][@"maxScore"] floatValue];
+    //maxTime = [chaptersDataArray[selectedGame][@"maxTime"] floatValue];
+    //timeElapsed = 0;
     
     if (matrixSize < 5) {
         self.buttonsContainerView.frame = CGRectMake(screenBounds.size.width/2.0 - 150.0, 100.0, 300.0, 300.0);
@@ -550,6 +582,9 @@
         [self.startGameTimer invalidate];
         self.startGameTimer = nil;
         gameInProgress = YES;
+        
+        //desctivate hand animations
+        animationActive = NO;
         
     } else {
         self.counterLabel.text = [NSString stringWithFormat:@"%lu", (unsigned long)startGameCount];
@@ -750,8 +785,7 @@
     self.topHand.hidden = NO;
     self.bottomHand.hidden = NO;
     
-    selectedGame = arc4random()%9;
-    selectedChapter = arc4random()%4;
+    selectedGame = arc4random()%[self.gamesArray count];
     [self initGame];
 }
 
@@ -769,7 +803,8 @@
 
 -(void)multiplayerWinAlertDidDissapear:(MultiplayerWinAlert *)winAlert {
     winAlert = nil;
-    [self prepareNextGame];
+    [self showFlurryAds];
+    //[self prepareNextGame];
 }
 
 #pragma mark - Sounds 
@@ -792,9 +827,9 @@
 -(void)initBottomGame {
     [self resetBottomGame];
     
-    NSString *gamesDatabasePath = [[NSBundle mainBundle] pathForResource:@"GamesDatabase2" ofType:@"plist"];
+    NSString *gamesDatabasePath = [[NSBundle mainBundle] pathForResource:@"FastGamesDatabase" ofType:@"plist"];
     NSArray *chaptersDataArray = [NSArray arrayWithContentsOfFile:gamesDatabasePath];
-    self.pointsArray = chaptersDataArray[selectedChapter][selectedGame][@"puntos"];
+    self.pointsArray = chaptersDataArray[selectedGame][@"puntos"];
     for (int i = 0; i < [self.pointsArray count]; i++) {
         NSUInteger row = [self.pointsArray[i][@"fila"] intValue] - 1;
         NSUInteger column = [self.pointsArray[i][@"columna"] intValue] - 1;
@@ -805,9 +840,9 @@
 -(void)initTopGame {
     [self resetTopGame];
     
-    NSString *gamesDatabasePath = [[NSBundle mainBundle] pathForResource:@"GamesDatabase2" ofType:@"plist"];
+    NSString *gamesDatabasePath = [[NSBundle mainBundle] pathForResource:@"FastGamesDatabase" ofType:@"plist"];
     NSArray *chaptersDataArray = [NSArray arrayWithContentsOfFile:gamesDatabasePath];
-    self.pointsArray = chaptersDataArray[selectedChapter][selectedGame][@"puntos"];
+    self.pointsArray = chaptersDataArray[selectedGame][@"puntos"];
     for (int i = 0; i < [self.pointsArray count]; i++) {
         NSUInteger row = [self.pointsArray[i][@"fila"] intValue] - 1;
         NSUInteger column = [self.pointsArray[i][@"columna"] intValue] - 1;
@@ -823,20 +858,20 @@
     }
     [self.columnsButtonsArray2 removeAllObjects];
     
-    NSString *gamesDatabasePath = [[NSBundle mainBundle] pathForResource:@"GamesDatabase2" ofType:@"plist"];
+    NSString *gamesDatabasePath = [[NSBundle mainBundle] pathForResource:@"FastGamesDatabase" ofType:@"plist"];
     NSArray *chaptersDataArray = [NSArray arrayWithContentsOfFile:gamesDatabasePath];
    
-    if (selectedGame >= [chaptersDataArray[selectedChapter] count]) {
+    /*if (selectedGame >= [chaptersDataArray[selectedChapter] count]) {
         selectedChapter += 1;
         self.view.backgroundColor = [[AppInfo sharedInstance] appColorsArray][selectedChapter];
         selectedGame = 0;
-    }
+    }*/
     
-    matrixSize = [chaptersDataArray[selectedChapter][selectedGame][@"matrixSize"] intValue];
-    maxNumber = [chaptersDataArray[selectedChapter][selectedGame][@"maxNumber"] intValue];
-    maxScore = [chaptersDataArray[selectedChapter][selectedGame][@"maxScore"] floatValue];
-    maxTime = [chaptersDataArray[selectedChapter][selectedGame][@"maxTime"] floatValue];
-    timeElapsed = 0;
+    matrixSize = [chaptersDataArray[selectedGame][@"matrixSize"] intValue];
+    maxNumber = [chaptersDataArray[selectedGame][@"maxNumber"] intValue];
+    //maxScore = [chaptersDataArray[selectedChapter][selectedGame][@"maxScore"] floatValue];
+    //maxTime = [chaptersDataArray[selectedChapter][selectedGame][@"maxTime"] floatValue];
+    //timeElapsed = 0;
     
     if (matrixSize < 5) {
         self.buttonsContainerView2.frame = CGRectMake(screenBounds.size.width/2.0 - 150.0, screenBounds.size.height/2.0 + 100.0, 300.0, 300.0);
@@ -874,20 +909,20 @@
     }
     [self.columnsButtonsArray removeAllObjects];
     
-    NSString *gamesDatabasePath = [[NSBundle mainBundle] pathForResource:@"GamesDatabase2" ofType:@"plist"];
+    NSString *gamesDatabasePath = [[NSBundle mainBundle] pathForResource:@"FastGamesDatabase" ofType:@"plist"];
     NSArray *chaptersDataArray = [NSArray arrayWithContentsOfFile:gamesDatabasePath];
     
-    if (selectedGame >= [chaptersDataArray[selectedChapter] count]) {
+    /*if (selectedGame >= [chaptersDataArray[selectedChapter] count]) {
         selectedChapter += 1;
         self.view.backgroundColor = [[AppInfo sharedInstance] appColorsArray][selectedChapter];
         selectedGame = 0;
-    }
+    }*/
     
-    matrixSize = [chaptersDataArray[selectedChapter][selectedGame][@"matrixSize"] intValue];
-    maxNumber = [chaptersDataArray[selectedChapter][selectedGame][@"maxNumber"] intValue];
-    maxScore = [chaptersDataArray[selectedChapter][selectedGame][@"maxScore"] floatValue];
-    maxTime = [chaptersDataArray[selectedChapter][selectedGame][@"maxTime"] floatValue];
-    timeElapsed = 0;
+    matrixSize = [chaptersDataArray[selectedGame][@"matrixSize"] intValue];
+    maxNumber = [chaptersDataArray[selectedGame][@"maxNumber"] intValue];
+    //maxScore = [chaptersDataArray[selectedChapter][selectedGame][@"maxScore"] floatValue];
+    //maxTime = [chaptersDataArray[selectedChapter][selectedGame][@"maxTime"] floatValue];
+    //timeElapsed = 0;
     
     if (matrixSize < 5) {
         self.buttonsContainerView.frame = CGRectMake(screenBounds.size.width/2.0 - 150.0, 100.0, 300.0, 300.0);
@@ -1057,15 +1092,83 @@
 }
 
 -(void)restartButtonPressedInMultiplayerAlert:(MultiplayerAlertView *)multiplayerAlert {
-     gameInProgress = NO;
-     self.topHand.hidden = NO;
-     self.bottomHand.hidden = NO;
-     
-     [self initGame];
+    gameInProgress = NO;
+    self.topHand.hidden = NO;
+    self.bottomHand.hidden = NO;
+    
+    if (!animationActive) {
+        animationActive = YES;
+        [self animateHands];
+    }
+    
+    [self initGame];
 }
 
 -(void)multiplayerAlertDidDissapear:(MultiplayerAlertView *)multiplayerAlert {
     multiplayerAlert = nil;
+}
+
+-(BOOL)userBoughtInfiniteMode {
+    if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"infiniteMode"] boolValue]) {
+        return YES;
+    } else {
+        return NO;
+    }
+}
+#pragma mark - Flurry Ads
+
+-(void)showFlurryAds {
+    //Check if the user removed the ads
+    FileSaver *fileSaver = [[FileSaver alloc] init];
+    BOOL userHasRemoveAds = [[fileSaver getDictionary:@"UserRemovedAdsDic"][@"UserRemovedAdsKey"] boolValue];
+    
+    if (userHasRemoveAds || userBoughtInfiniteMode) {
+        //The user removed the ads
+        
+        //Check if this is the last game
+        [self prepareNextGame];
+        animationActive = YES;
+        [self animateHands];
+        
+    } else {
+        //The user has not removed the ads, so display them.
+        if ([FlurryAds adReadyForSpace:@"FullScreenAd2"]) {
+            NSLog(@"Mostraré el ad");
+            [FlurryAds displayAdForSpace:@"FullScreenAd2" onView:self.view];
+        } else {
+            NSLog(@"No mostraré el ad sino que lo cargaré");
+            [FlurryAds fetchAdForSpace:@"FullScreenAd2" frame:self.view.frame size:FULLSCREEN];
+            
+            //Go to the next game
+            [self prepareNextGame];
+            animationActive = YES;
+            [self animateHands];
+        }
+    }
+}
+
+#pragma mark - FlurryAdsDelegate
+
+- (BOOL) spaceShouldDisplay:(NSString*)adSpace interstitial:(BOOL)
+interstitial {
+    NSLog(@"Entré al delegate");
+    if (interstitial) {
+        // Pause app state here
+    }
+    
+    // Continue ad display
+    return YES;
+}
+
+- (void)spaceDidDismiss:(NSString *)adSpace interstitial:(BOOL)interstitial {
+    NSLog(@"Entré al spaceDidDismiss");
+    if (interstitial) {
+        // Resume app state here
+        NSLog(@"**************Entraré al prepare next game ***************");
+        [self prepareNextGame];
+        animationActive = YES;
+        [self animateHands];
+    }
 }
 
 @end

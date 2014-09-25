@@ -1,0 +1,339 @@
+
+/* Logout message */
+"Logout Succesfull!" = "Salida Exitosa!";
+
+/* Button to open the multiplayer game */
+"2-Players Vs" = "Versus";
+
+/* Button to close a screen */
+"Accept" = "Aceptar";
+
+/* (No Commment) */
+"All your lives have been restored!" = "Todas tus vidas se han restaurado!";
+
+/* Text to inform the user that all the touches are available again */
+"All your touches have been restored!" = "Todos tus toques se han restaurado!";
+
+/* Message to restart both games */
+"Are you sure you want to restart both games?" = "¿Estás seguro de reiniciar ambos juegos?";
+
+/* (No Commment) */
+"Back" = "Volver";
+
+/* The best score of the current game */
+"Best Score" = "MejorPuntaje";
+
+/* The best score of the user */
+"Best Score: %lu/%d" = "Mejor Puntaje: %1$lu/%2$d";
+
+/* (No Commment) */
+"Buy" = "Comprar";
+
+/* (No Commment) */
+"Buy Lives" = "Comprar";
+
+/* the title of the Store screen */
+"Buy Touches" = "Comprar Toques";
+
+/* a description of numbers game */
+"By touching a button, its value will decrease by one, as well as the value of the upper, left, lower and right buttons" = "Al tocar un botón, su valor disminuirá en uno, así como el valor del botón superior, izquierdo, inferior y derecho";
+
+/* (No Commment) */
+"Cancel" = "Cancelar";
+
+/* A button to challenge friends */
+"Challenge" = "Retar";
+
+/* The current chapter of the game */
+"Chapter" = "Capítulo";
+
+/* The current chapter and game */
+"Chapter %lu - Game %lu" = "Capítulo %1$lu - Juego %2$lu";
+
+/* Button to close the color pattern screen */
+"Close" = "Cerrar";
+
+/* Button to open the colors games */
+"Colors" = "Colores";
+
+/* No comment provided by engineer. */
+"Colors Game\nObjective: Set all buttons to white.\n Every time you touch a button, its color will become lighter." = "Colores\nObjetivo: Poner todos los botones en blanco.\nCada vez que tocas un botón, se volverá mas blanco.";
+
+/* Congratulations message */
+"Congratulations!" = "Felicitaciones!";
+
+/* No comment provided by engineer. */
+"Congratulations! You have completed the tutorial! Start playing!\n\n *General Tip: If you affect a button that is already white (or has a value of zero, in the case of the numbers game), it will turn back to its original color" = "Felicitaciones! has completado el tutorial! Empieza a jugar!\n\n*Dato General: Si afectas un botón que ya es blanco (o tiene un valor de cero, en el caso del juego de números), volverá a su color o valor original";
+
+/* Message that appears when the user buy lives */
+"Congratulations! You have more lives available, start playing!" = "Felicitaciones! Tienes mas vidas disponibles! Empieza a jugar!";
+
+/* No comment provided by engineer. */
+"Congratulations!\nNow you can play the numbers game. Let's continue and see how the colors game works!" = "Felicitaciones!\nYa sabes como jugar este tipo de juego. Veamos como funciona el juego de colores!";
+
+/* (No Commment) */
+"Continue" = "Continuar";
+
+/* Button to enter without login */
+"Don't Login" = "No iniciar sesión";
+
+/* No comment provided by engineer. */
+"Excellent! You're becoming a Cross master! \n\nLet's practice one last time!" = "Excelente! Te estás volviendo un maestro de Cross!\n\nContinuemos practicando!";
+
+/* No comment provided by engineer. */
+"Excellent!\nBecause in this case there weren't upper and left buttons, the buttons that you changed were the right and lower ones. Let's practice one last time!" = "Excelente!\nDebido a que en este caso no había botón superior e izquierdo, los botones que afectaste fueron el derecho y el inferior. Practiquemos de nuevo!";
+
+/* No comment provided by engineer. */
+"Excellent!\nYou set all the buttons to zero! The light gray buttons were the ones affected by your touch. Let's practice again!" = "Excelente!\nPusiste todos los botones en cero! Los botones grises fueron los afectados por tu toque. Practiquemos de nuevo!";
+
+/* (No Commment) */
+"Exit" = "Salir";
+
+/* Exit fast mode message */
+"Exit Fast Mode" = "Salir Modo Rápido";
+
+/* Title for the option that turns on/off the timer inside the fast game mode */
+"Fast Game Timer" = "Timer Modo R";
+
+/* Fast games title */
+"Fast Games" = "Juegos Rápidos";
+
+/* Button to open the fast mode */
+"Fast Mode" = "Modo R";
+
+/* The current game */
+"Game" = "Juego";
+
+/* The current game */
+"Game %lu" = "Juego %lu";
+
+/* The user won the game */
+"Game Won!" = "Juego Ganado!";
+
+/* (No Commment) */
+"Games" = "Juegos";
+
+/* Message that display the games won by the user */
+"Games Won: %lu" = "Juegos Ganados: %lu";
+
+/* A message to invite friends to play the game */
+"Hey! I'm playing Cross: Numbers & Colors. Come try to beat my score!" = "Hola! Estoy jugando Cross para iOS! Intenta vencerme!";
+
+/* A message to share the user points */
+"I scored %lu points playing #Cross : Numbers & Colors" = "Obtuve un puntaje de %lu jugando #Cross : Números y Colores";
+
+/* The time for obtaining the best score */
+"Ideal Time" = "Tiempo Ideal";
+
+/* The number of touches to obtain the best score */
+"Ideal Touches" = "Toques Ideales";
+
+/* Title for the option that turns on/off the music inside the games */
+"In-Game Music" = "Música en Juego";
+
+/* Infinite */
+"Infinite" = "Infinitas";
+
+/* (No Commment) */
+"Infinite Touches" = "Toques Infinitos";
+
+/* (No Commment) */
+"Infinite Touches\nInfinite Lives\nNo Ads" = "Toques Infinitos\nVidas Infinitias\nNo Publicidad";
+
+/* Title for a button that displays the user friends available to invite */
+"Invite" = "Invitar";
+
+/* No comment provided by engineer. */
+"Let's practice! Remember, when you touch a button, its value will decrease by one, as well as the value of the upper, left, lower and right button." = "Practiquemos! Recuerda, cuando tocas un botón, su valor disminuirá en uno, así como el valor del botón superior, inferior, izquierdo y derecho.";
+
+/* Button to enter with facebook */
+"Login With Facebook" = "Entrar con Facebook";
+
+/* Button to close session with facebook */
+"Logout" = "Salir";
+
+/* Title for the new game button */
+"New Game" = "Nuevo Juego";
+
+/* New lives message */
+"New Lives!" = "Nuevas vidas!";
+
+/* There are new touches available */
+"New Touches!" = "Nuevos toques!";
+
+/* No comment provided by engineer. */
+"Nice! Now touch the upper left button to win!" = "Bien! Ahora toca el botón superior izquierdo";
+
+/* No comment provided by engineer. */
+"Now, touch the lower center button to win!" = "Ahora toca el botón inferior central";
+
+/* No comment provided by engineer. */
+"Now, touch the upper left button to win" = "Ahora toca el botón superior izquierdo";
+
+/* No comment provided by engineer. */
+"Now, you will have to make two touches to win" = "Ahora tendrás que hacer dos toques para ganar";
+
+/* No comment provided by engineer. */
+"Now, you will have to make two touches to win." = "Ahora tendrás que hacer dos toques para ganar";
+
+/* Button to open the numbers games */
+"Numbers" = "Números";
+
+/* Explanation of numbers game */
+"Numbers Game\nObjective: Set all the buttons to zero" = "Números\nObjetivo: Poner todos los botones en cero";
+
+/* (No Commment) */
+"Ok" = "Ok";
+
+/* Text to inform the user that there was a network error */
+"Oops! There was a network error. Please check that you're connected to the internet" = "Oops! Hubo un error de conexión. Por favor revisa que estés conectado a internet";
+
+/* A message that appears when there's a network error */
+"Oops! There was a network error. Please check that you're connected to the internet." = "Oops! Hubo un error de conexión. Por favor revisa que estés conectado a internet";
+
+/* Message to inform the user that the game has not been unlocked */
+"Oops! You haven't unlocked this game yet!" = "Oops! No has desbloqueado este juego aún";
+
+/* Button to open the colors pattern of the game */
+"Pattern" = "Patrón";
+
+/* (No Commment) */
+"Rankings" = "Rankings";
+
+/* Title for a button that reset the game */
+"Reset" = "Reiniciar";
+
+/* (No Commment) */
+"Restart" = "Reiniciar";
+
+/* Title for a button that restart all games */
+"Restart Both" = "Reiniciar ambos";
+
+
+
+/* The player's score */
+"Score" = "Puntaje";
+
+/* Settings */
+"Settings" = "Opciones";
+
+/* A button to share the score on social networks */
+"Share" = "Compartir";
+
+/* Button to open the sound configuration */
+"Sound" = "Sonido";
+
+/* Sounds screen title */
+"Sounds" = "Sonidos";
+
+/* Title for the start game button */
+"Start" = "Empezar";
+
+/* Title for the start game button */
+"Start Game" = "Jugar";
+
+/* No comment provided by engineer. */
+"Start Playing!" = "Empieza a jugar!";
+
+/* (No Commment) */
+"Start!" = "Empezar!";
+
+/* (No Commment) */
+"Store" = "Tienda";
+
+/* Message displayed when the login was successful */
+"Succesfull Login!" = "Login Exitoso!";
+
+/* Explanation of the game */
+"There are two types of games: Numbers and Colors" = "Hay dos tipos de juego: Números y Colores";
+
+/* A bonus score */
+"Time Bonus Score" = "Bonus de tiempo";
+
+/* The time used for winning the game */
+"Time Spent" = "Tiempo usado";
+
+/* The volume of the timer */
+"Timer Volume" = "Volumen Timer";
+
+/* No comment provided by engineer. */
+"Total Score" = "Puntaje Total";
+
+/* No comment provided by engineer. */
+"Touch the center button" = "Toca el botón central";
+
+/* No comment provided by engineer. */
+"Touch the center button and then the upper left button" = "Toca el botón central y luego el botón superior izquierdo";
+
+/* No comment provided by engineer. */
+"Touch the center button!" = "Toca el botón central";
+
+/* (No Commment) */
+"Touches Left" = "Toques restantes";
+
+/* The touches used for winning the game */
+"Touches Made" = "Toques realizados";
+
+/* Title for the try again button */
+"Try Again" = "Intentar de nuevo";
+
+/* Button to open the tutorial of the game */
+"Tutorial" = "Tutorial";
+
+/* A button to wait one hour for more touches */
+"Wait" = "Esperar";
+
+/* Message to inform the user that he will lose one life */
+"Warning! If you exit while the game is in progress, you will lose one life." = "Cuidado! Si sales mientras el juego está en curso, perderás una vida";
+
+/* Warning message that appears if the user tries to exit while the last unlocked game is in course */
+"Warning! if you exit the last unlocked game while the game is in progress, you will lose one life." = "Cuidado! Si sales del último juego mientras está en curso, perderás una vida";
+
+/* A welcome message */
+"Welcome to Cross, a simple, yet addictive game!" = "Bienvenido a Cross, un simple pero adictivo juego!";
+
+/* Welcome message */
+"Welcome to Fast Mode! You have just few seconds (10s - 30s) to complete each level! Be fast!" = "Bienvenido al modo rápido! Tienes entre 10 y 30 segundos para completar cada nivel! Se rápido!";
+
+/* A message to indicate which friends the user wants to challenge */
+"Which friends do you want to challenge?" = "¿Qué amigos deseas retar?";
+
+/* No comment provided by engineer. */
+"Which rankings would you like to see?" = "¿Que rankings deseas ver?";
+
+/* You won message */
+"You Won!" = "Ganaste!";
+
+/* Message that appears when the user completes all games */
+"You have completed all fast mode games! Wait for more games soon!" = "Has terminado todos los juegos del modo rápido! Espera mas juegos pronto!";
+
+/* Message that appears when the user completes all games */
+"You have completed all games! Wait for more games soon!" = "Has completado todos los juegos! Espera mas juegos pronto!";
+
+/* Message that appears when the user lost the game */
+"You have lost one life. Try to be faster next time!" = "Has perdido una vida. Se mas rápido la próxima vez!";
+
+/* Text that appears when the user has new lives available */
+"You have new lives available!" = "Tienes mas vidas disponibles!";
+
+/* Text that appears when the user has new touches available */
+"You have new touches available!" = "Tienas mas toques disponibles!";
+
+/* Message that appears when the user has no more lives left */
+"You have no more lives left! Every two hours you'll get one life. You can wait or buy some!" = "No tienes vidas! Cada dos horas obtendrás una vida. Puedes esperar o comprar algunas!";
+
+/* A message that indicates the user that there are no touches left */
+"You have no more touches left! Every hour you'll get 5 more. You can wait or buy more!" = "No tienes toques! Cada hora se te devolverán 5 toques. Puedes esperar o comprar algunos!";
+
+/* Message that appears when the user wins a game */
+"You have won game %lu, keep going!" = "Ganaste el juego %lu, sigue así!";
+
+/* No comment provided by engineer. */
+"You have won ten touches for completing this game for the first time!" = "Has ganado 10 toques por completar este nivel por primera vez!";
+
+/* No comment provided by engineer. */
+"You must login with Facebook to access the rankings. You can login from the main options." = "Debes ingresar con Facebook para ver los rankings. Lo puedes hacer desde las opciones principales.";
+
+/* No comment provided by engineer. */
+"You won! Just like in the numbers game, when you touch a button, you also affect the upper, left, lower and right buttons. Let's practice again!" = "Ganaste! Así como en en juego tipo 'Números', cuando tocas un botón afectarás también el botón superior, inferior, derecho e izquierdo! Continuemos!";
+

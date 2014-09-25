@@ -8,12 +8,15 @@
 
 #import "FirstPageTutViewController.h"
 #import "AppInfo.h"
+#import "AudioPlayer.h"
 
 @interface FirstPageTutViewController ()
 
 @end
 
-@implementation FirstPageTutViewController
+@implementation FirstPageTutViewController {
+    BOOL isPad;
+}
 
 -(void)viewDidLoad {
     [super viewDidLoad];
@@ -21,26 +24,40 @@
 }
 
 -(void)setupUI {
+    CGRect titleLabelRect;
+    CGRect descriptionLabelRect;
+    CGFloat fontSize;
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        isPad = YES;
+        fontSize = 30;
+        titleLabelRect = CGRectMake(80.0, 60.0, self.view.bounds.size.width - 160.0, 100.0);
+        descriptionLabelRect = CGRectMake(80.0, self.view.bounds.size.height - 230.0, self.view.bounds.size.width - 160.0, 100.0);
+    } else {
+        isPad = NO;
+        fontSize = 15.0;
+        titleLabelRect = CGRectMake(self.view.bounds.size.width/2.0 - 120.0, 50.0, 240.0, 100.0);
+        descriptionLabelRect = CGRectMake(self.view.bounds.size.width/2.0 - 120.0, self.view.bounds.size.height - 180.0, 240.0, 100.0);
+    }
     //Tutorial image
     UIImageView *tutorialImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"TutorialPhoneR4_1.png"]];
     tutorialImageView.frame = self.view.bounds;
     tutorialImageView.contentMode = UIViewContentModeScaleAspectFit;
     [self.view addSubview:tutorialImageView];
     
-    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.view.bounds.size.width/2.0 - 120.0, 50.0, 240.0, 100.0)];
+    UILabel *titleLabel = [[UILabel alloc] initWithFrame:titleLabelRect];
     titleLabel.text = NSLocalizedString(@"Welcome to Cross, a simple, yet addictive game!", @"A welcome message");
     titleLabel.textAlignment = NSTextAlignmentCenter;
-    titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:15.0];
+    titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:fontSize];
     titleLabel.numberOfLines = 0;
     titleLabel.textColor = [UIColor darkGrayColor];
     [self.view addSubview:titleLabel];
     
     //other label
-    UILabel *descriptionLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.view.bounds.size.width/2.0 - 120.0, self.view.bounds.size.height - 180.0, 240.0, 100.0)];
+    UILabel *descriptionLabel = [[UILabel alloc] initWithFrame:descriptionLabelRect];
     descriptionLabel.text = NSLocalizedString(@"There are two types of games: Numbers and Colors", @"Explanation of the game");
     descriptionLabel.textAlignment = NSTextAlignmentCenter;
     descriptionLabel.numberOfLines = 0;
-    descriptionLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:15.0];
+    descriptionLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:fontSize];
     descriptionLabel.textColor = [UIColor darkGrayColor];
     [self.view addSubview:descriptionLabel];
     
@@ -68,10 +85,12 @@
 #pragma mark - Actions 
 
 -(void)continueButtonPressed {
+    [[AudioPlayer sharedInstance] playPressSound];
     [self.delegate firstPageButtonPressed];
 }
 
 -(void)closeButtonPressed {
+    [[AudioPlayer sharedInstance] playBackSound];
     [self.delegate firstPageCloseButtonPressed];
 }
 

@@ -19,6 +19,11 @@
 
 @implementation FastGamesView
 
+-(void)setInitialCell:(NSUInteger)initialCell {
+    _initialCell = initialCell;
+    [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:initialCell inSection:0] atScrollPosition:UICollectionViewScrollPositionCenteredVertically animated:NO];
+}
+
 -(instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
         self.alpha = 0.0;

@@ -193,18 +193,20 @@
     CGRect buttonFrames;
     CGRect backButtonFrame;
     CGRect gamesButtonsFrames;
+    CGRect loginButtonsFrames;
     NSUInteger buttonsHeight = 0;
     NSUInteger fontSize = 0;
     NSUInteger borderWidth;
     NSString *fontName = nil;
     if (isPad) {
-        borderWidth = 2.0;
+        borderWidth = 1.0;
         backButtonFrame = CGRectMake(0.0, 0.0, 150.0, 70.0);
         buttonFrames = CGRectMake(0.0, 0.0, 237.0, 97.0);
         gamesButtonsFrames = CGRectMake(0.0, 0.0, 237.0, 60.0);
         fontSize = 40.0;
         buttonsHeight = 70.0;
         fontName = @"HelveticaNeue-Light";
+        loginButtonsFrames = CGRectMake(0.0, 0.0, 237.0, 90.0);
     } else {
         borderWidth = 1.0;
         backButtonFrame = CGRectMake(0.0, 0.0, 70.0, 40.0);
@@ -232,10 +234,16 @@
     
     //Dont login button
     self.enterButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    self.enterButton.frame = CGRectMake(self.view.bounds.size.width/2.0 - 90, screenBounds.size.height - 60.0, 180.0, 50.0);
+    if (isPad) {
+        self.enterButton.frame = loginButtonsFrames;
+        self.enterButton.center = CGPointMake(self.view.bounds.size.width/2.0, self.view.bounds.size.height - 160.0);
+        self.enterButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:22.0];
+    } else {
+        self.enterButton.frame = CGRectMake(self.view.bounds.size.width/2.0 - 90, screenBounds.size.height - 60.0, 180.0, 50.0);
+        self.enterButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:15.0];
+    }
     [self.enterButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [self.enterButton setTitle:NSLocalizedString(@"Don't Login", @"Button to enter without login") forState:UIControlStateNormal];
-    self.enterButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:15.0];
     self.enterButton.layer.cornerRadius = 10.0;
     self.enterButton.layer.borderColor = [UIColor whiteColor].CGColor;
     self.enterButton.layer.borderWidth = 1.0;
@@ -247,7 +255,11 @@
     [self.facebookButton setTitle:NSLocalizedString(@"Login With Facebook", @"Button to enter with facebook") forState:UIControlStateNormal];
     [self.facebookButton addTarget:self action:@selector(startLoginProcess) forControlEvents:UIControlEventTouchUpInside];
     self.facebookButton.layer.cornerRadius = 10.0;
-    self.facebookButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:15.0];
+    if (isPad) {
+        self.facebookButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:22.0];
+    } else {
+        self.facebookButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:15.0];
+    }
     self.facebookButton.backgroundColor = [UIColor colorWithRed:52.0/255.0 green:75.0/255.0 blue:139.0/255.0 alpha:1.0];
     [self.view addSubview:self.facebookButton];
     
@@ -720,7 +732,7 @@
     
     [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
     OneButtonAlert *logoutAlert = [[OneButtonAlert alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 110.0, screenBounds.size.height/2.0 - 65.0, 220.0, 130.0)];
-    logoutAlert.alertText = @"Logout Succesfull!";
+    logoutAlert.alertText = NSLocalizedString(@"Logout Succesfull!", @"Logout message");
     logoutAlert.buttonTitle = @"Ok";
     [logoutAlert showInView:self.view];
 }
@@ -822,7 +834,7 @@
 -(void)showRankingsAlert {
     [self playButtonSound];
     TwoButtonsAlert *twoButtonsAlert = [[TwoButtonsAlert alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 140.0, screenBounds.size.height/2.0 - 85.0, 280.0, 170.0)];
-    twoButtonsAlert.alertText = @"Which rankings would you like to see?";
+    twoButtonsAlert.alertText = NSLocalizedString(@"Which rankings would you like to see?", nil);
     twoButtonsAlert.leftButtonTitle = @"Facebook";
     twoButtonsAlert.rightButtonTitle = @"GameCenter";
     twoButtonsAlert.delegate = self;
@@ -831,8 +843,8 @@
 
 -(void)showSuccessfullLoginAlert {
     OneButtonAlert *loginSuccessAlert = [[OneButtonAlert alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 120.0, screenBounds.size.height/2.0 - 60.0, 240.0, 120.0)];
-    loginSuccessAlert.alertText = @"Succesfull Login!";
-    loginSuccessAlert.buttonTitle = @"Ok";
+    loginSuccessAlert.alertText = NSLocalizedString(@"Succesfull Login!", @"Message displayed when the login was successful");
+    loginSuccessAlert.buttonTitle = NSLocalizedString(@"Ok", nil);
     [loginSuccessAlert showInView:self.view];
 }
 
@@ -904,7 +916,7 @@
 
 -(void)showNoFacebookLoginAlert {
     OneButtonAlert *noFacebookAlert = [[OneButtonAlert alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 140.0, screenBounds.size.height/2.0 - 85.0, 280.0, 170.0)];
-    noFacebookAlert.alertText = @"You must log in with Facebook to access the rankings. You can login from the main options.";
+    noFacebookAlert.alertText = NSLocalizedString(@"You must login with Facebook to access the rankings. You can login from the main options.", nil);
     noFacebookAlert.buttonTitle = @"Ok";
     noFacebookAlert.messageLabel.frame = CGRectMake(20.0, 10.0, noFacebookAlert.bounds.size.width - 40.0, 120.0);
     noFacebookAlert.messageLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:15.0];
@@ -938,6 +950,10 @@
             self.logoutButton.hidden = NO;
             [self showSuccessfullLoginAlert];
             [self animateMainButtons];
+            
+            //Send data to flurry
+            [Flurry logEvent:@"FacebookLogin"];
+            
             if (user.isNew) {
                 NSLog(@"User with facebook signed up and logged in!");
             } else {
@@ -980,7 +996,12 @@
 }
 
 -(void)showFacebookRankingsListWithResults:(NSArray *)resultsArray {
-    FacebookRankingList *fbRankingsList = [[FacebookRankingList alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 140.0, 20.0, 280., screenBounds.size.height - 40.0)];
+    FacebookRankingList *fbRankingsList;
+    if (isPad) {
+        fbRankingsList = [[FacebookRankingList alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 140.0, screenBounds.size.height/2.0 - 264.0, 280., 528.0)];
+    } else {
+        fbRankingsList = [[FacebookRankingList alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 140.0, 20.0, 280., screenBounds.size.height - 40.0)];
+    }
     fbRankingsList.resultsArray = resultsArray;
     [fbRankingsList showInView:self.view];
 }

@@ -152,7 +152,7 @@
 #pragma mark - UserDefaults 
 
 -(void)saveVolumeSelectionInUserDefaults:(UISlider *)volumeSlider {
-    NSLog(@"Dejé de tocar elslideeeerrrr");
+    //NSLog(@"Dejé de tocar elslideeeerrrr");
     [[NSUserDefaults standardUserDefaults] setObject:@(volumeSlider.value) forKey:@"volume"];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }

@@ -14,11 +14,21 @@
 @interface FacebookRankingList() <UITableViewDataSource, UITableViewDelegate>
 @property (strong, nonatomic) UIView *opacityView;
 @property (strong, nonatomic) UITableView *tableView;
+@property (strong, nonatomic) NSNumberFormatter *scoreFormatter;
 @end
 
 @implementation FacebookRankingList
 
 #define CELL_IDENTIFIER @"cellID"
+
+-(NSNumberFormatter *)scoreFormatter {
+    if (!_scoreFormatter) {
+        _scoreFormatter = [[NSNumberFormatter alloc] init];
+        _scoreFormatter.formatterBehavior = NSNumberFormatterBehavior10_4;
+        _scoreFormatter.numberStyle = NSNumberFormatterDecimalStyle;
+    }
+    return _scoreFormatter;
+}
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -83,7 +93,7 @@
         cell = [[FriendsCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CELL_IDENTIFIER];
     }
     cell.friendName.text = self.resultsArray[indexPath.row][@"name"];
-    cell.friendScore.text = [self.resultsArray[indexPath.row][@"score"] description];
+    cell.friendScore.text = [self.scoreFormatter stringFromNumber:self.resultsArray[indexPath.row][@"score"]];
     
     //Get friend image
     NSString *photoPath = [NSString stringWithFormat:@"https://graph.facebook.com/%@/picture", self.resultsArray[indexPath.row][@"userID"]];

@@ -28,9 +28,12 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
+    
     //Parse & Facebook setup
-    [Parse setApplicationId:@"Z9VRUjoPPSMl2PQqQYVncx6UPjReI47lKROjPwkW"
-                  clientKey:@"pCLXgoDeQGR6cZZ62DK1CtNzCHFqMheI5qDHSy8e"];
+    [Parse setApplicationId:@"rTcgtrIE4e2yZdmwRKwxQGnilhhMmmzDlXIs5tcD"
+                  clientKey:@"haODNe1dmRhxgXxpT8wTHP3ZYO0z3qWL6fmti0R2"];
+    [PFAnalytics trackAppOpenedWithLaunchOptions:launchOptions];
     [PFFacebookUtils initializeFacebook];
     
     //Register for remote notifications

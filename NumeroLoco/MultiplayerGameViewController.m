@@ -42,6 +42,7 @@
 
 //Sounds
 @property (strong, nonatomic) AVAudioPlayer *playerButttonPressed;
+@property (strong, nonatomic) AVAudioPlayer *playerButttonPressed2;
 @property (strong, nonatomic) AVAudioPlayer *playerGameWon;
 @property (strong, nonatomic) AVAudioPlayer *playerBackSound;
 @end
@@ -274,7 +275,9 @@
     NSString *soundFilePath = [[NSBundle mainBundle] pathForResource:@"press" ofType:@"wav"];
     NSURL *soundFileURL = [NSURL URLWithString:soundFilePath];
     self.playerButttonPressed = [[AVAudioPlayer alloc] initWithContentsOfURL:soundFileURL error:nil];
+    self.playerButttonPressed2 = [[AVAudioPlayer alloc] initWithContentsOfURL:soundFileURL error:nil];
     [self.playerButttonPressed prepareToPlay];
+    [self.playerButttonPressed2 prepareToPlay];
     
     soundFilePath = nil;
     soundFilePath = [[NSBundle mainBundle] pathForResource:@"win" ofType:@"wav"];
@@ -637,7 +640,7 @@
 }
 
 -(void)bottomNumberButtonPressed:(UIButton *)numberButton {
-    [self playButtonPressedSound];
+    [self playButtonPressedSound2];
     
     NSLog(@"Oprimí el boton con tag %ld", (long)numberButton.tag);
     NSUInteger index = numberButton.tag - 2000;
@@ -813,6 +816,12 @@
     [self.playerButttonPressed stop];
     self.playerButttonPressed.currentTime = 0;
     [self.playerButttonPressed play];
+}
+
+-(void)playButtonPressedSound2 {
+    [self.playerButttonPressed2 stop];
+    self.playerButttonPressed2.currentTime = 0;
+    [self.playerButttonPressed2 play];
 }
 
 -(void)playWinSound {
@@ -1134,7 +1143,7 @@
         //The user has not removed the ads, so display them.
         if ([FlurryAds adReadyForSpace:@"FullScreenAd2"]) {
             NSLog(@"Mostraré el ad");
-            [FlurryAds displayAdForSpace:@"FullScreenAd2" onView:self.view];
+            [FlurryAds displayAdForSpace:@"FullScreenAd2" onView:self.view viewControllerForPresentation:self];
         } else {
             NSLog(@"No mostraré el ad sino que lo cargaré");
             [FlurryAds fetchAdForSpace:@"FullScreenAd2" frame:self.view.frame size:FULLSCREEN];

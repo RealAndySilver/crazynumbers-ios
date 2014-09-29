@@ -79,7 +79,7 @@
 -(void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     [FlurryAds setAdDelegate:self];
-    [FlurryAds fetchAndDisplayAdForSpace:@"GAME_TOP_BANNER" view:self.view size:BANNER_TOP];
+    //[FlurryAds fetchAndDisplayAdForSpace:@"GAME_TOP_BANNER" view:self.view viewController:self size:BANNER_TOP];
 }
 
 -(void)viewDidDisappear:(BOOL)animated {

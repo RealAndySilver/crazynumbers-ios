@@ -167,6 +167,34 @@
     [self configureSounds];
     
     if ([TouchesObject sharedInstance].totalTouches == 0 && !userBoughtInfiniteMode) [self disableButtons];
+    
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////
+    [FlurryAds setAdDelegate:self];
+    if ([FlurryAds adReadyForSpace:@"FullScreenAd2"]) {
+        NSLog(@"Mostraré el ad");
+        //[FlurryAds displayAdForSpace:@"FullScreenAd" onView:self.view];
+    } else {
+        NSLog(@"No mostraré el ad sino que lo cargaré");
+        [FlurryAds fetchAdForSpace:@"FullScreenAd2" frame:self.view.frame size:FULLSCREEN];
+    }
+    
+    //Check number of touches available
+    if ([TouchesObject sharedInstance].totalTouches == 0 && !userBoughtInfiniteMode) {
+        [self performSelector:@selector(showNoTouchesAlert) withObject:nil afterDelay:0.5];
+    }
+    
+    //Check if this is the first time the user launch the app
+    FileSaver *fileSaver = [[FileSaver alloc] init];
+    if (![[fileSaver getDictionary:@"FirstAppLaunchDic"][@"FirstAppLaunchKey"] boolValue]) {
+        //This is the first time the user launches the app
+        //so present the tutorial view controller
+        [fileSaver setDictionary:@{@"FirstAppLaunchKey" : @YES} withName:@"FirstAppLaunchDic"];
+        NSLog(@"Iré al tutorial");
+        [self performSelector:@selector(goToTutorialVC) withObject:nil afterDelay:0.5];
+    } else {
+        NSLog(@"No iré al tutorial");
+    }
+
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -180,41 +208,11 @@
 
 -(void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    [FlurryAds setAdDelegate:self];
-    if ([FlurryAds adReadyForSpace:@"FullScreenAd2"]) {
-        NSLog(@"Mostraré el ad");
-        //[FlurryAds displayAdForSpace:@"FullScreenAd" onView:self.view];
-    } else {
-        NSLog(@"No mostraré el ad sino que lo cargaré");
-        [FlurryAds fetchAdForSpace:@"FullScreenAd2" frame:self.view.frame size:FULLSCREEN];
-    }
-    
-    //Check number of touches available
-    if ([TouchesObject sharedInstance].totalTouches == 0 && !userBoughtInfiniteMode) {
-        [self showNoTouchesAlert];
-        /*NoTouchesAlertView *noTouchesAlert = [[NoTouchesAlertView alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 140.0, screenBounds.size.height/2.0 - 100.0, 280.0, 200.0)];
-        noTouchesAlert.delegate = self;
-        [noTouchesAlert showInView:self.view];*/
-    }
-    
-    //Check if this is the first time the user launch the app
-    FileSaver *fileSaver = [[FileSaver alloc] init];
-    if (![[fileSaver getDictionary:@"FirstAppLaunchDic"][@"FirstAppLaunchKey"] boolValue]) {
-        //This is the first time the user launches the app
-        //so present the tutorial view controller
-        [fileSaver setDictionary:@{@"FirstAppLaunchKey" : @YES} withName:@"FirstAppLaunchDic"];
-        NSLog(@"Iré al tutorial");
-        [self goToTutorialVC];
-    } else {
-        NSLog(@"No iré al tutorial");
-    }
 }
 
 -(void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    [FlurryAds removeAdFromSpace:@"GAME_TOP_BANNER"];
-    [FlurryAds setAdDelegate:nil];
 }
 
 -(void)configureSounds {
@@ -910,7 +908,7 @@
         //The user has not removed the ads, so display them.
         if ([FlurryAds adReadyForSpace:@"FullScreenAd2"]) {
             NSLog(@"Mostraré el ad");
-            [FlurryAds displayAdForSpace:@"FullScreenAd2" onView:self.view];
+            [FlurryAds displayAdForSpace:@"FullScreenAd2" onView:self.view viewControllerForPresentation:self];
         } else {
             NSLog(@"No mostraré el ad sino que lo cargaré");
             [FlurryAds fetchAdForSpace:@"FullScreenAd2" frame:self.view.frame size:FULLSCREEN];
@@ -1074,6 +1072,9 @@
 }
 
 -(void)dismissVC {
+    [FlurryAds removeAdFromSpace:@"GAME_TOP_BANNER"];
+    [FlurryAds setAdDelegate:nil];
+    
     //Synchronize touches left in User Defaults
     [self saveTouchesLeftInUserDefaults:[TouchesObject sharedInstance].totalTouches];
     

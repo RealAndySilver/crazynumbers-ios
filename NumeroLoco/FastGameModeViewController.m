@@ -127,6 +127,18 @@
             [FlurryAds fetchAdForSpace:@"FullScreenAd2" frame:self.view.frame size:FULLSCREEN];
         }
     }
+    
+    //Check if this is the first time the user launch the app
+    FileSaver *fileSaver = [[FileSaver alloc] init];
+    if (![[fileSaver getDictionary:@"FirstAppLaunchDic"][@"FirstAppLaunchKey"] boolValue]) {
+        //This is the first time the user launches the app
+        //so present the tutorial view controller
+        [fileSaver setDictionary:@{@"FirstAppLaunchKey" : @YES} withName:@"FirstAppLaunchDic"];
+        NSLog(@"Iré al tutorial");
+        [self performSelector:@selector(goToTutorialVC) withObject:nil afterDelay:0.5];
+    } else {
+        NSLog(@"No iré al tutorial");
+    }
 }
 
 -(void)checkLives {
@@ -154,18 +166,6 @@
 
 -(void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    
-    //Check if this is the first time the user launch the app
-    FileSaver *fileSaver = [[FileSaver alloc] init];
-    if (![[fileSaver getDictionary:@"FirstAppLaunchDic"][@"FirstAppLaunchKey"] boolValue]) {
-        //This is the first time the user launches the app
-        //so present the tutorial view controller
-        [fileSaver setDictionary:@{@"FirstAppLaunchKey" : @YES} withName:@"FirstAppLaunchDic"];
-        NSLog(@"Iré al tutorial");
-        [self goToTutorialVC];
-    } else {
-        NSLog(@"No iré al tutorial");
-    }
 }
 
 -(void)viewWillDisappear:(BOOL)animated {
@@ -1323,7 +1323,7 @@
 }
 
 -(void)continueButtonPressedInAlert:(FastGameWinAlert *)fastGameWinAlert {
-    [self showFlurryAds];
+    [self performSelector:@selector(showFlurryAds) withObject:nil afterDelay:0.3];
 }
 
 -(void)buyLivesButtonPressedInAlert:(FastGameWinAlert *)fastGameWinAlert {
@@ -1564,7 +1564,7 @@
         //The user has not removed the ads, so display them.
         if ([FlurryAds adReadyForSpace:@"FullScreenAd2"]) {
             NSLog(@"Mostraré el ad");
-            [FlurryAds displayAdForSpace:@"FullScreenAd2" onView:self.view];
+            [FlurryAds displayAdForSpace:@"FullScreenAd2" onView:self.view viewControllerForPresentation:self];
         } else {
             NSLog(@"No mostraré el ad sino que lo cargaré");
             [FlurryAds fetchAdForSpace:@"FullScreenAd2" frame:self.view.frame size:FULLSCREEN];

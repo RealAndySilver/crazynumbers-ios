@@ -97,8 +97,6 @@
 		8BE1D6051986F8D200CAAFCF /* ColorGamesDatabase2.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8BE1D6041986F8D200CAAFCF /* ColorGamesDatabase2.plist */; };
 		8BED734419D9930A00CFE502 /* libFlurry_5.4.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BED734319D9930A00CFE502 /* libFlurry_5.4.0.a */; };
 		8BED734619D9931800CFE502 /* libFlurryAds_5.4.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BED734519D9931800CFE502 /* libFlurryAds_5.4.0.a */; };
-		8BED734E19D9937200CFE502 /* libFlurry_5.4.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BED734919D9937200CFE502 /* libFlurry_5.4.0.a */; };
-		8BED734F19D9937200CFE502 /* libFlurryAds_5.4.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BED734D19D9937200CFE502 /* libFlurryAds_5.4.0.a */; };
 		8BF545BF19CB1D50002FD56A /* SoundsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BF545BE19CB1D50002FD56A /* SoundsView.m */; };
 		A02E3DEE19BE2926009FDC1C /* BackgroundiPadPortrait.png in Resources */ = {isa = PBXBuildFile; fileRef = A02E3DEA19BE2926009FDC1C /* BackgroundiPadPortrait.png */; };
 		A02E3DEF19BE2926009FDC1C /* BackgroundiPadPortrait@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A02E3DEB19BE2926009FDC1C /* BackgroundiPadPortrait@2x.png */; };
@@ -428,7 +426,6 @@
 				A0A0640519BDFCC2000202D1 /* FacebookSDK.framework in Frameworks */,
 				A0A0640619BDFCC2000202D1 /* ParseFacebookUtils.framework in Frameworks */,
 				A0A0640219BDF97E000202D1 /* Accounts.framework in Frameworks */,
-				8BED734E19D9937200CFE502 /* libFlurry_5.4.0.a in Frameworks */,
 				A0A79F2A19AE78730039E3C7 /* QuartzCore.framework in Frameworks */,
 				A0A79F2819AE78640039E3C7 /* MobileCoreServices.framework in Frameworks */,
 				A0A79F2619AE78530039E3C7 /* CoreLocation.framework in Frameworks */,
@@ -441,7 +438,6 @@
 				A0A79F2019AE780F0039E3C7 /* Parse.framework in Frameworks */,
 				A0BDEAE8197732A8008BFF4D /* MediaPlayer.framework in Frameworks */,
 				A0BDEAE61977329E008BFF4D /* AdSupport.framework in Frameworks */,
-				8BED734F19D9937200CFE502 /* libFlurryAds_5.4.0.a in Frameworks */,
 				A0BDEADF1976C806008BFF4D /* Security.framework in Frameworks */,
 				A0BDEADD1976C7FC008BFF4D /* SystemConfiguration.framework in Frameworks */,
 				8B6FB8C219507C6B00EB2C4E /* CoreGraphics.framework in Frameworks */,
@@ -954,7 +950,7 @@
 		8B6FB8B419507C6B00EB2C4E /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0510;
+				LastUpgradeCheck = 0600;
 				ORGANIZATIONNAME = "iAm Studio";
 				TargetAttributes = {
 					8B6FB8BB19507C6B00EB2C4E = {

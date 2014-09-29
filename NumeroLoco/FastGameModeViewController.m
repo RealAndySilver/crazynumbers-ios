@@ -825,21 +825,24 @@
     }
     
     if (timeLabelAnimationActive) {
+        NSLog(@"11 ESTÁ ACTIVO EL TIMELABEL ANIMATION ACTIVE");
         [UIView animateWithDuration:timeAnimationDuration
                               delay:0.0
                             options:UIViewAnimationOptionCurveLinear
                          animations:^(){
                              self.timeLeftLabel.transform = CGAffineTransformMakeScale(0.8, 0.8);
                          } completion:^(BOOL finished){
-                             if (finished) {
-                                 [self secondTimeLabelAnimation];
-                             }
+                             //NSLog(@"LLAMARE AL SECONDTIMELABELANIMATION");
+                             [self secondTimeLabelAnimation];
                          }];
+    } else {
+        //NSLog(@"11 NO ESTÁ ACTIVO EL TIME LABEL ANIMATION ACTIVE");
     }
 }
 
 -(void)secondTimeLabelAnimation {
     if (timeLabelAnimationActive) {
+        //NSLog(@"22 ESTÁ ACTIV EL TIME LABEL ANIMATION ACTIVE");
         [UIView animateWithDuration:timeAnimationDuration
                               delay:0.0
                             options:UIViewAnimationOptionCurveLinear
@@ -848,12 +851,15 @@
                          } completion:^(BOOL finished) {
                              [self startTimeLabelAnimation];
                          }];
+    } else {
+        //NSLog(@"22 NO ESTA ACTIVO EL TIME LABEL ANIMATION ACTIVE");
     }
 }
 
 #pragma mark - Winning & Lossing
 
 -(void)prepareNextGame {
+    NSLog(@"Entré al prepare next gameeeeeee");
     [[AudioPlayer sharedInstance] playRestartSound];
     
     if (fastGameWinAlertActiveTag == 1) {

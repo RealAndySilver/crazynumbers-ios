@@ -41,6 +41,11 @@
     [self.productsRequest start];
 }
 
+- (void)restoreCompletedTransactions {
+    [[SKPaymentQueue defaultQueue]
+     restoreCompletedTransactions];
+}
+
 -(void)buyProduct:(IAPProduct *)product {
     //NSAssert(product.allowedToPurchase, @"This product isn't allowed to purchase");
     if (!product.allowedToPurchase) {

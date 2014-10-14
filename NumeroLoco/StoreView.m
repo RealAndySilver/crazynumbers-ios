@@ -86,8 +86,22 @@
         title.textAlignment = NSTextAlignmentCenter;
         [self addSubview:title];
         
+        //Restore Purchases button
+        UIButton *restorePurchasesButton = [[UIButton alloc] initWithFrame:CGRectMake(50.0, title.frame.origin.y + title.frame.size.height + 20.0, frame.size.width - 100.0, 40.0)];
+        [restorePurchasesButton setTitle:@"Restore Purchases" forState:UIControlStateNormal];
+        [restorePurchasesButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        restorePurchasesButton.backgroundColor = [[AppInfo sharedInstance] appColorsArray][0];
+        restorePurchasesButton.layer.cornerRadius = 10.0;
+        restorePurchasesButton.titleLabel.font = [UIFont fontWithName:FONT_NAME size:13.0];
+        [restorePurchasesButton addTarget:self action:@selector(restorePurchases) forControlEvents:UIControlEventTouchUpInside];
+        [self addSubview:restorePurchasesButton];
+        
+        UIView *grayLine = [[UIView alloc] initWithFrame:CGRectMake(20.0, restorePurchasesButton.frame.origin.y + restorePurchasesButton.frame.size.height + 20.0, frame.size.width - 40.0, 1.0)];
+        grayLine.backgroundColor = [UIColor colorWithWhite:0.8 alpha:1.0];
+        [self addSubview:grayLine];
+        
         //Purchases table view
-        self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0.0, 100.0, frame.size.width, frame.size.height - 100.0) style:UITableViewStylePlain];
+        self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0.0, restorePurchasesButton.frame.origin.y + restorePurchasesButton.frame.size.height + 21.0, frame.size.width, frame.size.height - (restorePurchasesButton.frame.origin.y + restorePurchasesButton.frame.size.height + 21.0)) style:UITableViewStylePlain];
         self.tableView.delegate = self;
         self.tableView.dataSource = self;
         self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -176,6 +190,11 @@
 }
 
 #pragma mark - Purchases
+
+-(void)restorePurchases {
+    [MBProgressHUD showHUDAddedTo:self animated:YES];
+    [[CPIAPHelper sharedInstance] restoreCompletedTransactions];
+}
 
 -(void)buyProduct:(IAPProduct *)product {
     [MBProgressHUD showHUDAddedTo:self animated:YES];

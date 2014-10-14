@@ -173,6 +173,7 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [self.gameTimer invalidate];
     self.gameTimer = nil;
+    timeLabelAnimationActive = NO;
 }
 
 -(void)setupUI {
@@ -825,7 +826,7 @@
     }
     
     if (timeLabelAnimationActive) {
-        NSLog(@"11 ESTÁ ACTIVO EL TIMELABEL ANIMATION ACTIVE");
+        //NSLog(@"11 ESTÁ ACTIVO EL TIMELABEL ANIMATION ACTIVE");
         [UIView animateWithDuration:timeAnimationDuration
                               delay:0.0
                             options:UIViewAnimationOptionCurveLinear

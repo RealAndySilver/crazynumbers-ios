@@ -1,3 +1,12 @@
+"The purchase 'Infinite Mode' has been restored successfully" = "La compra 'Modo Infinito' se ha restaurado de manera exitosa";
+
+"The purchase 'No Ads' has been restored successfully" = "La compra 'No publicidad' se ha restaurado de manera exitosa";
+
+"Your purchases have been restored" = "Tus compras han sido restauradas";
+
+"There weren't purchases to restore" = "No habían compras para restaurar";
+
+"Restore Purchases" = "Restaurar Compras";
 
 /* Logout message */
 "Logout Succesfull!" = "Salida Exitosa!";

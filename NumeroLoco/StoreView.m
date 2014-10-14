@@ -16,6 +16,7 @@
 #import "TouchesObject.h"
 #import "FileSaver.h"
 #import "Flurry.h"
+#import "OneButtonAlert.h"
 
 @interface StoreView() <UITableViewDataSource, UITableViewDelegate, StoreProductsCellDelegate>
 @property (strong, nonatomic) UIView *opacityView;
@@ -25,7 +26,9 @@
 @property (strong, nonatomic) NSNumberFormatter *purchasesPriceFormatter;
 @end
 
-@implementation StoreView
+@implementation StoreView {
+    BOOL restoringPurchases;
+}
 
 #define FONT_NAME @"HelveticaNeue-Light"
 #define CELL_IDENTIFIER @"cellid"
@@ -66,6 +69,10 @@
                                                  selector:@selector(userDidSuscribeNotificationReceived:)
                                                      name:@"UserDidSuscribe"
                                                    object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(restoredPurchasesReceived:)
+                                                     name:@"PurchasesRestored"
+                                                   object:nil];
         
         //Close button
         UIButton *closeButton = [[UIButton alloc] initWithFrame:CGRectMake(5.0, 5.0, 30.0, 30.0)];
@@ -88,7 +95,7 @@
         
         //Restore Purchases button
         UIButton *restorePurchasesButton = [[UIButton alloc] initWithFrame:CGRectMake(50.0, title.frame.origin.y + title.frame.size.height + 20.0, frame.size.width - 100.0, 40.0)];
-        [restorePurchasesButton setTitle:@"Restore Purchases" forState:UIControlStateNormal];
+        [restorePurchasesButton setTitle:NSLocalizedString(@"Restore Purchases", nil) forState:UIControlStateNormal];
         [restorePurchasesButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         restorePurchasesButton.backgroundColor = [[AppInfo sharedInstance] appColorsArray][0];
         restorePurchasesButton.layer.cornerRadius = 10.0;
@@ -192,11 +199,13 @@
 #pragma mark - Purchases
 
 -(void)restorePurchases {
+    restoringPurchases = YES;
     [MBProgressHUD showHUDAddedTo:self animated:YES];
     [[CPIAPHelper sharedInstance] restoreCompletedTransactions];
 }
 
 -(void)buyProduct:(IAPProduct *)product {
+    restoringPurchases = NO;
     [MBProgressHUD showHUDAddedTo:self animated:YES];
     [[CPIAPHelper sharedInstance] buyProduct:product];
 }
@@ -250,6 +259,16 @@
 
 #pragma mark - Notification Handlers
 
+-(void)restoredPurchasesReceived:(NSNotification *)notification {
+    [MBProgressHUD hideAllHUDsForView:self animated:YES];
+    BOOL transactionsRestored = [[notification userInfo][@"TransactionsRestored"] boolValue];
+    if (transactionsRestored) {
+        [self showRestorePurchasesAlertWithMessage:NSLocalizedString(@"Your purchases have been restored", nil)];
+    } else {
+        [self showRestorePurchasesAlertWithMessage:NSLocalizedString(@"There weren't purchases to restore", nil)];
+    }
+}
+
 -(void)transactionFailedNotificationReceived:(NSNotification *)notification {
     [MBProgressHUD hideAllHUDsForView:self animated:YES];
     NSLog(@"Falló la transacción");
@@ -281,6 +300,9 @@
         [self saveInfiniteModeInUserDefaults];
         [self removeLivesSavedDateInUserDefaults];
         [self removeTouchesSavedDateInUserDefaults];
+        /*if (restoringPurchases) {
+            [self showRestorePurchasesAlertWithMessage:NSLocalizedString(@"The purchase 'Infinite Mode' has been restored successfully", nil)];
+        }*/
     
     } else if ([productBought.productIdentifier isEqualToString:@"com.iamstudio.cross.threehundredtouches"]) {
         [self saveTouchesLeftInUserDefaults:[self getTouchesAvailable] + 300];
@@ -298,7 +320,21 @@
         //Save a key in FileSaver indicating that the user has removed the ads
         FileSaver *fileSaver = [[FileSaver alloc] init];
         [fileSaver setDictionary:@{@"UserRemovedAdsKey" : @YES} withName:@"UserRemovedAdsDic"];
+        /*if (restoringPurchases) {
+            [self showRestorePurchasesAlertWithMessage:NSLocalizedString(@"The purchase 'No Ads' has been restored successfully", nil)];
+        }*/
     }
+}
+
+-(void)showRestorePurchasesAlertWithMessage:(NSString *)message {
+    CGRect screenBounds = [UIScreen mainScreen].bounds;
+    OneButtonAlert *restoredAlert = [[OneButtonAlert alloc] initWithFrame:CGRectMake(screenBounds.size.width/2.0 - 120.0, screenBounds.size.height/2.0 - 80.0, 240.0, 160.0)];
+    restoredAlert.alertText = message;
+    restoredAlert.buttonTitle = @"Ok";
+    restoredAlert.messageLabel.font = [UIFont fontWithName:FONT_NAME size:15.0];
+    restoredAlert.messageLabel.transform = CGAffineTransformMakeTranslation(0.0, 25.0);
+    restoredAlert.button.backgroundColor = [[AppInfo sharedInstance] appColorsArray][0];
+    [restoredAlert showInView:self.superview];
 }
 
 @end

@@ -42,6 +42,7 @@
 }
 
 - (void)restoreCompletedTransactions {
+    NSLog(@"Entré al restore completed transactions....");
     [[SKPaymentQueue defaultQueue]
      restoreCompletedTransactions];
 }
@@ -101,6 +102,22 @@
 }
 
 #pragma mark - SKPaymenttransactionObserver 
+
+-(void)paymentQueue:(SKPaymentQueue *)queue restoreCompletedTransactionsFailedWithError:(NSError *)error {
+    NSLog(@"Entré al failed with error");
+}
+
+-(void)paymentQueueRestoreCompletedTransactionsFinished:(SKPaymentQueue *)queue {
+    NSLog(@"Entré al finishhhhhh. el numero de transacciones restaurados: %lu", (unsigned long)[queue.transactions count]);
+    BOOL transactionsRestored;
+    if ([queue.transactions count] > 0) {
+        transactionsRestored = YES;
+    } else {
+        transactionsRestored = NO;
+    }
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"PurchasesRestored" object:nil userInfo:@{@"TransactionsRestored" : @(transactionsRestored)}];
+}
 
 -(void)paymentQueue:(SKPaymentQueue *)queue updatedTransactions:(NSArray *)transactions {
     NSLog(@"Entré al updatedTrnasactions");

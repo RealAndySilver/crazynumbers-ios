@@ -265,7 +265,7 @@
     if (transactionsRestored) {
         [self showRestorePurchasesAlertWithMessage:NSLocalizedString(@"Your purchases have been restored", nil)];
     } else {
-        [self showRestorePurchasesAlertWithMessage:NSLocalizedString(@"There weren't purchases to restore", nil)];
+        [self showRestorePurchasesAlertWithMessage:NSLocalizedString(@"You don't have purchases to be restored", nil)];
     }
 }
 

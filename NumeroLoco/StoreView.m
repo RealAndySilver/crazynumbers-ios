@@ -94,7 +94,7 @@
         [self addSubview:title];
         
         //Restore Purchases button
-        UIButton *restorePurchasesButton = [[UIButton alloc] initWithFrame:CGRectMake(50.0, title.frame.origin.y + title.frame.size.height + 20.0, frame.size.width - 100.0, 40.0)];
+        UIButton *restorePurchasesButton = [[UIButton alloc] initWithFrame:CGRectMake(70.0, title.frame.origin.y + title.frame.size.height + 20.0, frame.size.width - 140.0, 40.0)];
         [restorePurchasesButton setTitle:NSLocalizedString(@"Restore Purchases", nil) forState:UIControlStateNormal];
         [restorePurchasesButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         restorePurchasesButton.backgroundColor = [[AppInfo sharedInstance] appColorsArray][0];
